@@ -1,6 +1,6 @@
 # AIYA-CMS WordPress Theme
 
-[screenshot.png](https://github.com/yeraph-plus/aiya-cms-wordpress-theme/blob/main/screenshot.png)
+![screenshot.png](https://github.com/yeraph-plus/aiya-cms-wordpress-theme/blob/main/screenshot.png)
 
 ---
 
