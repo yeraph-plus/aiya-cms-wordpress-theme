@@ -1,0 +1,246 @@
+/*文章列表*/
+.card {
+    .card-img-border {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .card-img-border-left {
+        border-top-left-radius: var(--bs-card-inner-border-radius);
+        border-bottom-left-radius: var(--bs-card-inner-border-radius);
+    }
+    .card-img-border-top {
+        border-top-left-radius: var(--bs-card-inner-border-radius);
+        border-top-right-radius: var(--bs-card-inner-border-radius);
+    }
+}
+.badge {
+    /*兼容line-height: 1;布局*/
+    position: relative;
+    top: -2px;
+}
+.badge-sticky {
+    background-color: var(--aya-element-color);
+}
+.badge-private {
+    background-color: #d63384;
+}
+.badge-password {
+    background-color: #0a58ca;
+}
+.badge-new {
+    background-color: #dc3545;
+}
+.loop-content {
+    .loop-waterfall-mode {
+        position: relative;
+    }
+    .loop-waterfall {
+        position: absolute;
+    }
+    .loop-grid {
+        .card-title {
+            min-height: 60px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            white-space: initial;
+        }
+        .card-img-border {
+            min-height: 100px;
+        }
+    }
+    .loop-list {
+        .card-body {
+            padding-left: 0;
+        }
+        .card-img-border {
+            min-height: 200px;
+        }
+    }
+    .loop-not-found {
+        width: 100%;
+        .card-in-img {
+            max-width: 50%;
+        }
+        .card-in-message {
+            margin-top: 80px;
+            margin-bottom: 40px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+    }
+    .card-body {
+        .card-title {
+            a {
+                font-size: 18px;
+                font-weight: 600;
+                color: var(--aya-link-color);
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+            }
+            a:hover {
+                color: var(--aya-link-hover-color);
+            }
+        }
+        .card-text {
+            height: 40px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+        .loop-tags {
+            margin-top: 20px;
+            em {
+                display: inline-block;
+                margin-bottom: 10px;
+                font-size: 14px;
+                font-style: inherit;
+                a {
+                    color: var(--aya-link-color);
+                }
+            }
+            em::before {
+                content: "\f40a";
+                font-size: 12px;
+                margin-top: 2px;
+                margin-right: 2px;
+                color: #adb5bd;
+            }
+            em:nth-child(n + 8) {
+                display: none;
+            }
+            em:not(:last-child) {
+                margin-right: 10px;
+            }
+            .cat {
+                border: solid 1px var(--aya-border-color);
+                padding: 2px 8px;
+                border-radius: 5px;
+            }
+            .cat::before {
+                content: "\f479";
+            }
+            .cat:hover {
+                background: var(--aya-btn-hover-bg);
+                a {
+                    color: var(--aya-btn-hover-color);
+                }
+            }
+        }
+        .loop-meta {
+            display: block;
+            margin-bottom: 0px;
+            overflow: hidden;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+    }
+}
+.load-page-nav {
+    .paged-nav-full {
+        .pagination {
+            border-radius: var(--bs-border-radius);
+            background-color: var(--aya-card-box-bg);
+            box-shadow: var(--aya-card-box-shadow);
+            font-size: 15px;
+            font-weight: 500;
+            .page-item {
+                .page-link {
+                    border: 0;
+                }
+            }
+            .page-item:last-child .page-link {
+                border-radius: 0;
+            }
+        }
+    }
+    .paged-nav {
+        .page-button {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 10px;
+        }
+        .page-link {
+            width: 36px;
+            height: 36px;
+            text-align: center;
+            line-height: 36px;
+            border-radius: 18px;
+            color: #ffffff;
+            background-color: var(--aya-btn-bg-color);
+            text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
+            box-shadow: var(--aya-card-box-shadow);
+        }
+        .page-link:hover {
+            color: var(--aya-btn-hover-color);
+            background: var(--aya-btn-hover-bg);
+        }
+        .page-link:focus {
+            color: var(--aya-btn-focus-color);
+            background: var(--aya-btn-focus-bg);
+        }
+        .cur,
+        .cur:hover,
+        .cur:focus {
+            color: var(--aya-btn-focus-color);
+            background: var(--aya-btn-focus-bg);
+        }
+    }
+    .load-more {
+        margin-top: 40px;
+        margin-bottom: 40px;
+        .page-link {
+            margin: 0 auto;
+            width: 120px;
+            height: 36px;
+            border-radius: 18px;
+            line-height: 32px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--aya-btn-bg-color);
+            background: transparent;
+            border: solid 1px var(--aya-btn-bg-color);
+            cursor: pointer;
+        }
+        .page-link:hover {
+            color: var(--aya-btn-hover-color);
+            background: var(--aya-btn-hover-bg);
+        }
+    }
+}
+.loop-section-title {
+    h3 {
+        font-size: 18px;
+        font-weight: 700;
+        padding-bottom: 5px;
+        white-space: nowrap;
+        color: var(--aya-title-color);
+    }
+    h3:after {
+        content: "";
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 2px;
+        background: var(--aya-title-color);
+    }
+    a {
+        position: absolute;
+        top: auto;
+        right: 0;
+        width: 75px;
+        color: #515151;
+    }
+}

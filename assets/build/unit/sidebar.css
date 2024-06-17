@@ -1,0 +1,180 @@
+/*侧栏*/
+.sidebar-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(151, 151, 151, 0.1);
+}
+.sidebar {
+  width: 100%;
+  height: 100%;
+}
+.widget-card-box {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.widget-card-box .widget-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--aya-title-color);
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+.widget-card-box .widget-title:before {
+  content: " ";
+  display: inline-block;
+  background: var(--aya-title-color);
+  height: 12px;
+  width: 4px;
+  border-radius: 24px;
+  margin-right: 5px;
+}
+.widget-card-box .widget-bg {
+  background: rgba(247, 247, 248, 0.8);
+  background-clip: border-box;
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+}
+.widget-card-box .widget-body {
+  padding: 10px 10px;
+  color: var(--aya-less-color);
+}
+.widget-card-box .widget-tagcloud .tag-item {
+  position: relative;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 5px 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  color: var(--aya-btn-bg-color);
+  background: rgba(247, 247, 248, 0.8);
+  border: solid 1px var(--aya-border-color);
+  border-radius: var(--bs-border-radius);
+}
+.widget-card-box .widget-tagcloud .tag-item:hover {
+  background: var(--aya-btn-hover-bg);
+  color: var(--aya-btn-hover-color);
+}
+.widget-card-box .widget-loop .loop-list {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.widget-card-box .widget-loop .loop-list .card-img {
+  width: 80px;
+  height: 60px;
+  margin-right: 15px;
+  flex-shrink: 0;
+  border-radius: var(--bs-border-radius);
+}
+.widget-card-box .widget-loop .loop-list .card-event {
+  text-align: center;
+  width: 80px;
+  height: 60px;
+  margin-right: 15px;
+  align-items: center;
+  justify-content: center;
+}
+.widget-card-box .widget-loop .loop-list .card-event .event-mon {
+  font-size: 17px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--aya-less-color);
+  line-height: 0.75;
+}
+.widget-card-box .widget-loop .loop-list .card-event .event-day {
+  font-size: 30px;
+  font-weight: 800;
+  margin-top: 10px;
+  color: var(--aya-less-color);
+  line-height: 0.75;
+}
+.widget-card-box .widget-loop .loop-list .card-shade {
+  text-align: center;
+  width: 80px;
+  height: 60px;
+  margin-right: 15px;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: var(--bs-border-radius);
+}
+.widget-card-box .widget-loop .loop-list .card-shade .shade-icon {
+  font-size: 25px;
+  font-weight: 800;
+  color: var(--aya-less-color);
+  line-height: 0.75;
+}
+.widget-card-box .widget-loop .loop-list .card-shade .shade-second {
+  font-size: 20px;
+  margin-top: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--aya-less-color);
+  line-height: 0.75;
+}
+.widget-card-box .widget-loop .loop-list .card-title {
+  margin-bottom: 0;
+  color: #1f1f1f;
+  font-size: 14px;
+}
+.widget-card-box .widget-loop .loop-list .card-title h5 {
+  margin-bottom: 0;
+  max-width: 200px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 900;
+}
+.widget-card-box .widget-loop .loop-list .card-title p {
+  margin-top: 5px;
+  margin-bottom: 0;
+  display: flex;
+  color: var(--aya-less-color);
+}
+.widget-card-box .widget-loop .in-first:last-child {
+  margin: 0;
+}
+.widget-card-box .widget-loop .in-first:first-child {
+  position: relative;
+}
+.widget-card-box .widget-loop .in-first:first-child:before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  opacity: 0.6;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0 0 0));
+  border-radius: var(--bs-border-radius);
+}
+.widget-card-box .widget-loop .in-first:first-child .card-img {
+  margin: 0;
+  width: 100%;
+  height: auto;
+}
+.widget-card-box .widget-loop .in-first:first-child .card-title {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  padding: 10px;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.widget-card-box .widget-loop .in-first:first-child .card-title h5 a {
+  color: #fff;
+}
+.widget-card-box .widget-loop .in-first:first-child .card-title p {
+  color: #fff;
+}

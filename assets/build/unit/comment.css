@@ -1,0 +1,185 @@
+/*评论组件*/
+.comments-title {
+  margin-left: 10px;
+  margin-top: 20px;
+}
+.comments-title h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--aya-title-color);
+}
+.comments-from .comment-respond .comment-reply-title {
+  font-size: 14px;
+}
+.comments-from .comment-respond .comment-reply-title a {
+  color: var(--aya-btn-bg-color);
+}
+.comments-from .comment-respond .comment-reply-title small {
+  margin-left: 10px;
+  font-size: 14px;
+}
+.comments-from .comment-form {
+  display: table;
+  width: 100%;
+}
+.comments-from .comment-form .comment-form-comment textarea {
+  width: 100%;
+  height: 102px;
+  background-color: #f7f7f7;
+  border: none;
+  padding: 20px;
+  font-size: 14px;
+  color: #5f5e5e;
+  font-weight: 300;
+}
+.comments-from .comment-form .comment-form-author {
+  margin-right: 2%;
+}
+.comments-from .comment-form .comment-form-email {
+  margin-left: 2%;
+}
+.comments-from .comment-form .comment-form-url {
+  display: none;
+}
+.comments-from .comment-form .comment-form-author,
+.comments-from .comment-form .comment-form-email {
+  display: inline-block;
+  position: relative;
+  width: 48%;
+}
+.comments-from .comment-form .comment-form-author input,
+.comments-from .comment-form .comment-form-email input {
+  background-color: #f7f7f7;
+  width: 100%;
+  border: none;
+  padding: 8px 10px 8px 30px;
+  font-size: 12px;
+  color: #636363;
+}
+.comments-from .comment-form .comment-form-url:before,
+.comments-from .comment-form .comment-form-email:before,
+.comments-from .comment-form .comment-form-author:before {
+  position: absolute;
+  content: "\F4E1";
+  font-family: "bootstrap-icons";
+  top: 8px;
+  left: 8px;
+}
+.comments-from .comment-form .comment-form-email:before {
+  content: "\F152";
+}
+.comments-from .comment-form .comment-form-url:before {
+  content: "\F470";
+}
+.comments-from .comment-form .wp-comment-cookies-consent {
+  display: flex;
+}
+.comments-from .comment-form .logged-in-as a {
+  border-bottom: 1px solid var(--aya-border-color);
+}
+.comments-from .comment-form .comment-form-cookies-consent {
+  margin: 10px 0px 10px 0px;
+  align-items: center;
+  display: flex;
+}
+.comments-from .comment-form .comment-form-cookies-consent input {
+  margin-right: 5px;
+}
+.comments-from .comment-form .comment-form .comment-form-comment {
+  margin: 0px 0px 10px 0px;
+}
+.comments-from .comment-form .comment-form-comment {
+  margin: 0px 0px 10px 0px;
+}
+.comments-from .comment-form .form-submit .submit {
+  color: #fff;
+  width: 130px;
+  padding: 8px;
+  float: right;
+  font-size: 12px;
+  border: none;
+  background: var(--aya-btn-bg-color);
+  border-radius: var(--bs-border-radius);
+}
+.comments-from .comment-form .form-submit .submit:hover {
+  color: var(--aya-btn-hover-color);
+  background: var(--aya-btn-hover-bg);
+}
+.comments-from .comment-form .form-submit .submit:focus {
+  color: var(--aya-btn-focus-color);
+  background: var(--aya-btn-focus-bg);
+}
+.comments-area .comment-list {
+  padding-left: 0;
+}
+.comments-area .comment-list .comment {
+  width: 100%;
+}
+.comments-area .comment-list .comment .comment-body {
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--aya-border-color);
+}
+.comments-area .comment-list .comment .comment-body .comment-meta {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.comments-area .comment-list .comment .comment-body .comment-meta .comment-author img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.comments-area .comment-list .comment .comment-body .comment-meta .comment-author .fn {
+  font-weight: 500;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.comments-area .comment-list .comment .comment-body .comment-meta .comment-author .fn a {
+  color: var(--aya-btn-bg-color);
+}
+.comments-area .comment-list .comment .comment-body .comment-meta .comment-author .says {
+  display: none;
+}
+.comments-area .comment-list .comment .comment-body .comment-meta .comment-metadata a {
+  position: relative;
+  top: -1px;
+  color: var(--aya-card-box-color);
+}
+.comments-area .comment-list .comment .comment-body .comment-meta .comment-metadata::before {
+  content: "\F309";
+  font-family: "bootstrap-icons";
+}
+.comments-area .comment-list .comment .comment-body .comment-content {
+  color: var(--aya-main-color);
+  margin-top: 10px;
+}
+.comments-area .comment-list .comment .comment-body .reply {
+  position: absolute;
+  right: 0;
+  top: 4px;
+}
+.comments-area .comment-list .comment .comment-body .reply a {
+  font-size: 14px;
+  padding: 4px 20px;
+  color: var(--aya-link-color);
+  border: 1px solid var(--aya-border-color);
+  outline: none;
+  border-radius: 18px;
+  cursor: pointer;
+  -webkit-transition: all 200ms ease;
+  -moz-transition: all 200ms ease;
+  -ms-transition: all 200ms ease;
+  -o-transition: all 200ms ease;
+  transition: all 200ms ease;
+}
+.comments-area .comment-list .comment .comment-body .reply a:hover {
+  color: var(--aya-btn-hover-color);
+  background: var(--aya-btn-hover-bg);
+}
+.comments-area .comment-list .comment .comment-body .reply a:focus {
+  color: var(--aya-btn-focus-color);
+  background: var(--aya-btn-focus-bg);
+}

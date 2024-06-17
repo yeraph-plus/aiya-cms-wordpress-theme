@@ -1,0 +1,65 @@
+.logo {
+  display: flex;
+  height: 64px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+.logo img {
+  height: 64px;
+  width: auto;
+}
+.logo-with-text {
+  display: flex;
+  height: 64px;
+  margin: 0 auto;
+  font-size: 25px;
+  font-weight: 700;
+  color: var(--aya-link-color);
+  text-transform: uppercase;
+  letter-spacing: 0.075rem;
+  align-items: center;
+  justify-content: center;
+}
+.logo-with-text img {
+  height: 42px;
+  width: auto;
+  margin-right: 10px;
+}
+/* 布局容器 */
+.main-position-row {
+  position: relative;
+}
+.aside-padding-left {
+  padding-left: var(--aya-aside-width);
+}
+.aside-menu-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100vh;
+  min-height: 100vh;
+  transform-origin: left;
+  overflow: visible;
+  z-index: 100;
+  width: var(--aya-aside-width);
+  background-color: var(--aya-aside-bar-bg);
+  box-shadow: var(--aya-card-box-shadow);
+  -webkit-transform: translateX(0) translateY(0) translateZ(0);
+  transform: translateX(0) translateY(0) translateZ(0);
+}
+.aside-menu-bar .aside-nav {
+  height: 100%;
+  width: 100%;
+}
+.aside-menu-bar .aside-nav .nav .nav-item .nav-link {
+  font-size: 15px;
+  font-weight: 500;
+}
+@media screen and (max-width: 1024px) {
+  .main-position-row {
+    position: relative;
+    padding-left: 0;
+  }
+}

@@ -1,0 +1,377 @@
+/* AIYA-CMS 设置 */
+.default {
+    --aya-loading-animation: url();
+    --aya-banner-image: url();
+    --aya-banner-height: 360px;
+    --aya-bg-color: #ededed;
+    --aya-bg-image: url();
+    --aya-aside-bar-bg: #f8f8f5;
+    --aya-aside-width: 280px;
+    --aya-header-bar-bg: #1f1f1f;
+    --aya-footer-bar-bg: #1f1f1f;
+    --aya-element-color: #0d6efd;
+    --aya-less-color: #7a7a7a;
+    --aya-border-color: #f0f0f0;
+    --aya-title-color: #1f1f1f;
+    --aya-link-color: #212529;
+    --aya-link-hover-color: #0d6efd; //rgba(0, 0, 0, 0.5);
+    --aya-btn-bg-color: #0d6efd;
+    --aya-btn-hover-color: #fff;
+    --aya-btn-hover-bg: #0d6efd;
+    --aya-btn-focus-color: #fff;
+    --aya-btn-focus-bg: #0d6efd;
+    --aya-card-box-color: #505050;
+    --aya-card-box-bg: #fff;
+    --aya-card-box-shadow: 2px 2px 4px 2px #0000000f;
+    --aya-main-color: #121212;
+    --aya-main-link-color: #0d6efd;
+    --aya-main-margin-width: 10px;
+    --aya-main-block-bg: #f5f5f5;
+    --aya-main-font-size: 1rem;
+}
+/* 夜间模式 */
+.dark {
+    --aya-bg-color: #282c34 !important;
+    --aya-aside-bar-bg: #353b45 !important;
+    --aya-header-bar-bg: #353b45 !important;
+    --aya-footer-bar-bg: #353b45 !important;
+    --aya-link-color: #b6bdca !important;
+    --aya-card-box-bg: #353b45 !important;
+    --aya-card-box-color: #868e96 !important;
+    --aya-title-color: #d1d1d1 !important;
+    --aya-main-color: #e1e1e1 !important;
+    --aya-main-block-bg: #6c757d !important;
+}
+/* 灰色遮罩 */
+.gray-mode {
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+}
+/* 背景布局 */
+.bg-center {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.bg-shade {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-attachment: fixed;
+}
+.bg-shade::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    z-index: -1;
+    background: rgb(204, 204, 204);
+    background-image: linear-gradient(-180deg, rgba(255, 255, 255, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
+    background-attachment: fixed;
+}
+/* Boosstrap 设置 */
+:root {
+    --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", "bootstrap-icons";
+    --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+    --bs-body-font-family: "Microsoft YaHei", "Source Han Sans", "PingFangSC-Regular", "Open Sans", var(--bs-font-sans-serif);
+    --bs-body-font-size: 14px;
+    --bs-body-font-weight: 400;
+    --bs-body-line-height: 1.5;
+    --bs-body-color: #333;
+    --bs-body-color-rgb: 51, 51, 51;
+    --bs-body-bg-rgb: 247, 247, 247;
+    --bs-emphasis-color: #000;
+    --bs-emphasis-color-rgb: 0, 0, 0;
+    --bs-secondary-color: #171718;
+    --bs-secondary-color-rgb: 23, 23, 24;
+    --bs-secondary-bg: #f7f7f8;
+    --bs-secondary-bg-rgb: 247, 247, 248;
+    --bs-tertiary-color: #18191a;
+    --bs-tertiary-color-rgb: 248, 249, 250;
+    --bs-tertiary-bg: #f8f9fa;
+    --bs-tertiary-bg-rgb: 24, 25, 26;
+    --bs-heading-color: inherit;
+    --bs-link-color: var(--aya-link-color);
+    --bs-link-color-rgb: var(--aya-link-color);
+    --bs-link-decoration: underline;
+    --bs-link-hover-color: var(--aya-link-hover-color);
+    --bs-link-hover-color-rgb: var(--aya-link-hover-color);
+    --bs-border-width: 1px;
+    --bs-border-style: solid;
+    --bs-border-color: var(--aya-border-color);
+    --bs-border-color-translucent: rgba(0, 0, 0, 0);
+    --bs-border-radius: 0.375rem;
+    --bs-border-radius-sm: 0.25rem;
+    --bs-border-radius-lg: 0.5rem;
+    --bs-border-radius-xl: 1rem;
+    --bs-border-radius-xxl: 2rem;
+    --bs-border-radius-2xl: var(--bs-border-radius-xxl);
+    --bs-border-radius-pill: 50rem;
+    --bs-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    --bs-box-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --bs-box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+    --bs-box-shadow-inset: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    --bs-focus-ring-width: 1px;
+    --bs-focus-ring-opacity: 0.05;
+    --bs-focus-ring-color: rgba(0, 0, 0, 0);
+}
+.offcanvas {
+    --bs-offcanvas-color: var(--aya-card-box-color);
+    --bs-offcanvas-bg: var(--aya-card-box-bg);
+    --bs-offcanvas-border-width: none;
+}
+.dropdown-menu {
+    --bs-dropdown-divider-bg: var(--aya-border-color);
+    --bs-dropdown-bg: var(--aya-card-box-bg);
+    --bs-dropdown-color: var(--aya-btn-bg-color);
+    --bs-dropdown-link-color: var(--aya-link-color);
+    --bs-dropdown-link-hover-color: var(--aya-btn-hover-color);
+    --bs-dropdown-link-hover-bg: var(--aya-btn-hover-bg);
+    --bs-dropdown-link-active-color: var(--aya-btn-focus-color);
+    --bs-dropdown-link-active-bg: var(--aya-btn-focus-bg);
+    box-shadow: var(--aya-card-box-shadow);
+}
+.nav-pills {
+    --bs-nav-pills-link-active-bg: var(--aya-btn-bg-color);
+}
+.card {
+    --bs-card-color: var(--aya-card-box-color);
+    background: var(--aya-card-box-bg);
+    color: var(--aya-card-box-color);
+    box-shadow: var(--aya-card-box-shadow);
+}
+.pagination {
+    --bs-pagination-font-size: none;
+    --bs-pagination-color: var(--aya-link-color);
+    --bs-pagination-bg: var(--aya-card-box-bg);
+    --bs-pagination-hover-color: var(--aya-btn-hover-color);
+    --bs-pagination-hover-bg: var(--aya-btn-hover-bg);
+    --bs-pagination-active-color: var(--aya-btn-focus-color);
+    --bs-pagination-active-bg: var(--aya-btn-focus-bg);
+    --bs-pagination-active-border-color: var(--aya-btn-focus-color);
+}
+.btn-color-solid {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--aya-btn-bg-color);
+    --bs-btn-border-color: var(--aya-btn-bg-color);
+    --bs-btn-hover-color: var(--aya-btn-hover-color);
+    --bs-btn-hover-bg: var(--aya-btn-hover-bg);
+    --bs-btn-hover-border-color: var(--aya-btn-hover-bg);
+    --bs-btn-active-color: var(--aya-btn-focus-color);
+    --bs-btn-active-bg: var(--aya-btn-focus-bg);
+    --bs-btn-active-border-color: var(--aya-btn-focus-bg);
+}
+.btn-color-hollow {
+    --bs-btn-color: var(--aya-btn-bg-color);
+    --bs-btn-bg: transparent;
+    --bs-btn-border-color: var(--aya-btn-bg-color);
+    --bs-btn-hover-color: var(--aya-btn-hover-color);
+    --bs-btn-hover-bg: var(--aya-btn-hover-bg);
+    --bs-btn-hover-border-color: var(--aya-btn-hover-bg);
+    --bs-btn-active-color: var(--aya-btn-focus-color);
+    --bs-btn-active-bg: var(--aya-btn-focus-bg);
+    --bs-btn-active-border-color: var(--aya-btn-focus-bg);
+}
+*,
+*:before,
+*:after {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+/* 清除Bootstrap的聚焦样式 */
+*:focus,
+textarea:focus,
+button:focus,
+input:focus {
+    box-shadow: none !important;
+    outline: 0 !important;
+}
+/* 全局样式 */
+html {
+}
+body {
+    border: none;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    font-weight: 400;
+    background-color: var(--aya-bg-color);
+    background-image: var(--aya-bg-image);
+    background-attachment: fixed;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+div {
+    display: block;
+    position: relative;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+section {
+    display: block;
+    position: relative;
+    box-sizing: border-box;
+}
+ul {
+    list-style: none;
+    margin-bottom: 0px;
+}
+img {
+    margin: 0;
+    max-width: 100%;
+    height: auto;
+}
+a {
+    display: inline;
+    position: relative;
+    color: var(--aya-link-color);
+}
+p {
+    font-size: 14px;
+    line-height: 1.45;
+    font-weight: 500;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
+    text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
+}
+a:hover,
+a:visited,
+a:active,
+a:link {
+    text-decoration: none;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
+    text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
+    text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px;
+}
+::selection {
+}
+p ::selection {
+}
+h1::selection,
+h2::selection,
+h3::selection,
+h4::selection,
+h5::selection,
+h6::selection {
+}
+::-webkit-scrollbar {
+    width: 8px;
+    background: none;
+}
+::-webkit-scrollbar-thumb {
+    width: 5px;
+    border-radius: 5px;
+    background: #1e1e1e;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+/* 加载动画 */
+.loading-overlay-layer {
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-image: var(--aya-loading-animation);
+    background-color: var(--aya-bg-color);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+@media screen and (max-width: 1024px) {
+    .mobile-none {
+        display: none !important;
+    }
+}
+@media screen and (min-width: 1024px) {
+    .tablet-none {
+        display: none !important;
+    }
+}
+.float-left {
+    float: left;
+}
+.float-right {
+    float: right;
+}
+.trans-percent {
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.trans-200 {
+    -webkit-transition: all 200ms ease;
+    -moz-transition: all 200ms ease;
+    -ms-transition: all 200ms ease;
+    -o-transition: all 200ms ease;
+    transition: all 200ms ease;
+}
+.trans-300 {
+    -webkit-transition: all 300ms ease;
+    -moz-transition: all 300ms ease;
+    -ms-transition: all 300ms ease;
+    -o-transition: all 300ms ease;
+    transition: all 300ms ease;
+}
+.trans-400 {
+    -webkit-transition: all 400ms ease;
+    -moz-transition: all 400ms ease;
+    -ms-transition: all 400ms ease;
+    -o-transition: all 400ms ease;
+    transition: all 400ms ease;
+}
+.trans-500 {
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+}
+.height-fill {
+    height: 100%;
+}
+.width-fill {
+    width: 100%;
+}
+.prlx-parent {
+    overflow: hidden;
+}
+.prlx {
+    height: 130% !important;
+}
+.nopadding {
+    padding: 0px !important;
+}
+.last-of-type {
+    margin-bottom: 0;
+}
+.stretched-link {
+    position: static;
+}

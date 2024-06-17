@@ -1,0 +1,204 @@
+/*评论组件*/
+.comments-title {
+    margin-left: 10px;
+    margin-top: 20px;
+    h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--aya-title-color);
+    }
+}
+.comments-from {
+    .comment-respond {
+        .comment-reply-title {
+            font-size: 14px;
+            a {
+                color: var(--aya-btn-bg-color);
+            }
+            small {
+                margin-left: 10px;
+                font-size: 14px;
+            }
+        }
+    }
+    .comment-form {
+        display: table;
+        width: 100%;
+        .comment-form-comment {
+            textarea {
+                width: 100%;
+                height: 102px;
+                background-color: #f7f7f7;
+                border: none;
+                padding: 20px;
+                font-size: 14px;
+                color: #5f5e5e;
+                font-weight: 300;
+            }
+        }
+        .comment-form-author {
+            margin-right: 2%;
+        }
+        .comment-form-email {
+            margin-left: 2%;
+        }
+        .comment-form-url {
+            display: none;
+        }
+        .comment-form-author,
+        .comment-form-email {
+            display: inline-block;
+            position: relative;
+            width: 48%;
+            input {
+                background-color: #f7f7f7;
+                width: 100%;
+                border: none;
+                padding: 8px 10px 8px 30px;
+                font-size: 12px;
+                color: #636363;
+            }
+        }
+        .comment-form-url:before,
+        .comment-form-email:before,
+        .comment-form-author:before {
+            position: absolute;
+            content: "\F4E1";
+            font-family: "bootstrap-icons";
+            top: 8px;
+            left: 8px;
+        }
+        .comment-form-email:before {
+            content: "\F152";
+        }
+        .comment-form-url:before {
+            content: "\F470";
+        }
+        .wp-comment-cookies-consent {
+            display: flex;
+        }
+        .logged-in-as {
+            a {
+                border-bottom: 1px solid var(--aya-border-color);
+            }
+        }
+        .comment-notes {
+        }
+        .comment-form-cookies-consent {
+            margin: 10px 0px 10px 0px;
+            align-items: center;
+            display: flex;
+            input {
+                margin-right: 5px;
+            }
+        }
+        .comment-form {
+            .comment-form-comment {
+                margin: 0px 0px 10px 0px;
+            }
+        }
+        .comment-form-comment {
+            margin: 0px 0px 10px 0px;
+        }
+        .form-submit {
+            .submit {
+                color: #fff;
+                width: 130px;
+                padding: 8px;
+                float: right;
+                font-size: 12px;
+                border: none;
+                background: var(--aya-btn-bg-color);
+                border-radius: var(--bs-border-radius);
+            }
+            .submit:hover {
+                color: var(--aya-btn-hover-color);
+                background: var(--aya-btn-hover-bg);
+            }
+            .submit:focus {
+                color: var(--aya-btn-focus-color);
+                background: var(--aya-btn-focus-bg);
+            }
+        }
+    }
+}
+.comments-area {
+    .comment-list {
+        padding-left: 0;
+        .comment {
+            width: 100%;
+            .comment-body {
+                position: relative;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                border-bottom: 1px solid var(--aya-border-color);
+                .comment-meta {
+                    display: flex;
+                    width: 100%;
+                    align-items: center;
+                    .comment-author {
+                        img {
+                            width: 34px;
+                            height: 34px;
+                            border-radius: 50%;
+                            overflow: hidden;
+                        }
+                        .fn {
+                            font-weight: 500;
+                            margin-right: 10px;
+                            margin-left: 10px;
+                            a {
+                                color: var(--aya-btn-bg-color);
+                            }
+                        }
+                        .says {
+                            display: none;
+                        }
+                    }
+                    .comment-metadata {
+                        a {
+                            position: relative;
+                            top: -1px;
+                            color: var(--aya-card-box-color);
+                        }
+                    }
+                    .comment-metadata::before {
+                        content: "\F309";
+                        font-family: "bootstrap-icons";
+                    }
+                }
+                .comment-content {
+                    color: var(--aya-main-color);
+                    margin-top: 10px;
+                }
+                .reply {
+                    position: absolute;
+                    right: 0;
+                    top: 4px;
+                    a {
+                        font-size: 14px;
+                        padding: 4px 20px;
+                        color: var(--aya-link-color);
+                        border: 1px solid var(--aya-border-color);
+                        outline: none;
+                        border-radius: 18px;
+                        cursor: pointer;
+                        -webkit-transition: all 200ms ease;
+                        -moz-transition: all 200ms ease;
+                        -ms-transition: all 200ms ease;
+                        -o-transition: all 200ms ease;
+                        transition: all 200ms ease;
+                    }
+                    a:hover {
+                        color: var(--aya-btn-hover-color);
+                        background: var(--aya-btn-hover-bg);
+                    }
+                    a:focus {
+                        color: var(--aya-btn-focus-color);
+                        background: var(--aya-btn-focus-bg);
+                    }
+                }
+            }
+        }
+    }
+}
