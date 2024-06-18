@@ -4,7 +4,7 @@
  * 推文正文
  */
 
-$post_data = aya_get_post_meta_data(0);
+$post_data = aya_the_content_meta_data(0);
 
 ?>
 <article id="entry-main">

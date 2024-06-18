@@ -148,8 +148,15 @@ AYF::new_opt(array(
             'default'  => AYA_URI . '/assets/image/paper_plane.png',
         ),
         array(
-            'desc' => '备案信息',
+            'desc' => '页脚信息',
             'type' => 'title_2',
+        ),
+        array(
+            'title' => '站长邮箱',
+            'desc' => '在页脚显示站点管理员联系邮箱（自动转换为HTML实体编码格式，请勿重复操作）',
+            'id' => 'site_master_email',
+            'type' => 'text',
+            'default' => '',
         ),
         array(
             'title' => 'ICP备案',

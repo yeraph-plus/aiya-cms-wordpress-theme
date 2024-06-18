@@ -34,15 +34,22 @@ function aya_footer_menu_toggle()
 function aya_footer_beian()
 {
     //获取主题设置
+    $master_email = aya_opt('site_master_email', 'theme');
     $icp_beian = aya_opt('site_icp_beian', 'theme');
     $mps_beian = aya_opt('site_mps_beian', 'theme');
 
     $html = '';
 
+    //站长邮箱
+    if ($master_email !== '') {
+        $email = wp_kses($master_email, 'post');
+        $html .= '<a href="' . esc_url('mailto:' . antispambot($email)) . '"><i class="bi bi-envelope"></i> E-Mail: ' . esc_html(antispambot($email)) . '</a>';
+    }
+    //备案号
     if ($icp_beian !== '') {
         $html .= '<a class="beian" href="https://beian.miit.gov.cn/" rel="noopener noreferrer" target="_blank"><i class="bi bi-shield-check me-1"></i>' . $icp_beian . '</a><br />';
     }
-
+    //公安备案号
     if ($mps_beian !== '') {
         //$number_of = preg_match('/\d+/', $mps_beian, $number_of);
         //$html .= '<a class="beian" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=' . $number_of . '" rel="noopener noreferrer" target="_blank">' . $mps_beian . '</a>';

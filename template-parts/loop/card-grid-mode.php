@@ -4,16 +4,18 @@
  * 卡片布局
  */
 
-$post_data = aya_get_loop_meta_data(0, 400, 300, 1, 47);
+$post_type = aya_post_type();
+$post_data = aya_the_loop_meta_data(0, 47);
+$post_thumb = aya_the_loop_thumb($post_data['id'], 400, 300, true);
 ?>
 <div class="loop-grid col">
     <div class="card">
         <div class="card-img-border">
-            <?php e_html($post_data['thumb']);//e_html(aya_lazy_img_tags($post_data['thumb'], 'card-img-border-top', $post_data['attr_title'], true)); ?>
+            <?php aya_lazy_img_tags($post_thumb, 'card-img-border-top', $post_data['attr_title'], 400, 300, true); ?>
         </div>
         <div class="card-body">
             <h5 class="card-title">
-                <a href="<?php e_html($post_data['url']); ?>"  class="stretched-link" title="<?php e_html($post_data['attr_title']); ?>">
+                <a href="<?php e_html($post_data['url']); ?>" class="stretched-link" title="<?php e_html($post_data['attr_title']); ?>">
                     <?php e_html($post_data['title']); ?>
                 </a>
             </h5>

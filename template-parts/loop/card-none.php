@@ -3,9 +3,6 @@
 /**
  * 空列表
  */
-
-$page_img = AYF::get_opt('site_none_page_img', 'layout');
-
 ?>
 <div class="loop-not-found">
     <div class="card">

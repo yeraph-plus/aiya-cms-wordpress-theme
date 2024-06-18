@@ -4,7 +4,7 @@
  * 默认正文
  */
 
-$post_data = aya_get_post_meta_data();
+$post_data = aya_the_content_meta_data(0);
 
 ?>
 <article id="entry-main">
@@ -15,12 +15,14 @@ $post_data = aya_get_post_meta_data();
             //检查特色图
             if ($post_data['thumbnail'] != NULL) :
                 $title_style = 'thumbnail-inner';
-                //e_html('<div class="thumbnail card-img-border">' . aya_lazy_img_tags($post_data['thumbnail'], 'card-img-border-top', $post_data['title'], true) . '</div>');
+                e_html('<div class="thumbnail card-img-border">');
+                aya_lazy_img_tags($post_data['thumbnail'], 'card-img-border-top', $post_data['title'], '100%', 'auto', true);
+                e_html('</div>');
             endif;
             ?>
             <div class="card-body <?php e_html($title_style); ?>">
                 <h1 class="post-title">
-                    <?php e_html($post_data['title'] . (($post_data['status'] == '') ? '' : ' - ') . $post_data['status']); ?>
+                    <?php aya_loop_title_badge() . e_html($post_data['title'] . (($post_data['status'] == '') ? '' : ' - ') . $post_data['status']); ?>
                 </h1>
                 <div class="post-meta">
                     <span class="author px-2"><i class="bi bi-person"></i> <?php e_html($post_data['author']); ?></span>
@@ -38,28 +40,23 @@ $post_data = aya_get_post_meta_data();
             </div>
         </div>
         <div class="entry-content">
+            <?php aya_single_outdated_tip(); ?>
             <?php e_html($post_data['content']); ?>
         </div>
         <div class="post-end-box">
             <div class="card-body">
                 <div class="post-separator text-center">THE END</div>
-                <?php //aya_single_specs_like(); 
-                ?>
-                <div class="post-share"><!-- ComingSoon --></div>
-                <?php //aya_get_single_info(); 
-                ?>
+                <?php aya_single_related_more(); ?>
+                <?php aya_single_specs_like(); ?>
+                <?php aya_single_dis_claimer_info(); ?>
             </div>
         </div>
         <div class="post-tags-list border-top">
             <div class="card-body">
-                <?php e_html(aya_get_post_tags_list()); ?>
+                <?php aya_loop_tags_list(); ?>
             </div>
         </div>
     </div>
 </article>
-<?php //aya_single_prev_next_post(); 
-?>
-<?php //aya_single_author_panel(); 
-?>
-<?php //aya_single_related_more(); 
-?>
+<?php aya_single_prev_next_post(); ?>
+<?php aya_single_author_panel(); ?>

@@ -10,11 +10,9 @@ if (!defined('ABSPATH')) exit;
 //加载LOGO
 function aya_header_logo()
 {
-    //获取主题设置
-    $logo_type_text = aya_opt('site_logo_text', 'theme');
     $logo_image = aya_opt('site_logo_image', 'theme');
     //输出
-    if ($logo_type_text) {
+    if (aya_opt('site_logo_text', 'theme')) {
         return e_html('<a class="logo-with-text" href="' . esc_url(home_url()) . '"><img src="' . $logo_image . '" alt="logo" />' . get_bloginfo('name') . '</a>');
     } else {
         return e_html('<a class="logo" href="' . esc_url(home_url()) . '"><img src="' . $logo_image . '" alt="logo" /></a>');
@@ -46,16 +44,13 @@ function aya_header_menu_toggle()
 {
     //获取主题设置
     if (aya_opt('site_header_menu_drawer', 'layout')) {
-        $html_before = '';
-        $html_before .= '<div class="navbar-nav navbar-drawer trans-200 me-auto mb-0">';
+        $html_before = '<div class="navbar-nav navbar-drawer trans-200 me-auto mb-0">';
         $html_before .= '<li class="menu-item"><a id="nav-drawer-btn" href="javascript:void(0);" class="nav-link"><i class="bi bi-three-dots"></i></a></li>';
 
-        $html_after = '';
-        $html_after .= '</div>';
-        //输出
-        return e_html($html_before) . aya_nav_menu('header-menu', 'navbar-nav nav-drawer-menu me-auto mb-0', 1) . e_html($html_after);
+        return e_html($html_before) . aya_nav_menu('header-menu', 'nav-drawer-menu me-auto mb-0', 1) . e_html('</div>');
     }
-    return aya_nav_menu('header-menu', 'navbar-nav nav-drawer-menu me-auto mb-0', 1);
+
+    return e_html('<div class="trans-200 me-auto mb-0">') . aya_nav_menu('header-menu', 'navbar-nav me-auto mb-0', 1) . e_html('</div>');
 }
 //加载Banner组件
 function aya_banner_section()

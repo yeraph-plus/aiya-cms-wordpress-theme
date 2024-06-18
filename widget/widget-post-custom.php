@@ -37,7 +37,7 @@ class AYA_Widget_Post_Custom extends AYA_Widget
         } else {
             //循环
             foreach ($the_post as $post => $post_data) {
-                echo '<li class="loop-list"><img class="lozad card-img" src="' . $post_data['thumb'] . '" alt="' . $post_data['attr_title'] . '" loading="lazy">
+                echo '<li class="loop-list"><img class="lozad card-img" src="' . aya_the_loop_thumb($post_data['id'], 400, 300, true) . '" alt="' . $post_data['attr_title'] . '" loading="lazy">
                 <div class="card-title">
                     <h5><a class="stretched-link" href="' . $post_data['url'] . '">' . $post_data['title'] . '</a></h5>
                     <p><i class="bi bi-eye"></i>&nbsp' . $post_data['views'] . '&nbsp' . __('次浏览', 'AIYA') . '&nbsp;&nbsp;<i class="bi bi-clock"></i>&nbsp;' . __('发布于', 'AIYA') . '&nbsp;' . $post_data['date'] . '</p>

@@ -7,6 +7,8 @@
  */
 
 //获取主题设置
+//$comments_from_fields = apply_filters('comment_form_default_fields', $comments_from_fields);
+
 $input_from_url = false;
 
 //评论信息表单
@@ -22,6 +24,12 @@ else :
         'email' => '<span class="comment-form-email"><input id="email" class="blog-form-input" placeholder="Email " name="email" type="text" value="' . esc_attr($commenter['comment_author_email']) . '" size="30" /></span>',
     );
 endif;
+//排除评论表单站点字段
+add_filter('comment_form_default_fields', function ($fields) {
+    if (isset($fields['url'])) unset($fields['url']);
+
+    return $fields;
+});
 //评论表单
 $comments_form_args = array(
     'label_submit' => '发布',
@@ -30,7 +38,7 @@ $comments_form_args = array(
     'comment_notes_before' => '',
     'comment_notes_after' => '',
     'comment_field' => '<p class="comment-form-comment"><textarea id="comment" name="comment" aria-required="true"></textarea></p>',
-    'fields' => apply_filters('comment_form_default_fields', $comments_from_fields),
+    'fields' => $comments_from_fields,
 );
 //评论列表
 $comments_list_args = array(

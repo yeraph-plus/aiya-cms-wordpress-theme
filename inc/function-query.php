@@ -20,7 +20,7 @@ function aya_get_query($args = array())
     if (!is_array($args) || count($args) == 0) return;
 
     /**
-     * 如需使用query_posts()方法
+     * 如需使用query_posts()方法：
      * 
      * //新建查询
      * if (!is_main_query()) $the_query = query_posts($args);
@@ -45,7 +45,7 @@ function aya_get_query($args = array())
             //setup_postdata($post);
             //the_content();
             //使用主题定义的方法返回数据
-            $content[$post->ID] = aya_get_loop_meta_data($post->ID);
+            $content[$post->ID] = aya_the_loop_meta_data($post->ID);
         }
 
         //重置查询

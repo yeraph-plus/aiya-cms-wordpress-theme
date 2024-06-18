@@ -71,34 +71,37 @@ if (!class_exists('AYF') || !class_exists('AYP')) {
     return;
 }
 
+//加载Composer
+require_once AYA_PATH . '/composer/vendor/autoload.php';
+//公共方法
+require_once AYA_PATH . '/function-public.php';
+
 /*
  * ------------------------------------------------------------------------------
  * 载入主题方法和页面组件
  * ------------------------------------------------------------------------------
  */
 
-//加载Composer
-require_once AYA_PATH . '/composer/vendor/autoload.php';
 //主题方法
-require_once AYA_PATH . '/inc/function-public.php';
-require_once AYA_PATH . '/inc/function-query.php';
-require_once AYA_PATH . '/inc/function-enqueue.php';
-require_once AYA_PATH . '/inc/function-fix.php';
-require_once AYA_PATH . '/inc/function-single.php';
-require_once AYA_PATH . '/inc/function-template.php';
-//require_once AYA_PATH . '/inc/function-ajax.php';
-
-//require_once AYA_INC . '/inc/function-format.php';
-
+aya_require('inc', 'function-query');
+aya_require('inc', 'function-enqueue');
+aya_require('inc', 'function-fix');
+aya_require('inc', 'function-single');
+aya_require('inc', 'function-template');
+//主题设置项
+aya_require('settings', 'theme-parent');
+aya_require('settings', 'theme-color');
+aya_require('settings', 'theme-layout');
+aya_require('settings', 'theme-format');
 //加载组件
 aya_require('module', 'menu-nav');
 aya_require('module', 'menu-bread');
 aya_require('module', 'menu-page');
 aya_require('module', 'template-header');
 aya_require('module', 'template-footer');
+aya_require('module', 'template-loop');
 aya_require('module', 'template-single');
-//aya_require('module', 'template-carousel');
-//aya_require('module', 'template-archive');
+//aya_require('module', 'format-title');
 //小工具
 aya_require('widget', 'widget-add-menu');
 aya_require('widget', 'widget-search');
@@ -121,11 +124,6 @@ aya_require('shotcode', 'code-aplayer');
 aya_require('shotcode', 'code-dplayer');
 aya_require('shotcode', 'code-meting');
 aya_require('shotcode', 'code-download');
-//主题设置项
-aya_require('settings', 'theme-parent');
-aya_require('settings', 'theme-color');
-aya_require('settings', 'theme-layout');
-//aya_require('settings', 'theme-home');
 
 /*
  * ------------------------------------------------------------------------------
@@ -248,12 +246,12 @@ AYP::action_register('Widget_Load', array(
     'AYA_Widget_Serach',
     'AYA_Widget_Text_Html',
     'AYA_Widget_Tag_Cloud',
-    //'AYA_Widget_Comments',
     'AYA_Widget_Post_Comments',
     'AYA_Widget_Post_Views',
     'AYA_Widget_Post_Newest',
     'AYA_Widget_Post_Random',
     'AYA_Widget_Post_Custom',
+    //'AYA_Widget_Comments',
     //'AYA_Widget_Author_Box',
     //'AYA_Widget_User_Welcome',
     //'AYA_Widget_Tweet_Posts',

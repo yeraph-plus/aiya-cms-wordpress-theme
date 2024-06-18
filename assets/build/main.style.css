@@ -442,19 +442,20 @@ h6 {
   font-size: 15px;
   font-weight: 500;
 }
-.header-bar .navbar .navbar-drawer {
+.header-bar .navbar .navbar-drawer .nav-drawer-menu {
+  display: none;
+  padding-left: 0;
+}
+.header-bar .navbar .navbar-drawer .show {
+  display: flex;
+}
+.header-bar .navbar .navbar-nav {
   flex-direction: row;
   background: rgba(247, 247, 248, 0.8);
   height: 40px;
   padding: 3px;
   border: none;
   border-radius: 5px;
-}
-.header-bar .navbar .navbar-drawer .nav-drawer-menu {
-  display: none;
-}
-.header-bar .navbar .navbar-drawer .show {
-  display: flex;
 }
 .header-bar .navbar .navbar-nav .menu-item .nav-link {
   height: 34px;
@@ -569,7 +570,7 @@ h6 {
   justify-content: center;
   height: 100%;
 }
-.banner-box .banner-content .title {
+.banner-box .banner-content .banner-title {
   font-size: 24px;
   color: #fff;
   font-weight: 600;

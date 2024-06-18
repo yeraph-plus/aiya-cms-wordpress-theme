@@ -8,57 +8,98 @@ if (!defined('ABSPATH')) exit;
  */
 
 //合并文章信息查询
-function aya_get_loop_meta_data($post_id = 0, $preview_size = 255)
+function aya_the_loop_meta_data($post_id = 0, $preview_size = 255)
 {
     $post = aya_get_post($post_id);
 
     //直接退出
-    if (!$post) {
-        return '';
-    }
+    if (!$post) return '';
 
     $post_data = array();
 
+    //转换$post对象存入当前数组
     $post_data['id'] = aya_get_post_id($post);
-    $post_data['url'] = aya_get_post_url($post_id);
+    $post_data['url'] = aya_get_post_url($post);
     $post_data['title'] = aya_get_post_title($post, 0);
     $post_data['attr_title'] = aya_get_post_title($post, 1);
     $post_data['status'] = aya_get_post_status($post);
     $post_data['date'] = aya_get_post_date($post);
     $post_data['author'] = aya_get_post_author($post);
     $post_data['comments'] = aya_get_post_comments($post);
-    $post_data['views'] = aya_get_post_views($post_id);
-    $post_data['likes'] = aya_get_post_likes($post_id);
     $post_data['preview'] = aya_get_post_preview($post, $preview_size);
+
+    //获取自定义字段
+    $post_data['views'] = aya_get_post_views($post_data['id']);
+    $post_data['likes'] = aya_get_post_likes($post_data['id']);
 
     return $post_data;
 }
 //合并文章正文查询
-function aya_get_post_meta_data($post_id = 0)
+function aya_the_content_meta_data($post_id = 0)
 {
     $post = aya_get_post($post_id);
 
     //直接退出
-    if (!$post) {
-        return '';
-    }
+    if (!$post) return '';
 
     $post_data = array();
 
+    //转换$post对象
     $post_data['id'] = aya_get_post($post);
     $post_data['title'] = aya_get_post_title($post, 1);
     $post_data['status'] = aya_get_post_status($post);
     $post_data['author'] = aya_get_post_author($post, 1);
     $post_data['date'] = aya_get_post_date($post, 1);
-    $post_data['views'] = aya_get_post_views($post_id);
-    $post_data['likes'] = aya_get_post_likes($post_id);
     $post_data['comments'] = aya_get_post_comments($post, 1);
     $post_data['excerpt'] = aya_get_post_excerpt($post);
     $post_data['thumbnail'] = aya_get_post_thumbnail($post);
     $post_data['content'] = aya_get_post_content($post);
 
+    //获取自定义字段
+    $post_data['views'] = aya_get_post_views($post_data['id']);
+    $post_data['likes'] = aya_get_post_likes($post_data['id']);
+
     return $post_data;
 }
+//获取文章缩略图
+function aya_the_loop_thumb($post_id = 0, $thumb_w = 400, $thumb_h = 300, $thumb_def = true)
+{
+    //检查主题设置
+    $get_thumb = aya_get_post_thumb($post_id);
+
+    if (!empty($get_thumb)) {
+        return $get_thumb;
+    }
+
+    //不存在则开始查询
+
+    //如果存在特色图片
+    if (has_post_thumbnail($post_id)) {
+        //返回
+        $img_url = get_the_post_thumbnail_url($post_id);
+    }
+    //获取文章中的第一张图片
+    else {
+        //查询附件
+        $media = aya_get_post_media('image', $post_id);
+        //弹出数组中的第一个元素
+        $media = array_shift($media);
+        //返回
+        $img_url = (empty($media)) ? NULL : wp_get_attachment_image_src($media->ID, '', false)[0];
+    }
+    //如果存在图片
+    if ($img_url !== NULL) {
+        //返回裁剪
+        return get_bfi_thumb($img_url, $thumb_w, $thumb_h);
+    }
+    //不存在则返回主题默认
+    else if ($thumb_def) {
+        return aya_get_default_thumbnail();
+    }
+    //返回空
+    return NULL;
+}
+
 //定位文章
 function aya_get_post($post_id = 0)
 {
@@ -76,6 +117,10 @@ function aya_get_post($post_id = 0)
 //获取文章点赞数
 function aya_get_post_likes($post_id = 0)
 {
+    if (empty($post_id)) {
+        $post_id = get_the_ID();
+    }
+
     $the_likes = get_metadata('post', $post_id, 'likes', true);
 
     if ($the_likes > 0) {
@@ -87,6 +132,10 @@ function aya_get_post_likes($post_id = 0)
 //获取文章访问量
 function aya_get_post_views($post_id = 0)
 {
+    if (empty($post_id)) {
+        $post_id = get_the_ID();
+    }
+
     $the_views = get_metadata('post', $post_id, 'views', true);
 
     if ($the_views > 0) {
@@ -103,6 +152,10 @@ function aya_get_post_views($post_id = 0)
 //获取文章缩略图
 function aya_get_post_thumb($post_id = 0)
 {
+    if (empty($post_id)) {
+        $post_id = get_the_ID();
+    }
+
     $the_thumbnail = get_metadata('post', $post_id, 'thumbnail', true);
 
     return $the_thumbnail;
@@ -255,13 +308,11 @@ function aya_get_post_date($post = NULL, $modified = false)
 
     //获取WP时间格式设置
     $date_format = get_option('date_format');
-    //获取主题设置
-    $is_time_ago = aya_opt('site_loop_time_ago', 'layout');
 
     if ($modified == true) {
         return  __('发布时间 ', 'AIYA') . date($date_format, $publish_time) . __(' [ 上次更新于 ', 'AIYA') . aya_diff_timeago($modified_time) . ' 前 ]';
     } else {
-        return ($is_time_ago) ? aya_diff_timeago($publish_time) : date($date_format, $publish_time);
+        return date($date_format, $publish_time);
     }
 }
 //获取文章评论数
@@ -396,49 +447,4 @@ function aya_verify_post_is_outdated($post = NULL, $out_time = 30)
         return true;
     }
     return false;
-}
-
-/*
- * ------------------------------------------------------------------------------
- * 自定义文章缩略图方法
- * ------------------------------------------------------------------------------
- */
-
-//获取文章缩略图
-function aya_thumb($post_id = 0, $thumb_w = 400, $thumb_h = 300, $thumb_def = true)
-{
-    //检查主题设置
-    $get_thumb = aya_get_post_thumb($post_id);
-
-    if (empty($get_thumb)) {
-        return $get_thumb;
-    }
-
-    //不存在则开始查询
-
-    //如果存在特色图片
-    if (has_post_thumbnail($post_id)) {
-        //返回
-        $img_url = get_the_post_thumbnail_url($post_id);
-    }
-    //获取文章中的第一张图片
-    else {
-        //查询附件
-        $media = aya_get_post_media('image', $post_id);
-        //弹出数组中的第一个元素
-        $media = array_shift($media);
-        //返回
-        $img_url = (empty($media)) ? NULL : wp_get_attachment_image_src($media->ID, '', false)[0];
-    }
-    //如果存在图片
-    if ($img_url !== NULL) {
-        //返回裁剪
-        return get_bfi_thumb($img_url, $thumb_w, $thumb_h);
-    }
-    //不存在则返回主题默认
-    else if ($thumb_def) {
-        return aya_get_default_thumbnail();
-    }
-    //返回空
-    return NULL;
 }

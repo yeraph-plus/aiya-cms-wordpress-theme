@@ -1,0 +1,60 @@
+/**
+ * Admin Stylesheet
+ * Author: ThemeZilla & Theme Junkie
+ */
+
+.junkie-shortcode-wrap table { width: 100%; }
+
+.junkie-shortcode-wrap .junkie-sortable table {
+	background: #f7f7f7;
+	border-radius: 3px;
+	border: 1px solid #e0e0e0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	cursor: move;
+	margin-bottom: 10px;
+	padding: 15px;
+}
+
+.junkie-shortcode-wrap .junkie-sortable .junkie-sortable-placeholder {
+	background: #f7f7f7;
+	border: dashed 2px #e0e0e0;
+	border-radius: 3px;
+	height: 60px;
+	margin-bottom: 10px;
+}
+
+.junkie-shortcode-wrap td {
+	padding: 8px 0;
+	vertical-align: top;
+}
+
+.junkie-shortcode-wrap .label { padding-top: 13px; }
+
+#insert-button-shortcode label {
+	display: inline-block;
+	width: 20%;
+}
+
+.junkie-shortcode-select { margin: 10px 0 30px 0; }
+
+.junkie-shortcode-wrap input[type="text"],
+.junkie-shortcode-wrap textarea {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.junkie-form-desc {
+	color: #aaa;
+	display: block;
+	font-size:  12px;
+	font-style: italic;
+	padding-top: 3px;
+}
+
+.junkie-notes { font-style: italic; }
+
+.junkie-shortcode-wrap .junkie-cancel-shortcode-insert { margin-left: 1.25em; }

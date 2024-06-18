@@ -220,26 +220,27 @@ function aya_login_register_js_css()
 //主题自身
 function aya_theme_self_js_css()
 {
-    //调试用
-    $css_list = array(
-        'body',
-        'aside',
-        'header',
-        'footer',
-        'home',
-        'loop',
-        'post',
-        'editor',
-        'comment',
-        'sidebar',
-    );
-    foreach ($css_list as $css) {
-        wp_enqueue_style('aya-theme-' . $css . '', AYA_URI . '/assets/build/unit/' . $css . '.css', array(), time(), 'all');
+    //如果WP_DEBUG启用
+    if (WP_DEBUG) {
+        //调试用
+        $css_list = array(
+            'body',
+            'aside',
+            'header',
+            'footer',
+            'home',
+            'loop',
+            'post',
+            'editor',
+            'comment',
+            'sidebar',
+        );
+        foreach ($css_list as $css) {
+            wp_enqueue_style('aya-theme-' . $css . '', AYA_URI . '/assets/build/unit/' . $css . '.css', array(), time(), 'all');
+        }
     }
-    /*
     //主题CSS文件
     wp_register_style('aya-main-style', AYA_URI . '/assets/build/main.style.css', array(), aya_theme_version(), 'all');
-    */
     //主题JS文件
     wp_register_script('aya-main-action', AYA_URI . '/assets/build/main.firing.js', array(), aya_theme_version(), false); //false就在页头加载
     wp_register_script('aya-main-bulid', AYA_URI . '/assets/build/main.bulid.js', array(), aya_theme_version(), true);
@@ -271,7 +272,7 @@ function aya_theme_head_css_custom()
     $theme_css = apply_filters('aya_theme_style_filter', $theme_css);
 
     //组装自定义样式表
-    e_html('<style type="text/css">:root {' . $theme_css . '}</style>');
+    return e_html('<style type="text/css">:root {' . $theme_css . '}</style>');
 }
 //自定义样式表规则
 function aya_theme_head_css_custom_rule($re_echo = false)
@@ -321,7 +322,7 @@ function aya_theme_body_class_name($class_array)
     //获取主题设置
     $add_array = array(
         'clearfix',
-        (aya_get_loading_img() === false) ? 'default' : '',
+        //'default',
         (aya_opt('site_dark_mode_type', 'color')) ? 'dark' : '',
         (aya_opt('site_gray_mode_type', 'color')) ? 'gray-mode' : '',
         (aya_opt('site_background_center', 'color')) ? 'bg-center' : '',
@@ -336,10 +337,7 @@ function aya_get_loading_img()
     //获取主题设置
     $svg_selector = aya_opt('site_default_selector', 'theme');
 
-    //如果未设置直接返回一个false给下一步函数
-    if ($svg_selector) return false;
-
-    //判断是否存在
+    //判断切换
     if ($svg_selector == 'custom') {
         //获取主题设置
         return aya_opt('site_custom_selector', 'theme');
@@ -352,14 +350,14 @@ function aya_get_loaded_empty_img($class = '')
 {
     $page_img = aya_opt('site_none_page_img', 'theme');
 
-    return aya_lazy_img_tags($page_img, $class, 'NONE CONTENT', false);
+    return aya_lazy_img_tags($page_img, $class, 'NONE CONTENT');
 }
 //获取主题404页面占位图片
 function aya_get_404_page_img($class = '')
 {
     $page_img = aya_opt('site_404_page_img', 'theme');
 
-    return aya_lazy_img_tags($page_img, $class, '404 NOT FOUND', false);
+    return aya_lazy_img_tags($page_img, $class, '404 NOT FOUND');
 }
 //获取主题默认图片
 function aya_get_default_thumbnail()

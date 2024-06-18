@@ -3,11 +3,11 @@
 /**
  * 瀑布流
  */
-
+$post_type = aya_post_type();
 $grid_class = aya_grid_waterfall_class();
+$post_data = aya_the_loop_meta_data(0, 400, 'full', 0, 450);
 
-if (aya_post_type() == 'tweet') :
-    $post_data = aya_get_loop_meta_data(0, 400, 'full', 0, 450);
+if ($post_type == 'tweet') :
 
 ?>
     <div class="loop-waterfall <?php e_html($grid_class); ?> mb-4">
@@ -30,15 +30,14 @@ if (aya_post_type() == 'tweet') :
 <?php
 
 else :
-    $post_data = aya_get_loop_meta_data(0, 400, 'full', 0, 147);
 
 ?>
     <div class="loop-waterfall <?php e_html($grid_class); ?> mb-4">
         <div class="card">
             <?php
-            if ($post_data['thumb'] != NULL) :
-                //e_html(aya_lazy_img_tags($post_data['thumb'], 'card-img-top', $post_data['attr_title'], false));
-            endif;
+            //if ($post_data['thumb'] != NULL) :
+
+            //endif;
             ?>
             <div class="card-body">
                 <h5 class="card-title">
