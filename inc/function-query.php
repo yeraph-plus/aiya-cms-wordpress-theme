@@ -33,6 +33,9 @@ function aya_get_query($args = array())
 
     //新建查询
     $post_query = get_posts($args);
+    
+    //重置查询
+    wp_reset_postdata();
 
     //输出查询结果
     if (!empty($post_query)) {
@@ -48,8 +51,6 @@ function aya_get_query($args = array())
             $content[$post->ID] = aya_the_loop_meta_data($post->ID);
         }
 
-        //重置查询
-        wp_reset_postdata();
         //返回结果
         return $content;
     } else {

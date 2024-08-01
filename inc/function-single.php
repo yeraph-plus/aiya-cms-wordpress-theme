@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) exit;
  */
 
 //合并文章信息查询
-function aya_the_loop_meta_data($post_id = 0, $preview_size = 255)
+function aya_the_loop_meta_data($post_id = 0, $date_mod = 'short', $preview_size = 255)
 {
     $post = aya_get_post($post_id);
 
@@ -23,7 +23,7 @@ function aya_the_loop_meta_data($post_id = 0, $preview_size = 255)
     $post_data['title'] = aya_get_post_title($post, 0);
     $post_data['attr_title'] = aya_get_post_title($post, 1);
     $post_data['status'] = aya_get_post_status($post);
-    $post_data['date'] = aya_get_post_date($post);
+    $post_data['date'] = aya_get_post_date($post, $date_mod);
     $post_data['author'] = aya_get_post_author($post);
     $post_data['comments'] = aya_get_post_comments($post);
     $post_data['preview'] = aya_get_post_preview($post, $preview_size);
@@ -49,7 +49,7 @@ function aya_the_content_meta_data($post_id = 0)
     $post_data['title'] = aya_get_post_title($post, 1);
     $post_data['status'] = aya_get_post_status($post);
     $post_data['author'] = aya_get_post_author($post, 1);
-    $post_data['date'] = aya_get_post_date($post, 1);
+    $post_data['date'] = aya_get_post_date($post, 'full');
     $post_data['comments'] = aya_get_post_comments($post, 1);
     $post_data['excerpt'] = aya_get_post_excerpt($post);
     $post_data['thumbnail'] = aya_get_post_thumbnail($post);
@@ -84,7 +84,7 @@ function aya_the_loop_thumb($post_id = 0, $thumb_w = 400, $thumb_h = 300, $thumb
         $media = aya_get_post_media('image', $post_id);
         //弹出数组中的第一个元素
         $media = array_shift($media);
-        //返回
+        //只取URL，忽略width和height
         $img_url = (empty($media)) ? NULL : wp_get_attachment_image_src($media->ID, '', false)[0];
     }
     //如果存在图片
@@ -295,24 +295,29 @@ function aya_get_post_author($post = NULL, $modified = false)
 function aya_diff_timeago($time)
 {
     //更新：使用WordPress内置方法
-    return human_time_diff($time, current_time('timestamp'));
+    return human_time_diff($time, current_time('timestamp')) . __(' 前 ', 'AIYA');
 }
 //获取文章发布时间
-function aya_get_post_date($post = NULL, $modified = false)
+function aya_get_post_date($post = NULL, $modified = 'short')
 {
     if (!is_object($post)) {
         $post = get_post($post);
     }
     $publish_time = get_post_time('U', false, $post, true);
-    $modified_time = get_post_modified_time('U', false, $post, true);
 
     //获取WP时间格式设置
     $date_format = get_option('date_format');
 
-    if ($modified == true) {
-        return  __('发布时间 ', 'AIYA') . date($date_format, $publish_time) . __(' [ 上次更新于 ', 'AIYA') . aya_diff_timeago($modified_time) . ' 前 ]';
-    } else {
-        return date($date_format, $publish_time);
+    switch ($modified) {
+        case 'full':
+            $modified_time = get_post_modified_time('U', false, $post, true);
+            return  __('发布时间 ', 'AIYA') . date($date_format, $publish_time) . __(' [ 上次更新于 ', 'AIYA') . aya_diff_timeago($modified_time) . __(' ] ', 'AIYA');
+        case 'short':
+            return date($date_format, $publish_time);
+        case 'timeago':
+            return aya_diff_timeago($publish_time);
+        default:
+            return date($date_format, $publish_time);
     }
 }
 //获取文章评论数
@@ -447,4 +452,27 @@ function aya_verify_post_is_outdated($post = NULL, $out_time = 30)
         return true;
     }
     return false;
+}
+//截取标题关键词
+function aya_match_post_first_words($post = NULL)
+{
+    if (!is_object($post)) {
+        $the_title = get_the_title($post);
+    } else {
+        $the_title = $post->post_title;
+    }
+
+    ob_start();
+    ob_end_clean();
+
+    //遍历标题匹配括号
+    $match_all = preg_match_all('/(\[.*?\])|(\<.*?\>)|(\().*?(\))/', $the_title, $matches);
+    var_dump($matches);
+
+    //返回取到的第一个
+    if (isset($matches[1][0])) {
+        return $matches[1][0];
+    }
+    //返回空
+    return NULL;
 }

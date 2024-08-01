@@ -1,0 +1,307 @@
+<?php
+if (!defined('ABSPATH')) exit;
+
+/*
+ * ------------------------------------------------------------------------------
+ * 文章内容过滤器
+ * ------------------------------------------------------------------------------
+ */
+
+//添加钩子
+add_action('the_content', 'aya_post_content_filter_format');
+//合并方法
+function aya_post_content_filter_format($content)
+{
+    if (aya_opt('site_content_link_filter', 'format')) {
+        $content = aya_post_content_link_nofollow($content);
+    }
+    if (aya_opt('site_content_img_filter', 'format')) {
+        $content = aya_post_content_img_alt_and_lazy($content);
+    }
+    if (aya_opt('site_content_h1_filter', 'format')) {
+        $content = aya_post_content_menu_id_list($content);
+    }
+    if (aya_opt('site_content_pre_filter', 'format')) {
+        $content = aya_post_content_pre_encode($content);
+    }
+    if (aya_opt('site_content_table_filter', 'format')) {
+        $content = aya_post_content_bootstrap_table_class($content);
+    }
+    //外部链接添加nofollow
+    $content = trim($content);
+
+    return $content;
+}
+//格式化<img>标签
+function aya_post_content_img_alt_and_lazy($content)
+{
+    //遍历
+    preg_match_all('/<img (.*?)\/>/', $content, $imgs);
+    //如果存在img标签
+    if (!is_null($imgs)) {
+
+        foreach ($imgs[0] as $i => $img) {
+            //再次遍历提取属性
+            //preg_match_all('/(src|alt|width|height)=("[^"]*")/i', $img, $matche);
+
+            //附加ALT属性
+            if (!preg_match('/alt=/', $img) || preg_match('/alt=""/', $img)) {
+                $replace_image = preg_replace('/<img /', '<img alt="' . get_the_title($GLOBALS['post']) . '-PIC-' . $i + 1 . '" ', $img);
+            }
+            //附加懒加载状态
+            $replace_image = preg_replace('/<img /', '<img loading="lazy" class="lozad" ', $replace_image);
+
+            $content = str_replace($img, $replace_image, $content);
+        }
+    }
+
+    return $content;
+}
+//格式化<table>标签
+function aya_post_content_bootstrap_table_class($content)
+{
+    //遍历
+    preg_match_all('/<table.*?>[\s\S]*<\/table>/', $content, $tables);
+    //如果存在table标签
+    if (!is_null($tables)) {
+
+        foreach ($tables[0] as $i => $value) {
+            //附加Bootstrap的表格样式
+            $out = str_replace('<table', '<table class="table table-bordered"', $tables[0][$i]);
+
+            $content = str_replace($tables[0][$i], $out, $content);
+        }
+    }
+
+    return $content;
+}
+//格式化<h>标签
+function aya_post_content_menu_id_list($content)
+{
+    //遍历
+    preg_match_all('/<h[123]>(.*?)<\/h[123]>/im', $content, $h1s);
+    //如果存在标题
+    if (!is_null($h1s)) {
+
+        foreach ($h1s[1] as $i => $title) {
+            //重写h1标签
+            $start = stripos($content, $h1s[0][$i]);
+            $end = strlen($h1s[0][$i]);
+            $level = substr($h1s[0][$i], 1, 2);
+
+            $content = substr_replace($content, '<' . $level . ' id="menu-' . $i + 1 . '">' . $title . '</' . $level . '>', $start, $end);
+        }
+    }
+
+    return $content;
+}
+//格式化<pre>标签
+function aya_post_content_pre_encode($content)
+{
+    //遍历
+    preg_match_all('/<pre.*?>(.+?)<\/pre>/is', $content, $pres);
+    //如果存在pre标签
+    if (!is_null($pres)) {
+
+        foreach ($pres[1] as $match) {
+            $code = trim($match);
+            //如果没有code标签
+            if (!(substr($code, 0, strlen('<code')) === '<code')) {
+                $code = '<code class="language-plaintext">' . $code . '</code>';
+            }
+            //如果有code标签
+            //UPDATE：不处理，前台直接JS处理
+            /*
+            if (substr($code, 0, strlen("<code>")) === "<code>") {
+                //转义HTML
+                $code = aya_html_clean($code);
+                $code = '<code>' . substr($code, strlen('<code>'));
+            }
+            */
+            $content = str_replace($match, $code, $content);
+        }
+    }
+
+    return $content;
+}
+//外链转内链
+function aya_link_jump_page($url)
+{
+    $option = aya_opt('site_content_link_jump_page', 'format');
+    //生成格式
+    switch ($option) {
+        case 'false':
+            return $url;
+        case 'go':
+            return home_url() . "/go/?url=" . base64_encode($url);
+        case 'link':
+            return home_url() . "/link/?url=" . base64_encode($url);
+    }
+}
+//格式化<a>标签
+function aya_post_content_link_nofollow($content)
+{
+    //遍历
+    preg_match_all('/<a(.*?)href="(.*?)"(.*?)>/', $content, $urls);
+    //如果存在a标签
+    if (!is_null($urls)) {
+
+        foreach ($urls[2] as $url) {
+            //验证URL
+            $verify_val = strpos($url, '://');
+            $verify_self = strpos($url, home_url());
+            $verify_file = preg_match('/\.(jpg|jepg|png|ico|bmp|bnp|gif|tiff|zip|rar|exe|dmg|7z|svg|mp3|mp4|flv|wmv|heic|webp)/i', $url);
+            //不是本站链接且不是文件
+            if ($verify_val !== false && $verify_self === false && !$verify_file) {
+                $content = str_replace("href=\"$url\"", "href=\"" . aya_link_jump_page($url) . "\" rel=\"nofollow\" target=\"_blank\"", $content);
+            }
+        }
+    }
+
+    return $content;
+}
+
+/*
+ * ------------------------------------------------------------------------------
+ * 文章保存过滤器
+ * ------------------------------------------------------------------------------
+ */
+
+//添加动作 文章保存时循环一次
+add_action('save_post', 'aya_save_formatting');
+
+//循环方法
+function aya_save_formatting($post_id)
+{
+    //如果是新文章就先跳过
+    if (empty($post_id)) {
+        return;
+    }
+    //检查用户权限
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    //检查是否为自动保存
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    //防止进入递归，先注销钩子
+    remove_action('save_post', 'aya_save_formatting');
+
+    //获取文章标题
+    $post_title = get_post_field('post_title', $post_id);
+    //获取文章内容
+    $post_content = get_post_field('post_content', $post_id);
+
+    //是否排版
+    if (aya_opt('site_save_post_chinese_type', 'format')) {
+        //对文章内容进行格式化
+        $formatted_content = aya_chinese_type_setting($post_content);
+        //对文章标题进行格式化
+        $formatted_title = aya_chinese_type_setting($post_title);
+    }
+    //是否重建别名
+    if (aya_opt('site_save_post_slug_pinyin_type', 'format')) {
+        //对文章标题进行格式化处理
+        $formatted_sulg = aya_pinyin_permalink($post_title);
+    }
+
+    //更新文章内容
+    $post_array = array();
+
+    $post_array['ID'] = $post_id;
+
+    if (!empty($formatted_content)) {
+        $post_array['post_content'] = $formatted_content;
+    }
+    if (!empty($formatted_title)) {
+        $post_array['post_title'] = $formatted_title;
+    }
+    if (!empty($formatted_sulg)) {
+        $post_array['post_name'] = $formatted_sulg;
+    }
+    //更新文章
+    wp_update_post($post_array);
+    //恢复钩子
+    add_action('save_post', 'aya_save_formatting');
+}
+
+if (aya_opt('site_save_term_slug_pinyin_type', 'format')) {
+    //添加分类时替换分类slug为拼音
+    add_filter('wp_insert_term_data', function ($data, $taxonomy, $args) {
+        //已存在，跳过
+        if ($args['slug'] !== '') return $data;
+
+        $data['slug'] = wp_unique_term_slug(sanitize_title(aya_pinyin_permalink($data['name'], true)), (object) $args);
+
+        return $data;
+    }, 10, 3);
+    //更新分类时替换分类slug为拼音
+    add_filter('wp_update_term_data', function ($data, $term_id, $taxonomy, $args) {
+        //已存在，跳过
+        if ($args['slug'] !== '') return $data;
+
+        $data['slug'] = wp_unique_term_slug(sanitize_title(aya_pinyin_permalink($data['name'], true)), (object) $args);
+
+        return $data;
+    }, 10, 4);
+}
+
+/*
+ * ------------------------------------------------------------------------------
+ * 加载实例方法
+ * ------------------------------------------------------------------------------
+ */
+
+//加载库
+use Jxlwqq\ChineseTypesetting\ChineseTypesetting;
+use Overtrue\Pinyin\Pinyin;
+
+//应用中文格式化实例
+function aya_chinese_type_setting($content)
+{
+    $typesetting = new ChineseTypesetting();
+
+    //$formatted_content = $typesetting->correct($content, ['insertSpace', 'removeSpace', 'full2Half', 'fixPunctuation', 'properNoun']);
+    $formatted_content = $typesetting->correct($content, aya_opt('site_save_post_chinese_setting', 'format'));
+
+    //返回格式化后的内容
+    return $formatted_content;
+}
+//应用拼音转 SLUG 换实例
+function aya_pinyin_permalink($slug, $abbr = false)
+{
+    //传入如果不是字符串
+    $slug = strval($slug);
+    //设置最大词长
+    $length = 60;
+    //设置字符
+    $divider = '-'; //可用参数 '_', '-', '.', ''
+
+    $pinyin = new Pinyin();
+
+    //是否使用索引模式
+    if ($abbr === true) {
+        $slug = $pinyin->permalink($slug, $divider);
+    } else {
+        $slug = $pinyin->abbr($slug, $divider);
+    }
+    //截取最大长度
+    $slug = aya_trim_slug($slug, $length, $divider);
+    //返回格式化后的内容 //格式为：'带着希望去旅行' -> 'dai-zhe-xi-wang-qu-lyu-xing'
+    return $slug;
+}
+//应用通用拼音转换实例
+function aya_pinyin_setting($content, $tone = true)
+{
+    //传入如果不是字符串
+    $content = strval($content);
+
+    $pinyin = new Pinyin();
+
+    //是否添加声调
+    $tone = ($tone) ? 'none' : '';
+
+    //返回格式化后的内容
+    return $pinyin->sentence($content, $tone);
+}

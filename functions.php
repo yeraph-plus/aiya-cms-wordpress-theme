@@ -29,11 +29,10 @@ if (!defined('ABSPATH')) die('Invalid request.');
  * 定义常量
  * ------------------------------------------------------------------------------
  */
-
+define('AYA_RELEASE', '2.0.0');
 define('AYA_PATH', get_template_directory());
 define('AYA_URI', get_template_directory_uri());
-
-//define('AYA_RELEASE', true);
+define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); //MINUTE_IN_SECONDS
 
 /*
  * ------------------------------------------------------------------------------
@@ -42,24 +41,26 @@ define('AYA_URI', get_template_directory_uri());
  */
 
 //从主题内加载
-if (defined('AYA_RELEASE')) {
-    //引入设置框架
+if (!defined('AYF_VERSION')) {
+    if (!defined('AYA_RELEASE')) {
+        //引入设置框架
+        define('AYF_URI', get_template_directory_uri() . '/plugin');
 
-    define('AYF_PATH', get_template_directory() . '/core');
-    define('AYF_URL', get_template_directory_uri() . '/core');
-
-    //引入设置框架
-    require_once AYF_PATH . '/framework-required/setup.php';
-    //组件模板
-    //require_once AYF_PATH . '/framework-required/sample-config.php';
-
-    //引入插件组
-    require_once AYF_PATH . '/framework-unit/setup.php';
-    //加载插件组
-    AYP::include_plugins('plugin');
-
-    require_once AYF_PATH . '/framework-unit/plugin-config-parent.php';
-    require_once AYF_PATH . '/framework-unit/plugin-config.php';
+        //引入设置框架
+        require_once AYA_PATH . '/plugin/framework-required/setup.php';
+        //引入插件组
+        require_once AYA_PATH . '/plugin/framework-unit/setup.php';
+    } else {
+        return;
+    }
+}
+if (!defined('AYA_IMAGE_VERSION')) {
+    if (!defined('AYA_RELEASE')) {
+        //引入图片依赖包
+        require_once AYA_PATH . '/plugin/image-manager/setup.php';
+    } else {
+        return;
+    }
 }
 
 //检查框架插件加载
@@ -71,10 +72,10 @@ if (!class_exists('AYF') || !class_exists('AYP')) {
     return;
 }
 
-//加载Composer
+//加载 Composer 依赖
 require_once AYA_PATH . '/composer/vendor/autoload.php';
 //公共方法
-require_once AYA_PATH . '/function-public.php';
+require_once AYA_PATH . '/functions-public.php';
 
 /*
  * ------------------------------------------------------------------------------
@@ -83,47 +84,59 @@ require_once AYA_PATH . '/function-public.php';
  */
 
 //主题方法
-aya_require('inc', 'function-query');
-aya_require('inc', 'function-enqueue');
-aya_require('inc', 'function-fix');
-aya_require('inc', 'function-single');
-aya_require('inc', 'function-template');
-//主题设置项
-aya_require('settings', 'theme-parent');
-aya_require('settings', 'theme-color');
-aya_require('settings', 'theme-layout');
-aya_require('settings', 'theme-format');
-//加载组件
-aya_require('module', 'menu-nav');
-aya_require('module', 'menu-bread');
-aya_require('module', 'menu-page');
-aya_require('module', 'template-header');
-aya_require('module', 'template-footer');
-aya_require('module', 'template-loop');
-aya_require('module', 'template-single');
-//aya_require('module', 'format-title');
-//小工具
-aya_require('widget', 'widget-add-menu');
-aya_require('widget', 'widget-search');
-aya_require('widget', 'widget-text-html');
-aya_require('widget', 'widget-comments');
-aya_require('widget', 'widget-welcome');
-aya_require('widget', 'widget-tag-cloud');
-aya_require('widget', 'widget-author');
-aya_require('widget', 'widget-post-comments');
-aya_require('widget', 'widget-post-custom');
-aya_require('widget', 'widget-post-random');
-aya_require('widget', 'widget-post-views');
-aya_require('widget', 'widget-post-newest');
-aya_require('widget', 'widget-tweet');
+aya_require('function-query');
+aya_require('function-enqueue');
+aya_require('function-fix');
+aya_require('function-single');
+aya_require('function-ajax');
+//aya_require('function-cache');
+aya_require('function-filter-content');
+aya_require('function-image-procer');
+aya_require('function-template');
+aya_require('template-menu-nav');
+aya_require('template-menu-bread');
+aya_require('template-menu-page');
+aya_require('template-header');
+aya_require('template-footer');
+aya_require('template-loop');
+aya_require('template-single-embly');
 //短代码
-aya_require('shotcode', 'code-email');
-aya_require('shotcode', 'code-hide');
-aya_require('shotcode', 'code-list');
-aya_require('shotcode', 'code-aplayer');
-aya_require('shotcode', 'code-dplayer');
-aya_require('shotcode', 'code-meting');
-aya_require('shotcode', 'code-download');
+aya_require('code-email', 'shotcode');
+aya_require('code-hide', 'shotcode');
+aya_require('code-list', 'shotcode');
+aya_require('code-aplayer', 'shotcode');
+aya_require('code-dplayer', 'shotcode');
+aya_require('code-meting', 'shotcode');
+aya_require('code-download', 'shotcode');
+//小工具
+aya_require('widget-add-menu', 'widget');
+aya_require('widget-search', 'widget');
+aya_require('widget-text-html', 'widget');
+aya_require('widget-comments', 'widget');
+aya_require('widget-welcome', 'widget');
+aya_require('widget-tag-cloud', 'widget');
+aya_require('widget-author', 'widget');
+aya_require('widget-post-comments', 'widget');
+aya_require('widget-post-custom', 'widget');
+aya_require('widget-post-random', 'widget');
+aya_require('widget-post-views', 'widget');
+aya_require('widget-post-newest', 'widget');
+aya_require('widget-tweet', 'widget');
+//加载主题设置
+function aya_load_admin_setting()
+{
+    if (!is_admin()) return;
+
+    $in_file = AYA_PATH . '/inc/settings';
+
+    include_once $in_file . '/option-parent.php';
+    include_once $in_file . '/option-layout.php';
+    include_once $in_file . '/option-format.php';
+    include_once $in_file . '/option-index.php';
+    include_once $in_file . '/option-image.php';
+}
+//设置组
+aya_load_admin_setting();
 
 /*
  * ------------------------------------------------------------------------------
@@ -140,7 +153,7 @@ AYP::action('EnvCheck', array(
     //PHP最低版本
     'php_last' => '8.1',
     //PHP扩展
-    'php_ext' => array('session', 'curl'),
+    'php_ext' => array('session', 'curl', 'mbstring', 'exif', 'gd', 'fileinfo', 'zip'),
     //WP最低版本
     'wp_last' => '6.1',
     //经典编辑器插件
@@ -163,13 +176,13 @@ AYP::action_register('After_Setup_Theme', array(
     //支持文章类型
     'post-formats' => array(
         //'gallery',
-        //'image',
-        //'audio',
-        //'video',
+        'image',
+        'audio',
+        'video',
         //'status',
     ),
     //支持缩略图
-    //'post-thumbnails' => array('post', 'page'),
+    'post-thumbnails' => array('post', 'page'),
     //搜索表单、注释表单和注释的默认核心标记
     'html5' => array(
         'search-form',
@@ -293,7 +306,6 @@ AYP::action_register('Admin_Custom', array(
     'admin_footer_replace' => '感谢使用 <b>AIYA-CMS</b> 主题，欢迎访问 <a href="https://www.yeraph.com" target="_blank">Yeraph Studio</a> 了解更多。',
     //自定义后台导航栏菜单
     'add_admin_bar_menu' => array(),
-    'admin_add_system_dashboard_widgets' => true,
 ));
 //启用小工具缓存插件
 AYP::action_register('Widget_Cache', true);

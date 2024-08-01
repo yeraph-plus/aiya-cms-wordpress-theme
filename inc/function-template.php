@@ -286,6 +286,8 @@ function aya_loop_row_class()
         case 'fall':
             $row_class = 'loop-waterfall-mode" data-masonry="{&quot;percentPosition&quot;: true }';
             break;
+        default:
+            $row_class = '';
     }
     return $row_class;
 }

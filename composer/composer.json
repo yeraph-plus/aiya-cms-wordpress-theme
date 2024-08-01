@@ -1,8 +1,7 @@
 {
     "require": {
-        "guzzlehttp/guzzle": "^7.0",
-        "intervention/httpauth": "^5.0",
-        "intervention/image": "^3.6",
+        "overtrue/php-opencc": "^1.0",
+        "overtrue/pinyin": "^5.3",
         "metowolf/meting": "^1.5",
         "jxlwqq/chinese-typesetting": "^1.2"
     }
