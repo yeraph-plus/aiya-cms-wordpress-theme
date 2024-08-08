@@ -31,7 +31,7 @@ $header_class = ($header_sticky) ? 'sticky-top' . ' ' . $layout_class : 'smooth-
     <?php endif; ?>
     <!-- Header -->
     <header id="header">
-        <?php aya_header_home_extra(); ?>
+        <?php aya_header_home_extra(aya_magic()); ?>
         <div class="header-bar trans-400 <?php e_html($header_class); ?>">
             <div class="container height-fill">
                 <nav class="navbar navbar-expand-lg" aria-label="offcanvas-navbar-large">

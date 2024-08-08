@@ -22,8 +22,10 @@ function aya_single_author_panel()
 
     $html .= '<div class="author-meta ml-sm-auto">';
     $html .= '<a href="' . get_author_posts_url($user_id) . '">' . get_the_author_meta('display_name', $user_id) . '</a>';
-    $html .= '<i class="bi bi-dot"></i>';
-    $html .= '<span class="des">' . get_the_author_meta('description', $user_id) . '</span>';
+    if (get_the_author_meta('description', $user_id) != '') {
+        $html .= '<i class="bi bi-dot"></i>';
+        $html .= '<span class="des">' . get_the_author_meta('description', $user_id) . '</span>';
+    }
     $html .= '</div></div>';
 
     return e_html($html);
@@ -45,13 +47,13 @@ function aya_single_prev_next_post()
     $html .= '<div class="post-prev-next">';
 
     if (!empty($prev_post)) {
-        $html .= '<div class="pd-in-card mb-2 mt-2" ' . $width . '><div class="card" style="background: url(' . aya_the_loop_thumb($prev_post->ID, 400, 300, true) . ');"><div class="prev-post">';
+        $html .= '<div class="pd-in-card mb-2 mt-2" ' . $width . '><div class="card" style="background: url(' . aya_the_loop_image($prev_post->ID, 400, 300) . ');"><div class="prev-post">';
         $html .= '<p><i class="bi bi-chevron-double-left"></i> ' . __('上一篇', 'AIYA') . '</p>';
         $html .= '<a class="stretched-link" href="' . aya_get_post_url($prev_post) . '" title="' . aya_get_post_title($prev_post) . '" rel="next">' . aya_get_post_title($prev_post) . '</a>';
         $html .= '</div></div></div>';
     }
     if (!empty($next_post)) {
-        $html .= '<div class="pd-in-card mb-2 mt-2" ' . $width . '><div class="card" style="background: url(' . aya_the_loop_thumb($prev_post->ID, 400, 300, true) . ');"><div class="next-post">';
+        $html .= '<div class="pd-in-card mb-2 mt-2" ' . $width . '><div class="card" style="background: url(' . aya_the_loop_image($next_post, 400, 300) . ');"><div class="next-post">';
         $html .= '<p> ' . __('下一篇', 'AIYA') . ' <i class="bi bi-chevron-double-right"></i></p>';
         $html .= '<a class="stretched-link" href="' . aya_get_post_url($next_post) . '" title="' . aya_get_post_title($next_post) . '" rel="next">' . aya_get_post_title($next_post) . '</a>';
         $html .= '</div></div></div>';

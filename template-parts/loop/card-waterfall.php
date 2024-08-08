@@ -6,6 +6,7 @@
 $post_type = aya_post_type();
 $grid_class = aya_grid_waterfall_class();
 $post_data = aya_the_loop_meta_data(0, 400, 'full', 0, 450);
+$post_thumb = aya_the_loop_image($post_data['id'], 400, 300);
 
 if ($post_type == 'tweet') :
 
@@ -15,7 +16,7 @@ if ($post_type == 'tweet') :
             <div class="card-body">
                 <h5 class="card-title">
                     <a href="<?php e_html($post_data['url']); ?>" class="stretched-link" title="<?php e_html($post_data['attr_title']); ?>">
-                        <?php e_html($post_data['title']); ?>
+                        <?php aya_loop_title_badge() . e_html($post_data['title']); ?>
                     </a>
                 </h5>
                 <p class="card-text"><?php e_html($post_data['preview']); ?></p>
@@ -42,7 +43,7 @@ else :
             <div class="card-body">
                 <h5 class="card-title">
                     <a href="<?php e_html($post_data['url']); ?>" class="stretched-link" title="<?php e_html($post_data['attr_title']); ?>">
-                        <?php e_html($post_data['title']); ?>
+                        <?php aya_loop_title_badge() . e_html($post_data['title']); ?>
                     </a>
                 </h5>
                 <p class="card-text"><?php e_html($post_data['preview']); ?></p>

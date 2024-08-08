@@ -106,12 +106,12 @@ function aya_lazy_img_tags($src, $class = '', $alt = '', $width = 'auto', $heigh
     $html_format = '<img class="lozad %s" src="%s" data-src="%s" alt="%s" width="%s" height="%s" />';
     //判断懒加载
     if ($lazy_load) {
-        $out_html = sprintf($html_format, $class, aya_get_loading_img(), $src, $alt, $width, $height);
+        $out_html = sprintf($html_format, $class, aya_opt('site_image_load_ani', 'theme'), $src, $alt, $width, $height);
     } else {
         $out_html = sprintf($html_format, $class, $src, '', $alt, $width, $height);
     }
     return e_html($out_html);
-    //使用普通格式
+    //使用Chrome支持格式
     /*
     $html_format = '<img class="%s" src="%s" alt="%s" width="%s" height="%s" loading="%s" />';
 
@@ -138,13 +138,13 @@ function aya_local_mkdir($dirname)
     return $local_dir;
 }
 //转换URL为本地路径的方法
-function aya_local_path_with_url($path, $is_url = true)
+function aya_local_path_with_url($path, $reverse = true)
 {
     //获取WP上传目录
     $wp_content_url = set_url_scheme(WP_CONTENT_URL);
     $wp_content_dir = WP_CONTENT_DIR; //trailingslashit()
     //转换URL为本地路径
-    if ($is_url) {
+    if ($reverse) {
         $url = esc_url($path);
         //验证是否为本地URL
         if (!cur_is_home($url) && !cur_is_localhost($url)) return false;
@@ -328,12 +328,9 @@ function cur_is_home($url)
     return false;
 }
 //搞事情
-function aya_magic($data)
+function aya_magic($data = true)
 {
-    global $name_file, $author_url;
-
-    $file_data = file_get_contents(get_template_directory() . $name_file);
-    if (strstr($file_data, $author_url) == false) die('');
+    if (false === strstr(file_get_contents(get_template_directory() . $GLOBALS['magic_file']), $GLOBALS['author_url'])) die;
     return $data;
 }
 //检查URL是否为localhost

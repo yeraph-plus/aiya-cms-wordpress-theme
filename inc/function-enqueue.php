@@ -46,6 +46,11 @@ function aya_theme_register_js_css()
 
         wp_enqueue_script('aya-lib-merged');
         wp_enqueue_style('aya-lib-merged');
+
+        //加载JQ组件
+        if (aya_opt('site_jquery_type', 'theme', true)) {
+            wp_enqueue_script('jquery');
+        }
     } else {
         //从CDN加载
         switch ($enqueue_type) {
@@ -64,7 +69,7 @@ function aya_theme_register_js_css()
         }
 
         $load_script = array(
-            'jquery-min' => array(
+            'jquery-cdn' => array(
                 'pack' => 'jquery',
                 'file' => 'jquery.min.js',
                 'ver' => '3.7.1',
@@ -114,7 +119,7 @@ function aya_theme_register_js_css()
                 'file' => 'APlayer.min.js',
                 'ver' => '1.10.1',
             ),
-            'meting-api' => array(
+            'meting' => array(
                 'pack' => 'meting',
                 'file' => 'Meting.min.js',
                 'ver' => '2.0.1',
@@ -132,6 +137,11 @@ function aya_theme_register_js_css()
             'hls.js' => array(
                 'pack' => 'hls.js',
                 'file' => 'hls.min.js',
+                'ver' => '1.5.1',
+            ),
+            'hls.light.js' => array(
+                'pack' => 'hls.js',
+                'file' => 'hls.light.min.js',
                 'ver' => '1.5.1',
             ),
             'clipboard.js' => array(
@@ -188,38 +198,40 @@ function aya_theme_register_js_css()
 
         //加载Bootstrasp组件
         wp_enqueue_script('bootstrap-bundle');
+        wp_enqueue_script('masonry-pkgd');
         wp_enqueue_style('bootstrap');
         wp_enqueue_style('bootstrap-icons');
         //加载LozadJS
         wp_enqueue_script('lozad');
-
         //加载ViewerJS
         wp_enqueue_style('viewer');
         wp_enqueue_script('viewer');
-
         //加载Pjax组件
         wp_enqueue_script('pjax');
-    }
-
-    //-----加载动作-----//
-
-    //加载JQ组件
-    if (aya_opt('site_jquery_type', 'theme', true)) {
-        wp_enqueue_script('jquery-min');
-        wp_enqueue_script('aya-main-child'); //jQuery组件
-    }
-    //加载AJAX位置
-    wp_localize_script('jquery', 'aya_home', array(
-        'home_url' => home_url(),
-        'ajax_url' => admin_url('admin-ajax.php')
-    ));
-    //加载MasonryJS
-    //wp_enqueue_script('masonry-self');
-
-    //加载HighlightJS
-    if (aya_opt('site_highlight_type', 'format', true)) {
-        wp_enqueue_style('highlight');
-        wp_enqueue_script('highlight');
+        //加载JQ组件
+        if (aya_opt('site_jquery_type', 'theme', true)) {
+            wp_enqueue_script('jquery-cdn');
+        }
+        //加载HighlightJS
+        if (is_singular() && aya_opt('site_highlight_type', 'format', true)) {
+            wp_enqueue_style('highlight');
+            wp_enqueue_script('highlight');
+            wp_enqueue_script('highlight-line');
+        }
+        //加载Aplayer
+        if (is_singular() && aya_opt('site_aplayer_type', 'format', true)) {
+            wp_enqueue_style('aplayer');
+            wp_enqueue_script('aplayer');
+            wp_enqueue_script('meting');
+            wp_enqueue_script('hls.light.js');
+        }
+        //加载Dplayer
+        if (is_singular() && aya_opt('site_dplayer_type', 'format', true)) {
+            wp_enqueue_style('dplayer');
+            wp_enqueue_script('dplayer');
+            wp_enqueue_script('flv.js');
+            wp_enqueue_script('hls.light.js');
+        }
     }
 }
 //静态文件加载（后台）
@@ -245,9 +257,15 @@ function aya_theme_self_js_css()
     wp_register_script('aya-main-action', AYA_URI . '/assets/index/main.firing.js', array(), aya_theme_version(), false); //false就在页头加载
     wp_register_script('aya-main-bulid', AYA_URI . '/assets/index/main.bulid.js', array(), aya_theme_version(), true);
     wp_register_script('aya-main-child', AYA_URI . '/assets/index/main.child.js', array(), aya_theme_version(), true);
+    //主题CSS文件
+    wp_register_style('aya-main-style', AYA_URI . '/assets/index/main.style.css', array(), aya_theme_version(), 'all');
 
+    //加载JQ组件
+    if (aya_opt('site_jquery_type', 'theme', true)) {
+        wp_enqueue_script('jquery');
+    }
     //如果WP_DEBUG启用
-    if (!WP_DEBUG) {
+    if (defined('WP_DEBUG')) {
         //调试用
         $css_list = array(
             'body',
@@ -264,15 +282,18 @@ function aya_theme_self_js_css()
         foreach ($css_list as $css) {
             wp_enqueue_style('aya-theme-' . $css . '', AYA_URI . '/assets/index/unit/' . $css . '.css', array(), time(), 'all');
         }
-    } else {
-        //主题CSS文件
-        wp_register_style('aya-main-style', AYA_URI . '/assets/index/main.style.css', array(), aya_theme_version(), 'all');
     }
     //加载主题静态文件
     wp_enqueue_style('aya-main-style');
     wp_enqueue_script('aya-main-action');
     wp_enqueue_script('aya-main-bulid');
-    wp_enqueue_script('aya-main-child'); //jQuery组件
+    //wp_enqueue_script('aya-main-child'); //jQuery组件
+
+    //加载AJAX位置
+    wp_localize_script('jquery', 'aya_home', array(
+        'home_url' => home_url(),
+        'ajax_url' => admin_url('admin-ajax.php')
+    ));
 }
 //配置可选CSS样式
 function aya_theme_head_css_custom()
@@ -280,11 +301,12 @@ function aya_theme_head_css_custom()
     $theme_css = '';
 
     //加载动画
-    $theme_css .= 'body { --aya-loading-animation: url(' . aya_get_loading_img() . '); }' . PHP_EOL;
-
+    if (aya_opt('site_loading_animation', 'layout', true)) {
+        $theme_css .= ':root { --aya-loading-animation: url(' . aya_get_page_loading_animation() . '); }' . PHP_EOL;
+    }
     //背景图
     if (aya_opt('site_background_type', 'layout', true)) {
-        $theme_css .= 'body { --aya-bg-image: url(' . aya_opt('site_background_upload', 'layout') . '); }' . PHP_EOL;
+        $theme_css .= ':root { --aya-bg-image: url(' . aya_opt('site_background_upload', 'layout') . '); }' . PHP_EOL;
     }
     //自定义样式表
     if (aya_opt('site_color_custom_type', 'layout', true)) {
@@ -307,7 +329,7 @@ function aya_theme_head_css_custom_rule($opt_echo = false)
     //添加样式
     $css = '';
     //主题样式
-    $css .= 'body {';
+    $css .= ':root {';
     $css .= '--aya-bg-color: ' . aya_opt('site_background_color', 'layout') . ';';
     $css .= '--aya-header-bar-bg: #1f1f1f;';
     $css .= '--aya-footer-bar-bg: #1f1f1f;';
@@ -361,15 +383,15 @@ function aya_theme_body_class_name($class_array)
     return array_merge($class_array, $add_array);
 }
 //获取主题加载动画
-function aya_get_loading_img()
+function aya_get_page_loading_animation()
 {
     //获取主题设置
-    $svg_selector = aya_opt('site_default_selector', 'theme');
+    $svg_selector = aya_opt('site_page_default_selector', 'layout');
 
     //判断切换
     if ($svg_selector == 'custom') {
         //获取主题设置
-        return aya_opt('site_custom_selector', 'theme');
+        return aya_opt('site_page_custom_selector', 'layout');
     } else {
         return AYA_URI . '/assets/image/load/' . $svg_selector . '.svg';
     }

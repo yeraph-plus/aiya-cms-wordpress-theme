@@ -138,6 +138,9 @@
   display: flex;
   color: var(--aya-less-color);
 }
+.widget-card-box .widget-loop .loop-list .card-title a:hover {
+  color: var(--aya-link-hover-color);
+}
 .widget-card-box .widget-loop .in-first:last-child {
   margin: 0;
 }

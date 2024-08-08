@@ -59,29 +59,12 @@ AYF::new_opt(array(
             'type' => 'title_2',
         ),
         array(
-            'title' => '加载动画',
-            'desc' => '选择默认的 SVG 动画',
-            'id' => 'site_default_selector',
-            'type' => 'radio',
-            'sub'  => array(
-                'audio' => 'Audio',
-                'bars' => 'Bars',
-                'oval' => 'Oval',
-                'puff' => 'Puff',
-                'spinning-circles' => 'Spinning Circles',
-                'tail-spin' => 'Tail Spin',
-                'three-dots' => 'Three Fots',
-                'custom' => '自定义',
-            ),
-            'default' => 'three-dots',
-        ),
-        array(
-            'title' => '自定义加载动画',
-            'desc' => '覆盖上一项设置，上传自定义的 SVG 或 GIF 动画',
-            'id' => 'site_custom_selector',
+            'title' => '图片懒加载动画',
+            'desc' => '上传自定义的图片或 GIF 动画',
+            'id' => 'site_image_load_ani',
             'type' => 'upload',
             'button_text' => '上传',
-            'default'  => '',
+            'default'  => AYA_URI . '/assets/image/rolling.gif',
         ),
         array(
             'title' => '默认文章缩略图',
@@ -97,7 +80,7 @@ AYF::new_opt(array(
             'id' => 'site_none_page_img',
             'type' => 'upload',
             'button_text' => '上传',
-            'default'  => AYA_URI . '/assets/image/paper_plane.png',
+            'default'  => AYA_URI . '/assets/image/ex0-sakamoto.png',
         ),
         array(
             'title' => ' 404 页面占位图',
@@ -105,7 +88,18 @@ AYF::new_opt(array(
             'id' => 'site_404_page_img',
             'type' => 'upload',
             'button_text' => '上传',
-            'default'  => AYA_URI . '/assets/image/paper_plane.png',
+            'default'  => AYA_URI . '/assets/image/ex0-lzumi-404.png',
+        ),
+        array(
+            'desc' => '主题拓展组件设置',
+            'type' => 'title_2',
+        ),
+        array(
+            'title' => '图像处理依赖',
+            'desc' => '使用主题方式加载和生成文章缩略图和封面图等，否则使用 WP 媒体库自带功能',
+            'id' => 'site_expand_image_manager',
+            'type' => 'switch',
+            'default' => true,
         ),
         array(
             'desc' => '页脚信息',
@@ -123,7 +117,7 @@ AYF::new_opt(array(
             'desc' => '根据《互联网信息服务管理办法》要求，设置网站 ICP 备案信息',
             'id' => 'site_icp_beian',
             'type' => 'text',
-            'default' => '', // 没ICP备11451419号-0（雾）
+            'default' => '', // 没ICP备11451419号-19（雾）
         ),
         array(
             'title' => '公安网备',

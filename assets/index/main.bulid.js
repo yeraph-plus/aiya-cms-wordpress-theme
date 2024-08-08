@@ -6,14 +6,16 @@ class AIYA_INIT {
         this.loadPjax();
         this.OP_RootOut();
         this.loadLozad();
-        this.loadMasonry();
+        this.navDrawer();
+        //this.loadMasonry();
         this.loadViewer();
-        this.loadHighlight();
+        //this.loadHighlight();
     }
     reInit() {
         this.loadLozad();
         this.loadViewer();
-        this.loadHighlight();
+        //this.loadMasonry();
+        //this.loadHighlight();
     }
     //LozadJS
     loadLozad() {
@@ -65,11 +67,24 @@ class AIYA_INIT {
     loadPjax() {
         const pjax_js = new Pjax({
             elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"])', // 拦截正常带链接的 a 标签
-            selectors: ["#pjax-wrapper", "#aside-wrapper", "title"], // 根据实际需要确认重载区域
+            selectors: ["#pjax-wrapper", "#aside-wrapper", "title"],
             cacheBust: true,
         });
         //Log
         console.log("Document initialized:", pjax_js);
+    }
+    //导航栏菜单抽屉
+    navDrawer() {
+        let menuBtn = document.getElementById("nav-drawer-btn");
+        let drawerMenu = document.querySelector(".nav-drawer-menu");
+
+        menuBtn.addEventListener("click", function () {
+            drawerMenu.classList.toggle("show");
+        });
+    }
+    //Info
+    infoTheme() {
+        console.log("\n\n %c AIYA-CMS %c https://www.yeraph.com", "color:#f1ab0e;background:#222222;padding:5px;", "background:#eee;padding:5px;");
     }
     //Loading
     OP_RootIn() {
@@ -95,10 +110,6 @@ class AIYA_INIT {
         let wrapper = document.getElementById("pjax-wrapper");
         //out
         this.Loading_Opacity(wrapper, "out", false);
-    }
-    //Info
-    infoTheme() {
-        console.log("\n\n %c AIYA-CMS %c https://www.yeraph.com", "color:#f1ab0e;background:#222222;padding:5px;", "background:#eee;padding:5px;");
     }
     //demo
     /*
@@ -169,7 +180,6 @@ document.addEventListener("DOMContentLoaded", function () {
     //Init
     init_self = new AIYA_INIT();
     init_self.firstInit();
-    init_self.ajaxNextPage();
 });
 //PJAX: Send
 document.addEventListener("pjax:send", function () {
@@ -194,22 +204,13 @@ document.addEventListener("pjax:error", function () {
 });
 //PJAX: Success
 document.addEventListener("pjax:success", function () {
-    //Promise
-    async function loadCallback() {
-        await init_self.reInit();
-        //timeout
-        setTimeout(function () {
-            init_self.loadMasonry();
-        }, 1000);
-    }
-    loadCallback();
     //url without
     let urlWithoutParam = window.location.pathname;
     window.history.replaceState({}, document.title, urlWithoutParam);
+    init_self.reInit();
     //Log
     console.log("Event: pjax:success", arguments);
 });
 //IF Window resize
 window.addEventListener("resize", function () {
-    init_self.loadMasonry();
 });

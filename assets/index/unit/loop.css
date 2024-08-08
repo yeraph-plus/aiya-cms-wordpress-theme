@@ -48,7 +48,7 @@
 .loop-content .loop-grid .card-img-border {
   min-height: 100px;
 }
-.loop-content .loop-list .card-body {
+.loop-content .loop-list .with-img {
   padding-left: 0;
 }
 .loop-content .loop-list .card-img-border {
@@ -66,18 +66,20 @@
   font-size: 18px;
   font-weight: 700;
 }
-.loop-content .card-body .card-title a {
+.loop-content .card-body a {
+  color: var(--aya-link-color);
+  text-overflow: ellipsis;
+}
+.loop-content .card-body a:hover {
+  color: var(--aya-link-hover-color);
+}
+.loop-content .card-body .card-title {
   font-size: 18px;
   font-weight: 600;
-  color: var(--aya-link-color);
   overflow: hidden;
-  text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-}
-.loop-content .card-body .card-title a:hover {
-  color: var(--aya-link-hover-color);
 }
 .loop-content .card-body .card-text {
   height: 40px;
@@ -86,6 +88,25 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+.loop-content .card-body .card-tweet-quote {
+  position: relative;
+  height: 40px;
+}
+.loop-content .card-body .card-tweet-quote .quote {
+  position: absolute;
+  top: -10px;
+  right: 0;
+  font-size: 34px;
+  font-style: italic;
+}
+.loop-content .card-body .card-tweet {
+  height: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 10;
 }
 .loop-content .card-body .loop-tags {
   margin-top: 20px;

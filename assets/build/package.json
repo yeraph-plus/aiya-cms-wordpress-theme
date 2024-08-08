@@ -18,10 +18,11 @@
     "dplayer": "^1.27.1",
     "flv.js": "^1.6.2",
     "highlight": "^0.2.4",
+    "highlight.js": "^11.10.0",
     "hls.js": "^1.5.13",
     "jquery": "^3.7.1",
     "lozad": "^1.16.0",
-    "masonry": "^0.0.2",
+    "masonry-layout": "^4.2.2",
     "meting": "^2.0.1",
     "pjax": "^0.2.8",
     "viewerjs": "^1.11.6"

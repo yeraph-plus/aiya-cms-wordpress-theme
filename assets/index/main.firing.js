@@ -1,5 +1,4 @@
 const rootElement = document.documentElement;
-const currentDomain = window.location.hostname;
 //检查暗色模式设置
 const autoDark = localStorage.getItem("isDarkMode");
 //监听页面滚动
@@ -15,13 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
     //操作滚动后样式
     document.addEventListener("scroll", headerScroll);
     document.addEventListener("scroll", buttonScroll);
-    //操作导航栏菜单
-    let menuBtn = document.getElementById("nav-drawer-btn");
-    let drawerMenu = document.querySelector(".nav-drawer-menu");
-
-    menuBtn.addEventListener("click", function () {
-        drawerMenu.classList.toggle("show");
-    });
 });
 //深色模式切换器
 function switchDarkMode() {
@@ -72,14 +64,9 @@ function switchTo(id) {
 }
 //返回上一页
 function backButton() {
-    window.history.back();
-}
-//导航栏菜单抽屉
-function navDrawer() {
-    let menuBtn = self;
-    let drawerMenu = document.querySelector(".nav-drawer-menu");
-
-    menuBtn.addEventListener("click", function () {
-        drawerMenu.classList.toggle("show");
-    });
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        window.location.href = "/";
+    }
 }

@@ -9,6 +9,42 @@ AYF::new_opt(array(
     'desc' => 'AIYA-CMS 主题，外观样式、配色切换、页面布局和组件设置',
     'fields' => array(
         array(
+            'desc' => '页面加载动画',
+            'type' => 'title_2',
+        ),
+        array(
+            'title' => '启用页面加载动画',
+            'desc' => '首次打开页面时，使用加载动画层覆盖页面',
+            'id' => 'site_loading_animation',
+            'type' => 'switch',
+            'default' => false,
+        ),
+        array(
+            'title' => '页面加载动画',
+            'desc' => '选择默认的 SVG 动画',
+            'id' => 'site_page_default_selector',
+            'type' => 'radio',
+            'sub'  => array(
+                'audio' => 'Audio',
+                'bars' => 'Bars',
+                'oval' => 'Oval',
+                'puff' => 'Puff',
+                'spinning-circles' => 'Spinning Circles',
+                'tail-spin' => 'Tail Spin',
+                'three-dots' => 'Three Fots',
+                'custom' => '自定义',
+            ),
+            'default' => 'three-dots',
+        ),
+        array(
+            'title' => '页面加载动画（自定义）',
+            'desc' => '覆盖上一项设置，上传自定义的 SVG 或 GIF 动画',
+            'id' => 'site_page_custom_selector',
+            'type' => 'upload',
+            'button_text' => '上传',
+            'default'  => '',
+        ),
+        array(
             'desc' => '顶部导航（Topbar）',
             'type' => 'title_2',
         ),

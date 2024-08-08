@@ -21,14 +21,14 @@ AYF::new_opt(array(
         ),
         array(
             'title' => '正文文字大小',
-            'desc' => '设置正文文字大小，仅影响文内，默认值<code>1rem</code>',
+            'desc' => '设置正文文字大小，仅影响文内，默认值[code]1rem[/code]',
             'id' => 'site_main_size',
             'type' => 'text',
             'default' => '1rem',
         ),
         array(
             'title' => '正文文字行间距',
-            'desc' => '设置正文文字行间距，仅影响文内，默认值<code>10px</code>',
+            'desc' => '设置正文文字行间距，仅影响文内，默认值[code]10px[/code]',
             'id' => 'site_main_width',
             'type' => 'text',
             'default' => '10px',
@@ -39,7 +39,7 @@ AYF::new_opt(array(
         ),
         array(
             'title' => '链接标签格式',
-            'desc' => '给文章正文内部 &lt;a&gt; 标签自动添加 <code>rel="nofollow"</code> 和 <code>target="_blank"</code> 属性，仅对外部链接生效',
+            'desc' => '给文章正文内部 <a> 标签自动添加 [code]rel="nofollow"[/code] 和 [code]target="_blank"[/code] 属性，仅对外部链接生效',
             'id' => 'site_content_link_filter',
             'type' => 'switch',
             'default' => true,
@@ -145,15 +145,15 @@ AYF::new_opt(array(
             'type' => 'title_2',
         ),
         array(
-            'title' => '启用 Highlight.js',
-            'desc' => '设置是否加载代码高亮组件',
+            'title' => '启用代码高亮组件',
+            'desc' => '前台加载 Highlight.js 组件，并启用短代码功能',
             'id' => 'site_highlight_type',
             'type' => 'switch',
             'default' => false,
         ),
         array(
             'title' => '设置 Highlight.js 样式',
-            'desc' => '使用自定义的 Highlight.js 样式表，仅填写样式文件名，默认<code>atom-one-dark</code>',
+            'desc' => '自定义的 Highlight.js 样式表，仅填写样式文件名，默认 [code]atom-one-dark.css[/code]',
             'id' => 'site_highlight_style',
             'type' => 'text',
             'default' => 'base16/atom-one-dark.css',
@@ -163,7 +163,7 @@ AYF::new_opt(array(
             'type' => 'title_2',
         ),
         array(
-            'desc' => '*此功能使用 <code>jxlwqq/chinese-typesetting</code> 项目：<a href="https://github.com/jxlwqq/chinese-typesetting" target="_blank">查看文档</a>',
+            'desc' => '*此功能使用 [code]jxlwqq/chinese-typesetting[/code] 项目：[url="https://github.com/jxlwqq/chinese-typesetting"]查看文档[/url]',
             'type' => 'message',
         ),
         array(
@@ -198,7 +198,7 @@ AYF::new_opt(array(
             'type' => 'title_2',
         ),
         array(
-            'desc' => '*此功能使用 <code>overtrue/pinyin</code> 项目',
+            'desc' => '*此功能使用 [code]overtrue/pinyin[/code] 项目',
             'type' => 'message',
         ),
         array(

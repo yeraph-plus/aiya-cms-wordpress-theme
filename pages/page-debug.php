@@ -22,7 +22,7 @@ $cover = array(
     //'title_center' => '测试文字',
     //'title_top' => '测试文字',
     //'title_bottom' => '测试文字',
-    'title_auto' => '恶魔妹妹卖卖萌恶魔妹妹卖卖萌',
+    'title_auto' => '恶魔妹妹，卖卖萌恶魔妹妹卖卖萌',
     //'thumb_image' => $thisfile,
 );
 $cover_draw = new AYA_Imagine_Draws();

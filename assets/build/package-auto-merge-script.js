@@ -7,8 +7,9 @@ const min_js_files = [
   './node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
   './node_modules/pjax/pjax.min.js',
   './node_modules/lozad/dist/lozad.min.js',
+  './node_modules/masonry-layout/dist/masonry.pkgd.min.js',
   './node_modules/viewerjs/dist/viewer.min.js',
-  './node_modules/clipboard/dist/clipboard.min.js'
+  './node_modules/clipboard/dist/clipboard.min.js',
 ];
 const min_css_files = [
   './node_modules/bootstrap/dist/css/bootstrap.min.css',

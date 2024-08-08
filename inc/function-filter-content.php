@@ -35,24 +35,31 @@ function aya_post_content_filter_format($content)
 //格式化<img>标签
 function aya_post_content_img_alt_and_lazy($content)
 {
+    global $post;
+
     //遍历
-    preg_match_all('/<img (.*?)\/>/', $content, $imgs);
+    preg_match_all('/<img [^>]+>/', $content, $images);
     //如果存在img标签
-    if (!is_null($imgs)) {
+    if (!is_array($images)) {
+        return $content;
+    }
 
-        foreach ($imgs[0] as $i => $img) {
-            //再次遍历提取属性
-            //preg_match_all('/(src|alt|width|height)=("[^"]*")/i', $img, $matche);
-
-            //附加ALT属性
-            if (!preg_match('/alt=/', $img) || preg_match('/alt=""/', $img)) {
-                $replace_image = preg_replace('/<img /', '<img alt="' . get_the_title($GLOBALS['post']) . '-PIC-' . $i + 1 . '" ', $img);
-            }
-            //附加懒加载状态
-            $replace_image = preg_replace('/<img /', '<img loading="lazy" class="lozad" ', $replace_image);
-
-            $content = str_replace($img, $replace_image, $content);
+    foreach ($images[0] as $i => $image) {
+        //检查class
+        if (!preg_match('/class=["\']?([^"\']*)["\']?/i', $image)) {
+            //添加
+            $image = preg_replace('/<img /', '<img class="lozad" ', $image);
+        } else {
+            //追加
+            $image = preg_replace('/class=["\']?([^"\']*)["\']?/i', 'class="$1 lozad"', $image);
         }
+        //检查alt
+        if (!preg_match('/alt=["\']?([^"\']*)["\']?/i', $image)) {
+            // 如果没有alt属性，添加alt属性
+            $image = preg_replace('/<img /', '<img alt="' . get_the_title($post->ID) . '-PIC-' . $i + 1 . '" ', $image);
+        }
+
+        $content = str_replace($image, $image, $content);
     }
 
     return $content;
@@ -136,6 +143,8 @@ function aya_link_jump_page($url)
             return home_url() . "/go/?url=" . base64_encode($url);
         case 'link':
             return home_url() . "/link/?url=" . base64_encode($url);
+        default:
+            return $url;
     }
 }
 //格式化<a>标签

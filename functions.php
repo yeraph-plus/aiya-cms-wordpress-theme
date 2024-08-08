@@ -29,10 +29,10 @@ if (!defined('ABSPATH')) die('Invalid request.');
  * 定义常量
  * ------------------------------------------------------------------------------
  */
-define('AYA_RELEASE', '2.0.0');
+//define('AYA_RELEASE', '2.0.0');
+define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); //MINUTE_IN_SECONDS
 define('AYA_PATH', get_template_directory());
 define('AYA_URI', get_template_directory_uri());
-define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); //MINUTE_IN_SECONDS
 
 /*
  * ------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); //MINUTE_IN_SECONDS
 
 //从主题内加载
 if (!defined('AYF_VERSION')) {
-    if (!defined('AYA_RELEASE')) {
+    if (defined('AYA_RELEASE')) {
         //引入设置框架
         define('AYF_URI', get_template_directory_uri() . '/plugin');
 
@@ -50,16 +50,12 @@ if (!defined('AYF_VERSION')) {
         require_once AYA_PATH . '/plugin/framework-required/setup.php';
         //引入插件组
         require_once AYA_PATH . '/plugin/framework-unit/setup.php';
-    } else {
-        return;
     }
 }
 if (!defined('AYA_IMAGE_VERSION')) {
-    if (!defined('AYA_RELEASE')) {
+    if (defined('AYA_RELEASE')) {
         //引入图片依赖包
         require_once AYA_PATH . '/plugin/image-manager/setup.php';
-    } else {
-        return;
     }
 }
 
@@ -88,10 +84,10 @@ aya_require('function-query');
 aya_require('function-enqueue');
 aya_require('function-fix');
 aya_require('function-single');
-aya_require('function-ajax');
+//aya_require('function-ajax');
 //aya_require('function-cache');
 aya_require('function-filter-content');
-aya_require('function-image-procer');
+aya_require('function-image-manager');
 aya_require('function-template');
 aya_require('template-menu-nav');
 aya_require('template-menu-bread');
@@ -101,13 +97,14 @@ aya_require('template-footer');
 aya_require('template-loop');
 aya_require('template-single-embly');
 //短代码
-aya_require('code-email', 'shotcode');
-aya_require('code-hide', 'shotcode');
-aya_require('code-list', 'shotcode');
-aya_require('code-aplayer', 'shotcode');
-aya_require('code-dplayer', 'shotcode');
-aya_require('code-meting', 'shotcode');
+//aya_require('code-email', 'shotcode');
+//aya_require('code-hide', 'shotcode');
+//aya_require('code-list', 'shotcode');
+//aya_require('code-aplayer', 'shotcode');
+//aya_require('code-dplayer', 'shotcode');
+//aya_require('code-meting', 'shotcode');
 aya_require('code-download', 'shotcode');
+//aya_require('code-hightlight', 'shotcode');
 //小工具
 aya_require('widget-add-menu', 'widget');
 aya_require('widget-search', 'widget');
@@ -122,21 +119,6 @@ aya_require('widget-post-random', 'widget');
 aya_require('widget-post-views', 'widget');
 aya_require('widget-post-newest', 'widget');
 aya_require('widget-tweet', 'widget');
-//加载主题设置
-function aya_load_admin_setting()
-{
-    if (!is_admin()) return;
-
-    $in_file = AYA_PATH . '/inc/settings';
-
-    include_once $in_file . '/option-parent.php';
-    include_once $in_file . '/option-layout.php';
-    include_once $in_file . '/option-format.php';
-    include_once $in_file . '/option-index.php';
-    include_once $in_file . '/option-image.php';
-}
-//设置组
-aya_load_admin_setting();
 
 /*
  * ------------------------------------------------------------------------------
@@ -146,6 +128,13 @@ aya_load_admin_setting();
  * ------------------------------------------------------------------------------
  */
 
+//加载主题设置
+include_once AYA_PATH . '/settings/option-parent.php';
+include_once AYA_PATH . '/settings/option-layout.php';
+include_once AYA_PATH . '/settings/option-format.php';
+include_once AYA_PATH . '/settings/option-index.php';
+include_once AYA_PATH . '/settings/option-image.php';
+//组件功能
 AYP::include_plugins('inc');
 
 //运行环境检查

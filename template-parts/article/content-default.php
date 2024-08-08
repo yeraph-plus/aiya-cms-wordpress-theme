@@ -6,6 +6,7 @@
 
 $post_data = aya_the_content_meta_data(0);
 
+//<span class="likes px-2"><i class="bi bi-heart"></i> <?php //e_html($post_data['likes']); </span>
 ?>
 <article id="entry-main">
     <div class="card">
@@ -28,18 +29,17 @@ $post_data = aya_the_content_meta_data(0);
                     <span class="author px-2"><i class="bi bi-person"></i> <?php e_html($post_data['author']); ?></span>
                     <span class="date pr-2"><i class="bi bi-clock"></i> <?php e_html($post_data['date']); ?></span>
                     <span class="views px-2"><i class="bi bi-eye"></i> <?php e_html($post_data['views']); ?></span>
-                    <span class="likes px-2"><i class="bi bi-heart"></i> <?php e_html($post_data['likes']); ?></span>
                     <span class="comments px-2"><i class="bi bi-chat-dots"></i> <?php e_html($post_data['comments']); ?></span>
                 </div>
-                <?php
-                //检查摘要
-                if ($post_data['excerpt'] != '') :
-                    e_html('<p class="card-text">' . $post_data['excerpt'] . '</p>');
-                endif;
-                ?>
             </div>
         </div>
         <div class="entry-content">
+            <?php
+            //检查摘要
+            if ($post_data['excerpt'] != '') :
+                e_html('<p class="card-excerpt">' . $post_data['excerpt'] . '</p>');
+            endif;
+            ?>
             <?php aya_single_outdated_tip(); ?>
             <?php e_html($post_data['content']); ?>
         </div>

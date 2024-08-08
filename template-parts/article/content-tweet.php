@@ -6,6 +6,7 @@
 
 $post_data = aya_the_content_meta_data(0);
 
+//<span class="likes px-2"><i class="bi bi-heart"></i>e_html($post_data['likes'])</span>
 ?>
 <article id="entry-main">
     <div class="card">
@@ -18,7 +19,6 @@ $post_data = aya_the_content_meta_data(0);
                     <span class="author px-2"><i class="bi bi-person"></i> <?php e_html($post_data['author']); ?></span>
                     <span class="date pr-2"><i class="bi bi-clock"></i> <?php e_html($post_data['date']); ?></span>
                     <span class="views px-2"><i class="bi bi-eye"></i> <?php e_html($post_data['views']); ?></span>
-                    <span class="likes px-2"><i class="bi bi-heart"></i> <?php e_html($post_data['likes']); ?></span>
                     <span class="comments px-2"><i class="bi bi-chat-dots"></i> <?php e_html($post_data['comments']); ?></span>
                 </div>
             </div>
@@ -35,5 +35,4 @@ $post_data = aya_the_content_meta_data(0);
         </div>
     </div>
 </article>
-<?php //aya_single_author_panel(); 
-?>
+<?php aya_single_author_panel(); ?>

@@ -47,10 +47,12 @@ function aya_header_menu_toggle()
         $html_before = '<div class="navbar-nav navbar-drawer trans-200 me-auto mb-0">';
         $html_before .= '<li class="menu-item"><a id="nav-drawer-btn" href="javascript:void(0);" class="nav-link"><i class="bi bi-three-dots"></i></a></li>';
 
-        return e_html($html_before) . aya_nav_menu('header-menu', 'nav-drawer-menu me-auto mb-0', 1) . e_html('</div>');
-    }
+        $html_after = '</div>';
 
-    return e_html('<div class="trans-200 me-auto mb-0">') . aya_nav_menu('header-menu', 'navbar-nav me-auto mb-0', 1) . e_html('</div>');
+        return e_html($html_before) . aya_nav_menu('header-menu', 'nav-drawer-menu me-auto mb-0', 1) . e_html($html_after);
+    } else {
+        return e_html('<div class="trans-200 me-auto mb-0">') . aya_nav_menu('header-menu', 'navbar-nav me-auto mb-0', 1) . e_html('</div>');
+    }
 }
 //加载Banner组件
 function aya_banner_section()

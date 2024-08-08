@@ -48,7 +48,7 @@ class AYA_Widget_Post_Random extends AYA_Widget
             foreach ($the_post as $post => $post_data) {
                 $i++;
                 $first = ($i == 1) ? ' in-first' : '';
-                echo '<li class="loop-list' . $first . '"><img class="lozad card-img" src="' . aya_the_loop_thumb($post_data['id'], 400, 300, true) . '" alt="' . $post_data['attr_title'] . '" loading="lazy">
+                echo '<li class="loop-list' . $first . '"><img class="lozad card-img" src="' . aya_the_loop_image($post_data['id'], 400, 300) . '" alt="' . $post_data['attr_title'] . '" loading="lazy">
                 <div class="card-title">
                     <h5><a class="stretched-link" href="' . $post_data['url'] . '">' . $post_data['title'] . '</a></h5>
                     <p><i class="bi bi-clock"></i>&nbsp;' . $post_data['date'] . '&nbsp<i class="bi bi-eye"></i>&nbsp' . $post_data['views'] . '</p>
