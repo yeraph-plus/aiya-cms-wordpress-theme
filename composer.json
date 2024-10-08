@@ -27,7 +27,7 @@
     "scripts": {
         "php:wpcs": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
         "php:lint": "@php ./vendor/bin/parallel-lint --exclude .git --exclude vendor .",
-        "make-pot": "wp i18n make-pot . languages/_s.pot"
+        "make-pot": "wp i18n make-pot . languages/aiya-cms.pot"
     },
     "support": {
         "issues": "https://github.com/yeraph-plus/aiya-cms-wordpress-theme/issues",

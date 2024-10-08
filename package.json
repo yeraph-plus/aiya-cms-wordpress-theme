@@ -16,8 +16,8 @@
     },
     "scripts": {
         "node:test": "echo \"Error: no test specified\" && exit 1",
-        "lint:css": "wp-scripts lint-style 'sass/**/*.scss'",
-        "lint:js": "wp-scripts lint-js 'js/*.js'",
+        "lint:css": "wp-scripts lint-style 'build/sass/**/*.scss'",
+        "lint:js": "wp-scripts lint-js 'build/js/*.js'",
         "bundle": "dir-archiver --src . --dest ../aiya-cms-releases.zip --exclude .DS_Store .stylelintrc.json .eslintrc .git .gitattributes .github .gitignore README.md composer.json composer.lock node_modules vendor package-lock.json package.json .travis.yml phpcs.xml.dist sass style.css.map yarn.lock"
     }
 }
