@@ -1,0 +1,23 @@
+{
+    "name": "aiya-wordpress-cms-theme",
+    "version": "1.0.0",
+    "description": "一种很新的旧 WordPress 主题",
+    "author": "Yeraph",
+    "keywords": [
+        "WordPress",
+        "Theme"
+    ],
+    "homepage": "https://www.yeraph.com",
+    "license": "GPL-3.0-or-later",
+    "devDependencies": {
+        "@wordpress/scripts": "^30.1.0",
+        "dir-archiver": "^2.1.0",
+        "sass": "^1.79.4"
+    },
+    "scripts": {
+        "node:test": "echo \"Error: no test specified\" && exit 1",
+        "lint:css": "wp-scripts lint-style 'sass/**/*.scss'",
+        "lint:js": "wp-scripts lint-js 'js/*.js'",
+        "bundle": "dir-archiver --src . --dest ../aiya-cms-releases.zip --exclude .DS_Store .stylelintrc.json .eslintrc .git .gitattributes .github .gitignore README.md composer.json composer.lock node_modules vendor package-lock.json package.json .travis.yml phpcs.xml.dist sass style.css.map yarn.lock"
+    }
+}
