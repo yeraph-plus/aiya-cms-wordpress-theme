@@ -1,0 +1,20 @@
+{
+    "name": "aiya-cms/lib",
+    "description": "一种很新的旧 WordPress 主题",
+    "type": "library",
+    "license": "GPL-3.0-or-later",
+    "minimum-stability": "stable",
+    "require": {
+        "guzzlehttp/guzzle": "^7.2",
+        "overtrue/php-opencc": "^1.0",
+        "overtrue/pinyin": "^5.3",
+        "metowolf/meting": "^1.5",
+        "jxlwqq/chinese-typesetting": "^1.2"
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        }
+    }
+}

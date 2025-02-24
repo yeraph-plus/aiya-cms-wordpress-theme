@@ -1,0 +1,1 @@
+<?php aya_section_tittle('图片集'); ?>
