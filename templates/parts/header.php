@@ -52,7 +52,7 @@
                     <a href="javascript:;" class="block p-2 rounded-md bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60" @click="toggle">
                         <i data-feather="bell" width="20" height="20" stroke-width="2"></i>
 
-                        <template x-if="siteNotificationMarked">
+                        <template x-if="!notificationList.length">
                             <span class="flex absolute w-3 h-3 ltr:right-0 rtl:left-0 top-0">
                                 <span class="animate-ping absolute ltr:-left-[3px] rtl:-right-[3px] -top-[3px] inline-flex h-full w-full rounded-full bg-success/50 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full w-[6px] h-[6px] bg-success"></span>
@@ -62,13 +62,15 @@
                     <ul x-cloak x-show="open" x-transition x-transition.duration.300ms class="top-11 !py-0 text-dark dark:text-white-dark w-[300px] ltr:-right-16 sm:ltr:-right-2 rtl:-left-16 sm:rtl:-left-2 sm:w-[375px] text-xs">
                         <li>
                             <div class="flex items-center px-4 py-2 justify-between font-semibold hover:!bg-transparent">
-                                <h4 class="text-lg">Notification</h4>
-                                <template x-if="siteNotifications.length">
-                                    <span class="badge bg-primary/80" x-text="siteNotifications.length"></span>
+                                <h4 class="text-lg">
+                                    <?php aya_echo(__('通知盒子', 'AIYA')); ?>
+                                </h4>
+                                <template x-if="notificationList.length">
+                                    <span class="badge bg-primary/80" x-text="notificationList.length"></span>
                                 </template>
                             </div>
                         </li>
-                        <template x-for="note in siteNotifications">
+                        <template x-for="note in notificationList">
                             <li>
                                 <div class="flex items-center px-5 py-3" @click.self="toggle">
                                     <div x-html="note.icon"></div>
@@ -80,10 +82,10 @@
                                 </div>
                             </li>
                         </template>
-                        <template x-if="!siteNotifications.length">
+                        <template x-if="!notificationList.length">
                             <li class="mb-5">
                                 <div class="!grid place-content-center hover:!bg-transparent text-lg min-h-[200px]">
-                                    No data available.
+                                    <?php aya_echo(__('没有新的消息', 'AIYA')); ?>
                                 </div>
                             </li>
                         </template>
@@ -92,14 +94,14 @@
                 <?php if (aya_user_can_register()): ?>
                     <!-- Login Button -->
                     <div class="sm:flex items-center">
-                        <a href="#" class="block p-2 rounded-md btn btn-outline-primary" @click="toggle">Login</a>
+                        <a href="#" class="block p-2 rounded-md btn btn-outline-primary" @click="toggle"><?php aya_echo(__('登录', 'AIYA')); ?></a>
                     </div>
                     <div class="sm:flex items-center">
-                        <a href="#" class="block p-2 rounded-md btn btn-primary" @click="toggle">Register</a>
+                        <a href="#" class="block p-2 rounded-md btn btn-primary" @click="toggle"><?php aya_echo(__('注册', 'AIYA')); ?></a>
                     </div>
                 <?php else: ?>
                     <!-- User Profile -->
-                    <div class="dropdown" x-show="userInformation.logged" x-data="dropdown" @click.outside="open = false">
+                    <div class="dropdown" x-show="userInfo.logged" x-data="dropdown" @click.outside="open = false">
                         <a href="javascript:;" class="block p-2 rounded-md bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60" @click="toggle()">
                             <i data-feather="user" width="20" height="20" stroke-width="2"></i>
                         </a>
@@ -108,27 +110,28 @@
                                 <div class="flex items-center px-4 py-4">
                                     <div class="flex-none">
                                         <span>
-                                            <img class=" rounded-md w-10 h-10 object-cover" :src="userInformation.avatar" alt="avatar" />
+                                            <img class=" rounded-md w-10 h-10 object-cover" :src="userInfo.avatar" alt="avatar" />
                                         </span>
                                     </div>
                                     <div class="ltr:pl-4 rtl:pr-4 truncate">
                                         <h4 class="text-base">
-                                            <span x-text="userInformation.name"></span>
-                                            <span class="text-xs rounded" x-html="userInformation.badge"></span>
+                                            <span x-text="userInfo.name"></span>
+                                            <span class="text-xs rounded" x-html="userInfo.badge"></span>
                                         </h4>
 
-                                        <p class="text-black/60  hover:text-primary dark:text-dark-light/60 dark:hover:text-white" x-text="userInformation.email"></p>
+                                        <p class="text-black/60  hover:text-primary dark:text-dark-light/60 dark:hover:text-white" x-text="userInfo.email"></p>
                                     </div>
                                 </div>
                             </li>
-                            <template x-for="item in userInformation.menus">
+                            <template x-for="item in userInfo.menus">
                                 <li>
                                     <a :href="item.url" class="dark:hover:text-white" x-text="item.label"></a>
                                 </li>
                             </template>
                             <li class="border-t border-white-light dark:border-white-light/10">
                                 <a href="#" class=" text-danger !py-3" @click="toggle">
-                                    <i data-feather="log-out" width="16" height="16" class="mr-2"></i>Sign Out
+                                    <i data-feather="log-out" width="16" height="16" class="mr-2"></i>
+                                    <span><?php aya_echo(__('退出登录', 'AIYA')); ?></span>
                                 </a>
                             </li>
                         </ul>
@@ -166,32 +169,3 @@
         </ul>
     </div>
 </header>
-<script>
-    document.addEventListener("alpine:init", () => {
-        Alpine.data("header", () => ({
-            init() {
-                const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');
-                if (selector) {
-                    selector.classList.add('active');
-                    const ul = selector.closest('ul.sub-menu');
-                    if (ul) {
-                        let ele = ul.closest('li.menu').querySelectorAll('.nav-link');
-                        if (ele) {
-                            ele = ele[0];
-                            setTimeout(() => {
-                                ele.classList.add('active');
-                            });
-                        }
-                    }
-                }
-            },
-
-            siteNotificationMarked: true,
-
-            siteNotifications: <?php aya_notify_list_data() ?>,
-
-            userInformation: <?php aya_user_login_in_data() ?>,
-
-        }));
-    });
-</script>

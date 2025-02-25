@@ -39,26 +39,9 @@ define('AYA_EXTRA_BRANCH', '');
 
 /*
  * ------------------------------------------------------------------------------
- * 验证主题依赖组件
+ * 载入主题方法和页面组件
  * ------------------------------------------------------------------------------
  */
-
-//加载主题功能包
-if (file_exists(AYA_PATH . '/plugins/plugin-startup.php')) {
-    //索引文件
-    require_once AYA_PATH . '/plugins/plugin-startup.php';
-}
-
-//检查框架插件加载
-if (!class_exists('AYF') || !class_exists('AYP')) {
-
-    if (!is_admin()) {
-        wp_die('AIYA-CMS 主题缺少必要依赖，请使用 Release 版本，或安装并激活 AIYA-Optimize 插件。');
-        exit;
-    }
-
-    return;
-}
 
 //转为输出
 function aya_echo($data, $special = false)
@@ -129,14 +112,28 @@ function aya_require($name, $path = '')
     }
 }
 
-/*
- * ------------------------------------------------------------------------------
- * 载入主题方法和页面组件
- * ------------------------------------------------------------------------------
- */
+//加载主题功能包
+if (file_exists(AYA_PATH . '/plugins/plugin-startup.php')) {
+    //索引文件
+    require_once AYA_PATH . '/plugins/plugin-startup.php';
+    require_once AYA_PATH . '/plugins/plugin-extra-opt.php';
+}
+
+//拦截加载，防止WP严重报错
+if (!class_exists('AYF') || !class_exists('AYP')) {
+    if (!is_admin()) {
+        wp_die('AIYA-CMS 主题缺少必要依赖，请使用 Release 版本，或安装并激活 AIYA-Optimize 插件。');
+        exit;
+    }
+
+    return;
+}
 
 //加载 Composer 依赖
-require_once AYA_PATH . '/lib/vendor/autoload.php';
+if (file_exists(AYA_PATH . '/lib/vendor/autoload.php')) {
+    //autoload
+    require_once AYA_PATH . '/lib/vendor/autoload.php';
+}
 
 //主题方法
 aya_require('func-public');
@@ -150,12 +147,11 @@ aya_require('func-template-comment');
 aya_require('func-template-data');
 aya_require('func-notify');
 //aya_require('function-image-manager');
-
 //设置页面
 aya_require('opt-parent', 'settings');
 aya_require('opt-homepage', 'settings');
-aya_require('opt-single', 'settings');
-aya_require('opt-extra', 'settings');
+aya_require('opt-postpage', 'settings');
+aya_require('opt-plugin-extra', 'settings');
 //小工具
 aya_require('widget-text-html', 'widgets');
 aya_require('widget-add-menu', 'widgets');
@@ -309,6 +305,7 @@ AYP::action('Register_Sidebar', array(
     'archive-sitebar' => __('归档页面', 'AIYA'),
     'main-sitebar' => __('工具板', 'AIYA'),
 ));
+/*
 //注册自定义文章类型
 AYP::action('Register_Post_Type', array(
     //'文章类型' => array('name' => '文章类型名','slug' => '别名','icon' => '图标'),
@@ -319,7 +316,6 @@ AYP::action('Register_Post_Type', array(
     ),
 ));
 //注册自定义分类法
-/*
 AYP::action('Register_Tax_Type', array(
     //'分类法' => array('name' => '分类法名','slug' => '别名','post_type' => array('此分类法适用的文章类型',)),
     'collect' => array(
@@ -329,14 +325,6 @@ AYP::action('Register_Tax_Type', array(
     ),
 ));
 */
-AYP::action('Register_Tax_Type', array(
-    //'分类法' => array('name' => '分类法名','slug' => '别名','post_type' => array('此分类法适用的文章类型',)),
-    'status' => array(
-        'name' => __('状态', 'AIYA'),
-        'slug' => 'status',
-        'post_type' => array('post'),
-    ),
-));
 //注册自定义模板页面
 AYP::action('Template_New_Page', array(
     //'模板名' => '是否静态化',
@@ -349,21 +337,3 @@ AYP::action('Widget_Cache', true);
 AYP::action('Record_Visitors', true);
 //文章点赞量计数器插件
 AYP::action('Record_ClickLikes', true);
-
-
-
-function add_default_terms() {
-    // 检查默认项目是否已存在
-    if (!term_exists('默认项目', 'status')) {
-        // 插入默认项目
-        wp_insert_term(
-            '默认项目', // 项目名称
-            'status', // 分类法名称
-            array(
-                'description' => '这是默认项目', // 项目描述
-                'slug' => 'default-project' // 项目别名
-            )
-        );
-    }
-}
-add_action('init', 'add_default_terms');

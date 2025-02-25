@@ -27,11 +27,7 @@ AYF::new_opt([
     'desc' => 'AIYA-CMS 主题，文章页面组件设置',
     'fields' => [
         [
-            'desc' => '评论（Comments）',
-            'type' => 'title_2',
-        ],
-        [
-            'desc' => '提示功能（Tips）',
+            'desc' => '提示功能',
             'type' => 'title_2',
         ],
         [
@@ -54,20 +50,20 @@ AYF::new_opt([
             'default' => true,
         ],
         [
-            'desc' => '正文格式设置',
+            'desc' => '正文格式过滤器',
             'type' => 'title_2',
         ],
         [
             'title' => '正文链接标签格式',
-            'desc' => '给文章正文内部 <a> 标签自动添加 [code]rel="nofollow"[/code] 和 [code]target="_blank"[/code] 属性，仅对外部链接生效',
-            'id' => 'site_content_link_filter',
+            'desc' => '给文章正文内部 &lt;a&gt; 标签自动添加 [code]rel="nofollow"[/code] 和 [code]target="_blank"[/code] 属性（仅对外部链接生效）',
+            'id' => 'site_content_link_filter_bool',
             'type' => 'switch',
-            'default' => true,
+            'default' => false,
         ],
         [
-            'title' => '正文外部链接跳转设置',
+            'title' => '正文链接跳转设置',
             'desc' => '可选跳转方式，默认跳转方式为内链跳转',
-            'id' => 'site_content_link_jump_page',
+            'id' => 'site_content_link_jump_page_type',
             'type' => 'radio',
             'sub'  => array(
                 'false' => '直接跳转（不处理）',
@@ -78,24 +74,29 @@ AYF::new_opt([
         ],
         [
             'title' => '正文图片标签格式',
-            'desc' => '文章正文内部 &lt;img&gt; 标签自动添加alt属性和懒加载属性',
-            'id' => 'site_content_img_filter',
+            'desc' => '文章正文内部 &lt;img&gt; 标签自动添加alt和懒加载属性',
+            'id' => 'site_content_img_filter_bool',
             'type' => 'switch',
-            'default' => true,
+            'default' => false,
         ],
         [
             'title' => '正文标题标签格式',
             'desc' => '给文章正文内部 &lt;h1&gt; 、 &lt;h2&gt; 、 &lt;h3&gt; 标签自动添加锚点id（用于生成文章目录）',
-            'id' => 'site_content_h1_filter',
+            'id' => 'site_content_h1_filter_bool',
             'type' => 'switch',
             'default' => false,
         ],
         [
             'title' => '正文预定义标签格式',
             'desc' => '文章正文内部 &lt;pre&gt; 标签自动添加 heighlight 的样式',
-            'id' => 'site_content_pre_filter',
+            'id' => 'site_content_pre_filter_bool',
             'type' => 'switch',
-            'default' => true,
+            'default' => false,
+        ],
+        /*
+        [
+            'desc' => '评论（Comments）',
+            'type' => 'title_2',
         ],
         [
             'desc' => '排版纠正',
@@ -154,5 +155,6 @@ AYF::new_opt([
             'type' => 'switch',
             'default' => false,
         ],
+        */
     ]
 ]);

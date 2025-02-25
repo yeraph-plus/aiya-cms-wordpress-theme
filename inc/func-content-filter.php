@@ -8,34 +8,69 @@ if (!defined('ABSPATH')) exit;
  */
 
 //添加钩子
-//add_action('the_content', 'aya_post_content_filter_format');
+add_action('the_content', 'aya_post_content_filter_format');
 
 //合并方法
 function aya_post_content_filter_format($content)
 {
-    if (aya_opt('site_content_link_filter', 'format')) {
-        $content = aya_post_content_link_nofollow($content);
+    if (aya_opt('site_content_link_filter_bool', 'postpage')) {
+        $content = aya_post_content_filter_link_tag($content);
     }
-    if (aya_opt('site_content_img_filter', 'format')) {
-        $content = aya_post_content_img_alt_and_lazy($content);
+    if (aya_opt('site_content_img_filter_bool', 'postpage')) {
+        $content = aya_post_content_filter_img_tag($content);
     }
-    if (aya_opt('site_content_h1_filter', 'format')) {
-        $content = aya_post_content_menu_id_list($content);
+    if (aya_opt('site_content_h1_filter_bool', 'postpage')) {
+        $content = aya_post_content_filter_h1_tag($content);
     }
-    if (aya_opt('site_content_pre_filter', 'format')) {
-        $content = aya_post_content_pre_encode($content);
+    if (aya_opt('site_content_pre_filter_bool', 'postpage')) {
+        $content = aya_post_content_filter_pre_tag($content);
     }
-    if (aya_opt('site_content_table_filter', 'format')) {
-        $content = aya_post_content_bootstrap_table_class($content);
-    }
-    //外部链接添加nofollow
     $content = trim($content);
 
     return $content;
 }
 
+//外链转内链
+function aya_link_jump_page($url)
+{
+    $option = aya_opt('site_content_link_jump_page_type', 'postpage');
+    //生成格式
+    switch ($option) {
+        case 'go':
+            return home_url() . "/go/?url=" . base64_encode($url);
+        case 'link':
+            return home_url() . "/link/?url=" . base64_encode($url);
+        case 'false':
+        default:
+            return $url;
+    }
+}
+
+//格式化<a>标签
+function aya_post_content_filter_link_tag($content)
+{
+    //遍历
+    preg_match_all('/<a(.*?)href="(.*?)"(.*?)>/', $content, $urls);
+    //如果存在a标签
+    if (!is_null($urls)) {
+
+        foreach ($urls[2] as $url) {
+            //验证URL
+            $verify_val = strpos($url, '://');
+            $verify_self = strpos($url, home_url());
+            $verify_file = preg_match('/\.(jpg|jepg|png|ico|bmp|bnp|gif|tiff|zip|rar|exe|dmg|7z|svg|mp3|mp4|flv|wmv|heic|webp)/i', $url);
+            //不是本站链接且不是文件
+            if ($verify_val !== false && $verify_self === false && !$verify_file) {
+                $content = str_replace("href=\"$url\"", "href=\"" . aya_link_jump_page($url) . "\" rel=\"nofollow\" target=\"_blank\"", $content);
+            }
+        }
+    }
+
+    return $content;
+}
+
 //格式化<img>标签
-function aya_post_content_img_alt_and_lazy($content)
+function aya_post_content_filter_img_tag($content)
 {
     global $post;
 
@@ -67,27 +102,8 @@ function aya_post_content_img_alt_and_lazy($content)
     return $content;
 }
 
-//格式化<table>标签
-function aya_post_content_bootstrap_table_class($content)
-{
-    //遍历
-    preg_match_all('/<table.*?>[\s\S]*<\/table>/', $content, $tables);
-    //如果存在table标签
-    if (!is_null($tables)) {
-
-        foreach ($tables[0] as $i => $value) {
-            //附加Bootstrap的表格样式
-            $out = str_replace('<table', '<table class="table table-bordered"', $tables[0][$i]);
-
-            $content = str_replace($tables[0][$i], $out, $content);
-        }
-    }
-
-    return $content;
-}
-
 //格式化<h>标签
-function aya_post_content_menu_id_list($content)
+function aya_post_content_filter_h1_tag($content)
 {
     //遍历
     preg_match_all('/<h[123]>(.*?)<\/h[123]>/im', $content, $h1s);
@@ -107,8 +123,27 @@ function aya_post_content_menu_id_list($content)
     return $content;
 }
 
+//格式化<table>标签
+function aya_post_content_filter_table_tag($content)
+{
+    //遍历
+    preg_match_all('/<table.*?>[\s\S]*<\/table>/', $content, $tables);
+    //如果存在table标签
+    if (!is_null($tables)) {
+
+        foreach ($tables[0] as $i => $value) {
+            //附加Bootstrap的表格样式
+            $out = str_replace('<table', '<table class="table-bordered"', $tables[0][$i]);
+
+            $content = str_replace($tables[0][$i], $out, $content);
+        }
+    }
+
+    return $content;
+}
+
 //格式化<pre>标签
-function aya_post_content_pre_encode($content)
+function aya_post_content_filter_pre_tag($content)
 {
     //遍历
     preg_match_all('/<pre.*?>(.+?)<\/pre>/is', $content, $pres);
@@ -137,45 +172,6 @@ function aya_post_content_pre_encode($content)
     return $content;
 }
 
-//外链转内链
-function aya_link_jump_page($url)
-{
-    $option = aya_opt('site_content_link_jump_page', 'format');
-    //生成格式
-    switch ($option) {
-        case 'false':
-            return $url;
-        case 'go':
-            return home_url() . "/go/?url=" . base64_encode($url);
-        case 'link':
-            return home_url() . "/link/?url=" . base64_encode($url);
-        default:
-            return $url;
-    }
-}
-
-//格式化<a>标签
-function aya_post_content_link_nofollow($content)
-{
-    //遍历
-    preg_match_all('/<a(.*?)href="(.*?)"(.*?)>/', $content, $urls);
-    //如果存在a标签
-    if (!is_null($urls)) {
-
-        foreach ($urls[2] as $url) {
-            //验证URL
-            $verify_val = strpos($url, '://');
-            $verify_self = strpos($url, home_url());
-            $verify_file = preg_match('/\.(jpg|jepg|png|ico|bmp|bnp|gif|tiff|zip|rar|exe|dmg|7z|svg|mp3|mp4|flv|wmv|heic|webp)/i', $url);
-            //不是本站链接且不是文件
-            if ($verify_val !== false && $verify_self === false && !$verify_file) {
-                $content = str_replace("href=\"$url\"", "href=\"" . aya_link_jump_page($url) . "\" rel=\"nofollow\" target=\"_blank\"", $content);
-            }
-        }
-    }
-
-    return $content;
-}
 
 /*
  * ------------------------------------------------------------------------------
@@ -244,9 +240,9 @@ function aya_pinyin_setting($content, $tone = true)
  * ------------------------------------------------------------------------------
  */
 
-add_filter('wp_insert_term_data', 'aya_insert_term_data_slug', 10, 3);
-add_filter('wp_update_term_data', 'aya_update_term_data_slug', 10, 4);
-add_filter('wp_insert_post_data', 'aya_insert_post_data_slug', 10, 2);
+//add_filter('wp_insert_term_data', 'aya_insert_term_data_slug', 10, 3);
+//add_filter('wp_update_term_data', 'aya_update_term_data_slug', 10, 4);
+//add_filter('wp_insert_post_data', 'aya_insert_post_data_slug', 10, 2);
 
 //添加分类时替换分类slug为拼音
 function aya_insert_term_data_slug($data, $taxonomy, $term_arr)

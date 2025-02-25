@@ -3,7 +3,7 @@
         'name' => 'aiya-cms/lib',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '6ac6d5c5ea7f2117d4c2062e8da81e61d8675f60',
+        'reference' => '964aeb1d4b0c29b466bd0c83c88b3a5360f07b3e',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'aiya-cms/lib' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '6ac6d5c5ea7f2117d4c2062e8da81e61d8675f60',
+            'reference' => '964aeb1d4b0c29b466bd0c83c88b3a5360f07b3e',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

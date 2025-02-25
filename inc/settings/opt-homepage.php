@@ -53,6 +53,7 @@ AYF::new_opt([
             'type' => 'text',
             'default' => '',
         ],
+        /*
         [
             'desc' => '轮播设置（Carousel）',
             'type' => 'title_1',
@@ -168,5 +169,6 @@ AYF::new_opt([
                 ),
             ),
         ],
+        */
     ]
 ]);

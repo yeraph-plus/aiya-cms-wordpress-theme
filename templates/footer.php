@@ -42,6 +42,9 @@ aya_scripts_include();
 <script type="text/javascript">
     const $settingsConfig = <?php aya_json_echo($settings); ?>;
     const $ajaxObj = <?php aya_json_echo($ajax_obj); ?>;
+    const $siteNotification = <?php aya_notify_list_data() ?>;
+    const $userLogindata = <?php aya_user_login_in_data() ?>;
+
 </script>
 
 </body>

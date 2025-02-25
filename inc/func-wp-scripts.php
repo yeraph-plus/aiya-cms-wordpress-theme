@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) exit;
  */
 
 //从CDN加载
-function aya_scripts_static_cdn()
+function aya_static_scripts_cdn()
 {
     //获取主题设置
     $load_type = aya_opt('site_scripts_load_type', 'basic');
@@ -25,7 +25,7 @@ function aya_scripts_static_cdn()
             $url_cdn = '//cdn.bootcdn.net/ajax/libs/';
             break;
         default:
-            $url_cdn = get_template_directory_uri() . '/assets/libs/';
+            $url_cdn = get_template_directory_uri() . '/assets/static/';
             break;
     }
 
@@ -121,17 +121,17 @@ function aya_head_include()
         ],
     );
     foreach ($load_js as $value) {
-        echo '<script src="' . htmlspecialchars(aya_scripts_static_cdn() .  $value['pack'] . '/' . $value['ver'] . '/' . $value['file']) . '"></script>' . PHP_EOL;
+        echo '<script src="' . htmlspecialchars(aya_static_scripts_cdn() .  $value['pack'] . '/' . $value['ver'] . '/' . $value['file']) . '"></script>' . PHP_EOL;
     }
     foreach ($load_css as $value) {
-        echo '<link rel="stylesheet" href="' . htmlspecialchars(aya_scripts_static_cdn() .  $value['pack'] . '/' . $value['ver'] . '/' . $value['file']) . '">' . PHP_EOL;
+        echo '<link rel="stylesheet" href="' . htmlspecialchars(aya_static_scripts_cdn() .  $value['pack'] . '/' . $value['ver'] . '/' . $value['file']) . '">' . PHP_EOL;
     }
 
     //主题样式表
     $main_pack_ver = (defined('AYA_RELEASE')) ? aya_theme_version() : time();
     $main_theme_uri = get_template_directory_uri() . '/assets/css/';
+
     aya_echo('<link rel="stylesheet" href="' . esc_url($main_theme_uri . 'main.style.css?ver=' . $main_pack_ver) . '">' . PHP_EOL);
-    //aya_echo('<link rel="stylesheet" href="' . esc_url($main_theme_uri . 'editor.style.css?ver=' . $main_pack_ver) . '">' . PHP_EOL);
 }
 
 //直接嵌入alpinejs和其他esm模块的标签结构
@@ -234,7 +234,7 @@ function aya_scripts_include()
         ],
     );
     foreach ($load_js as $value) {
-        echo '<script ' . $value['attr'] . ' src="' . htmlspecialchars(aya_scripts_static_cdn() .  $value['pack'] . '/' . $value['ver'] . '/' . $value['file']) . '"></script>' . PHP_EOL;
+        echo '<script ' . $value['attr'] . ' src="' . htmlspecialchars(aya_static_scripts_cdn() .  $value['pack'] . '/' . $value['ver'] . '/' . $value['file']) . '"></script>' . PHP_EOL;
     }
 
     //主题脚本

@@ -33,12 +33,12 @@ AYF::new_opt([
             'id' => 'site_scripts_load_type',
             'type' => 'radio',
             'sub'  => [
-                'local' => '本地加载',
+                //'local' => '本地加载',
                 'cdnjs' => 'CloudFlare',
                 'zstatic' => 'ZstaticCDN',
                 'bootcdn' => 'BootCDN',
             ],
-            'default' => 'local',
+            'default' => 'cdnjs',
         ],
         [
             'desc' => '页面布局设置（Layout）',
@@ -154,7 +154,7 @@ AYF::new_opt([
                 'dark' => '暗色',
                 'system' => '跟随系统',
             ],
-            'default' => 'light',
+            'default' => 'system',
         ],
         [
             'title' => '盒模式布局',

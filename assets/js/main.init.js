@@ -1,7 +1,12 @@
 (function () {
     //event load
     window.addEventListener('DOMContentLoaded', function () {
-        // screen loader
+        replaceLozad();
+        initSwup();
+    });
+
+    //screen loader
+    window.addEventListener('load', function () {
         const screen_loader = document.getElementsByClassName('screen_loader');
         if (screen_loader?.length) {
             screen_loader[0].classList.add('animate__fadeOut');
@@ -9,13 +14,56 @@
                 document.body.removeChild(screen_loader[0]);
             }, 200);
         }
-
-        //AlpineJS init
+        //alpineJS store init
         Alpine.store('app').setRTLLayout();
         Alpine.store('app').setLoopMode();
     });
 
-    //perfect-scrollbarJS: init
+    const replaceLozad = () => {
+        document.querySelectorAll('img:not([data-src])').forEach(img => {
+            if (img.src && !img.hasAttribute('data-src')) {
+                img.dataset.src = img.src;
+                img.removeAttribute('src');
+                img.setAttribute('loading', 'lazy');
+            }
+            img.classList.add('lozad');
+        });
+
+        //Lozad observer init
+        const observer = lozad('.lozad', {
+            rootMargin: '200px 0px', // 提前加载
+            threshold: 0.1,
+            loaded(el) {
+                el.classList.add('loaded');
+            }
+        });
+        observer.observe();
+    };
+
+    //swup4JS init
+    const initSwup = () => {
+        const swup = new Swup({
+            containers: ['#swup-container'],
+            //plugins: [/*new SwupPreloadPlugin()*/]
+        });
+        swup.hooks.on('content:replace', () => {
+            //Alpine.$persist.rehydrate();
+            //Alpine.disposeTree(document.querySelector('#main-content'));
+            //Alpine.start();
+            Alpine.initTree(document.body);
+            feather.replace({}); replaceLozad();
+            //window.location.reload();
+        });
+        //swup.on('contentReplaced', () => Alpine.start());
+
+        /*
+        swup.hooks.before('page:preload', () => {
+            Alpine.disposeTree(document.querySelector('#main-content'));
+        });
+        */
+    };
+
+    //perfect-scrollbarJS init
     const initPerfectScrollbar = () => {
         const container = document.querySelectorAll('.perfect-scrollbar');
         for (let i = 0; i < container.length; i++) {
@@ -27,7 +75,11 @@
     };
     initPerfectScrollbar();
 
+    //Feather-icons replace all icons
+    feather.replace({});
+
     document.addEventListener('alpine:init', () => {
+
         //AlpineJS config
         const $themeConfig = $settingsConfig;
 
@@ -37,53 +89,16 @@
             default: 'localStorage'
         };
 
-        //lozadJS
-        Alpine.data('LozadControl', () => ({
-            init() {
-                const images = document.querySelectorAll('img');
-                images.forEach(img => {
-                    if (!img.classList.contains('lozad')) {
-                        img.classList.add('lozad');
-                        img.setAttribute('data-src', img.src);
-                        img.removeAttribute('src');
-                    }
-                });
+        Alpine.data('swup4Control', (value) => ({
 
-                const observer = lozad('.lozad', {
-                    loaded: function (el) {
-                        el.classList.add('loaded');
-                    }
-                });
-                observer.observe();
-            }
-        }));
-
-        //SwupJS
-        Alpine.data('Swup4Control', () => ({
             init() {
                 const links = document.querySelectorAll('a');
-
                 links.forEach(link => {
                     link.addEventListener('mouseover', () => {
                         if (link.href && link.href !== '#' && link.href !== 'javascript:;') {
                             fetch(link.href);
                         }
                     });
-                });
-
-                const swup = new Swup({
-                    containers: ['#main-content'],
-                    plugins: [new SwupPreloadPlugin()]
-                });
-
-                swup.hooks.on('content:replace', () => {
-                    Alpine.disposeTree(document.querySelector('#main-content'));
-                    Alpine.initTree(document.querySelector('#main-content'));
-                    Alpine.$persist.rehydrate();
-                });
-
-                swup.hooks.on('page:preload', () => {
-                    Alpine.disposeTree(document.querySelector('#main-content'));
                 });
             }
         }));
@@ -113,9 +128,127 @@
                 this.open = !this.open;
             },
         }));
-        Alpine.data('clickLikesCounter', () => ({
+        Alpine.data("header", () => ({
+            notificationList: $siteNotification,
+            userInfo: $userLogindata,
 
+            init() {
+                const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');
+                if (selector) {
+                    selector.classList.add('active');
+                    const ul = selector.closest('ul.sub-menu');
+                    if (ul) {
+                        let ele = ul.closest('li.menu').querySelectorAll('.nav-link');
+                        if (ele) {
+                            ele = ele[0];
+                            setTimeout(() => {
+                                ele.classList.add('active');
+                            });
+                        }
+                    }
+                }
+            },
         }));
+        Alpine.data("navbar", () => ({
+            init() {
+                const selector = document.querySelector('.sidebar ul a[href="' + window.location.pathname + '"]');
+                if (selector) {
+                    selector.classList.add('active');
+                    const ul = selector.closest('ul.sub-menu');
+                    if (ul) {
+                        let ele = ul.closest('li.menu').querySelectorAll('.nav-link');
+                        if (ele) {
+                            ele = ele[0];
+                            setTimeout(() => {
+                                ele.click();
+                            });
+                        }
+                    }
+                }
+            },
+        }));
+        Alpine.data("customizer", () => ({
+            showCustomizer: false,
+        }));
+        Alpine.data("cookieconsent", () => ({
+            init() { },
+        }));
+        Alpine.data('ajaxClickLikes', () => ({
+            saved: Alpine.$persist([]).as('LikesList'),
+            responseLikes: 0,
+
+            init() {
+                this.responseLikes = parseInt(
+                    this.$el.dataset.initialLikes || 0
+                );
+            },
+
+            sendClickLikes(postID) {
+                if (this.saved.includes(postID)) return;
+
+                fetch($ajaxObj.url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-WP-Nonce': $ajaxObj.nonce
+                    },
+                    body: new URLSearchParams({
+                        action: 'click_likes',
+                        post_id: postID,
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'done') {
+                            this.responseLikes++;
+                        }
+                    });
+
+                this.saved.push(postID);
+            }
+        }));
+        Alpine.data("404countDown", () => ({
+            timeLeft: 10,
+            interval: null,
+
+            startCountdown: function () {
+                this.interval = setInterval(() => {
+                    if (this.timeLeft > 0) {
+                        this.timeLeft -= 1;
+                    } else {
+                        this.redirectHome();
+                    }
+                }, 1000);
+            },
+
+            redirectHome: function () {
+                clearInterval(this.interval);
+                window.location.href = '/';
+            }
+        }));
+        Alpine.data("scrollToTop", () => ({
+            showTopButton: false,
+            init() {
+                window.onscroll = () => {
+                    this.scrollFunction();
+                };
+            },
+
+            scrollFunction() {
+                if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                    this.showTopButton = true;
+                } else {
+                    this.showTopButton = false;
+                }
+            },
+
+            goToTop() {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            },
+        }));
+
 
         // app - global store
         Alpine.store('app', {
@@ -241,9 +374,6 @@
     if (yearEle) {
         yearEle.innerHTML = new Date().getFullYear();
     }
-
-    //Feather icons：replace all icons
-    feather.replace({});
 
     //Info
     console.log("\n\n %c AIYA-CMS %c https://www.yeraph.com \n", "color:#f1ab0e;background:#222222;padding:5px;", "background:#eee;padding:5px;");

@@ -78,46 +78,6 @@ $post_disclaimer_text = aya_opt('site_single_disclaimer_text', 'postpage');
         <?php aya_single_badge_tags(); ?>
     </div>
 </div>
-<script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('ajaxClickLikes', () => ({
-            saved: Alpine.$persist([]).as('LikesList'),
-            responseLikes: 0,
-
-            init() {
-                this.responseLikes = parseInt(
-                    this.$el.dataset.initialLikes || 0
-                );
-            },
-
-            sendClickLikes(postID) {
-                if (this.saved.includes(postID)) return;
-
-                fetch($ajaxObj.url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-WP-Nonce': $ajaxObj.nonce
-                        },
-                        body: new URLSearchParams({
-                            action: 'click_likes',
-                            post_id: postID,
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'done') {
-                            this.responseLikes++;
-                            console.log('Likes: ' + this.responseLikes);
-                        }
-                    });
-
-                this.saved.push(postID);
-            }
-        }));
-    });
-</script>
 
 <?php
 //上/下篇文章

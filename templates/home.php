@@ -14,14 +14,8 @@ if (is_paged()) {
                 <?php
                 //轮播
                 //aya_template_load('parts/carousel');
-                ?>
-                <!-- Loop post grid -->
-                <div class="relative grid grid-cols-1 gap-4" :class="[$store.app.loopGridClass]">
-                    <?php aya_while_have_post(); ?>
-                </div>
-                <?php
-                //分页
-                aya_template_load('parts/pagination');
+                //主循环
+                aya_template_load('parts/main-loop');
                 ?>
             </div>
             <div class="w-full mt-4 lg:w-1/4 lg:mt-0 animate__animated" :class="[$store.app.animation]">
@@ -32,13 +26,9 @@ if (is_paged()) {
             </div>
         </div>
     <?php else: ?>
-        <!-- Loop post grid -->
-        <div class="re grid grid-cols-1 gap-4" :class="[$store.app.loopGridClass]">
-            <?php aya_while_have_post(); ?>
-        </div>
         <?php
-        //分页
-        aya_template_load('parts/pagination');
+        //主循环
+        aya_template_load('parts/main-loop');
         ?>
     <?php endif; ?>
 </div>

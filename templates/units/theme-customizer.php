@@ -128,10 +128,3 @@ if (!aya_opt('site_theme_customizer_bool', 'basic')) return;
         </div>
     </nav>
 </div>
-<script>
-    document.addEventListener("alpine:init", () => {
-        Alpine.data("customizer", () => ({
-            showCustomizer: false,
-        }));
-    });
-</script>

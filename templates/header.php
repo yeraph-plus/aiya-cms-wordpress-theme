@@ -47,12 +47,12 @@
     aya_body_start();
     ?>
 
-    <div x-data="LozadControl" class="main-container text-black dark:text-white-dark min-h-screen" :class="[$store.app.navbarSticky]">
+    <div id="main-container" class="main-container text-black dark:text-white-dark min-h-screen" :class="[$store.app.navbarSticky]">
         <?php
         //左侧边菜单
         aya_template_load('parts/navbar');
         ?>
-        <div id="main-content" class="main-content flex flex-col min-h-screen">
+        <div id="swup-container" class="main-content flex flex-col min-h-screen">
             <?php
             //顶栏
             aya_template_load('parts/header');
