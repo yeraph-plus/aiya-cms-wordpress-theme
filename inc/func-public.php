@@ -358,7 +358,7 @@ function aya_curl_get_hitokoto()
     //检查是否被403
     if ($concent === false) {
         //获取本地json文件
-        $data  = get_template_directory() . '/static/json/hitokoto.json';
+        $data  = get_template_directory() . '/assets/json/hitokoto.json';
         //检查文件存在
         if (!file_exists($data)) {
             return 'ERROR: Cannot read under <code>hitokoto.json</code>';

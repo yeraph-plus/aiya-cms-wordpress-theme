@@ -25,7 +25,7 @@ function aya_static_scripts_cdn()
             $url_cdn = '//cdn.bootcdn.net/ajax/libs/';
             break;
         default:
-            $url_cdn = get_template_directory_uri() . '/assets/static/';
+            $url_cdn = get_template_directory_uri() . '/assets/ajax/libs/';
             break;
     }
 

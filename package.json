@@ -22,6 +22,6 @@
         "build": "npx tailwindcss -i tailwind.css -o assets/css/main.style.css --minify",
         "lint:css": "wp-scripts lint-style 'assets/css/**/*.css'",
         "lint:js": "wp-scripts lint-js 'assets/js/*.js'",
-        "archive": "dir-archiver --src ./ --dest ../aiya-cms-releases.zip --exclude .DS_Store .git .gitattributes .github .gitignore README.md composer.json composer.lock node_modules build vendor package.json package-lock.json tailwind.css tailwind.config.js"
+        "archive": "dir-archiver --src ./ --dest ../aiya-cms-release.zip --exclude .DS_Store .git .gitattributes .github .gitignore .gitmodules vendor composer.json composer.lock node_modules package.json package-lock.json gulpfile.js tailwind.css tailwind.config.js"
     }
 }
