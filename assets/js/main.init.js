@@ -4,7 +4,6 @@
         replaceLozad();
         initSwup();
     });
-
     //screen loader
     window.addEventListener('load', function () {
         const screen_loader = document.getElementsByClassName('screen_loader');
@@ -18,7 +17,7 @@
         Alpine.store('app').setRTLLayout();
         Alpine.store('app').setLoopMode();
     });
-
+    //LozadJS init
     const replaceLozad = () => {
         document.querySelectorAll('img:not([data-src])').forEach(img => {
             if (img.src && !img.hasAttribute('data-src')) {
@@ -28,18 +27,18 @@
             }
             img.classList.add('lozad');
         });
-
-        //Lozad observer init
+        //observer
         const observer = lozad('.lozad', {
-            rootMargin: '200px 0px', // 提前加载
-            threshold: 0.1,
+            rootMargin: "0px 0px", // CSS Margin
+            threshold: 0.5, // ratio of element convergence
+            enableAutoReload: true, // it will reload the new image when validating attributes changes
+            //load: function (el) {},
             loaded(el) {
                 el.classList.add('loaded');
             }
         });
         observer.observe();
     };
-
     //swup4JS init
     const initSwup = () => {
         const swup = new Swup({
@@ -47,22 +46,18 @@
             //plugins: [/*new SwupPreloadPlugin()*/]
         });
         swup.hooks.on('content:replace', () => {
-            //Alpine.$persist.rehydrate();
-            //Alpine.disposeTree(document.querySelector('#main-content'));
-            //Alpine.start();
-            Alpine.initTree(document.body);
-            feather.replace({}); replaceLozad();
             //window.location.reload();
+            Alpine.initTree(document.body);
+            feather.replace({});
+            replaceLozad();
         });
         //swup.on('contentReplaced', () => Alpine.start());
-
         /*
         swup.hooks.before('page:preload', () => {
-            Alpine.disposeTree(document.querySelector('#main-content'));
+            Alpine.disposeTree(document.querySelector('#swup-container'));
         });
         */
     };
-
     //perfect-scrollbarJS init
     const initPerfectScrollbar = () => {
         const container = document.querySelectorAll('.perfect-scrollbar');
@@ -74,56 +69,34 @@
         }
     };
     initPerfectScrollbar();
-
     //Feather-icons replace all icons
     feather.replace({});
-
+    //alpineJS
     document.addEventListener('alpine:init', () => {
-
-        //AlpineJS config
+        //config
         const $themeConfig = $settingsConfig;
-
         console.log($themeConfig);
-
+        //persist
         Alpine.persist = {
             default: 'localStorage'
         };
-
-        Alpine.data('swup4Control', (value) => ({
-
-            init() {
-                const links = document.querySelectorAll('a');
-                links.forEach(link => {
-                    link.addEventListener('mouseover', () => {
-                        if (link.href && link.href !== '#' && link.href !== 'javascript:;') {
-                            fetch(link.href);
-                        }
-                    });
-                });
-            }
-        }));
-
-        // main - custom functions
+        //main - custom functions
         Alpine.data('main', (value) => ({}));
-
-        // main - components
+        //main - components
         Alpine.data('collapse', () => ({
             collapse: false,
-
             collapseSidebar() {
                 this.collapse = !this.collapse;
             },
         }));
         Alpine.data('dropdown', (initialOpenState = false) => ({
             open: initialOpenState,
-
             toggle() {
                 this.open = !this.open;
             },
         }));
         Alpine.data('modal', (initialOpenState = false) => ({
             open: initialOpenState,
-
             toggle() {
                 this.open = !this.open;
             },
@@ -131,7 +104,6 @@
         Alpine.data("header", () => ({
             notificationList: $siteNotification,
             userInfo: $userLogindata,
-
             init() {
                 const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');
                 if (selector) {
@@ -171,18 +143,28 @@
             showCustomizer: false,
         }));
         Alpine.data("cookieconsent", () => ({
-            init() { },
+            init() {
+            },
+        }));
+        Alpine.data('editorComponent', () => ({
+            init() {
+                //viewerJS init
+                const container = document.querySelector('.editor-modality');
+                const viewer = new Viewer(container, {
+                    navbar: false,
+                    toolbar: false,
+                    url: "src",
+                });
+            }
         }));
         Alpine.data('ajaxClickLikes', () => ({
             saved: Alpine.$persist([]).as('LikesList'),
             responseLikes: 0,
-
             init() {
                 this.responseLikes = parseInt(
                     this.$el.dataset.initialLikes || 0
                 );
             },
-
             sendClickLikes(postID) {
                 if (this.saved.includes(postID)) return;
 
@@ -197,21 +179,17 @@
                         action: 'click_likes',
                         post_id: postID,
                     }),
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'done') {
-                            this.responseLikes++;
-                        }
-                    });
-
+                }).then(response => response.json()).then(data => {
+                    if (data.status === 'done') {
+                        this.responseLikes++;
+                    }
+                });
                 this.saved.push(postID);
             }
         }));
         Alpine.data("404countDown", () => ({
             timeLeft: 10,
             interval: null,
-
             startCountdown: function () {
                 this.interval = setInterval(() => {
                     if (this.timeLeft > 0) {
@@ -221,7 +199,6 @@
                     }
                 }, 1000);
             },
-
             redirectHome: function () {
                 clearInterval(this.interval);
                 window.location.href = '/';
@@ -234,7 +211,6 @@
                     this.scrollFunction();
                 };
             },
-
             scrollFunction() {
                 if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
                     this.showTopButton = true;
@@ -242,15 +218,24 @@
                     this.showTopButton = false;
                 }
             },
-
             goToTop() {
                 document.body.scrollTop = 0;
                 document.documentElement.scrollTop = 0;
             },
         }));
-
-
-        // app - global store
+        Alpine.data('swup4Control', (value) => ({
+            init() {
+                const links = document.querySelectorAll('a');
+                links.forEach(link => {
+                    link.addEventListener('mouseover', () => {
+                        if (link.href && link.href !== '#' && link.href !== 'javascript:;') {
+                            fetch(link.href);
+                        }
+                    });
+                });
+            }
+        }));
+        //app - global store
         Alpine.store('app', {
             // color scheme
             colorScheme: Alpine.$persist($themeConfig.colorScheme),
@@ -282,9 +267,7 @@
                 if (!val) {
                     val = this.colorScheme || $themeConfig.colorScheme;
                 }
-
                 this.colorScheme = val; // light, dark, system
-
                 if (this.colorScheme == 'light') {
                     this.isDarkMode = false;
                 } else if (this.colorScheme == 'dark') {
@@ -301,23 +284,19 @@
                 if (!val) {
                     val = this.navbarMenu || $themeConfig.navbarMenu;
                 }
-
                 this.menuBar = false; // reset left sidebar state
-
                 this.navbarMenu = val; // vertical, collapsible-vertical, horizontal
             },
             toggleLayout(val) {
                 if (!val) {
                     val = this.bodyLayout || $themeConfig.bodyLayout;
                 }
-
                 this.bodyLayout = val; // full, boxed-layout
             },
             toggleAnimation(val) {
                 if (!val) {
                     val = this.animation || $themeConfig.animation;
                 }
-
                 val = val?.trim();
 
                 this.animation = val; // animate__fadeIn, animate__fadeInDown, animate__fadeInUp, animate__fadeInLeft, animate__fadeInRight, animate__slideInDown, animate__slideInLeft, animate__slideInRight, animate__zoomIn
@@ -326,15 +305,12 @@
                 if (!val) {
                     val = this.navbarSticky || $themeConfig.navbarSticky;
                 }
-
                 this.navbarSticky = val; // navbar-sticky, navbar-floating, navbar-static
             },
-
             toggleSemidark(val) {
                 if (!val) {
                     val = this.colorSemidark || $themeConfig.colorSemidark;
                 }
-
                 this.colorSemidark = val;
             },
             toggleMenuBar() {
@@ -344,9 +320,7 @@
                 if (!val) {
                     val = this.loopGridCol || $themeConfig.loopGridCol;
                 }
-
                 this.loopGridCol = val;
-
                 switch (val) {
                     case 'col-2':
                         this.loopGridClass = 'md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2';
@@ -370,11 +344,9 @@
 
     // set current year in footer
     const yearEle = document.querySelector('#footer-year');
-
     if (yearEle) {
         yearEle.innerHTML = new Date().getFullYear();
     }
-
     //Info
     console.log("\n\n %c AIYA-CMS %c https://www.yeraph.com \n", "color:#f1ab0e;background:#222222;padding:5px;", "background:#eee;padding:5px;");
 })();

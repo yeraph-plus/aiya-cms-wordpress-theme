@@ -33,7 +33,7 @@
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <meta http-equiv="Cache-Control" content="private">
-    <?php aya_head_include(); ?>
+    <?php aya_head_inc(); ?>
     <?php wp_head(); ?>
     <!--body <?php body_class(); ?>-->
 </head>

@@ -300,9 +300,8 @@ AYP::action('Register_Menu', array(
 //注册小工具栏位
 AYP::action('Register_Sidebar', array(
     //'边栏ID' => '边栏名',
-    'index-sitebar' => __('首页', 'AIYA'),
+    'archive-sitebar' => __('首页/归档页面', 'AIYA'),
     'single-sitebar' => __('正文页面', 'AIYA'),
-    'archive-sitebar' => __('归档页面', 'AIYA'),
     'main-sitebar' => __('工具板', 'AIYA'),
 ));
 /*

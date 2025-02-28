@@ -37,7 +37,7 @@ aya_template_load('units/theme-customizer');
 aya_template_load('units/top-button');
 
 //加载Alpine.js脚本
-aya_scripts_include();
+aya_footer_inc();
 ?>
 <script type="text/javascript">
     const $settingsConfig = <?php aya_json_echo($settings); ?>;

@@ -42,7 +42,7 @@ PS：不建议直接克隆或直接下载仓库的方式使用主题（虽然这
 
 ### 建议/BUG发现/使用问题
 
-提建议建议提 [issues](https://github.com/mbd-pub/aiya-cms/issues) ,或者在我的博客留言，或者任何你能找的到我的地方。
+提建议建议提 [issues](https://github.com/yeraph-plus/aiya-cms-wordpress-theme/issues) ,或者在我的博客留言，或者任何你能找的到我的地方。
 
 BUG反馈时请附上报错内容、截图、或尽你所能的详细描述出现的问题，这有助于我更快的定位问题。
 

@@ -78,8 +78,21 @@ function aya_static_scripts_cdn()
     );
 }
 
+//模板script标签
+function aya_int_script($pack, $ver, $file, $defer)
+{
+    $defer = ($defer) ? 'defer ' : '';
+
+    aya_echo('<script ' . $defer . 'src="' . aya_static_scripts_cdn() .  $pack . '/' . $ver . '/' . $file . '"></script>' . PHP_EOL);
+}
+//模板css标签
+function aya_int_style($pack, $ver, $file)
+{
+    aya_echo('<link rel="stylesheet" href="' . aya_static_scripts_cdn() .  $pack . '/' . $ver . '/' . $file . '">' . PHP_EOL);
+}
+
 //在head中加载
-function aya_head_include()
+function aya_head_inc()
 {
     $load_js = array(
         [
@@ -120,98 +133,92 @@ function aya_head_include()
             'file' => 'animate.min.css',
         ],
     );
+
     foreach ($load_js as $value) {
-        echo '<script src="' . htmlspecialchars(aya_static_scripts_cdn() .  $value['pack'] . '/' . $value['ver'] . '/' . $value['file']) . '"></script>' . PHP_EOL;
+        aya_int_script($value['pack'], $value['ver'], $value['file'], false);
     }
     foreach ($load_css as $value) {
-        echo '<link rel="stylesheet" href="' . htmlspecialchars(aya_static_scripts_cdn() .  $value['pack'] . '/' . $value['ver'] . '/' . $value['file']) . '">' . PHP_EOL;
+        aya_int_style($value['pack'], $value['ver'], $value['file']);
     }
 
-    //主题样式表
     $main_pack_ver = (defined('AYA_RELEASE')) ? aya_theme_version() : time();
     $main_theme_uri = get_template_directory_uri() . '/assets/css/';
-
+    //主题样式表
     aya_echo('<link rel="stylesheet" href="' . esc_url($main_theme_uri . 'main.style.css?ver=' . $main_pack_ver) . '">' . PHP_EOL);
 }
 
 //直接嵌入alpinejs和其他esm模块的标签结构
-function aya_scripts_include()
+function aya_footer_inc()
 {
     $load_js = array(
         [
             'pack' => 'alpinejs-collapse',
             'ver' => '3.14.8',
             'file' => 'cdn.min.js',
-            'attr' => '',
+            'defer' => false,
         ],
         [
             'pack' => 'alpinejs-persist',
             'ver' => '3.14.8',
             'file' => 'cdn.min.js',
-            'attr' => '',
+            'defer' => false,
         ],
         [
             'pack' => 'alpinejs-ui',
             'ver' => '3.14.8',
             'file' => 'cdn.min.js',
-            'attr' => 'defer',
+            'defer' => true,
         ],
         [
             'pack' => 'alpinejs-focus',
             'ver' => '3.14.8',
             'file' => 'cdn.min.js',
-            'attr' => 'defer',
+            'defer' => true,
         ],
         [
             'pack' => 'alpinejs-anchor',
             'ver' => '3.14.8',
             'file' => 'cdn.min.js',
-            'attr' => 'defer',
+            'defer' => true,
         ],
         [
             'pack' => 'alpinejs',
             'ver' => '3.14.8',
             'file' => 'cdn.min.js',
-            'attr' => 'defer',
-        ],
-        [
-            'pack' => 'pjax',
-            'ver' => '0.2.8',
-            'file' => 'pjax.min.js',
-            'attr' => '',
+            'defer' => true,
         ],
         [
             'pack' => 'feather-icons',
             'ver' => '4.29.2',
             'file' => 'feather.min.js',
-            'attr' => '',
+            'defer' => false,
         ],
+        /*
         [
             'pack' => 'splidejs',
             'ver' => '4.1.4',
             'file' => 'js/splide.min.js',
-            'attr' => '',
+            'defer' => false,
         ],
-        /*
         [
             'pack' => 'ionicons',
             'ver' => '7.4.0',
             'file' => 'ionicons.min.js',
-            'attr' => '',
+            'defer' => false,
         ],
         */
         [
             'pack' => 'viewerjs',
             'ver' => '1.11.7',
             'file' => 'viewer.min.js',
-            'attr' => '',
+            'defer' => false,
         ],
         /*
         [
             'pack' => 'sweetalert',
             'ver' => '2.1.2',
             'file' => 'sweetalert.min.js',
-            'attr' => 'defer',
+            'defer' => false,
         ],
         [
             'pack' => 'masonry',
@@ -224,22 +231,18 @@ function aya_scripts_include()
             'pack' => 'clipboard.js',
             'ver' => '2.0.11',
             'file' => 'clipboard.min.js',
-            'attr' => 'defer',
-        ],
-        [
-            'pack' => 'highlight.js',
-            'ver' => '11.11.1',
-            'file' => 'highlight.min.js',
-            'attr' => 'defer',
+            'defer' => false,
         ],
     );
+
     foreach ($load_js as $value) {
-        echo '<script ' . $value['attr'] . ' src="' . htmlspecialchars(aya_static_scripts_cdn() .  $value['pack'] . '/' . $value['ver'] . '/' . $value['file']) . '"></script>' . PHP_EOL;
+        aya_int_script($value['pack'], $value['ver'], $value['file'], $value['defer']);
     }
 
-    //主题脚本
     $main_pack_ver = (defined('AYA_RELEASE')) ? aya_theme_version() : time();
-    aya_echo('<script src="' . esc_url(get_template_directory_uri() . '/assets/js/main.init.js?ver=' . $main_pack_ver) . '"></script>' . PHP_EOL);
+    $main_theme_uri = get_template_directory_uri() . '/assets/js/';
+    //主题脚本
+    aya_echo('<script src="' . esc_url($main_theme_uri . 'main.init.js?ver=' . $main_pack_ver) . '"></script>' . PHP_EOL);
 }
 
 //排队后台静态文件

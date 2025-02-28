@@ -350,8 +350,6 @@ function aya_widget_bar()
     //检查页面类型
     switch (aya_is_where()) {
         case 'home':
-            $sidebar_type = 'index-sitebar';
-            break;
         case 'search':
         case 'archive':
         case 'post_type_archive':

@@ -7,11 +7,10 @@ if (!defined('ABSPATH')) exit;
  * ------------------------------------------------------------------------------
  */
 
+//简单调度器
 //通知列表消息钩子
 function aya_notify_filter_hook($notes)
 {
-    if (!is_array($notes)) return;
-
     //存储变量
     static $stored_notes = array();
     static $note_count = 0;
@@ -59,6 +58,7 @@ function aya_notify_icon_selector($icon_name)
             break;
         default:
             $icon = '';
+            break;
     }
     return $icon;
 }

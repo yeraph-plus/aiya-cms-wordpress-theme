@@ -51,7 +51,7 @@ $post_disclaimer_text = aya_opt('site_single_disclaimer_text', 'postpage');
         </div>
     <?php endif; ?>
     <!-- The content start -->
-    <div class="editor-modality">
+    <div x-data="editorComponent" class="editor-modality">
         <?php
         //摘要
         if ($post_data->excerpt != '') : ?>
