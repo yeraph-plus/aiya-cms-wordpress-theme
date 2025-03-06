@@ -1,6 +1,7 @@
 /node_modules
 /vendor
 /plugins
+/embed
 .env
 .env.backup
 .phpunit.result.cache

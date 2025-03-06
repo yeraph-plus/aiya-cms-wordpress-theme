@@ -19,13 +19,6 @@ function aya_post_content_filter_format($content)
     if (aya_opt('site_content_img_filter_bool', 'postpage')) {
         $content = aya_post_content_filter_img_tag($content);
     }
-    if (aya_opt('site_content_h1_filter_bool', 'postpage')) {
-        $content = aya_post_content_filter_h1_tag($content);
-    }
-    if (aya_opt('site_content_pre_filter_bool', 'postpage')) {
-        $content = aya_post_content_filter_pre_tag($content);
-    }
-    $content = trim($content);
 
     return $content;
 }
@@ -33,6 +26,8 @@ function aya_post_content_filter_format($content)
 //外链转内链
 function aya_link_jump_page($url)
 {
+    return $url;
+
     $option = aya_opt('site_content_link_jump_page_type', 'postpage');
     //生成格式
     switch ($option) {
@@ -101,7 +96,7 @@ function aya_post_content_filter_img_tag($content)
     return $content;
 }
 
-//格式化<h>标签
+//弃用：格式化<h>标签（用于生成文章目录）
 function aya_post_content_filter_h1_tag($content)
 {
     //遍历
@@ -122,7 +117,7 @@ function aya_post_content_filter_h1_tag($content)
     return $content;
 }
 
-//格式化<table>标签
+//弃用：格式化<table>标签
 function aya_post_content_filter_table_tag($content)
 {
     //遍历
@@ -131,7 +126,7 @@ function aya_post_content_filter_table_tag($content)
     if (!is_null($tables)) {
 
         foreach ($tables[0] as $i => $value) {
-            //附加Bootstrap的表格样式
+            //附加表格样式
             $table_html = str_replace('<table', '<table class="bordered"', $tables[0][$i]);
 
             $content = str_replace($tables[0][$i], $table_html, $content);
@@ -141,7 +136,7 @@ function aya_post_content_filter_table_tag($content)
     return $content;
 }
 
-//格式化<pre>标签
+//弃用：格式化<pre>标签
 function aya_post_content_filter_pre_tag($content)
 {
     //遍历
