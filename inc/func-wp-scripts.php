@@ -193,6 +193,18 @@ function aya_footer_inc()
             'file' => 'feather.min.js',
             'defer' => false,
         ],
+        [
+            'pack' => 'viewerjs',
+            'ver' => '1.11.7',
+            'file' => 'viewer.min.js',
+            'defer' => false,
+        ],
+        [
+            'pack' => 'clipboard.js',
+            'ver' => '2.0.11',
+            'file' => 'clipboard.min.js',
+            'defer' => false,
+        ],
         /*
         [
             'pack' => 'splidejs',
@@ -206,14 +218,6 @@ function aya_footer_inc()
             'file' => 'ionicons.min.js',
             'defer' => false,
         ],
-        */
-        [
-            'pack' => 'viewerjs',
-            'ver' => '1.11.7',
-            'file' => 'viewer.min.js',
-            'defer' => false,
-        ],
-        /*
         [
             'pack' => 'sweetalert',
             'ver' => '2.1.2',
@@ -227,12 +231,6 @@ function aya_footer_inc()
             'attr' => '',
         ],
         */
-        [
-            'pack' => 'clipboard.js',
-            'ver' => '2.0.11',
-            'file' => 'clipboard.min.js',
-            'defer' => false,
-        ],
     );
 
     foreach ($load_js as $value) {

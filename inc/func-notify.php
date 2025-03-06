@@ -72,7 +72,7 @@ function aya_notify_list_data()
 }
 
 //demo
-aya_notify_create('success', 'Congratulations!', 'Your OS has been updated.', '1hr');
+//aya_notify_create('success', 'Congratulations!', 'Your OS has been updated.', '1hr');
 //aya_notify_create('info', 'Did you know?', 'You can switch between artboards.', '2hr');
 //aya_notify_create('warning', 'Something went wrong!', 'Send Reposrt', '2days');
 //aya_notify_create('danger', 'Warning', 'Your password strength is low.', '5days');

@@ -34,6 +34,9 @@
     .widget-content {
         @apply relative rounded-md bg-white shadow text-base p-4 dark:bg-[#0e1726] dark:shadow-none;
     }
+    .widget-content .flex {
+        @apply overflow-auto;
+    }
     .widget-menu {
         @apply inline-flex align-middle flex-col items-start justify-start font-semibold w-full;
     }
@@ -401,7 +404,15 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         }
 
         blockquote {
-            @apply border-l-4 border-primary bg-primary-light bg-opacity-70 text-base font-medium rounded tracking-normal pl-4 pt-2 mb-4;
+            @apply text-black p-5 ltr:pl-3.5 rtl:pr-3.5 bg-white rounded-tr-md rounded-br-md border border-white-light border-l-4 !border-l-primary dark:bg-[#060818] dark:border-[#060818] mb-4;
+        }
+
+        blockquote p {
+            @apply not-italic text-[#515365] text-base dark:text-white-light m-0;
+        }
+
+        blockquote cite {
+            @apply w-full not-italic text-xs text-[#777] block before:w-3 before:h-[1px] before:bg-[#777] before:inline-block before:opacity-50 before:relative before:-top-1 ltr:before:mr-1 rtl:before:ml-1 mt-3;
         }
 
         strong {
@@ -441,11 +452,11 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         }
 
         code {
-            @apply text-[#d63384] bg-gray-300 backdrop-opacity-50 rounded;
+            @apply text-[#d63384] bg-gray-100 backdrop-opacity-50 rounded;
         }
 
         pre {
-            @apply p-4 rounded overflow-auto whitespace-pre-wrap font-mono mb-4;
+            @apply p-4 rounded bg-gray-100 overflow-auto whitespace-pre-wrap font-mono dark:bg-[#060818] mb-4;
         }
 
         pre code {
@@ -776,64 +787,6 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
 .ps .ps__rail-x.ps--clicking,
 .ps .ps__rail-y.ps--clicking {
     @apply !bg-transparent;
-}
-
-/* swal2 */
-.swal2-container .swal2-close {
-    @apply text-white hover:text-dark-light focus:shadow-none;
-}
-
-.swal2-container .swal2-popup.swal2-toast {
-    @apply bg-dark py-2.5 px-5;
-}
-
-.swal2-popup.swal2-toast .swal2-title,
-.swal2-container .swal2-popup.swal2-toast .swal2-html-container {
-    @apply text-white;
-}
-.swal2-container .swal2-popup.swal2-toast.color-primary {
-    @apply bg-primary;
-}
-
-.swal2-container .swal2-popup.swal2-toast.color-secondary {
-    @apply bg-secondary;
-}
-
-.swal2-container .swal2-popup.swal2-toast.color-warning {
-    @apply bg-warning;
-}
-.swal2-container .swal2-popup.swal2-toast.color-info {
-    @apply bg-info;
-}
-.swal2-container .swal2-popup.swal2-toast.color-danger {
-    @apply bg-danger;
-}
-.swal2-container .swal2-popup.swal2-toast.color-success {
-    @apply bg-success;
-}
-
-/* apex chart */
-.apexcharts-canvas .apexcharts-tooltip.apexcharts-theme-light,
-.apexcharts-canvas .apexcharts-xaxistooltip.apexcharts-theme-light {
-    box-shadow: none;
-    @apply border-[#050717cc] bg-[#050717cc] text-white;
-}
-
-.apexcharts-canvas .apexcharts-xaxistooltip-bottom:before,
-.apexcharts-canvas .apexcharts-xaxistooltip-bottom:after {
-    @apply border-b-[#050717cc];
-}
-
-.apexcharts-canvas .apexcharts-tooltip-series-group.apexcharts-active {
-    @apply text-white;
-}
-
-.apexcharts-canvas .apexcharts-tooltip.apexcharts-theme-light .apexcharts-tooltip-title {
-    @apply border-dark bg-[#060818];
-}
-
-.apexcharts-legend-series {
-    @apply ltr:!mr-2 rtl:!ml-2;
 }
 
 /* dark mode */

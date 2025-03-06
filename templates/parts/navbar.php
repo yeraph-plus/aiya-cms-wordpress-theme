@@ -50,7 +50,7 @@
         </div>
         <?php
         //小广告
-        aya_template_load('units/navbar-info-box');
+        //aya_template_load('units/navbar-info-box');
         ?>
     </nav>
 </aside>

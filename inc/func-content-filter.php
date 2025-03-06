@@ -72,8 +72,6 @@ function aya_post_content_filter_link_tag($content)
 //格式化<img>标签
 function aya_post_content_filter_img_tag($content)
 {
-    global $post;
-
     //遍历
     preg_match_all('/<img [^>]+>/', $content, $images);
     //如果存在img标签
@@ -92,6 +90,7 @@ function aya_post_content_filter_img_tag($content)
         }
         //检查alt
         if (!preg_match('/alt=["\']?([^"\']*)["\']?/i', $image)) {
+            global $post;
             // 如果没有alt属性，添加alt属性
             $image = preg_replace('/<img /', '<img alt="' . get_the_title($post->ID) . '-PIC-' . $i + 1 . '" ', $image);
         }
@@ -133,9 +132,9 @@ function aya_post_content_filter_table_tag($content)
 
         foreach ($tables[0] as $i => $value) {
             //附加Bootstrap的表格样式
-            $out = str_replace('<table', '<table class="table-bordered"', $tables[0][$i]);
+            $table_html = str_replace('<table', '<table class="bordered"', $tables[0][$i]);
 
-            $content = str_replace($tables[0][$i], $out, $content);
+            $content = str_replace($tables[0][$i], $table_html, $content);
         }
     }
 
@@ -151,21 +150,24 @@ function aya_post_content_filter_pre_tag($content)
     if (!is_null($pres)) {
 
         foreach ($pres[1] as $match) {
-            $code = trim($match);
+            $code_html = trim($match);
+            //检查pre标签class
+            $code_html = preg_replace('/<pre class="([^"]*)">/', '<pre class="line-numbers $1">', $code_html);
+
             //如果没有code标签
-            if (!(substr($code, 0, strlen('<code')) === '<code')) {
-                $code = '<code class="language-plaintext">' . $code . '</code>';
+            if (!(substr($code_html, 0, strlen('<code')) === '<code')) {
+                $code_html = '<code class="language-plaintext">' . $code_html . '</code>';
             }
             //如果有code标签
             //UPDATE：不处理，前台直接JS处理
             /*
-            if (substr($code, 0, strlen("<code>")) === "<code>") {
+            if (substr($code_html, 0, strlen("<code>")) === "<code>") {
                 //转义HTML
-                $code = aya_html_clean($code);
-                $code = '<code>' . substr($code, strlen('<code>'));
+                $code_html = aya_html_clean($code_html);
+                $code_html = '<code>' . substr($code_html, strlen('<code>'));
             }
             */
-            $content = str_replace($match, $code, $content);
+            $content = str_replace($match, $code_html, $content);
         }
     }
 

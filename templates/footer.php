@@ -11,6 +11,7 @@ $settings = array(
     'animation' => 'animate__' . aya_opt('site_router_trans_type', 'basic'),
     'loopGridCol' => aya_opt('site_loop_width_type', 'basic'),
     'colorSemidark' => false,
+    'themeCustomizer' => (aya_opt('site_theme_customizer_bool', 'basic')) ? true : false,
 );
 //AJAX
 $ajax_obj = array(
@@ -27,8 +28,8 @@ aya_template_load('parts/footer');
 wp_footer();
 
 ?>
-        </div>
-    </div>
+</div>
+</div>
 
 <?php
 //其他组件
@@ -44,7 +45,6 @@ aya_footer_inc();
     const $ajaxObj = <?php aya_json_echo($ajax_obj); ?>;
     const $siteNotification = <?php aya_notify_list_data() ?>;
     const $userLogindata = <?php aya_user_login_in_data() ?>;
-
 </script>
 
 </body>

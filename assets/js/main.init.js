@@ -14,6 +14,7 @@
             }, 200);
         }
         //alpineJS store init
+        Alpine.store('app').resetCustomizer();
         Alpine.store('app').setRTLLayout();
         Alpine.store('app').setLoopMode();
     });
@@ -49,6 +50,7 @@
             //window.location.reload();
             Alpine.initTree(document.body);
             feather.replace({});
+            Prism.highlightAll();
             replaceLozad();
         });
         //swup.on('contentReplaced', () => Alpine.start());
@@ -256,7 +258,19 @@
             // loop grid mode column
             loopGridCol: Alpine.$persist($themeConfig.loopGridCol),
             loopGridClass: '',
+            // user can manage theme
+            handleCustomizer: $themeConfig.themeCustomizer,
 
+            resetCustomizer() {
+                if (!this.handleCustomizer) {
+                    this.navbarMenu = $themeConfig.navbarMenu;
+                    this.bodyLayout = $themeConfig.bodyLayout;
+                    this.navbarSticky = $themeConfig.navbarSticky;
+                    this.colorSemidark = $themeConfig.colorSemidark;
+                    this.animation = $themeConfig.animation;
+                    this.loopGridCol = $themeConfig.loopGridCol;
+                }
+            },
             setRTLLayout() {
                 document.querySelector('html').setAttribute('dir', $themeConfig.rtlClass);
             },

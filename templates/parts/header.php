@@ -52,14 +52,14 @@
                     <a href="javascript:;" class="block p-2 rounded-md bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60" @click="toggle">
                         <i data-feather="bell" width="20" height="20" stroke-width="2"></i>
 
-                        <template x-if="!notificationList.length">
+                        <template x-if="notificationList.length">
                             <span class="flex absolute w-3 h-3 ltr:right-0 rtl:left-0 top-0">
                                 <span class="animate-ping absolute ltr:-left-[3px] rtl:-right-[3px] -top-[3px] inline-flex h-full w-full rounded-full bg-success/50 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full w-[6px] h-[6px] bg-success"></span>
                             </span>
                         </template>
                     </a>
-                    <ul x-cloak x-show="open" x-transition x-transition.duration.300ms class="top-11 !py-0 text-dark dark:text-white-dark w-[300px] ltr:-right-16 sm:ltr:-right-2 rtl:-left-16 sm:rtl:-left-2 sm:w-[375px] text-xs">
+                    <ul x-cloak x-show="open" x-transition x-transition.duration.300ms class="top-11 !py-0 text-dark dark:text-white-dark w-[300px] ltr:-right-10 rtl:-left-10 text-xs">
                         <li>
                             <div class="flex items-center px-4 py-2 justify-between font-semibold hover:!bg-transparent">
                                 <h4 class="text-lg">
