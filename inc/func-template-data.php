@@ -100,17 +100,17 @@ function aya_pagination_item_link($paged_array, $get_data = '')
             $value = $paged_array['page_home'];
 
             $link_add_class = ($value['event_none']) ? '!hidden' : 'mr-2';
-            $link_name = '<i data-feather="home" width="16" height="16" class="mr-1"></i> 首页';
+            $link_name = aya_feather_icon('home', '16', 'mr-1') . '首页';
         } else if ($get_data == 'prev') {
             $value = $paged_array['page_prev'];
 
             $link_add_class = ($value['event_none']) ? 'events-none' : ''; //使链接失效
-            $link_name = '<i data-feather="chevron-left" width="16" height="16" class="mr-1"></i> 上一页';
+            $link_name = aya_feather_icon('chevron-left', '16', 'mr-1') . '上一页';
         } else if ($get_data == 'next') {
             $value = $paged_array['page_next'];
 
             $link_add_class = ($value['event_none']) ? 'events-none' : ''; //使链接失效
-            $link_name = '下一页 <i data-feather="chevron-right" width="16" height="16" class="ml-1"></i>';
+            $link_name = '下一页' . aya_feather_icon('chevron-right', '16', 'mr-1');
         } else {
             return '';
         }
@@ -156,12 +156,12 @@ function aya_comment_pagination_item_link($label_type = 'next')
     //上一页
     if ($label_type === 'prev') {
         $get_page = $page - 1;
-        $label = '<i data-feather="chevrons-left" width="16" height="16" stroke-width="2"></i>' . __('Older', 'AIYA');
+        $label = aya_feather_icon('chevron-left', '16', '', 'stroke-width="2"') . __('Older', 'AIYA');
     }
     //下一页
     else if ($label_type === 'next') {
         $get_page = $page + 1;
-        $label = '<i data-feather="chevrons-right" width="16" height="16" stroke-width="2"></i>' . __('Newer', 'AIYA');
+        $label = __('Newer', 'AIYA') . aya_feather_icon('chevrons-right', '16', '', 'stroke-width="2"');
     }
 
     $html_template = '<a href="%1$s" class="item %2$s">%3$s</a>';
@@ -217,12 +217,9 @@ function aya_breadcrumb_item_link()
     $link_template = '<li><a href="%1$s" class="%2$s">%3$s</a></li>';
     $text_template = '<li><p class="%1$s">%2$s<p></li>';
 
-    $home_item_text = '<i data-feather="home" width="16" height="16" class="mr-1"></i>' . __('首页', 'AIYA');
-
     $item_html = '';
-
     $item_html .= '<ol class="breadcrumb">';
-    $item_html .= '<li class="first-li"><a href="' . home_url() . '" class="flex items-center"><i data-feather="home" width="16" height="16" class="mr-1"></i>' . __('首页', 'AIYA') . '</a></li>';
+    $item_html .= '<li class="first-li"><a href="' . home_url() . '" class="flex items-center">' . aya_feather_icon('navigation', '16', 'mr-1', '') . __('首页', 'AIYA') . '</a></li>';
 
     switch ($is_where) {
         case 'singular':
@@ -424,12 +421,21 @@ function aya_get_related_posts($post_id = 0, $per_num = 5)
  * ------------------------------------------------------------------------------
  */
 
+//feather-icons模板格式
+function aya_feather_icon($icon, $size = 24, $class = '', $ext = '')
+{
+    $html = '';
+    $html .= '<i data-feather="' . $icon . '" width="' . $size . '" height="' . $size . '" class="' . $class . '" ' . $ext . '></i>';
+
+    return $html;
+}
+
 //分块标题
 function aya_section_tittle($title, $icon = 'navigation')
 {
     $html = '';
     $html .= '<div class="section-tittle">';
-    $html .= '<i data-feather="' . $icon . '" width="24" height="24" class="mr-2 mt-1"></i><h2>' . $title . '</h2>';
+    $html .= aya_feather_icon($icon, '24', 'mr-2 mt-1', '') . '<h2>' . $title . '</h2>';
     $html .= '</div>';
 
     return aya_echo($html);
@@ -455,30 +461,26 @@ function aya_single_badge_starts($post_id = 0)
     //检查置顶
     if (is_sticky($post_id)) {
         $badge .= '<span class="title-badge bg-[#2196f3]">';
-        $badge .= '<i data-feather="paperclip" width="16" height="16" class="mr-1"></i>';
-        $badge .= __('置顶', 'AIYA');
+        $badge .= aya_feather_icon('paperclip', '16', 'mr-1', '') . __('置顶', 'AIYA');
         $badge .= '</span>';
     }
     //检查密码保护
     if (post_password_required($post_id)) {
         $badge .= '<span class="title-badge bg-[#caa70a]">';
-        $badge .= '<i data-feather="lock" width="16" height="16" class="mr-1"></i>';
-        $badge .= __('密码保护', 'AIYA');
+        $badge .= aya_feather_icon('lock', '16', 'mr-1', '') . __('密码保护', 'AIYA');
         $badge .= '</span>';
     }
     //检查私密文章
     if (get_post_status($post_id) == 'private') {
         $badge .= '<span class="title-badge bg-[#d63384]">';
-        $badge .= '<i data-feather="eye-off" width="16" height="16" class="mr-1"></i>';
-        $badge .= __('私密', 'AIYA');
+        $badge .= aya_feather_icon('eye-off', '16', 'mr-1', '') . __('私密', 'AIYA');
         $badge .= '</span>';
     }
     //检查最新文章
     $post_date = get_the_date('U', $post_id);
     if (date('U') - $post_date < 86400) {
         $badge .= '<span class="title-badge bg-[#e7515a]">';
-        $badge .= '<i data-feather="plus-circle" width="16" height="16" class="mr-1"></i>';
-        $badge .= __('最新', 'AIYA');
+        $badge .= aya_feather_icon('clock', '16', 'mr-1', '') . __('最新', 'AIYA');
         $badge .= '</span>';
     }
 
@@ -503,8 +505,8 @@ function aya_single_badge_tags($post_id = 0)
 {
     $cats_before = '<span class="tags-badge">';
     $cats_after = '</span>';
-    $cats_icon = '<i data-feather="tag" width="12" height="12" class="mr-1"></i>';
-    $tags_icon = '<i data-feather="hash" width="12" height="12" class="mr-1"></i>';
+    $cats_icon = aya_feather_icon('tag', '12', 'mr-1', '');
+    $tags_icon = aya_feather_icon('hash', '12', 'mr-1', '');
 
     $the_cat_list = get_the_term_list($post_id, 'category', $cats_before . $cats_icon, $cats_after . $cats_before . $cats_icon, $cats_after);
     $the_tag_list = get_the_term_list($post_id, 'post_tag', $cats_before . $tags_icon, $cats_after . $cats_before . $tags_icon, $cats_after);

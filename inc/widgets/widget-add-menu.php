@@ -25,7 +25,7 @@ class AYA_Widget_Menu extends AYA_Widget
 
             if (!empty($menu['child'])):
                 $html .= '<div class="relative mb-2"><div x-data="dropdown" @click.outside="open = false" class="dropdown">';
-                $html .= '<button type="button" class="flex items-center dropdown-toggle" @click="toggle">' . $menu['label'] . '&nbsp;<i data-feather="chevron-down" width="16" height="16"></i></button>';
+                $html .= '<button type="button" class="flex items-center dropdown-toggle" @click="toggle">' . $menu['label'] . '&nbsp;' . aya_feather_icon('chevron-down', '16', 'mr-1', '') . '</button>';
                 $html .= '<ul x-cloak x-show="open" x-transition x-transition.duration.300ms class="ltr:right-0 rtl:left-0 whitespace-nowrap">';
 
                 foreach ($menu['child'] as $key => $child):

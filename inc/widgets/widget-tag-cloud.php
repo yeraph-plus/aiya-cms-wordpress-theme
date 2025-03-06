@@ -48,7 +48,12 @@ class AYA_Widget_Tag_Cloud extends AYA_Widget
 
         aya_echo($html);
 
-        //
+        //<a href="#" class="btn btn-outline-">button</a>
+        //<a href="#" class="btn btn-outline-">button</a>
+        //<a href="#" class="btn btn-outline-">button</a>
+        //<a href="#" class="btn btn-outline-">button</a>
+        //<a href="#" class="btn btn-outline-">button</a>
+        //<a href="#" class="btn btn-outline-">button</a>
         
     }
 }

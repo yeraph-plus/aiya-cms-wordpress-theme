@@ -43,7 +43,7 @@ class AYA_Widget_Comments extends AYA_Widget
 
         //生成评论列表
         foreach ($comments as $key => $comment) {
-            $html .= '<div class="relative flex">';
+            $html .= '<div class="relative flex overflow-hidden">';
             $html .= '<div class="w-12 h-12 rounded-full bg-white shadow dark:bg-[#0e1726] dark:shadow-none p-1 mr-2"><img class="rounded-full" src="' . get_avatar_url($comment, 32) . '" alt="avatar"></div>';
             $html .= '<div class="flex-1 rounded-md bg-white shadow dark:bg-[#0e1726] dark:shadow-none p-4">';
             $html .= '<div class="flex items-center justify-between">';

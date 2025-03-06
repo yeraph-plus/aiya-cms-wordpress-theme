@@ -47,7 +47,7 @@ class AYA_Widget_Post_Newest extends AYA_Widget
 
         //生成文章列表
         if ($the_query == false) {
-            $html .= '<span class="text-center text-base text-gray-500 m-4">' . __('暂无文章', 'AIYA') . '</span>';
+            $html .= '<span class="text-center text-sm text-gray-500 m-4">' . __('暂无文章', 'AIYA') . '</span>';
         } else {
             //循环
             foreach ($the_query as $post => $post_data) {
@@ -55,9 +55,9 @@ class AYA_Widget_Post_Newest extends AYA_Widget
 
                 $html .= '<div class="relative flex items-center group">';
                 $html .= '<img class="w-[100px] h-[75px] rounded-lg mr-2" src="' . $post_thumb . '" alt="thumb">';
-                $html .= '<div class="flex flex-col">';
+                $html .= '<div class="flex flex-col overflow-hidden">';
                 $html .= '<a class="text-sm font-bold group-hover:text-primary transition-all duration-300 line-clamp-2 mb-2" href="' . $post_data['url'] . '" title="' . $post_data['attr_title'] . '">' . $post_data['title'] . '</a>';
-                $html .= '<span class="flex items-center text-sm text-gray-500"><i data-feather="calendar" width="16" height="16" class="mr-1"></i>' .  __('发布于', 'AIYA') . ' ' . $post_data['date'] . '</span>';
+                $html .= '<span class="flex items-center text-sm text-gray-500">' . aya_feather_icon('calendar', '16', 'mr-1', '') . $post_data['date'] . '</span>';
                 $html .= '</div></div>';
             }
         }

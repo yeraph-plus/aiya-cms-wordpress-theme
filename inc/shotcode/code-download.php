@@ -3,47 +3,56 @@ if (!defined('ABSPATH')) exit;
 
 //AIYA-CMS 短代码组件：下载提示框
 
-function download_box_shortcode($atts = array(), $content = '')
+function copy_board_box_shortcode($atts = array(), $content = '')
 {
     //定义简码参数
-    $atts = shortcode_atts(array(
-        'file_name' => '',
-        'file_size' => '',
-        'file_des' => '',
-        'btn_name' => '',
-        'btn_link'  => '',
-        'od_link' => '',
-        'magnet_xt' => false,
-        'copy_link' => false,
-    ), $atts, 'download_box_shortcode');
-    $html = '';
+    $content = strip_tags($content);
+
+    $atts = shortcode_atts(
+        array(
+            'title' => '',
+            'icon' => '',
+            'href_link' => false,
+        ),
+        $atts
+    );
+
+    switch($atts['icon']){
+        case 'magnet':
+            $icon = '<i data-feather="globe" width="20" height="20" stroke-width="2"></i>';
+            break;
+        case 'file':
+            $icon = '<i data-feather="folder" width="20" height="20" stroke-width="2"></i>';
+            break;
+        default:
+            $icon = '<i data-feather="link" width="20" height="20" stroke-width="2"></i>';
+    }
+
     //开始输出组件
-    $html .= '<div class="tips-box down-box">';
-    if ($atts['file_name'] !== '') {
-        $html .= '<b>' . $atts['file_name'] . '</b><br /><p>' . $atts['file_size'] . ' / ' . $atts['file_des'] . '</p>';
-    }
-    $html .= '<div class="down-concent">' . $content . '</div>';
-    $html .= '<div class="down-btn">';
-    //输出自定义按钮
-    if ($atts['btn_link'] !== '') {
-        $have_name = ($atts['btn_name'] !== '') ? $atts['btn_name'] : '打开链接';
-        $html .= '<a class="btn" href="' . $atts['btn_link'] . '"><i class="bi bi-link"></i> ' . $have_name . '</a>';
-    }
-    //输出OD盘
-    if ($atts['od_link'] !== '') {
-        $html .= '<a class="btn" href="' . $atts['od_link'] . '"><i class="bi bi-box"></i> OneDrive</a>';
-    }
-    //输出磁力链接
-    if ($atts['magnet_xt'] !== false) {
-        $html .= '<a class="btn" href="' . strip_tags($content) . '"><i class="bi bi-magnet"></i> Magnet</a>';
-    }
-    //输出复制按钮
-    if ($atts['copy_link'] !== false) {
-        //$html .= '<input id="down-this-clip" type="hidden" value="' . str_replace('<br />', '', $content) . '" />';
-        //$html .= '<button id="down-clip" class="btn"><i class="bi bi-clipboard"></i> 复制代码 </button>';
-    }
-    $html .= '</div></div>';
+
+    $html = '';
+    $html .= '<div class="bg-[#f1f2f3] p-5 rounded dark:bg-[#060818]"><form>';
+    $html .= '<h5 class="mb-3 text-lg font-semibold">';
+    $html .= $atts['title'] . '</h5>';
+    $html .= '<p class="mb-3 font-semibold"><span id="copyLink">' . $content . '</span></p>';
+    $html .= '<button type="button" class="btn btn-primary " data-clipboard-target="#copyLink">';
+    $html .= '</form></div>';
 
     return $html;
 }
-add_shortcode('down_board', 'download_box_shortcode');
+add_shortcode('copy_board', 'copy_board_box_shortcode');
+?>
+<div class="bg-[#f1f2f3] p-5 rounded dark:bg-[#060818]">
+    <form>
+        <p class="mb-3 font-semibold"> <span> Link -> </span> <span id="copyLink"> http://www.admin-dashboard.com/code</span></p>
+        <span class="absolute opacity-0" id="copyHiddenCode">2291</span>
+        <div class="flex flex-wrap gap-2 mt-5">
+            <button type="button" class="btn btn-primary " data-clipboard-target="#copyLink">
+                <svg> ... </svg> Copy Link
+            </button>
+            <button type="button" class="btn btn-dark " data-clipboard-target="#copyHiddenCode">
+                <svg> ... </svg> Copy Hidden Code
+            </button>
+        </div>
+    </form>
+</div>

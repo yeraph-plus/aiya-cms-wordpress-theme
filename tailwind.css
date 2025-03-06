@@ -29,13 +29,10 @@
         @apply relative w-full mb-4;
     }
     .widget-title {
-        @apply relative flex items-center text-base font-semibold dark:text-white-light mb-2 before:content-[''] before:h-4 before:w-1 before:ml-1 before:mr-2 before:bg-primary before:rounded;
+        @apply relative flex items-center text-base overflow-hidden font-semibold dark:text-white-light mb-2 before:content-[''] before:h-4 before:w-1 before:ml-1 before:mr-2 before:bg-primary before:rounded;
     }
     .widget-content {
         @apply relative rounded-md bg-white shadow text-base p-4 dark:bg-[#0e1726] dark:shadow-none;
-    }
-    .widget-content .flex {
-        @apply overflow-auto;
     }
     .widget-menu {
         @apply inline-flex align-middle flex-col items-start justify-start font-semibold w-full;
@@ -456,6 +453,7 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         }
 
         pre {
+            direction: ltr;
             @apply p-4 rounded bg-gray-100 overflow-auto whitespace-pre-wrap font-mono dark:bg-[#060818] mb-4;
         }
 
@@ -506,6 +504,52 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
 
         dd {
             @apply text-base font-medium tracking-normal mb-4;
+        }
+        
+        /* tables */
+        .table-responsive {
+            @apply overflow-auto;
+        }
+        
+        table {
+            @apply w-full !border-collapse;
+        }
+
+        table thead tr,
+        table tfoot tr {
+            @apply border-b-0 !bg-[#f6f8fa]  dark:!bg-[#1a2941];
+        }
+
+        table thead tr th,
+        table tfoot tr th,
+        table tbody tr td {
+            @apply py-3 px-4 ltr:text-left rtl:text-right;
+        }
+
+        table thead tr th,
+        table tfoot tr th {
+            @apply font-semibold;
+        }
+
+        table tbody tr {
+            @apply border-b !border-white-light/40 dark:!border-[#191e3a];
+        }
+
+        table.table-hover tbody tr {
+            @apply hover:!bg-white-light/20 dark:hover:!bg-[#1a2941]/40;
+        }
+
+        table.table-striped tbody tr:nth-child(odd) {
+            @apply !bg-white-light/20 dark:!bg-[#1a2941]/40;
+        }
+
+        table.dataTable-table tbody tr th,
+        table.dataTable-table tbody tr td {
+            @apply border-b border-white-light/40 py-3 px-4 ltr:text-left rtl:text-right dark:border-[#191e3a];
+        }
+
+        table.dataTable-table tbody tr:last-child td {
+            @apply border-b-0;
         }
     }
 
@@ -723,48 +767,6 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         @apply w-full;
     }
 
-    /* tables */
-    .table-responsive {
-        @apply overflow-auto;
-    }
-    table {
-        @apply w-full !border-collapse;
-    }
-    table thead tr,
-    table tfoot tr {
-        @apply border-b-0 !bg-[#f6f8fa]  dark:!bg-[#1a2941];
-    }
-    table thead tr th,
-    table tfoot tr th,
-    table tbody tr td {
-        @apply py-3 px-4 ltr:text-left rtl:text-right;
-    }
-    table thead tr th,
-    table tfoot tr th {
-        @apply font-semibold;
-    }
-    table tbody tr {
-        @apply border-b !border-white-light/40 dark:!border-[#191e3a];
-    }
-    table.table-hover tbody tr {
-        @apply hover:!bg-white-light/20 dark:hover:!bg-[#1a2941]/40;
-    }
-    table.table-striped tbody tr:nth-child(odd) {
-        @apply !bg-white-light/20 dark:!bg-[#1a2941]/40;
-    }
-
-    table.dataTable-table tbody tr th,
-    table.dataTable-table tbody tr td {
-        @apply border-b border-white-light/40 py-3 px-4 ltr:text-left rtl:text-right dark:border-[#191e3a];
-    }
-    table.dataTable-table tbody tr:last-child td {
-        @apply border-b-0;
-    }
-
-    /* code hightlight */
-    pre {
-        direction: ltr;
-    }
 }
 
 /* perfect scrollbar */

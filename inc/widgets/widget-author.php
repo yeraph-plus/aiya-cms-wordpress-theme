@@ -61,10 +61,8 @@ class AYA_Widget_Author_Box extends AYA_Widget
                 <?php aya_echo($author_data['desc']); ?>
             </p>
             <p class="flex items-center text-base font-medium mb-4">
-                <i data-feather="edit-3" width="16" height="16" class="mr-1"></i>
-                <span class="mr-2">文章 <?php aya_echo(count_user_posts($author_data['id'])); ?> 篇</span>
-                <i data-feather="message-circle" width="16" height="16" class="mr-1"></i>
-                <span>评论 <?php aya_echo(get_comments('count=true&user_id=' . $author_data['id'])); ?> 次</span>
+                <i data-feather="edit-3" width="16" height="16" class="mr-1"></i> <span class="mr-2">文章 <?php aya_echo(count_user_posts($author_data['id'])); ?> 篇</span>
+                <i data-feather="message-circle" width="16" height="16" class="mr-1"></i> <span>评论 <?php aya_echo(get_comments('count=true&user_id=' . $author_data['id'])); ?> 次</span>
             </p>
         </div>
 <?php
@@ -82,7 +80,7 @@ class AYA_Widget_Author_Box extends AYA_Widget
                 $html .= '<img class="w-[100px] h-[75px] rounded-lg mr-2" src="' . $post_thumb . '" alt="thumb">';
                 $html .= '<div class="flex flex-col">';
                 $html .= '<a class="text-sm font-bold group-hover:text-primary transition-all duration-300 line-clamp-2 mb-2" href="' . $post_data['url'] . '" title="' . $post_data['attr_title'] . '">' . $post_data['title'] . '</a>';
-                $html .= '<span class="flex items-center text-sm text-gray-500"><i data-feather="calendar" width="16" height="16" class="mr-1"></i>' .  __('发布于', 'AIYA') . ' ' . $post_data['date'] . '</span>';
+                $html .= '<span class="flex items-center text-sm text-gray-500">' . aya_feather_icon('calendar', '16', 'mr-1', '') .  __('发布于', 'AIYA') . ' ' . $post_data['date'] . '</span>';
                 $html .= '</div></div>';
             }
         }
