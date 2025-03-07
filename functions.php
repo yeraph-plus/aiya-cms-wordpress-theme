@@ -131,7 +131,6 @@ if (!class_exists('AYF') || !class_exists('AYP')) {
 
 //加载 Composer 依赖
 if (file_exists(AYA_PATH . '/lib/vendor/autoload.php')) {
-    //autoload
     require_once AYA_PATH . '/lib/vendor/autoload.php';
 }
 

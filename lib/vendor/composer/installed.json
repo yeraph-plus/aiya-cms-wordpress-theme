@@ -353,6 +353,77 @@
             "install-path": "../guzzlehttp/psr7"
         },
         {
+            "name": "imagine/imagine",
+            "version": "1.5.0",
+            "version_normalized": "1.5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-imagine/Imagine.git",
+                "reference": "80ab21434890dee9ba54969d31c51ac8d4d551e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-imagine/Imagine/zipball/80ab21434890dee9ba54969d31c51ac8d4d551e0",
+                "reference": "80ab21434890dee9ba54969d31c51ac8d4d551e0",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5 || ^8.4 || ^9.3"
+            },
+            "suggest": {
+                "ext-exif": "to read EXIF metadata",
+                "ext-gd": "to use the GD implementation",
+                "ext-gmagick": "to use the Gmagick implementation",
+                "ext-imagick": "to use the Imagick implementation"
+            },
+            "time": "2024-12-03T14:37:55+00:00",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Imagine\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bulat Shakirzyanov",
+                    "email": "mallluhuct@gmail.com",
+                    "homepage": "http://avalanche123.com"
+                }
+            ],
+            "description": "Image processing for PHP",
+            "homepage": "http://imagine.readthedocs.org/",
+            "keywords": [
+                "drawing",
+                "graphics",
+                "image manipulation",
+                "image processing"
+            ],
+            "support": {
+                "issues": "https://github.com/php-imagine/Imagine/issues",
+                "source": "https://github.com/php-imagine/Imagine/tree/1.5.0"
+            },
+            "install-path": "../imagine/imagine"
+        },
+        {
             "name": "jxlwqq/chinese-typesetting",
             "version": "1.2.4",
             "version_normalized": "1.2.4.0",
@@ -406,81 +477,18 @@
             "install-path": "../jxlwqq/chinese-typesetting"
         },
         {
-            "name": "metowolf/meting",
-            "version": "v1.5.11",
-            "version_normalized": "1.5.11.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/metowolf/Meting.git",
-                "reference": "a88a1dffca16ae32f20cf009d7b65bfa1e9cdbad"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/metowolf/Meting/zipball/a88a1dffca16ae32f20cf009d7b65bfa1e9cdbad",
-                "reference": "a88a1dffca16ae32f20cf009d7b65bfa1e9cdbad",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-openssl": "*",
-                "php": ">=5.4.0"
-            },
-            "suggest": {
-                "ext-bcmath": "Required to use BC Math calculate RSA.",
-                "ext-openssl": "Required to use OpenSSL encrypt params."
-            },
-            "time": "2021-07-19T11:53:12+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Metowolf\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "metowolf",
-                    "email": "i@i-meto.com",
-                    "homepage": "https://i-meto.com"
-                }
-            ],
-            "description": "A powerful music API framework to accelerate development.",
-            "homepage": "https://github.com/metowolf/Meting",
-            "keywords": [
-                "lightweight",
-                "lighty",
-                "music api",
-                "php music"
-            ],
-            "support": {
-                "issues": "https://github.com/metowolf/Meting/issues",
-                "source": "https://github.com/metowolf/Meting"
-            },
-            "install-path": "../metowolf/meting"
-        },
-        {
             "name": "overtrue/php-opencc",
-            "version": "1.2.0",
-            "version_normalized": "1.2.0.0",
+            "version": "1.2.1",
+            "version_normalized": "1.2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/overtrue/php-opencc.git",
-                "reference": "866b2620321123188b99e42d717e0eb8364dd2b7"
+                "reference": "3befc36a0f21e3b08ec769628771c94bd0ddfdeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/overtrue/php-opencc/zipball/866b2620321123188b99e42d717e0eb8364dd2b7",
-                "reference": "866b2620321123188b99e42d717e0eb8364dd2b7",
+                "url": "https://api.github.com/repos/overtrue/php-opencc/zipball/3befc36a0f21e3b08ec769628771c94bd0ddfdeb",
+                "reference": "3befc36a0f21e3b08ec769628771c94bd0ddfdeb",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -492,8 +500,8 @@
             "require": {
                 "ext-zip": "*",
                 "php": ">=8.0",
-                "symfony/console": "^5.4|^6.3",
-                "symfony/process": "^5.4|^6.3"
+                "symfony/console": "^5.4|^6.3|^7.0",
+                "symfony/process": "^5.4|^6.3|^7.0"
             },
             "require-dev": {
                 "brainmaestro/composer-git-hooks": "dev-master",
@@ -504,7 +512,7 @@
                 "phpunit/phpunit": "^9.0",
                 "vimeo/psalm": "^4.10"
             },
-            "time": "2024-12-23T01:57:45+00:00",
+            "time": "2025-01-16T08:03:18+00:00",
             "bin": [
                 "bin/opencc"
             ],
@@ -540,7 +548,7 @@
             "description": "中文简繁转换，支持词汇级别的转换、异体字转换和地区习惯用词转换（中国大陆、台湾、香港、日本新字体）。基于 [BYVoid/OpenCC](https://github.com/BYVoid/OpenCC) 数据实现。",
             "support": {
                 "issues": "https://github.com/overtrue/php-opencc/issues",
-                "source": "https://github.com/overtrue/php-opencc/tree/1.2.0"
+                "source": "https://github.com/overtrue/php-opencc/tree/1.2.1"
             },
             "funding": [
                 {
@@ -938,17 +946,17 @@
         },
         {
             "name": "symfony/console",
-            "version": "v6.4.15",
-            "version_normalized": "6.4.15.0",
+            "version": "v7.2.0",
+            "version_normalized": "7.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "f1fc6f47283e27336e7cebb9e8946c8de7bff9bd"
+                "reference": "23c8aae6d764e2bae02d2a99f7532a7f6ed619cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/f1fc6f47283e27336e7cebb9e8946c8de7bff9bd",
-                "reference": "f1fc6f47283e27336e7cebb9e8946c8de7bff9bd",
+                "url": "https://api.github.com/repos/symfony/console/zipball/23c8aae6d764e2bae02d2a99f7532a7f6ed619cf",
+                "reference": "23c8aae6d764e2bae02d2a99f7532a7f6ed619cf",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -958,36 +966,35 @@
                 ]
             },
             "require": {
-                "php": ">=8.1",
-                "symfony/deprecation-contracts": "^2.5|^3",
+                "php": ">=8.2",
                 "symfony/polyfill-mbstring": "~1.0",
                 "symfony/service-contracts": "^2.5|^3",
-                "symfony/string": "^5.4|^6.0|^7.0"
+                "symfony/string": "^6.4|^7.0"
             },
             "conflict": {
-                "symfony/dependency-injection": "<5.4",
-                "symfony/dotenv": "<5.4",
-                "symfony/event-dispatcher": "<5.4",
-                "symfony/lock": "<5.4",
-                "symfony/process": "<5.4"
+                "symfony/dependency-injection": "<6.4",
+                "symfony/dotenv": "<6.4",
+                "symfony/event-dispatcher": "<6.4",
+                "symfony/lock": "<6.4",
+                "symfony/process": "<6.4"
             },
             "provide": {
                 "psr/log-implementation": "1.0|2.0|3.0"
             },
             "require-dev": {
                 "psr/log": "^1|^2|^3",
-                "symfony/config": "^5.4|^6.0|^7.0",
-                "symfony/dependency-injection": "^5.4|^6.0|^7.0",
-                "symfony/event-dispatcher": "^5.4|^6.0|^7.0",
+                "symfony/config": "^6.4|^7.0",
+                "symfony/dependency-injection": "^6.4|^7.0",
+                "symfony/event-dispatcher": "^6.4|^7.0",
                 "symfony/http-foundation": "^6.4|^7.0",
                 "symfony/http-kernel": "^6.4|^7.0",
-                "symfony/lock": "^5.4|^6.0|^7.0",
-                "symfony/messenger": "^5.4|^6.0|^7.0",
-                "symfony/process": "^5.4|^6.0|^7.0",
-                "symfony/stopwatch": "^5.4|^6.0|^7.0",
-                "symfony/var-dumper": "^5.4|^6.0|^7.0"
+                "symfony/lock": "^6.4|^7.0",
+                "symfony/messenger": "^6.4|^7.0",
+                "symfony/process": "^6.4|^7.0",
+                "symfony/stopwatch": "^6.4|^7.0",
+                "symfony/var-dumper": "^6.4|^7.0"
             },
-            "time": "2024-11-06T14:19:14+00:00",
+            "time": "2024-11-06T14:24:19+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1021,7 +1028,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v6.4.15"
+                "source": "https://github.com/symfony/console/tree/v7.2.0"
             },
             "funding": [
                 {
@@ -1471,17 +1478,17 @@
         },
         {
             "name": "symfony/process",
-            "version": "v6.4.14",
-            "version_normalized": "6.4.14.0",
+            "version": "v7.2.0",
+            "version_normalized": "7.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "25214adbb0996d18112548de20c281be9f27279f"
+                "reference": "d34b22ba9390ec19d2dd966c40aa9e8462f27a7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/25214adbb0996d18112548de20c281be9f27279f",
-                "reference": "25214adbb0996d18112548de20c281be9f27279f",
+                "url": "https://api.github.com/repos/symfony/process/zipball/d34b22ba9390ec19d2dd966c40aa9e8462f27a7e",
+                "reference": "d34b22ba9390ec19d2dd966c40aa9e8462f27a7e",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1491,9 +1498,9 @@
                 ]
             },
             "require": {
-                "php": ">=8.1"
+                "php": ">=8.2"
             },
-            "time": "2024-11-06T09:25:01+00:00",
+            "time": "2024-11-06T14:24:19+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1521,7 +1528,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v6.4.14"
+                "source": "https://github.com/symfony/process/tree/v7.2.0"
             },
             "funding": [
                 {
@@ -1729,5 +1736,13 @@
         }
     ],
     "dev": true,
-    "dev-package-names": []
+    "dev-package-names": [
+        "guzzlehttp/guzzle",
+        "guzzlehttp/promises",
+        "guzzlehttp/psr7",
+        "psr/http-client",
+        "psr/http-factory",
+        "psr/http-message",
+        "ralouphie/getallheaders"
+    ]
 }

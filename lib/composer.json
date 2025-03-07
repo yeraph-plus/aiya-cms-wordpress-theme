@@ -5,11 +5,13 @@
     "license": "GPL-3.0-or-later",
     "minimum-stability": "stable",
     "require": {
-        "guzzlehttp/guzzle": "^7.2",
+        "jxlwqq/chinese-typesetting": "^1.2",
         "overtrue/php-opencc": "^1.0",
         "overtrue/pinyin": "^5.3",
-        "metowolf/meting": "^1.5",
-        "jxlwqq/chinese-typesetting": "^1.2"
+        "imagine/imagine": "^1.5"
+    },
+    "require-dev": {
+        "guzzlehttp/guzzle": "^7.2"
     },
     "repositories": {
         "packagist": {
