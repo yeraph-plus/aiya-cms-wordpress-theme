@@ -33,6 +33,7 @@ if (is_admin()) {
     ));
 }
 
+add_shortcode('clip_board', 'clip_board_box_shortcode');
 //AIYA-CMS 短代码组件：剪贴板功能卡片
 function clip_board_box_shortcode($atts = array(), $content = '')
 {
@@ -76,4 +77,3 @@ function clip_board_box_shortcode($atts = array(), $content = '')
 
     return htmlspecialchars_decode($html);
 }
-add_shortcode('clip_board', 'clip_board_box_shortcode');

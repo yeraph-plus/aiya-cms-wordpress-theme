@@ -55,8 +55,15 @@ if (is_admin()) {
         'id' => 'sc-li-list',
         'title' => '快捷列表（li）',
         'note' => '将文本按行转换为列表显示',
-        'template' => '[list {{attributes}}]<br/> <br/>[/list]',
+        'template' => '[list {{attributes}}]<br/> {{content}} <br/>[/list]',
         'field_build' => array(
+            [
+                'id' => 'content',
+                'type' => 'textarea',
+                'label' => '内容',
+                'desc' => '按每行顺序格式化结构为：<li>第1行</li>/<li>第2行</li>',
+                'default' => '',
+            ],
             [
                 'id' => 'order',
                 'type'  => 'checkbox',
@@ -70,9 +77,16 @@ if (is_admin()) {
     AYA_Shortcode::shortcode_register('quick-col-content', array(
         'id' => 'sc-col-list',
         'title' => '快捷列表（Column）',
-        'note' => '将文本按行转换为描述列表显示，按每行顺序格式化结构为：<dt>第1行</dt>/<dd>第2行</dd>',
-        'template' => '[col_list {{attributes}}]<br/> <br/>[/col_list]',
+        'note' => '将文本按行转换为描述列表显示',
+        'template' => '[col_list {{attributes}}]<br/> {{content}} <br/>[/col_list]',
         'field_build' => array(
+            [
+                'id' => 'content',
+                'type' => 'textarea',
+                'label' => '内容',
+                'desc' => '按每行顺序格式化结构为：<dt>第1行</dt>/<dd>第2行</dd>',
+                'default' => '',
+            ],
             [
                 'id' => 'dt_width',
                 'type'  => 'select',

@@ -118,17 +118,15 @@ if (file_exists(AYA_PATH . '/plugins/plugin-startup.php')) {
     require_once AYA_PATH . '/plugins/plugin-startup.php';
     require_once AYA_PATH . '/plugins/plugin-extra-opt.php';
 }
-
 //拦截加载，防止WP严重报错
 if (!class_exists('AYF') || !class_exists('AYP')) {
     if (!is_admin()) {
-        wp_die('AIYA-CMS 主题缺少必要依赖，请使用 Release 版本，或安装并激活 AIYA-Optimize 插件。');
+        wp_die('AIYA-CMS 未找到主题框架依赖，请安装并激活 AIYA-Optimize 插件，或订阅 Pro 版本。');
         exit;
     }
 
     return;
 }
-
 //加载 Composer 依赖
 if (file_exists(AYA_PATH . '/lib/vendor/autoload.php')) {
     require_once AYA_PATH . '/lib/vendor/autoload.php';
@@ -165,10 +163,12 @@ aya_require('widget-search', 'widgets');
 aya_require('widget-tag-cloud', 'widgets');
 //aya_require('widget-welcome-panel', 'widgets');
 //短代码
-aya_require('code-basic', 'shotcode');
-aya_require('code-clipboard', 'shotcode');
 //aya_require('code-aplayer', 'shotcode');
 //aya_require('code-dplayer', 'shotcode');
+aya_require('code-basic', 'shotcode');
+aya_require('code-hilight', 'shotcode');
+aya_require('code-clipboard', 'shotcode');
+//aya_require('code-collapse', 'shotcode');
 
 /*
  * ------------------------------------------------------------------------------
