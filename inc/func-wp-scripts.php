@@ -24,8 +24,9 @@ function aya_static_scripts_cdn()
         case 'bootcdn':
             $url_cdn = '//cdn.bootcdn.net/ajax/libs/';
             break;
+        case 'local':
         default:
-            $url_cdn = get_template_directory_uri() . '/assets/ajax/libs/';
+            $url_cdn = get_template_directory_uri() . '/assets/libs/';
             break;
     }
 
@@ -94,10 +95,11 @@ function aya_int_style($pack, $ver, $file)
 //在head中加载
 function aya_head_inc()
 {
+    //wget -x -nH --cut-dirs=2 -P ./ https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js
     $load_js = array(
         [
             'pack' => 'perfect-scrollbar',
-            'ver' => '1.5.5',
+            'ver' => '1.5.6',
             'file' => 'perfect-scrollbar.min.js',
         ],
         [
@@ -114,7 +116,7 @@ function aya_head_inc()
     $load_css = array(
         [
             'pack' => 'perfect-scrollbar',
-            'ver' => '1.5.5',
+            'ver' => '1.5.6',
             'file' => 'css/perfect-scrollbar.min.css',
         ],
         [

@@ -33,7 +33,7 @@ AYF::new_opt([
             'id' => 'site_scripts_load_type',
             'type' => 'radio',
             'sub'  => [
-                //'local' => '本地加载',
+                'local' => '本地加载',
                 'cdnjs' => 'CloudFlare',
                 'zstatic' => 'ZstaticCDN',
                 'bootcdn' => 'BootCDN',

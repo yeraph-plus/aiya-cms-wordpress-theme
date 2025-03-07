@@ -50,10 +50,10 @@
             //window.location.reload();
             Alpine.initTree(document.body);
             feather.replace({});
+            //PrismJS
             Prism.highlightAll();
             replaceLozad();
         });
-        //swup.on('contentReplaced', () => Alpine.start());
         /*
         swup.hooks.before('page:preload', () => {
             Alpine.disposeTree(document.querySelector('#swup-container'));
@@ -258,21 +258,6 @@
                     //clipboard.destroy();
                 });
             },
-            hrefTo() {
-                const clipElement = document.querySelector('#' + targetId);
-                if (!clipElement) { return; }
-
-                return window.open(clipElement.innerHTML, "_blank");
-            }
-            /*
-            copy() {
-                navigator.clipboard.writeText(this.content);
-                this.clipstatus = 'Copied!';
-                setTimeout(() => {
-                    this.clipstatus = '';
-                }, 2000);
-            }
-            */
         }));
         //app - global store
         Alpine.store('app', {

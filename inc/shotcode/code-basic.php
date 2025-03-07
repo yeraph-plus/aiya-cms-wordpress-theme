@@ -51,6 +51,43 @@ if (is_admin()) {
         )
     ));
 
+    AYA_Shortcode::shortcode_register('quick-li-content', array(
+        'id' => 'sc-li-list',
+        'title' => '快捷列表（li）',
+        'note' => '将文本按行转换为列表显示',
+        'template' => '[list {{attributes}}]<br/> <br/>[/list]',
+        'field_build' => array(
+            [
+                'id' => 'order',
+                'type'  => 'checkbox',
+                'label' => '编号列表',
+                'desc' => '启用此项将显示为编号列表，否则使用符号列表',
+                'default' => false,
+            ]
+        )
+    ));
+
+    AYA_Shortcode::shortcode_register('quick-col-content', array(
+        'id' => 'sc-col-list',
+        'title' => '快捷列表（Column）',
+        'note' => '将文本按行转换为描述列表显示，按每行顺序格式化结构为：<dt>第1行</dt>/<dd>第2行</dd>',
+        'template' => '[col_list {{attributes}}]<br/> <br/>[/col_list]',
+        'field_build' => array(
+            [
+                'id' => 'dt_width',
+                'type'  => 'select',
+                'label' => '列表比例',
+                'desc'  => '选择描述列表的宽度比例',
+                'sub' => [
+                    '1' => '1/4列表',
+                    '2' => '1/2列表',
+                    '3' => '3/4列表',
+                ],
+                'default' => '1',
+            ],
+        )
+    ));
+
     AYA_Shortcode::shortcode_register('alert-content', array(
         'id' => 'sc-default-alert',
         'title' => '提示框',
@@ -184,6 +221,8 @@ remove_shortcode('cn_ga_text');
 
 add_shortcode('hide', 'aya_shortcode_hide_content');
 add_shortcode('email', 'aya_shortcode_email_content');
+add_shortcode('list', 'aya_shortcode_li_list_content');
+add_shortcode('col_list', 'aya_shortcode_column_list_content');
 add_shortcode('alert', 'aya_shortcode_alert_content');
 add_shortcode('button', 'aya_shortcode_button_content');
 add_shortcode('badge', 'aya_shortcode_badge_content');
@@ -198,7 +237,7 @@ function aya_shortcode_hide_content($atts = array(), $content = '')
         $atts,
     );
     //
-    if ($atts['inline'] == 'true') {
+    if ($atts['inline'] == 'true' || $atts['inline'] == 'on' || $atts['inline'] == true) {
         return '<!--' . esc_html($content) . '-->';
     } else {
         return '';
@@ -218,11 +257,77 @@ function aya_shortcode_email_content($atts = array(), $content = null)
     $content = wp_kses($content, 'post');
 
     //将电子邮件地址字符转换为 HTML 实体
-    if ($atts['mailto'] == 'true') {
+    if ($atts['mailto'] == 'true' || $atts['mailto'] == 'on' || $atts['mailto'] == true) {
         return '<a class="inline-flex btn btn-outline-primary" href="' . esc_url('mailto:' . antispambot($content)) . '">' . esc_html(antispambot($content)) . '</a>';
     } else {
         return antispambot($content);
     }
+}
+
+//AIYA-CMS 短代码组件：快捷列表
+function aya_shortcode_li_list_content($atts = array(), $content = '')
+{
+    $atts = shortcode_atts(
+        array(
+            'order' => 'false',
+        ),
+        $atts,
+    );
+
+    $content = str_replace(array("\r\n", "<br />\n", "</p>\n", "\n<p>"), "\n", $content);
+
+    //增加样式
+    $tag = ($atts['order'] == 'true' || $atts['order'] == 'on' || $atts['order'] == true) ? 'ul' : 'ol';
+
+    //循环格式
+    $html = '';
+    $html .= '<' . $tag . '>' . "\n";
+
+    foreach (explode("\n", $content) as $li) {
+        if ($li = trim($li)) {
+            $html .= '<li>' . do_shortcode($li) . '</li>' . "\n";
+        }
+    }
+
+    $html .= '</' . $tag . '>' . "\n";
+
+    return $html;
+}
+
+//AIYA-CMS 短代码组件：快捷描述列表
+function aya_shortcode_column_list_content($atts = array(), $content = '')
+{
+    $atts = shortcode_atts(
+        array(
+            'dt_width' => '1', //dt宽度
+        ),
+        $atts,
+    );
+
+    $content = str_replace(array("\r\n", "<br />\n", "</p>\n", "\n<p>"), "\n", $content);
+
+    $dt_width = intval($atts['dt_width']);
+    $dd_width = 4 - $dt_width;
+
+    //循环格式
+    $html = '';
+    $html .= '<dl class="flex flex-wrap">' . "\n";
+    $d = 0; //dd计数
+    foreach (explode("\n", $content) as $lc) {
+        if ($lc = trim($lc)) {
+            if ($d == 0) {
+                $html .= '<dt class="w-' . $dt_width . '/4">' . do_shortcode($lc) . '</dt>' . "\n";
+                $d = 1;
+            } else {
+                $html .= '<dd class="w-' . $dd_width . '/4">' . do_shortcode($lc) . '</dd>' . "\n";
+                $d = 0;
+            }
+        }
+    }
+
+    $html .= '</dl>' . "\n";
+
+    return $html;
 }
 
 //AIYA-CMS 短代码：提示框
