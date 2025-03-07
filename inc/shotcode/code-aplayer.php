@@ -1,6 +1,10 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
+
+//to be continued
+
+
 add_shortcode('aplayer', 'aplayer_shortcode');
 add_shortcode('aplayer_trac', 'aplayer_trac_shortcode');
 add_shortcode('meting', 'meting_shortcode');

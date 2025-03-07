@@ -288,7 +288,10 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
 
     /* Buttons */
     .btn {
-        @apply relative flex items-center justify-center rounded-md border px-5 py-2 text-sm font-semibold shadow-[0_10px_20px_-10px] outline-none transition duration-300 hover:shadow-none;
+        @apply relative flex items-center justify-center w-fit rounded-md border px-5 py-2 my-2 mr-4 text-sm font-semibold shadow-[0_10px_20px_-10px] outline-none transition duration-300 hover:!shadow-none hover:!no-underline;
+    }
+    .brn-flex {
+        @apply;
     }
     .btn-lg {
         @apply px-7 py-2.5 text-base;
@@ -301,53 +304,53 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
     }
 
     .btn-primary {
-        @apply border-primary bg-primary text-white shadow-primary/60;
+        @apply border-primary bg-primary !text-white shadow-primary/60;
     }
     .btn-outline-primary {
-        @apply border-primary text-primary shadow-none hover:bg-primary hover:text-white;
+        @apply border-primary !text-primary shadow-none hover:bg-primary hover:!text-white;
     }
 
     .btn-secondary {
-        @apply border-secondary bg-secondary text-white shadow-secondary/60;
+        @apply border-secondary bg-secondary !text-white shadow-secondary/60;
     }
     .btn-outline-secondary {
-        @apply border-secondary text-secondary shadow-none hover:bg-secondary hover:text-white;
+        @apply border-secondary !text-secondary shadow-none hover:bg-secondary hover:!text-white;
     }
 
     .btn-success {
-        @apply border-success bg-success text-white shadow-success/60;
+        @apply border-success bg-success !text-white shadow-success/60;
     }
     .btn-outline-success {
-        @apply border-success text-success shadow-none hover:bg-success hover:text-white;
+        @apply border-success !text-success shadow-none hover:bg-success hover:!text-white;
     }
 
     .btn-danger {
-        @apply border-danger bg-danger text-white shadow-danger/60;
+        @apply border-danger bg-danger !text-white shadow-danger/60;
     }
     .btn-outline-danger {
-        @apply border-danger text-danger shadow-none hover:bg-danger hover:text-white;
+        @apply border-danger !text-danger shadow-none hover:bg-danger hover:!text-white;
     }
 
     .btn-warning {
-        @apply border-warning bg-warning text-white shadow-warning/60;
+        @apply border-warning bg-warning !text-white shadow-warning/60;
     }
     .btn-outline-warning {
-        @apply border-warning text-warning shadow-none hover:bg-warning hover:text-white;
+        @apply border-warning !text-warning shadow-none hover:bg-warning hover:!text-white;
     }
 
     .btn-info {
-        @apply border-info bg-info text-white shadow-info/60;
+        @apply border-info bg-info !text-white shadow-info/60;
     }
     .btn-outline-info {
-        @apply border-info text-info shadow-none hover:bg-info hover:text-white;
+        @apply border-info !text-info shadow-none hover:bg-info hover:!text-white;
     }
 
     .btn-dark {
-        @apply border-dark bg-dark text-white shadow-dark/60;
+        @apply border-dark bg-dark !text-white shadow-dark/60;
     }
 
     .btn-outline-dark {
-        @apply border-dark text-dark shadow-none hover:bg-dark hover:text-white;
+        @apply border-dark !text-dark shadow-none hover:bg-dark hover:!text-white;
     }
 
     /* Badge */
@@ -378,10 +381,10 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
 
     /* content */
     .editor-modality {
-        @apply relative w-full;
+        @apply container;
 
         p {
-            @apply text-base font-medium tracking-normal mb-4;
+            @apply text-base font-medium leading-relaxed tracking-normal mb-4;
         }
 
         h1,
@@ -474,7 +477,7 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         }
 
         hr {
-            @apply border-t-2 border-b-0 border-l-0 border-r-0 border-solid border-gray-100 rounded my-10;
+            @apply border-t-2 border-b-0 border-l-0 border-r-0 border-solid border-gray-100 rounded my-8;
         }
 
         br {
@@ -487,6 +490,11 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
 
         ol {
             @apply space-y-3 list-inside list-decimal mb-4;
+        }
+
+        ul ul,
+        ol ol {
+            @apply pl-4 mt-4 md:pl-8;
         }
 
         li {

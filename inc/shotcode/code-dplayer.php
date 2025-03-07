@@ -1,6 +1,10 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
+
+//to be continued
+
+
 //AIYA-CMS 短代码组件：DPlayer
 function dplayer_shortcode($atts = array(), $content = '')
 {

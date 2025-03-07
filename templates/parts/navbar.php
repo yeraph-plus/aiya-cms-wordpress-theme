@@ -4,9 +4,11 @@
             <div class="flex justify-between items-center px-4 py-3">
                 <!-- Logo -->
                 <a href="/" class="main-logo flex items-center shrink-0">
-                    <img class="w-8 ml-[5px] flex-none" src="<?php aya_echo(aya_opt('site_logo_image_upload', 'basic')); ?>" alt="image" />
                     <?php if (aya_opt('site_logo_text_bool', 'basic')): ?>
-                        <span class="text-2xl ltr:ml-1.5 rtl:mr-1.5 font-bold align-middle lg:inline dark:text-white-light"><?php echo get_bloginfo('name'); ?></span>
+                        <img class="w-8 h-8 ml-2 flex-none" src="<?php aya_echo(aya_opt('site_logo_image_upload', 'basic')); ?>" alt="<?php aya_echo(get_bloginfo('name')); ?>" />
+                        <span class="text-2xl ltr:ml-1.5 rtl:mr-1.5 font-bold align-middle lg:inline dark:text-white-light"><?php aya_echo(get_bloginfo('name')); ?></span>
+                    <?php else: ?>
+                        <img class="w-full h-8 ml-2 flex-none" src="<?php aya_echo(aya_opt('site_logo_image_upload', 'basic')); ?>" alt="<?php aya_echo(get_bloginfo('name')); ?>" />
                     <?php endif; ?>
                 </a>
                 <!-- Sidebar toggle button -->

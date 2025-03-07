@@ -166,8 +166,8 @@ aya_require('widget-search', 'widgets');
 aya_require('widget-tag-cloud', 'widgets');
 //aya_require('widget-welcome-panel', 'widgets');
 //短代码
-//aya_require('code-basic', 'shotcode');
-//aya_require('code-download', 'shotcode');
+aya_require('code-basic', 'shotcode');
+aya_require('code-clipboard', 'shotcode');
 //aya_require('code-aplayer', 'shotcode');
 //aya_require('code-dplayer', 'shotcode');
 

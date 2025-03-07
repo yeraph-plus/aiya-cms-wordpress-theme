@@ -424,6 +424,10 @@ function aya_get_related_posts($post_id = 0, $per_num = 5)
 //feather-icons模板格式
 function aya_feather_icon($icon, $size = 24, $class = '', $ext = '')
 {
+    if (empty($icon)) {
+        return '';
+    }
+
     $html = '';
     $html .= '<i data-feather="' . $icon . '" width="' . $size . '" height="' . $size . '" class="' . $class . '" ' . $ext . '></i>';
 
@@ -433,6 +437,10 @@ function aya_feather_icon($icon, $size = 24, $class = '', $ext = '')
 //分块标题
 function aya_section_tittle($title, $icon = 'navigation')
 {
+    if (empty($title)) {
+        return '';
+    }
+
     $html = '';
     $html .= '<div class="section-tittle">';
     $html .= aya_feather_icon($icon, '24', 'mr-2 mt-1', '') . '<h2>' . $title . '</h2>';
@@ -444,6 +452,10 @@ function aya_section_tittle($title, $icon = 'navigation')
 //小工具卡片模板
 function aya_widget_card($title, $content)
 {
+    if (empty($title)) {
+        return '';
+    }
+
     $html = '';
     $html .= '<aside class="widget widget-panel">';
     $html .= '<h3 class="widget-title">' . $title . '</h3>';

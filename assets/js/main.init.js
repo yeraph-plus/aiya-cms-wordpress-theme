@@ -30,7 +30,7 @@
         });
         //observer
         const observer = lozad('.lozad', {
-            rootMargin: "0px 0px", // CSS Margin
+            rootMargin: '0px 0px', // CSS Margin
             threshold: 0.5, // ratio of element convergence
             enableAutoReload: true, // it will reload the new image when validating attributes changes
             //load: function (el) {},
@@ -103,7 +103,7 @@
                 this.open = !this.open;
             },
         }));
-        Alpine.data("header", () => ({
+        Alpine.data('header', () => ({
             notificationList: $siteNotification,
             userInfo: $userLogindata,
             init() {
@@ -123,7 +123,7 @@
                 }
             },
         }));
-        Alpine.data("navbar", () => ({
+        Alpine.data('navbar', () => ({
             init() {
                 const selector = document.querySelector('.sidebar ul a[href="' + window.location.pathname + '"]');
                 if (selector) {
@@ -141,10 +141,10 @@
                 }
             },
         }));
-        Alpine.data("customizer", () => ({
+        Alpine.data('customizer', () => ({
             showCustomizer: false,
         }));
-        Alpine.data("cookieconsent", () => ({
+        Alpine.data('cookieconsent', () => ({
             init() {
             },
         }));
@@ -155,7 +155,7 @@
                 const viewer = new Viewer(container, {
                     navbar: false,
                     toolbar: false,
-                    url: "src",
+                    url: 'src',
                 });
             }
         }));
@@ -189,7 +189,7 @@
                 this.saved.push(postID);
             }
         }));
-        Alpine.data("404countDown", () => ({
+        Alpine.data('404countDown', () => ({
             timeLeft: 10,
             interval: null,
             startCountdown: function () {
@@ -206,7 +206,7 @@
                 window.location.href = '/';
             }
         }));
-        Alpine.data("scrollToTop", () => ({
+        Alpine.data('scrollToTop', () => ({
             showTopButton: false,
             init() {
                 window.onscroll = () => {
@@ -225,7 +225,7 @@
                 document.documentElement.scrollTop = 0;
             },
         }));
-        Alpine.data('swup4Control', (value) => ({
+        Alpine.data('swup4Control', () => ({
             init() {
                 const links = document.querySelectorAll('a');
                 links.forEach(link => {
@@ -236,6 +236,43 @@
                     });
                 });
             }
+        }));
+        Alpine.data('copyTextBtn', (targetId) => ({
+            isCopied: false,
+            init() {
+                // 通过目标 ID 获取内容
+                const clipElement = document.querySelector('#' + targetId);
+                if (!clipElement) { return; }
+
+                //init ClipboardJS
+                const clipboard = new ClipboardJS(this.$refs.copyBtn, {
+                    text: () => clipElement.innerHTML,
+                });
+                clipboard.on('success', (e) => {
+                    this.isCopied = true;
+                    setTimeout(() => this.isCopied = false, 5000);
+                    //clipboard.destroy();
+                });
+                clipboard.on('error', (e) => {
+                    console.error('Copy failed:', e.action);
+                    //clipboard.destroy();
+                });
+            },
+            hrefTo() {
+                const clipElement = document.querySelector('#' + targetId);
+                if (!clipElement) { return; }
+
+                return window.open(clipElement.innerHTML, "_blank");
+            }
+            /*
+            copy() {
+                navigator.clipboard.writeText(this.content);
+                this.clipstatus = 'Copied!';
+                setTimeout(() => {
+                    this.clipstatus = '';
+                }, 2000);
+            }
+            */
         }));
         //app - global store
         Alpine.store('app', {
