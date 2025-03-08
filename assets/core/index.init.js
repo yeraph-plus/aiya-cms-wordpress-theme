@@ -189,7 +189,7 @@
                 this.saved.push(postID);
             }
         }));
-        Alpine.data('404countDown', () => ({
+        Alpine.data('autoCountdown', () => ({
             timeLeft: 10,
             interval: null,
             startCountdown: function () {

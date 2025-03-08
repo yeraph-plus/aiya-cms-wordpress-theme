@@ -27,6 +27,36 @@ AYF::new_opt([
     'desc' => 'AIYA-CMS 主题，文章页面组件设置',
     'fields' => [
         [
+            'desc' => '正文格式过滤器',
+            'type' => 'title_2',
+        ],
+        [
+            'title' => '图片标签自动添加描述格式',
+            'desc' => '文章正文内的图片标签自动添加 alt 属性和懒加载属性',
+            'id' => 'site_content_img_filter_bool',
+            'type' => 'switch',
+            'default' => false,
+        ],
+        [
+            'title' => '链接标签自动转内链',
+            'desc' => '给文章正文内链接标签自动添加 [code]rel="nofollow"[/code] 和 [code]target="_blank"[/code] 属性（仅对外部链接生效）',
+            'id' => 'site_content_link_filter_bool',
+            'type' => 'switch',
+            'default' => false,
+        ],
+        [
+            'title' => '链接跳转设置',
+            'desc' => '接上一项设置，可选跳转方式',
+            'id' => 'site_content_link_jump_page_type',
+            'type' => 'radio',
+            'sub'  => array(
+                'link' => '提示外部页面',
+                'go' => '使用内链跳转',
+                'false' => '直接跳转（不处理）',
+            ),
+            'default' => 'link',
+        ],
+        [
             'desc' => '提示功能',
             'type' => 'title_2',
         ],
@@ -47,39 +77,9 @@ AYF::new_opt([
                 'next-prev' => '上/下一篇',
                 'related' => '相关文章',
             ),
-            'default' => true,
-        ],
-        [
-            'desc' => '正文格式过滤器',
-            'type' => 'title_2',
-        ],
-        [
-            'title' => '正文链接标签格式',
-            'desc' => '给文章正文内链接标签自动添加 [code]rel="nofollow"[/code] 和 [code]target="_blank"[/code] 属性（仅对外部链接生效）',
-            'id' => 'site_content_link_filter_bool',
-            'type' => 'switch',
-            'default' => false,
-        ],
-        [
-            'title' => '正文图片标签格式',
-            'desc' => '文章正文内图片标签自动添加alt和懒加载属性',
-            'id' => 'site_content_img_filter_bool',
-            'type' => 'switch',
-            'default' => false,
-        ],
-        /*
-        [
-            'title' => '正文链接跳转设置',
-            'desc' => '可选跳转方式，默认跳转方式为内链跳转',
-            'id' => 'site_content_link_jump_page_type',
-            'type' => 'radio',
-            'sub'  => array(
-                'false' => '直接跳转（不处理）',
-                'go' => '内链跳转',
-                'link' => '提示外部页面',
-            ),
             'default' => 'false',
         ],
+        /*
         [
             'desc' => '评论（Comments）',
             'type' => 'title_2',

@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('ABSPATH')) exit;
 
 /*
@@ -11,11 +12,6 @@ if (!defined('ABSPATH')) exit;
 function aya_body_start()
 {
     do_action('aya_body_start');
-}
-
-function aya_home_open()
-{
-    do_action('aya_home_open');
 }
 
 function aya_body_end()
@@ -34,7 +30,9 @@ function aya_template_load($name = null)
 {
     $name = (string) $name;
 
-    locate_template(array("templates/{$name}.php"), true, false);
+    $templates = array("templates/{$name}.php");
+
+    locate_template($templates, true, false);
 }
 
 //加载WP方式的组件模板
@@ -371,4 +369,24 @@ function aya_widget_bar()
     }
     //小工具栏位
     dynamic_sidebar($sidebar_type);
+}
+
+/*
+ * ------------------------------------------------------------------------------
+ * 评论模板
+ * ------------------------------------------------------------------------------
+ */
+
+//获取评论模板
+function aya_comments_template()
+{
+    //检查评论开启
+    if (is_attachment() || is_404() || post_password_required()) return;
+
+    if (aya_opt('site_comment_disable_bool', 'basic', true) === false) return;
+
+    if (comments_open() || get_comments_number()) {
+        //输出（定义这个位置必须包含"/"）
+        comments_template('/templates/comments.php', false);
+    }
 }

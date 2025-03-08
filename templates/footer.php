@@ -20,13 +20,8 @@ $ajax_obj = array(
     'nonce' => wp_create_nonce('ajax_nonce'),
 );
 
-//模板底部动作钩子
-aya_body_end();
 //页脚
 aya_template_load('parts/footer');
-//WP兼容
-wp_footer();
-
 ?>
 </div>
 </div>
@@ -36,9 +31,10 @@ wp_footer();
 //aya_template_load('units/hover-cookie-consent');
 aya_template_load('units/theme-customizer');
 aya_template_load('units/top-button');
-
-//加载Alpine.js脚本
-aya_footer_inc();
+//模板底部动作钩子
+aya_body_end();
+//The wp_footer action
+wp_footer();
 ?>
 <script type="text/javascript">
     const $settingsConfig = <?php aya_json_echo($settings); ?>;

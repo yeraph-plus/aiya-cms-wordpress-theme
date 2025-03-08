@@ -134,21 +134,19 @@ if (file_exists(AYA_PATH . '/lib/vendor/autoload.php')) {
 
 //主题方法
 aya_require('func-public');
+//aya_require('func-cache');
+//aya_require('func-auto-vendor');
 aya_require('func-wp-scripts');
 aya_require('func-wp-emends');
-aya_require('func-content-filter');
-//aya_require('func-cache');
-aya_require('func-ajax');
+aya_require('func-wp-content');
 aya_require('func-template-loader');
-aya_require('func-template-comment');
 aya_require('func-template-data');
 aya_require('func-notify');
-//aya_require('function-image-manager');
 //设置页面
 aya_require('opt-parent', 'settings');
 aya_require('opt-homepage', 'settings');
 aya_require('opt-postpage', 'settings');
-aya_require('opt-plugin-extra', 'settings');
+//aya_require('opt-ads', 'settings');
 //小工具
 aya_require('widget-text-html', 'widgets');
 aya_require('widget-add-menu', 'widgets');
@@ -163,12 +161,12 @@ aya_require('widget-search', 'widgets');
 aya_require('widget-tag-cloud', 'widgets');
 //aya_require('widget-welcome-panel', 'widgets');
 //短代码
-//aya_require('code-aplayer', 'shotcode');
-//aya_require('code-dplayer', 'shotcode');
 aya_require('code-basic', 'shotcode');
 aya_require('code-hilight', 'shotcode');
 aya_require('code-clipboard', 'shotcode');
 //aya_require('code-collapse', 'shotcode');
+//aya_require('code-aplayer', 'shotcode');
+//aya_require('code-dplayer', 'shotcode');
 
 /*
  * ------------------------------------------------------------------------------
@@ -177,9 +175,6 @@ aya_require('code-clipboard', 'shotcode');
  * Tips：以下是一些简化方法，内部定义了部分设置、路由和HTML结构，有需要时请自行修改
  * ------------------------------------------------------------------------------
  */
-
-//定义了一些全局变量
-global $aya_post_type, $aya_tax_type;
 
 //组件功能
 AYP::include_plugins('inc');
@@ -275,7 +270,7 @@ AYP::action('Widget_Unload', array(
     'WP_Widget_Block',           //区块
 ));
 //重新定义模板位置
-AYP::action('Template_Redefine', false);
+AYP::action('Template_Redefine_Path', false);
 //后台自定义
 AYP::action('Admin_Custom', array(
     //禁用前台顶部工具栏
@@ -306,11 +301,12 @@ AYP::action('Register_Sidebar', array(
 /*
 //注册自定义文章类型
 AYP::action('Register_Post_Type', array(
-    //'文章类型' => array('name' => '文章类型名','slug' => '别名','icon' => '图标'),
+    //'文章类型' => array('name' => '文章类型名','slug' => '别名','icon' => '图标','in_homepage' => 允许显示在首页),
     'tweet' => array(
         'name' => __('推文', 'AIYA'),
         'slug' => 'tweet',
         'icon' => 'dashicons-format-quote',
+        'in_homepage' => false,
     ),
 ));
 //注册自定义分类法
@@ -325,9 +321,9 @@ AYP::action('Register_Tax_Type', array(
 */
 //注册自定义模板页面
 AYP::action('Template_New_Page', array(
-    //'模板名' => '是否静态化',
-    'go' => false,
-    'link' => false,
+    //'模板名' => '模板文件路径',
+    'go' => 'template-pages/external-auto',
+    'link' => 'template-pages/external-link',
 ));
 //启用小工具缓存插件
 AYP::action('Widget_Cache', true);

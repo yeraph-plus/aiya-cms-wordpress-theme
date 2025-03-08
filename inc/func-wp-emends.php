@@ -15,7 +15,15 @@ add_filter('private_title_format', 'aya_theme_remove_protected_title_format');
 //添加钩子 修改阅读更多文本
 add_filter('excerpt_more', 'aya_theme_excerpt_more_filter');
 //编辑器中 给文章添加一个置顶选项
-add_action('add_meta_boxes', 'aya_theme_add_tweet_meta_box');
+//add_action('add_meta_boxes', 'aya_theme_add_tweet_meta_box');
+
+//强制排除评论表单站点字段
+add_filter('comment_form_default_fields', function ($fields) {
+    if (isset($fields['url'])) {
+        unset($fields['url']);
+    }
+    return $fields;
+});
 
 //静态文件加载（编辑器）
 //add_action('admin_print_scripts', 'aya_theme_add_tinymce_buttons');

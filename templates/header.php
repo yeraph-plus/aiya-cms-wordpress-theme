@@ -29,13 +29,15 @@
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <meta name="renderer" content="webkit">
     <meta name="format-detection" content="telephone=no, email=no">
-    <meta http-equiv="content-language" content="<?php echo get_locale(); ?>" />
+    <meta http-equiv="content-language" content="<?php aya_echo(get_locale()); ?>" />
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <meta http-equiv="Cache-Control" content="private">
-    <?php aya_head_inc(); ?>
-    <?php wp_head(); ?>
-    <!--body <?php body_class(); ?>-->
+    <?php
+    //The wp_head action
+    wp_head();
+    ?>
+    <!-- Current the body <?php body_class(); ?> of. -->
 </head>
 
 <body x-data="main" class="antialiased relative font-nunito text-sm font-normal overflow-x-hidden" :class="[ $store.app.menuBar ? 'toggle-sidebar' : '', $store.app.colorScheme === 'dark' || $store.app.isDarkMode ? 'dark' : '', $store.app.navbarMenu, $store.app.bodyLayout, $store.app.rtlClass ]">
@@ -46,7 +48,6 @@
     //模板顶部动作钩子
     aya_body_start();
     ?>
-
     <div id="main-container" class="main-container text-black dark:text-white-dark min-h-screen" :class="[$store.app.navbarSticky]">
         <?php
         //左侧边菜单
@@ -56,10 +57,6 @@
             <?php
             //顶栏
             aya_template_load('parts/header');
-            //横幅
-            aya_template_load('parts/banner');
-            //WP兼容
+            //The wp_body_open action
             wp_body_open();
-            //首页模板单一路由函数
-            aya_home_open();
             ?>

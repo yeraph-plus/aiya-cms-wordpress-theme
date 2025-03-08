@@ -2,7 +2,6 @@
 module.exports = {
     content: [
         './templates/**/*.{html,php}',
-        './template-pages/*.{html,php}',
         './inc/**/*.php',
         //'./assets/**/*.{html,js,ts}',
     ],
@@ -60,7 +59,7 @@ module.exports = {
                 },
             },
             fontFamily: {
-                nunito: ['PingFang SC', 'Microsoft YaHei', 'WenQuanYi Micro Hei','Nunito', 'sans-serif'],
+                nunito: ['PingFang SC', 'Microsoft YaHei', 'WenQuanYi Micro Hei', 'Nunito', 'sans-serif'],
             },
             spacing: {
                 4.5: '18px',
@@ -87,6 +86,7 @@ module.exports = {
             }),
         },
     },
+    safelist: ['animate-spin'],
     plugins: [
         require('@tailwindcss/forms')({
             strategy: 'class',

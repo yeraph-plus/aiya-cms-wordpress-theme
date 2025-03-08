@@ -2,6 +2,8 @@
 
 //检查是否是首页
 if (is_paged()) {
+    //横幅组件
+    aya_template_load('parts/banner');
     //面包屑
     aya_template_load('parts/breadcrumb');
 }

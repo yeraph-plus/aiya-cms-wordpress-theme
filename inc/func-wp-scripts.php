@@ -1,11 +1,8 @@
 <?php
+
 if (!defined('ABSPATH')) exit;
 
-/*
- * ------------------------------------------------------------------------------
- * 静态文件注册和排队
- * ------------------------------------------------------------------------------
- */
+//wget -x -nH --cut-dirs=2 -P ./ https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js
 
 //从CDN加载
 function aya_static_scripts_cdn()
@@ -92,10 +89,27 @@ function aya_int_style($pack, $ver, $file)
     aya_echo('<link rel="stylesheet" href="' . aya_static_scripts_cdn() .  $pack . '/' . $ver . '/' . $file . '">' . PHP_EOL);
 }
 
-//在head中加载
-function aya_head_inc()
+/*
+ * ------------------------------------------------------------------------------
+ * 静态文件注册和排队
+ * ------------------------------------------------------------------------------
+ */
+
+//排队后台静态文件
+//add_action('admin_enqueue_scripts', 'aya_theme_register_admin_scripts');
+//add_action('login_enqueue_scripts', 'aya_theme_register_admin_scripts');
+add_action('wp_head', 'aya_inc_echo_head_scripts');
+add_action('wp_footer', 'aya_inc_echo_footer_scripts');
+
+//静态文件加载（后台）
+function aya_theme_register_admin_scripts()
 {
-    //wget -x -nH --cut-dirs=2 -P ./ https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js
+    //wp_enqueue_style('aya-login-style', AYA_URI . '/assets/css/admin.login.css', array(), aya_theme_version(), 'all');
+}
+
+//在head中加载
+function aya_inc_echo_head_scripts()
+{
     $load_js = array(
         [
             'pack' => 'perfect-scrollbar',
@@ -143,14 +157,14 @@ function aya_head_inc()
         aya_int_style($value['pack'], $value['ver'], $value['file']);
     }
 
-    $main_pack_ver = (defined('AYA_RELEASE')) ? aya_theme_version() : time();
-    $main_theme_uri = get_template_directory_uri() . '/assets/css/';
     //主题样式表
-    aya_echo('<link rel="stylesheet" href="' . esc_url($main_theme_uri . 'main.style.css?ver=' . $main_pack_ver) . '">' . PHP_EOL);
+    $main_pack_ver = (defined('AYA_RELEASE')) ? aya_theme_version() : time();
+
+    aya_echo('<link rel="stylesheet" href="' . esc_url(get_template_directory_uri() . '/assets/core/main.style.css?ver=' . $main_pack_ver) . '">' . PHP_EOL);
 }
 
 //直接嵌入alpinejs和其他esm模块的标签结构
-function aya_footer_inc()
+function aya_inc_echo_footer_scripts()
 {
     $load_js = array(
         [
@@ -239,18 +253,9 @@ function aya_footer_inc()
         aya_int_script($value['pack'], $value['ver'], $value['file'], $value['defer']);
     }
 
-    $main_pack_ver = (defined('AYA_RELEASE')) ? aya_theme_version() : time();
-    $main_theme_uri = get_template_directory_uri() . '/assets/js/';
     //主题脚本
-    aya_echo('<script src="' . esc_url($main_theme_uri . 'main.init.js?ver=' . $main_pack_ver) . '"></script>' . PHP_EOL);
+    $main_pack_ver = (defined('AYA_RELEASE')) ? aya_theme_version() : time();
+
+    aya_echo('<script src="' . esc_url(get_template_directory_uri() . '/assets/core/index.init.js?ver=' . $main_pack_ver) . '"></script>' . PHP_EOL);
 }
 
-//排队后台静态文件
-//add_action('admin_enqueue_scripts', 'aya_theme_register_admin_scripts');
-//add_action('login_enqueue_scripts', 'aya_theme_register_admin_scripts');
-
-//静态文件加载（后台）
-function aya_theme_register_admin_scripts()
-{
-    //wp_enqueue_style('aya-login-style', AYA_URI . '/assets/css/admin.login.css', array(), aya_theme_version(), 'all');
-}

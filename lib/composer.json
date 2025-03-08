@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "require": {
         "jxlwqq/chinese-typesetting": "^1.2",
-        "overtrue/php-opencc": "^1.0",
+        "overtrue/php-opencc": "^1.2",
         "overtrue/pinyin": "^5.3",
         "imagine/imagine": "^1.5"
     },
