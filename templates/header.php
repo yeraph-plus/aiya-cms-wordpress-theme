@@ -53,7 +53,7 @@
         //左侧边菜单
         aya_template_load('parts/navbar');
         ?>
-        <div id="swup-container" class="main-content flex flex-col min-h-screen">
+        <div id="swup-versatile" class="main-content flex flex-col min-h-screen">
             <?php
             //顶栏
             aya_template_load('parts/header');

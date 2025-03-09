@@ -43,9 +43,12 @@
     //swup4JS init
     const initSwup = () => {
         const swup = new Swup({
-            containers: ['#swup-container'],
-            //plugins: [/*new SwupPreloadPlugin()*/]
+            containers: ['#swup-versatile', '#swup-scripts-reload'],
+            //plugins: [new SwupProgressPlugin(), new SwupPreloadPlugin()]
         });
+        //First screen event
+        //swup.hooks.on('page:view', () => {}, { once: true });
+        //Content replace event
         swup.hooks.on('content:replace', () => {
             //window.location.reload();
             Alpine.initTree(document.body);
@@ -54,11 +57,6 @@
             Prism.highlightAll();
             replaceLozad();
         });
-        /*
-        swup.hooks.before('page:preload', () => {
-            Alpine.disposeTree(document.querySelector('#swup-container'));
-        });
-        */
     };
     //perfect-scrollbarJS init
     const initPerfectScrollbar = () => {

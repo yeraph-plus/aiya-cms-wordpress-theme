@@ -23,9 +23,8 @@ $ajax_obj = array(
 //页脚
 aya_template_load('parts/footer');
 ?>
-</div>
-</div>
-
+        </div>
+    </div>
 <?php
 //其他组件
 //aya_template_load('units/hover-cookie-consent');
@@ -33,15 +32,19 @@ aya_template_load('units/theme-customizer');
 aya_template_load('units/top-button');
 //模板底部动作钩子
 aya_body_end();
-//The wp_footer action
-wp_footer();
 ?>
-<script type="text/javascript">
-    const $settingsConfig = <?php aya_json_echo($settings); ?>;
-    const $ajaxObj = <?php aya_json_echo($ajax_obj); ?>;
-    const $siteNotification = <?php aya_notify_list_data() ?>;
-    const $userLogindata = <?php aya_user_login_in_data() ?>;
-</script>
+<div id="swup-scripts-reload">
+    <?php
+    //The wp_footer action
+    wp_footer();
+    ?>
+    <script type="text/javascript">
+        const $settingsConfig = <?php aya_json_echo($settings); ?>;
+        const $ajaxObj = <?php aya_json_echo($ajax_obj); ?>;
+        const $siteNotification = <?php aya_notify_list_data() ?>;
+        const $userLogindata = <?php aya_user_login_in_data() ?>;
+    </script>
+</div>
 
 </body>
 
