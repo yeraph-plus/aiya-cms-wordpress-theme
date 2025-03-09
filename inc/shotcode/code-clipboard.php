@@ -1,5 +1,8 @@
 <?php
+
 if (!defined('ABSPATH')) exit;
+
+add_shortcode('clip_board', 'clip_board_box_shortcode');
 
 if (is_admin()) {
     AYA_Shortcode::shortcode_register('clipboard-box', array(
@@ -32,8 +35,6 @@ if (is_admin()) {
         )
     ));
 }
-
-add_shortcode('clip_board', 'clip_board_box_shortcode');
 //AIYA-CMS 短代码组件：剪贴板功能卡片
 function clip_board_box_shortcode($atts = array(), $content = '')
 {
@@ -61,6 +62,13 @@ function clip_board_box_shortcode($atts = array(), $content = '')
     static $clip_box = 0;
     $clip_box++;
     $clip_box_id = 'clip-' . $clip_box;
+
+    if ($clip_box == 1) {
+        //引入JS
+        add_filter('aya_int_add_scripts', function ($strings) {
+            return $strings . aya_int_script('clipboard.js', '2.0.11', 'clipboard.min.js', false);
+        });
+    }
 
     $html = '';
     $html .= '<div class="bg-[#f1f1f1] p-4 my-2 rounded dark:bg-[#060818]">';

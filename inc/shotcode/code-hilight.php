@@ -76,20 +76,30 @@ function aya_plugin_prismjs_process_pre($atts = array(), $content = '')
         $atts
     );
 
-    //静态文件地址
-    $load = '';
-    $prism_plugin_uri = AYA_URI . '/assets/prismjs';
-    //是否包含语言包
-    if (in_array($atts['language'], ['none', 'markup', 'clike', 'css', 'javascript'])) {
-        $load .= '<script src="' . $prism_plugin_uri . '/prism.slim.js"></script>' . PHP_EOL;
-    } else {
-        $load .= '<script src="' . $prism_plugin_uri . '/prism.js"></script>' . PHP_EOL;
-    }
-    //切换主题样式
-    if (in_array($atts['theme'], ['default', 'okaidia', 'solarizedlight', 'tomorrow'])) {
-        $load .= '<link rel="stylesheet" href="' . $prism_plugin_uri . '/css/prism.' . $atts['theme'] . '.css">' . PHP_EOL;
-    } else {
-        $load .= '<link rel="stylesheet" href="' . $prism_plugin_uri . '/css/prism.okaidia.css">' . PHP_EOL;
+    //储存一个id用于多次调用
+    static $prism_box = 0;
+    $prism_box++;
+
+    if ($prism_box == 1) {
+        //静态文件地址
+        $load = '';
+        $prism_plugin_uri = AYA_URI . '/assets/prismjs';
+        //是否包含语言包
+        if (in_array($atts['language'], ['none', 'markup', 'clike', 'css', 'javascript'])) {
+            $load .= '<script src="' . $prism_plugin_uri . '/prism.slim.js"></script>' . PHP_EOL;
+        } else {
+            $load .= '<script src="' . $prism_plugin_uri . '/prism.js"></script>' . PHP_EOL;
+        }
+        //切换主题样式
+        if (in_array($atts['theme'], ['default', 'okaidia', 'solarizedlight', 'tomorrow'])) {
+            $load .= '<link rel="stylesheet" href="' . $prism_plugin_uri . '/css/prism.' . $atts['theme'] . '.css">' . PHP_EOL;
+        } else {
+            $load .= '<link rel="stylesheet" href="' . $prism_plugin_uri . '/css/prism.okaidia.css">' . PHP_EOL;
+        }
+        //引入JS
+        add_filter('aya_int_add_scripts', function ($strings) use ($load) {
+            return $strings . $load;
+        });
     }
 
     //显示行号
@@ -109,5 +119,5 @@ function aya_plugin_prismjs_process_pre($atts = array(), $content = '')
     $content = str_replace('<pre><code>', '<pre class="' . $lin_cl . '"><code class="' . $lan_cl . '">', $content);
     $content = trim($content);
 
-    return $load . $content;
+    return $content;
 }

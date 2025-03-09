@@ -18,10 +18,10 @@
         "tailwindcss": "^3.4.17"
     },
     "scripts": {
-        "dev": "npx tailwindcss -i tailwind.css -o assets/css/main.style.css --watch",
-        "build": "npx tailwindcss -i tailwind.css -o assets/css/main.style.css --minify",
-        "lint:css": "wp-scripts lint-style 'assets/css/**/*.css'",
-        "lint:js": "wp-scripts lint-js 'assets/js/*.js'",
+        "dev": "npx tailwindcss -i tailwind.css -o assets/core/main.style.css --watch",
+        "build": "npx tailwindcss -i tailwind.css -o assets/core/main.style.css --minify",
+        "lint:css": "wp-scripts lint-style 'assets/core/**/*.css'",
+        "lint:js": "wp-scripts lint-js 'assets/core/*.js'",
         "archive": "dir-archiver --src ./ --dest ../aiya-cms-release.zip --exclude .DS_Store .git .gitattributes .github .gitignore .gitmodules screenshot vendor composer.json composer.lock node_modules package.json package-lock.json gulpfile.js tailwind.css tailwind.config.js"
     }
 }

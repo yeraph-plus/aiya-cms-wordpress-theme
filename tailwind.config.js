@@ -2,8 +2,9 @@
 module.exports = {
     content: [
         './templates/**/*.{html,php}',
+        './template-pages/*.{html,php}',
         './inc/**/*.php',
-        //'./assets/**/*.{html,js,ts}',
+        './assets/**/*.{html,js,ts}',
     ],
     darkMode: 'class',
     theme: {

@@ -98,18 +98,18 @@ function aya_int_style($pack, $ver, $file)
 //排队后台静态文件
 //add_action('admin_enqueue_scripts', 'aya_theme_register_admin_scripts');
 //add_action('login_enqueue_scripts', 'aya_theme_register_admin_scripts');
-add_action('wp_head', 'aya_inc_echo_head_scripts');
-add_action('wp_footer', 'aya_inc_echo_footer_scripts');
+add_action('wp_head', 'aya_inc_load_head_scripts');
+add_action('wp_footer', 'aya_inc_load_footer_scripts');
 
 //静态文件加载（后台）
 function aya_theme_register_admin_scripts()
 {
     //wp_enqueue_style('aya-login-style', AYA_URI . '/assets/css/admin.login.css', array(), aya_theme_version(), 'all');
 }
-
 //在head中加载
-function aya_inc_echo_head_scripts()
+function aya_inc_load_head_scripts()
 {
+    //使用自定义的方法加载静态文件
     $load_js = array(
         [
             'pack' => 'perfect-scrollbar',
@@ -149,23 +149,23 @@ function aya_inc_echo_head_scripts()
             'file' => 'animate.min.css',
         ],
     );
-
+    //循环打印
     foreach ($load_js as $value) {
         aya_int_script($value['pack'], $value['ver'], $value['file'], false);
     }
+    //循环打印
     foreach ($load_css as $value) {
         aya_int_style($value['pack'], $value['ver'], $value['file']);
     }
-
-    //主题样式表
+    //设置版本
     $main_pack_ver = (defined('AYA_RELEASE')) ? aya_theme_version() : time();
-
+    //主题样式表
     aya_echo('<link rel="stylesheet" href="' . esc_url(get_template_directory_uri() . '/assets/core/main.style.css?ver=' . $main_pack_ver) . '">' . PHP_EOL);
 }
-
 //直接嵌入alpinejs和其他esm模块的标签结构
-function aya_inc_echo_footer_scripts()
+function aya_inc_load_footer_scripts()
 {
+    //使用自定义的方法加载静态文件
     $load_js = array(
         [
             'pack' => 'alpinejs-collapse',
@@ -215,12 +215,6 @@ function aya_inc_echo_footer_scripts()
             'file' => 'viewer.min.js',
             'defer' => false,
         ],
-        [
-            'pack' => 'clipboard.js',
-            'ver' => '2.0.11',
-            'file' => 'clipboard.min.js',
-            'defer' => false,
-        ],
         /*
         [
             'pack' => 'splidejs',
@@ -244,18 +238,19 @@ function aya_inc_echo_footer_scripts()
             'pack' => 'masonry',
             'ver' => '4.2.2',
             'file' => 'masonry.pkgd.min.js',
-            'attr' => '',
+            'defer' => false,
         ],
         */
     );
-
+    //循环打印
     foreach ($load_js as $value) {
         aya_int_script($value['pack'], $value['ver'], $value['file'], $value['defer']);
     }
-
+    //加载额外脚本
+    $add_scripts_filter = apply_filters('aya_int_add_scripts', '');
+    aya_echo($add_scripts_filter);
     //主题脚本
     $main_pack_ver = (defined('AYA_RELEASE')) ? aya_theme_version() : time();
-
+    //主题启动脚本
     aya_echo('<script src="' . esc_url(get_template_directory_uri() . '/assets/core/index.init.js?ver=' . $main_pack_ver) . '"></script>' . PHP_EOL);
 }
-
