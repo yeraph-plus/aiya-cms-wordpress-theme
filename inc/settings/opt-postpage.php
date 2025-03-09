@@ -31,14 +31,25 @@ AYF::new_opt([
             'type' => 'title_2',
         ],
         [
-            'title' => '图片标签自动添加描述格式',
+            'title' => '使用 DOMDocument 处理',
+            'desc' => '标签属性匹配更精准，但性能更差（[del] 什么年代了还在用传统 preg_match_all [/del]）',
+            'id' => 'site_content_dom_handler_bool',
+            'type' => 'switch',
+            'default' => false,
+        ],
+        [
+            'desc' => '过滤器功能',
+            'type' => 'title_2',
+        ],
+        [
+            'title' => '图片自动描述',
             'desc' => '文章正文内的图片标签自动添加 alt 属性和懒加载属性',
             'id' => 'site_content_img_filter_bool',
             'type' => 'switch',
             'default' => false,
         ],
         [
-            'title' => '链接标签自动转内链',
+            'title' => '链接自动内链',
             'desc' => '给文章正文内链接标签自动添加 [code]rel="nofollow"[/code] 和 [code]target="_blank"[/code] 属性（仅对外部链接生效）',
             'id' => 'site_content_link_filter_bool',
             'type' => 'switch',

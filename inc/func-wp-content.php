@@ -4,64 +4,130 @@ if (!defined('ABSPATH')) exit;
 
 /*
  * ------------------------------------------------------------------------------
- * 文章内容过滤器
+ * 文章格式过滤器
  * ------------------------------------------------------------------------------
  */
 
 //添加钩子
 add_action('the_content', 'aya_post_content_filter_format');
-
 //合并方法
 function aya_post_content_filter_format($content)
 {
-    //$dom = new DOMDocument();
-    // 加载HTML内容，使用LIBXML_HTML_NOIMPLIED和LIBXML_HTML_NODEFDTD以避免自动添加DOCTYPE和HTML标签
-    //@$dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    if (!defined('AYA_RELEASE')) $start = microtime(true);
 
-    if (aya_opt('site_content_link_filter_bool', 'postpage')) {
-        $content = aya_post_content_filter_link_tag($content);
+    if (aya_opt('site_content_dom_handler_bool', 'postpage')) {
+        $content = aya_content_filter_dom_document($content);
+    } else {
+        //默认版本
+        if (aya_opt('site_content_link_filter_bool', 'postpage')) {
+            $content = aya_content_filter_link_tag($content);
+        }
+        if (aya_opt('site_content_img_filter_bool', 'postpage')) {
+            $content = aya_content_filter_img_tag($content);
+        }
     }
-    if (aya_opt('site_content_img_filter_bool', 'postpage')) {
-        $content = aya_post_content_filter_img_tag($content);
-    }
+
+    if (!defined('AYA_RELEASE')) $end = microtime(true);
+    if (!defined('AYA_RELEASE')) $content = 'The content load time: ' . ($end - $start) . ' seconds.' . $content;
 
     return $content;
 }
 
-//外链转内链
-function aya_url_encode_type($external_url)
+//DOM版过滤器方法
+function aya_content_filter_dom_document($content, $encode_utf8 = false)
 {
-    $option = aya_opt('site_content_link_jump_page_type', 'postpage');
+    if (empty($content)) return $content;
 
-    //默认的内跳页面格式
-    if ($option == 'go') {
-        $redirect_url = add_query_arg('url', base64_encode($external_url), home_url('/go/'));
+    global $post;
+
+    //强制编码为UTF-8
+    if ($encode_utf8) {
+        @$content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
     }
-    //外链页面
-    else if ($option == 'link') {
-        $redirect_url = add_query_arg('target', urlencode($external_url), home_url('/link/'));
+    //用 DOMDocument 处理 HTML
+    $dom = new DOMDocument();
+    //忽略 HTML5 警告
+    libxml_use_internal_errors(true);
+    //加载 HTML
+    $dom->loadHTML('<?xml encoding="UTF-8">' . $content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    //清除报错
+    //libxml_clear_errors();
+    //格式<img>标签
+    if (aya_opt('site_content_img_filter_bool', 'postpage')) {
+        $images = $dom->getElementsByTagName('img');
+        foreach ($images as $img) {
+            //添加class
+            $existing_class = $img->getAttribute('class');
+            $img->setAttribute('class', trim($existing_class . ' lozad'));
+            //添加属性
+            $img->setAttribute('loading', 'lazy'); //eager
+            //判断补充alt属性
+            $existing_alt = $img->getAttribute('alt');
+            if (empty($$existing_alt)) {
+                $img->setAttribute('alt', get_the_title($post));
+            }
+        }
     }
-    //直接返回
-    return $redirect_url;
+    //格式化<a>标签
+    if (aya_opt('site_content_link_filter_bool', 'postpage')) {
+        $redirect_option = aya_opt('site_content_link_jump_page_type', 'postpage');
+        $links = $dom->getElementsByTagName('a');
+        foreach ($links as $link) {
+            $href = $link->getAttribute('href');
+
+            //如果是外部链接
+            if (cur_is_external_url($href)) {
+                //添加nofollow
+                $rel = $link->getAttribute('rel');
+                $rel = preg_replace('/\bnofollow\b/', '', $rel);
+                $link->setAttribute('rel', trim($rel . ' nofollow'));
+                //外链转内链
+                if ($redirect_option == 'link') {
+                    //外链提示页面
+                    $link->setAttribute('href', add_query_arg('target', urlencode($href), home_url('/link/')));
+                } else if ($redirect_option == 'go') {
+                    //内跳页面
+                    $link->setAttribute('href', add_query_arg('url', base64_encode($href), home_url('/go/')));
+                    //添加target
+                    $link->setAttribute('target', '_blank');
+                } else {
+                    //只添加target
+                    $link->setAttribute('target', '_blank');
+                }
+            }
+        }
+    }
+    //保存
+    $this_content = $dom->saveHTML();
+    return $this_content;
 }
 
-//弃用：格式化<a>标签
-function aya_post_content_filter_link_tag($content)
+//格式化<a>标签
+function aya_content_filter_link_tag($content)
 {
     //遍历
     $matches = preg_match_all('/<a(.*?)href="(.*?)"(.*?)>/', $content, $urls);
     //如果存在a标签
     if (!is_null($urls)) {
-
+        $redirect_option = aya_opt('site_content_link_jump_page_type', 'postpage');
         foreach ($urls[2] as $url) {
-            //验证URL
-            $verify_val = strpos($url, '://');
-            $verify_self = strpos($url, home_url());
-            //验证文件
-            $verify_file = preg_match('/\.(jpg|jepg|png|ico|bmp|bnp|gif|tiff|zip|rar|exe|dmg|7z|svg|mp3|mp4|flv|wmv|heic|webp)/i', $url);
-            //不是本站链接且不是文件
-            if ($verify_val !== false && $verify_self === false && !$verify_file) {
-                $content = str_replace("href=\"$url\"", "href=\"" . $url . "\" rel=\"nofollow\" target=\"_blank\"", $content);
+            //如果是外部链接
+            if (cur_is_external_url($url)) {
+                //外链提示页面
+                if ($redirect_option == 'link') {
+                    $url = add_query_arg('target', urlencode($url), home_url('/link/'));
+                    $content = str_replace("href=\"$url\"", "href=\"" . $url . "\" rel=\"nofollow\"", $content);
+                }
+                //内跳页面
+                else if ($redirect_option == 'go') {
+
+                    $url = add_query_arg('url', base64_encode($url), home_url('/go/'));
+                    $content = str_replace("href=\"$url\"", "href=\"" . $url . "\" rel=\"nofollow\" target=\"_blank\"", $content);
+                }
+                //只添加nofollow
+                else {
+                    $content = str_replace("href=\"$url\"", "href=\"" . $url . "\" rel=\"nofollow\" target=\"_blank\"", $content);
+                }
             }
         }
     }
@@ -69,40 +135,42 @@ function aya_post_content_filter_link_tag($content)
     return $content;
 }
 
-//弃用：格式化<img>标签
-function aya_post_content_filter_img_tag($content)
+//格式化<img>标签
+function aya_content_filter_img_tag($content)
 {
     //遍历
     $matches = preg_match_all('/<img [^>]+>/', $content, $images);
     //如果存在img标签
-    if (!is_array($images)) {
-        return $content;
-    }
+    if (!is_null($images)) {
+        global $post;
 
-    foreach ($images[0] as $i => $image) {
-        //检查class
-        if (!preg_match('/class=["\']?([^"\']*)["\']?/i', $image)) {
-            //添加
-            $image = preg_replace('/<img /', '<img class="lozad" ', $image);
-        } else {
-            //追加
-            $image = preg_replace('/class=["\']?([^"\']*)["\']?/i', 'class="$1 lozad"', $image);
-        }
-        //检查alt
-        if (!preg_match('/alt=["\']?([^"\']*)["\']?/i', $image)) {
-            global $post;
-            // 如果没有alt属性，添加alt属性
-            $image = preg_replace('/<img /', '<img alt="' . get_the_title($post->ID) . '-PIC-' . $i + 1 . '" ', $image);
-        }
+        foreach ($images[0] as $i => $image) {
+            //检查class
+            if (!preg_match('/class=["\']?([^"\']*)["\']?/i', $image)) {
+                //添加
+                $new_image = preg_replace('/<img /', '<img class="lozad" ', $image);
+            } else {
+                //追加
+                $new_image = preg_replace('/class=["\']?([^"\']*)["\']?/i', 'class="lozad $1"', $image);
+            }
+            //检查alt
+            if (!preg_match('/alt=["\']?([^"\']*)["\']?/i', $image)) {
+                //如果没有alt属性，添加alt属性
+                $new_image = preg_replace('/<img /', '<img alt="' . get_the_title($post) . '" ', $new_image);
+            } else {
+                //如果alt属性为空，添加alt属性
+                $new_image = preg_replace('/alt=["\']?([^"\']*)["\']?/i', 'alt="' . get_the_title($post) . '" ', $new_image);
+            }
 
-        $content = str_replace($image, $image, $content);
+            $content = str_replace($image, $new_image, $content);
+        }
     }
 
     return $content;
 }
 
 //弃用：格式化<h>标签（用于生成文章目录）
-function aya_post_content_filter_h1_tag($content)
+function aya_content_filter_h1_tag($content)
 {
     //遍历
     $matches = preg_match_all('/<h[123]>(.*?)<\/h[123]>/im', $content, $h1s);
@@ -123,7 +191,7 @@ function aya_post_content_filter_h1_tag($content)
 }
 
 //弃用：格式化<table>标签
-function aya_post_content_filter_table_tag($content)
+function aya_content_filter_table_tag($content)
 {
     //遍历
     $matches = preg_match_all('/<table.*?>[\s\S]*<\/table>/', $content, $tables);
@@ -142,7 +210,7 @@ function aya_post_content_filter_table_tag($content)
 }
 
 //弃用：格式化<pre>标签
-function aya_post_content_filter_pre_tag($content)
+function aya_content_filter_pre_tag($content)
 {
     //遍历
     $matches = preg_match_all('/<pre.*?>(.+?)<\/pre>/is', $content, $pres);

@@ -528,33 +528,3 @@ function aya_single_badge_tags($post_id = 0)
         return aya_echo($the_cat_list . $the_tag_list);
     }
 }
-
-//图片转换懒加载
-function aya_lazy_img_tags($src, $class = '', $alt = '', $width = 'auto', $height = 'auto', $lazy_load = true)
-{
-    $src = esc_url($src);
-
-    if ($src == '') return;
-
-    //使用 lozad.js 的格式
-    $html_format = '<img class="lozad %s" src="%s" data-src="%s" alt="%s" width="%s" height="%s" />';
-    //判断懒加载
-    if ($lazy_load) {
-        $out_html = sprintf($html_format, $class, '', $src, $alt, $width, $height);
-    } else {
-        $out_html = sprintf($html_format, $class, $src, '', $alt, $width, $height);
-    }
-    return esc_html($out_html);
-    //使用Chrome支持格式
-    /*
-    $html_format = '<img class="%s" src="%s" alt="%s" width="%s" height="%s" loading="%s" />';
-
-    if ($lazy_load) {
-        $out_html = sprintf($html_format, $class, $src, $alt, $width, $height, 'lazy');
-    } else {
-        $out_html = sprintf($html_format, $class, $src, $alt, $width, $height, 'eager');
-    }
-
-    return esc_html($out_html);
-    */
-}

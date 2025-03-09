@@ -31,11 +31,10 @@ if (!defined('ABSPATH')) die('Invalid request.');
  * ------------------------------------------------------------------------------
  */
 
-//define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); //MINUTE_IN_SECONDS
+//define('AYA_RELEASE', '2.0.0');
 define('AYA_PATH', get_template_directory());
 define('AYA_URI', get_template_directory_uri());
-//define('AYA_RELEASE', '2.0.0');
-define('AYA_EXTRA_BRANCH', '');
+//define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); //MINUTE_IN_SECONDS
 
 /*
  * ------------------------------------------------------------------------------
