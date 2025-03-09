@@ -1,14 +1,13 @@
 {
     "name": "aiya-cms/lib",
-    "description": "一种很新的旧 WordPress 主题",
+    "description": "AIYA-CMS WordPress Theme",
     "type": "library",
     "license": "GPL-3.0-or-later",
     "minimum-stability": "stable",
     "require": {
         "jxlwqq/chinese-typesetting": "^1.2",
         "overtrue/php-opencc": "^1.2",
-        "overtrue/pinyin": "^5.3",
-        "imagine/imagine": "^1.5"
+        "overtrue/pinyin": "^5.3"
     },
     "require-dev": {
         "guzzlehttp/guzzle": "^7.2"

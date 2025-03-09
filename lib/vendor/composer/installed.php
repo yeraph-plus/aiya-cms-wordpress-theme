@@ -3,7 +3,7 @@
         'name' => 'aiya-cms/lib',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '7a33b72a8d7ca3502700347bf5df3014576b8e0a',
+        'reference' => 'fb455b49c92802bae2bd0add5eb3c05a29098e07',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'aiya-cms/lib' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '7a33b72a8d7ca3502700347bf5df3014576b8e0a',
+            'reference' => 'fb455b49c92802bae2bd0add5eb3c05a29098e07',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -45,15 +45,6 @@
             'install_path' => __DIR__ . '/../guzzlehttp/psr7',
             'aliases' => array(),
             'dev_requirement' => true,
-        ),
-        'imagine/imagine' => array(
-            'pretty_version' => '1.5.0',
-            'version' => '1.5.0.0',
-            'reference' => '80ab21434890dee9ba54969d31c51ac8d4d551e0',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../imagine/imagine',
-            'aliases' => array(),
-            'dev_requirement' => false,
         ),
         'jxlwqq/chinese-typesetting' => array(
             'pretty_version' => '1.2.4',

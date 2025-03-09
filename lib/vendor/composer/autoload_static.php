@@ -44,10 +44,6 @@ class ComposerStaticInit9bf10455f03ddd3004e5b0ae041e6a76
         array (
             'Jxlwqq\\ChineseTypesetting\\' => 26,
         ),
-        'I' => 
-        array (
-            'Imagine\\' => 8,
-        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
@@ -91,8 +87,8 @@ class ComposerStaticInit9bf10455f03ddd3004e5b0ae041e6a76
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -113,10 +109,6 @@ class ComposerStaticInit9bf10455f03ddd3004e5b0ae041e6a76
         'Jxlwqq\\ChineseTypesetting\\' => 
         array (
             0 => __DIR__ . '/..' . '/jxlwqq/chinese-typesetting/src',
-        ),
-        'Imagine\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/imagine/imagine/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
