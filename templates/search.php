@@ -4,7 +4,7 @@
 aya_template_load('parts/breadcrumb');
 
 ?>
-<section class="search-loop w-full p-4">
+<section class="main-boxed search-loop w-full p-4">
     <div class="flex flex-wrap">
         <div class="w-full lg:w-3/4 lg:pr-4 animate__animated" :class="[$store.app.animation]">
             <!-- Loop post grid -->

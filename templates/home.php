@@ -9,7 +9,7 @@ if (is_paged()) {
 }
 
 ?>
-<div class="main-homepage w-full p-4">
+<div class="main-boxed main-homepage w-full p-4">
     <?php if (aya_opt('site_home_widget_bool', 'basic')): ?>
         <div class="flex flex-wrap">
             <div class="w-full lg:w-3/4 lg:pr-4 animate__animated" :class="[$store.app.animation]">

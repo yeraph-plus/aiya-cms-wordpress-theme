@@ -90,6 +90,7 @@ function aya_plugin_prismjs_process_pre($atts = array(), $content = '')
         } else {
             $load .= '<script src="' . $prism_plugin_uri . '/prism.js"></script>' . PHP_EOL;
         }
+        //$load .= '<script type="text/javascript"> Prism.highlightAll(); //PrismJS </script>' . PHP_EOL;
         //切换主题样式
         if (in_array($atts['theme'], ['default', 'okaidia', 'solarizedlight', 'tomorrow'])) {
             $load .= '<link rel="stylesheet" href="' . $prism_plugin_uri . '/css/prism.' . $atts['theme'] . '.css">' . PHP_EOL;

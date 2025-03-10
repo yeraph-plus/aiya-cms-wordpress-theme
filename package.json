@@ -9,13 +9,13 @@
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.1",
         "@tailwindcss/typography": "^0.5.2",
-        "@wordpress/scripts": "^30.1.0",
         "dir-archiver": "^2.1.0",
         "gulp": "^5.0.0",
         "prettier": "^2.7.1",
         "prettier-plugin-tailwindcss": "^0.1.13",
         "rtlcss": "^4.3.0",
-        "tailwindcss": "^3.4.17"
+        "tailwindcss": "^3.4.17",
+        "@wordpress/scripts": "^30.1.0"
     },
     "scripts": {
         "dev": "npx tailwindcss -i tailwind.css -o assets/core/main.style.css --watch",

@@ -24,26 +24,31 @@
         @apply relative rounded-md bg-white shadow dark:bg-[#0e1726] dark:shadow-none;
     }
 
+    /* Mix width */
+    .main-boxed {
+        @apply mx-auto max-w-[1400px];
+    }
+
     /* Widget */
     .widget {
-        @apply relative w-full mb-4;
+        @apply relative mb-4 w-full;
     }
     .widget-title {
-        @apply relative flex items-center text-base overflow-hidden font-semibold dark:text-white-light mb-2 before:content-[''] before:h-4 before:w-1 before:ml-1 before:mr-2 before:bg-primary before:rounded;
+        @apply relative mb-2 flex items-center overflow-hidden text-base font-semibold before:ml-1 before:mr-2 before:h-4 before:w-1 before:rounded before:bg-primary before:content-[''] dark:text-white-light;
     }
     .widget-content {
-        @apply relative rounded-md bg-white shadow text-base p-4 dark:bg-[#0e1726] dark:shadow-none;
+        @apply relative rounded-md bg-white p-4 text-base shadow dark:bg-[#0e1726] dark:shadow-none;
     }
     .widget-menu {
-        @apply inline-flex align-middle flex-col items-start justify-start font-semibold w-full;
+        @apply inline-flex w-full flex-col items-start justify-start align-middle font-semibold;
     }
 
     /* Pagination */
     .nav-pagination {
-        @apply inline-flex items-center space-x-1 rtl:space-x-reverse m-auto;
+        @apply m-auto inline-flex items-center space-x-1 rtl:space-x-reverse;
     }
     .nav-pagination .item {
-        @apply relative inline-flex items-center justify-center font-semibold px-3.5 py-2 transition rounded-md bg-white shadow dark:bg-[#0e1726] dark:shadow-none text-dark hover:text-white hover:bg-primary dark:text-white-light dark:hover:bg-primary;
+        @apply relative inline-flex items-center justify-center rounded-md bg-white px-3.5 py-2 font-semibold text-dark shadow transition hover:bg-primary hover:text-white dark:bg-[#0e1726] dark:text-white-light dark:shadow-none dark:hover:bg-primary;
     }
     .nav-pagination .active {
         @apply pointer-events-none bg-primary text-white dark:bg-primary;
@@ -59,16 +64,16 @@
         @apply flex font-semibold text-gray-500 dark:text-white-dark;
     }
     .nav-breadcrumb .breadcrumb li {
-        @apply before:content-['/'] before:px-2 flex items-center;
+        @apply flex items-center before:px-2 before:content-['/'];
     }
     .nav-breadcrumb .breadcrumb a {
-        @apply  hover:text-gray-500/70 dark:hover:text-white-dark/70;
+        @apply hover:text-gray-500/70 dark:hover:text-white-dark/70;
     }
     .nav-breadcrumb .breadcrumb .first-li {
-        @apply before:hidden flex items-center;
+        @apply flex items-center before:hidden;
     }
-    .nav-breadcrumb .breadcrumb .active  {
-        @apply text-black dark:text-white-light hover:text-black/70 dark:hover:text-white-light/70;
+    .nav-breadcrumb .breadcrumb .active {
+        @apply text-black hover:text-black/70 dark:text-white-light dark:hover:text-white-light/70;
     }
 
     /* section tittle */
@@ -76,20 +81,20 @@
         @apply flex w-full items-center justify-start pb-6 lg:mb-0;
     }
     .section-tittle h2 {
-        @apply text-xl font-bold dark:text-white-light after:content-[''] after:block after:h-1 after:w-14 after:bg-primary after:mt-0 after:rounded;
+        @apply text-xl font-bold after:mt-0 after:block after:h-1 after:w-14 after:rounded after:bg-primary after:content-[''] dark:text-white-light;
     }
-    
+
     /* post title badge */
     .title-badge {
-        @apply relative flex items-center my-1 mr-2 rounded border border-transparent px-2 py-0.5 text-xs font-semibold text-white;
+        @apply relative my-1 mr-2 flex items-center rounded border border-transparent px-2 py-0.5 text-xs font-semibold text-white;
     }
     .tags-badge {
-        @apply relative flex items-center mr-2 p-1 text-dark border rounded border-white hover:bg-primary hover:text-white dark:text-white-light dark:border-dark;
+        @apply relative mr-2 flex items-center rounded border border-white p-1 text-dark hover:bg-primary hover:text-white dark:border-dark dark:text-white-light;
     }
 
     /* Banner */
     .featured-banner {
-        @apply relative w-full top-0 m-0 p-0;
+        @apply relative top-0 m-0 w-full p-0;
     }
 
     /* Navbar */
@@ -131,7 +136,7 @@
     .sidebar ul.sub-menu li button,
     .sidebar ul.sub-menu li a {
         @apply flex w-full items-center px-9 py-2.5 before:h-0.5 before:w-2 before:rounded before:bg-gray-300 hover:bg-gray-100
-hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark:before:bg-gray-500 dark:hover:bg-gray-900 dark:hover:text-primary;
+hover:text-primary hover:before:!bg-primary dark:before:bg-gray-500 dark:hover:bg-gray-900 dark:hover:text-primary ltr:before:mr-2 rtl:before:ml-2;
     }
     .sidebar ul.sub-menu li button.active,
     .sidebar ul.sub-menu li a.active {
@@ -161,7 +166,7 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         @apply ltr:-left-[260px] rtl:-right-[260px];
     }
     .horizontal.toggle-sidebar .sidebar {
-        @apply ltr:left-0 rtl:right-0 lg:ltr:-left-[260px] lg:rtl:-right-[260px];
+        @apply ltr:left-0 lg:ltr:-left-[260px] rtl:right-0 lg:rtl:-right-[260px];
     }
 
     .horizontal .nav-item a div:first-child svg {
@@ -174,7 +179,7 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
     }
 
     .horizontal-menu .nav-link {
-        @apply flex items-center rounded-lg py-2.5 px-2 hover:bg-[#000]/[0.08] hover:text-black dark:hover:bg-[#181f32] dark:hover:text-white-dark xl:px-4;
+        @apply flex items-center rounded-lg px-2 py-2.5 hover:bg-[#000]/[0.08] hover:text-black dark:hover:bg-[#181f32] dark:hover:text-white-dark xl:px-4;
     }
 
     .horizontal-menu .nav-link.active {
@@ -207,15 +212,15 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         @apply ltr:ml-0 rtl:mr-0;
     }
     .vertical .sidebar {
-        @apply ltr:-left-[260px] rtl:-right-[260px] lg:ltr:left-0 lg:rtl:right-0;
+        @apply ltr:-left-[260px] lg:ltr:left-0 rtl:-right-[260px] lg:rtl:right-0;
     }
     .vertical.toggle-sidebar .sidebar {
-        @apply ltr:left-0 rtl:right-0 lg:ltr:-left-[260px] lg:rtl:-right-[260px];
+        @apply ltr:left-0 lg:ltr:-left-[260px] rtl:right-0 lg:rtl:-right-[260px];
     }
 
     /* Collapsible vertical layouts */
     .collapsible-vertical .sidebar {
-        @apply hover:w-[260px] ltr:-left-[260px] rtl:-right-[260px] lg:w-[70px] lg:ltr:left-0 lg:rtl:right-0;
+        @apply hover:w-[260px] lg:w-[70px] ltr:-left-[260px] lg:ltr:left-0 rtl:-right-[260px] lg:rtl:right-0;
     }
     .collapsible-vertical.toggle-sidebar .sidebar {
         @apply ltr:left-0 rtl:right-0;
@@ -288,7 +293,7 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
 
     /* Buttons */
     .btn {
-        @apply relative flex items-center justify-center w-fit rounded-md border px-5 py-2 my-2 mr-4 text-sm font-semibold shadow-[0_10px_20px_-10px] outline-none transition duration-300 hover:!shadow-none hover:!no-underline;
+        @apply relative my-2 mr-4 flex w-fit items-center justify-center rounded-md border px-5 py-2 text-sm font-semibold shadow-[0_10px_20px_-10px] outline-none transition duration-300 hover:!no-underline hover:!shadow-none;
     }
     .brn-flex {
         @apply;
@@ -384,35 +389,35 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         @apply container;
 
         p {
-            @apply text-base font-medium leading-relaxed tracking-normal mb-4;
+            @apply mb-4 text-base font-medium leading-relaxed tracking-normal;
         }
 
         h1,
         h2,
         h3 {
-            @apply flex items-center text-xl font-bold tracking-normal mt-2 mb-4 before:content-[''] before:inline-block before:bg-primary before:rounded before:h-4 before:w-2 before:mr-2;
+            @apply mb-4 mt-2 flex items-center text-xl font-bold tracking-normal before:mr-2 before:inline-block before:h-4 before:w-2 before:rounded before:bg-primary before:content-[''];
         }
 
         h4,
         h5,
         h6 {
-            @apply flex text-lg font-bold tracking-normal mt-2 mb-4;
+            @apply mb-4 mt-2 flex text-lg font-bold tracking-normal;
         }
 
         a {
-            @apply text-primary no-underline hover:underline px-1;
+            @apply px-1 text-primary no-underline hover:underline;
         }
 
         blockquote {
-            @apply text-black p-5 ltr:pl-3.5 rtl:pr-3.5 bg-white rounded-tr-md rounded-br-md border border-white-light border-l-4 !border-l-primary dark:bg-[#060818] dark:border-[#060818] mb-4;
+            @apply mb-4 rounded-br-md rounded-tr-md border border-l-4 border-white-light !border-l-primary bg-white p-5 text-black dark:border-[#060818] dark:bg-[#060818] ltr:pl-3.5 rtl:pr-3.5;
         }
 
         blockquote p {
-            @apply not-italic text-[#515365] text-base dark:text-white-light m-0;
+            @apply m-0 text-base not-italic text-[#515365] dark:text-white-light;
         }
 
         blockquote cite {
-            @apply w-full not-italic text-xs text-[#777] block before:w-3 before:h-[1px] before:bg-[#777] before:inline-block before:opacity-50 before:relative before:-top-1 ltr:before:mr-1 rtl:before:ml-1 mt-3;
+            @apply mt-3 block w-full text-xs not-italic text-[#777] before:relative before:-top-1 before:inline-block before:h-[1px] before:w-3 before:bg-[#777] before:opacity-50 ltr:before:mr-1 rtl:before:ml-1;
         }
 
         strong {
@@ -424,15 +429,15 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         }
 
         cite {
-            @apply not-italic font-medium;
+            @apply font-medium not-italic;
         }
 
         ins {
-            @apply underline font-medium;
+            @apply font-medium underline;
         }
 
         del {
-            @apply line-through opacity-70 font-medium;
+            @apply font-medium line-through opacity-70;
         }
 
         sub {
@@ -444,24 +449,24 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         }
 
         abbr {
-            @apply underline cursor-help;
+            @apply cursor-help underline;
         }
 
         address {
-            @apply border border-gray-200 p-4 rounded font-medium mb-4;
+            @apply mb-4 rounded border border-gray-200 p-4 font-medium;
         }
 
         code {
-            @apply text-[#d63384] bg-gray-100 backdrop-opacity-50 rounded;
+            @apply rounded bg-gray-100 text-[#d63384] backdrop-opacity-50;
         }
 
         pre {
             direction: ltr;
-            @apply p-4 rounded bg-gray-100 overflow-auto whitespace-pre-wrap font-mono dark:bg-[#060818] mb-4;
+            @apply mb-4 overflow-auto whitespace-pre-wrap rounded bg-gray-100 p-4 font-mono dark:bg-[#060818];
         }
 
         pre code {
-            @apply text-black bg-transparent;
+            @apply bg-transparent text-black;
         }
 
         figure {
@@ -469,15 +474,15 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         }
 
         figure figcaption {
-            @apply text-center text-gray-600 mt-4;
+            @apply mt-4 text-center text-gray-600;
         }
 
         img {
-            @apply rounded bg-gray-300 backdrop-opacity-50 mb-4;
+            @apply mb-4 rounded bg-gray-300 backdrop-opacity-50;
         }
 
         hr {
-            @apply border-t-2 border-b-0 border-l-0 border-r-0 border-solid border-gray-100 rounded my-8;
+            @apply my-8 rounded border-b-0 border-l-0 border-r-0 border-t-2 border-solid border-gray-100;
         }
 
         br {
@@ -485,40 +490,39 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         }
 
         ul {
-            @apply space-y-3 list-inside list-disc mb-4;
+            @apply mb-4 list-inside list-disc space-y-3;
         }
 
         ol {
-            @apply space-y-3 list-inside list-decimal mb-4;
+            @apply mb-4 list-inside list-decimal space-y-3;
         }
 
         ul ul,
         ol ol {
-            @apply pl-4 mt-4 md:pl-8;
+            @apply mt-4 pl-4 md:pl-8;
         }
 
         li {
-            @apply text-base tracking-normal mb-1;
+            @apply mb-1 text-base tracking-normal;
         }
 
         dl {
-            @apply space-y-2 mb-4;
-
+            @apply mb-4 space-y-2;
         }
 
         dt {
-            @apply text-base font-semibold tracking-normal mb-4;
+            @apply mb-4 text-base font-semibold tracking-normal;
         }
 
         dd {
-            @apply text-base font-medium tracking-normal mb-4;
+            @apply mb-4 text-base font-medium tracking-normal;
         }
-        
+
         /* tables */
         .table-responsive {
             @apply overflow-auto;
         }
-        
+
         table {
             @apply w-full !border-collapse;
         }
@@ -531,7 +535,7 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         table thead tr th,
         table tfoot tr th,
         table tbody tr td {
-            @apply py-3 px-4 ltr:text-left rtl:text-right;
+            @apply px-4 py-3 ltr:text-left rtl:text-right;
         }
 
         table thead tr th,
@@ -553,7 +557,7 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
 
         table.dataTable-table tbody tr th,
         table.dataTable-table tbody tr td {
-            @apply border-b border-white-light/40 py-3 px-4 ltr:text-left rtl:text-right dark:border-[#191e3a];
+            @apply border-b border-white-light/40 px-4 py-3 dark:border-[#191e3a] ltr:text-left rtl:text-right;
         }
 
         table.dataTable-table tbody tr:last-child td {
@@ -568,55 +572,55 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         }
         .comment-list-title,
         .comment-reply-title {
-            @apply font-semibold text-lg dark:text-white-light mb-4;
+            @apply mb-4 text-lg font-semibold dark:text-white-light;
         }
         .comment-respond {
             @apply relative w-full;
         }
         .comment-form {
-            @apply grid grid-cols-1 md:grid-cols-2 gap-4 justify-between;
-        
+            @apply grid grid-cols-1 justify-between gap-4 md:grid-cols-2;
+
             .form-submit {
                 @apply relative col-span-full h-10;
 
                 .submit {
-                    @apply absolute right-0 bottom-0 rounded-md border px-5 py-2 text-sm font-semibold outline-none transition duration-300 border-primary text-primary dark:border-white-light dark:text-white-light hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:text-white-light;
+                    @apply absolute bottom-0 right-0 rounded-md border border-primary px-5 py-2 text-sm font-semibold text-primary outline-none transition duration-300 hover:bg-primary hover:text-white dark:border-white-light dark:text-white-light dark:hover:bg-primary dark:hover:text-white-light;
                 }
             }
         }
-        .comment{
-            @apply relative w-full border border-gray-500/20 mb-4 p-4 rounded-md;
+        .comment {
+            @apply relative mb-4 w-full rounded-md border border-gray-500/20 p-4;
 
             .comment-meta {
-                @apply flex items-center gap-4 mb-4 border-b border-[#e0e6ed] dark:border-[#1b2e4b] pb-4;
+                @apply mb-4 flex items-center gap-4 border-b border-[#e0e6ed] pb-4 dark:border-[#1b2e4b];
 
                 .comment-author {
                     @apply relative flex items-center gap-2;
                     .avatar {
-                        @apply w-12 h-12 rounded-full overflow-hidden border border-white shadow-xl;
+                        @apply h-12 w-12 overflow-hidden rounded-full border border-white shadow-xl;
                     }
-                    .says{
+                    .says {
                         @apply hidden;
                     }
                 }
                 .comment-metadata {
                     @apply text-sm text-gray-500 dark:text-white-dark;
-                    .edit-link{
+                    .edit-link {
                         @apply text-primary dark:text-white-light;
                     }
                 }
             }
-            .comment-content{
+            .comment-content {
                 @apply text-base font-medium tracking-normal;
             }
             .reply {
                 @apply flex items-center gap-2 text-sm text-gray-500 dark:text-white-dark;
                 .comment-reply-link {
-                    @apply absolute right-4 top-6 btn btn-sm btn-outline-primary rounded-full dark:border-white-light dark:text-white-light;
+                    @apply btn btn-sm btn-outline-primary absolute right-4 top-6 rounded-full dark:border-white-light dark:text-white-light;
                 }
             }
             .comment {
-                @apply border-none p-0 pt-4 pl-4 md:pl-8;
+                @apply border-none p-0 pl-4 pt-4 md:pl-8;
 
                 .comment-meta {
                     @apply border-none pb-2;
@@ -648,7 +652,7 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
     label {
         @apply mb-1.5 block font-semibold;
     }
-    [dir='rtl'] select {
+    [dir="rtl"] select {
         background-position: left 0.5rem center;
     }
 
@@ -696,8 +700,8 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
     /* checkbox & radio */
     .form-radio,
     .form-checkbox {
-        @apply h-5 w-5 cursor-pointer rounded border-2 border-[#e0e6ed] bg-transparent text-primary !shadow-none !outline-none !ring-0 !ring-offset-0 checked:bg-[length:90%_90%] disabled:cursor-not-allowed disabled:bg-[#eee] ltr:mr-1.5 rtl:ml-1.5
-      dark:border-[#253b5c] dark:checked:border-transparent dark:disabled:bg-[#1b2e4b];
+        @apply h-5 w-5 cursor-pointer rounded border-2 border-[#e0e6ed] bg-transparent text-primary !shadow-none !outline-none !ring-0 !ring-offset-0 checked:bg-[length:90%_90%] disabled:cursor-not-allowed disabled:bg-[#eee] dark:border-[#253b5c] dark:checked:border-transparent
+      dark:disabled:bg-[#1b2e4b] ltr:mr-1.5 rtl:ml-1.5;
     }
 
     .form-checkbox.outline-primary:checked {
@@ -774,7 +778,6 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
     .dropdown ul li > button {
         @apply w-full;
     }
-
 }
 
 /* perfect scrollbar */
@@ -837,9 +840,9 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
 }
 
 .apexcharts-canvas .apexcharts-legend-marker {
-    @apply ltr:!mr-1.5 rtl:ml-1.5 rtl:!mr-0;
+    @apply ltr:!mr-1.5 rtl:!mr-0 rtl:ml-1.5;
 }
 
-[dir='rtl'] .apexcharts-tooltip-marker {
-    @apply mr-0 ml-2.5;
+[dir="rtl"] .apexcharts-tooltip-marker {
+    @apply ml-2.5 mr-0;
 }

@@ -2,9 +2,12 @@
 
 $none_page_image = aya_opt('site_501_page_img_upload', 'basic');
 
+//面包屑
+aya_template_load('parts/breadcrumb');
+
 ?>
 <!-- 501 -->
-<div class="501-not-implemented w-full p-4">
+<div class="main-boxed 501-not-implemented w-full p-4">
     <div class="panel w-auto">
         <div class="relative flex items-center justify-center overflow-hidden">
             <div class="px-8 py-8 text-center before:container before:absolute before:left-1/2 before:-translate-x-1/2 before:rounded-full before:bg-[linear-gradient(180deg,#4361EE_0%,rgba(67,97,238,0)_50.73%)] before:aspect-square before:opacity-10 md:py-20">

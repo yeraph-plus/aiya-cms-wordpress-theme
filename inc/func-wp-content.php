@@ -156,10 +156,10 @@ function aya_content_filter_img_tag($content)
             //检查alt
             if (!preg_match('/alt=["\']?([^"\']*)["\']?/i', $image)) {
                 //如果没有alt属性，添加alt属性
-                $new_image = preg_replace('/<img /', '<img alt="' . get_the_title($post) . '" ', $new_image);
+                $new_image = preg_replace('/<img /', '<img alt="' . get_the_title($post) . '" ', $image);
             } else {
                 //如果alt属性为空，添加alt属性
-                $new_image = preg_replace('/alt=["\']?([^"\']*)["\']?/i', 'alt="' . get_the_title($post) . '" ', $new_image);
+                $new_image = preg_replace('/alt=["\']?([^"\']*)["\']?/i', 'alt="' . get_the_title($post) . '" ', $image);
             }
 
             $content = str_replace($image, $new_image, $content);

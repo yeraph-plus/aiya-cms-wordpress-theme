@@ -18,7 +18,7 @@ $post_disclaimer_text = aya_opt('site_single_disclaimer_text', 'postpage');
         <h1 class="text-2xl font-bold">
             <?php aya_echo($post_data->title); ?>
         </h1>
-        <span class="ml-4 text-2xl font-normal">
+        <span class=" flex items-center ml-4 text-2xl font-normal">
             <?php aya_single_badge_starts($post_data->id); ?>
         </span>
     </div>
