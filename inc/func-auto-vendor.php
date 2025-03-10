@@ -15,12 +15,13 @@ use Overtrue\PHPOpenCC\OpenCC;
 //use Overtrue\PHPOpenCC\Strategy;
 
 //应用中文格式化实例
-function aya_chinese_type_setting($content)
+function aya_chs_type_setting($content, $correct_array)
 {
     $typesetting = new ChineseTypesetting();
 
     //$formatted_content = $typesetting->correct($content, ['insertSpace', 'removeSpace', 'full2Half', 'fixPunctuation', 'properNoun']);
-    $formatted_content = $typesetting->correct($content, aya_opt('site_save_post_chinese_setting', 'format'));
+
+    $formatted_content = $typesetting->correct($content, $correct_array);
 
     //返回格式化后的内容
     return $formatted_content;

@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('ABSPATH')) exit;
 
 /*
@@ -83,4 +84,61 @@ function aya_tweet_product_sticky()
         checked(is_sticky(), true, false),
         esc_html__('置顶这篇文章', 'AIYA')
     );
+}
+
+/*
+ * ------------------------------------------------------------------------------
+ * 自动拼音化别名
+ * ------------------------------------------------------------------------------
+ */
+
+add_filter('wp_insert_term_data', 'aya_insert_term_data_slug', 10, 3);
+add_filter('wp_update_term_data', 'aya_update_term_data_slug', 10, 4);
+add_filter('wp_insert_post_data', 'aya_insert_post_data_slug', 10, 2);
+
+//添加分类时替换分类slug为拼音
+function aya_insert_term_data_slug($data, $taxonomy, $term_arr)
+{
+    if (aya_opt('site_term_auto_pinyin_slug_bool', 'postpage')) {
+        //已存在，跳过
+        if (!empty($term_arr['slug'])) return $data;
+
+        $data['slug'] = wp_unique_term_slug(sanitize_title(aya_pinyin_permalink($data['name'], true)), (object) $term_arr);
+    }
+
+    return $data;
+}
+
+//更新分类时替换分类slug为拼音
+function aya_update_term_data_slug($data, $term_id, $taxonomy, $term_arr)
+{
+    if (aya_opt('site_term_auto_pinyin_slug_bool', 'postpage')) {
+        //已存在，跳过
+        if (!empty($term_arr['slug'])) return $data;
+
+        $data['slug'] = wp_unique_term_slug(sanitize_title(aya_pinyin_permalink($data['name'], true)), (object) $term_arr);
+    }
+
+    return $data;
+}
+
+//保存文章时替换文章slug为拼音
+function aya_insert_post_data_slug($data, $post_arr)
+{
+    //跳过自动草稿
+    if ('auto-draft' === $post_arr['post_status']) return $data;
+
+    if (aya_opt('site_post_auto_pinyin_slug_bool', 'postpage')) {
+        //已存在，跳过
+        if (!empty($post_arr['post_name'])) return $data;
+        //检查标题是否为空
+        if (empty($post_arr['post_title'])) return $data;
+
+
+        $formatted_sulg = sanitize_title(aya_pinyin_permalink($post_arr['post_title'], true));
+
+        $data['post_name'] = wp_unique_term_slug($formatted_sulg, (object) $post_arr);
+    }
+
+    return $data;
 }

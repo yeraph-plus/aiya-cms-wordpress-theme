@@ -27,36 +27,36 @@ AYF::new_opt([
     'desc' => 'AIYA-CMS 主题，文章页面组件设置',
     'fields' => [
         [
-            'desc' => '正文格式过滤器',
+            'desc' => '格式过滤器模式',
             'type' => 'title_2',
         ],
         [
             'title' => '使用 DOMDocument 处理',
-            'desc' => '标签属性匹配更精准，但性能更差（[del] 什么年代了还在用传统 preg_match_all [/del]）',
+            'desc' => '标签属性匹配更精准，但在文本量较少时性能更差（[del] 什么年代了还在用传统 preg_match_all [/del]）',
             'id' => 'site_content_dom_handler_bool',
             'type' => 'switch',
             'default' => false,
         ],
         [
-            'desc' => '过滤器功能',
+            'desc' => '文内功能',
             'type' => 'title_2',
         ],
         [
-            'title' => '图片自动描述',
+            'title' => '添加图片描述',
             'desc' => '文章正文内的图片标签自动添加 alt 属性和懒加载属性',
             'id' => 'site_content_img_filter_bool',
             'type' => 'switch',
-            'default' => false,
+            'default' => true,
         ],
         [
-            'title' => '链接自动内链',
+            'title' => '添加链接内链',
             'desc' => '给文章正文内链接标签自动添加 [code]rel="nofollow"[/code] 和 [code]target="_blank"[/code] 属性（仅对外部链接生效）',
             'id' => 'site_content_link_filter_bool',
             'type' => 'switch',
-            'default' => false,
+            'default' => true,
         ],
         [
-            'title' => '链接跳转设置',
+            'title' => '内链格式设置',
             'desc' => '接上一项设置，可选跳转方式',
             'id' => 'site_content_link_jump_page_type',
             'type' => 'radio',
@@ -66,10 +66,6 @@ AYF::new_opt([
                 'false' => '直接跳转（不处理）',
             ),
             'default' => 'link',
-        ],
-        [
-            'desc' => '提示功能',
-            'type' => 'title_2',
         ],
         [
             'title' => '文章末尾声明信息',
@@ -90,30 +86,25 @@ AYF::new_opt([
             ),
             'default' => 'false',
         ],
-        /*
         [
-            'desc' => '评论（Comments）',
+            'desc' => '自动功能',
             'type' => 'title_2',
         ],
         [
-            'desc' => '排版纠正',
-            'type' => 'title_2',
-        ],
-        [
-            'desc' => '*此功能使用 [code]jxlwqq/chinese-typesetting[/code] 项目：[url="https://github.com/jxlwqq/chinese-typesetting"]查看文档[/url]',
+            'desc' => '*此功能使用 [code]jxlwqq/chinese-typesetting[/code] 项目创建：[url="https://github.com/jxlwqq/chinese-typesetting"]查看文档[/url]',
             'type' => 'message',
         ],
         [
-            'title' => '启用中文排版',
+            'title' => '中文排版纠正',
             'desc' => '在文章保存/更新时触发，执行统一排版纠正',
-            'id' => 'site_save_post_chinese_type',
+            'id' => 'site_post_chs_compose_bool',
             'type' => 'switch',
             'default' => false,
         ],
         [
-            'title' => '启用的格式过滤器',
+            'title' => '启用的排版方法',
             'desc' => '接续上一项设置，选择需要启用的格式过滤器，详细说明请查阅相关项目文档',
-            'id' => 'site_save_post_chinese_setting',
+            'id' => 'site_post_chs_compose_type',
             'type' => 'checkbox',
             'sub'  => array(
                 'insertSpace' => '中英文空格补正',
@@ -131,26 +122,27 @@ AYF::new_opt([
             'default' => array('insertSpace', 'removeSpace', 'full2Half'),
         ],
         [
-            'desc' => '自动别名',
-            'type' => 'title_2',
-        ],
-        [
-            'desc' => '*此功能使用 [code]overtrue/pinyin[/code] 项目',
+            'desc' => '*此功能使用 [code]overtrue/pinyin[/code] 项目创建',
             'type' => 'message',
         ],
         [
             'title' => '使用拼音生成文章别名',
             'desc' => '在文章保存/更新时触发，如果未设置别名（为空时），则自动生成',
-            'id' => 'site_save_post_slug_pinyin_type',
+            'id' => 'site_post_auto_pinyin_slug_bool',
             'type' => 'switch',
             'default' => false,
         ],
         [
             'title' => '使用拼音生成分类别名',
             'desc' => '在分类保存/更新时触发，如果未设置别名（为空时），则自动生成',
-            'id' => 'site_save_term_slug_pinyin_type',
+            'id' => 'site_term_auto_pinyin_slug_bool',
             'type' => 'switch',
             'default' => false,
+        ],
+        /*
+        [
+            'desc' => '评论过滤',
+            'type' => 'title_2',
         ],
         */
     ]

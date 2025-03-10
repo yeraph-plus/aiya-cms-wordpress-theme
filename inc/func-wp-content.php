@@ -18,7 +18,7 @@ function aya_post_content_filter_format($content)
     if (aya_opt('site_content_dom_handler_bool', 'postpage')) {
         $content = aya_content_filter_dom_document($content);
     } else {
-        //默认版本
+        //普通正则方法
         if (aya_opt('site_content_link_filter_bool', 'postpage')) {
             $content = aya_content_filter_link_tag($content);
         }
@@ -248,64 +248,8 @@ function aya_content_filter_pre_tag($content)
  * ------------------------------------------------------------------------------
  */
 
-//add_filter('wp_insert_term_data', 'aya_insert_term_data_slug', 10, 3);
-//add_filter('wp_update_term_data', 'aya_update_term_data_slug', 10, 4);
-//add_filter('wp_insert_post_data', 'aya_insert_post_data_slug', 10, 2);
-
-//添加分类时替换分类slug为拼音
-function aya_insert_term_data_slug($data, $taxonomy, $term_arr)
-{
-    if (aya_opt('site_save_term_slug_pinyin_type', 'format')) {
-        //已存在，跳过
-        if (!empty($term_arr['slug'])) return $data;
-
-        $data['slug'] = wp_unique_term_slug(sanitize_title(aya_pinyin_permalink($data['name'], true)), (object) $term_arr);
-    }
-
-    return $data;
-}
-
-//更新分类时替换分类slug为拼音
-function aya_update_term_data_slug($data, $term_id, $taxonomy, $term_arr)
-{
-    if (aya_opt('site_save_term_slug_pinyin_type', 'format')) {
-        //已存在，跳过
-        if (!empty($term_arr['slug'])) return $data;
-
-        $data['slug'] = wp_unique_term_slug(sanitize_title(aya_pinyin_permalink($data['name'], true)), (object) $term_arr);
-    }
-
-    return $data;
-}
-
-//保存文章时替换文章slug为拼音
-function aya_insert_post_data_slug($data, $post_arr)
-{
-    //跳过自动草稿
-    if ('auto-draft' === $post_arr['post_status']) return $data;
-
-    if (aya_opt('site_save_post_slug_pinyin_type', 'format')) {
-        //已存在，跳过
-        if (!empty($post_arr['post_name'])) return $data;
-        //检查标题是否为空
-        if (empty($post_arr['post_title'])) return $data;
-
-
-        $formatted_sulg = sanitize_title(aya_pinyin_permalink($post_arr['post_title'], true));
-
-        $data['post_name'] = wp_unique_term_slug($formatted_sulg, (object) $post_arr);
-    }
-
-    if (aya_opt('site_save_post_chinese_type', 'format')) {
-        $data['post_title'] = aya_chinese_type_setting($post_arr['post_title']);
-        $data['post_content'] = aya_chinese_type_setting($post_arr['post_content']);
-    }
-
-    return $data;
-}
-
 //添加动作 文章保存时循环一次
-//add_action('save_post', 'aya_save_formatting');
+add_action('save_post', 'aya_save_formatting');
 
 //循环方法
 function aya_save_formatting($post_id)
@@ -331,11 +275,15 @@ function aya_save_formatting($post_id)
     $post_content = get_post_field('post_content', $post_id);
 
     //是否排版
-    if (aya_opt('site_save_post_chinese_type', 'format')) {
+    if (aya_opt('site_post_chs_compose_bool', 'postpage')) {
+
+        //过滤一些禁止的参数
+        $correct_array = aya_opt('site_post_chs_compose_type', 'postpage');
+
         //对文章内容进行格式化
-        $formatted_content = aya_chinese_type_setting(nl2br($post_content));
+        $formatted_content = aya_chs_type_setting($post_content, $correct_array);
         //对文章标题进行格式化
-        $formatted_title = aya_chinese_type_setting($post_title);
+        $formatted_title = aya_chs_type_setting($post_title, $correct_array);
     }
 
     //更新文章内容

@@ -133,8 +133,8 @@ if (file_exists(AYA_PATH . '/lib/vendor/autoload.php')) {
 
 //主题方法
 aya_require('func-public');
+aya_require('func-auto-vendor');
 //aya_require('func-cache');
-//aya_require('func-auto-vendor');
 aya_require('func-wp-scripts');
 aya_require('func-wp-emends');
 aya_require('func-wp-content');
