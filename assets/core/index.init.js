@@ -50,7 +50,6 @@
                 /*new SwupProgressPlugin(), new SwupPreloadPlugin()*/
             ],
         });
-
         //First screen event
         swup.hooks.on(
             "page:view",
@@ -59,7 +58,6 @@
             },
             { once: true }
         );
-
         //Content replace event
         swup.hooks.on("content:replace", () => {
             //window.location.reload();

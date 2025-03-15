@@ -20,7 +20,7 @@ aya_template_load('parts/breadcrumb');
         <div class="w-full mt-4 lg:w-1/4 lg:mt-0">
             <?php
             //小工具栏
-            aya_template_load('parts/sidebar');
+            aya_widget_bar();
             ?>
         </div>
     </div>

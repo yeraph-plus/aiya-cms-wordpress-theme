@@ -2,7 +2,7 @@
 
 if (!defined('ABSPATH')) exit;
 
-//wget -x -nH --cut-dirs=2 -P ./ https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js
+//wget -x -nH --cut-dirs=2 -P ./ https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.14.8/cdn.min.js
 
 //从CDN加载
 function aya_static_scripts_cdn()
@@ -213,6 +213,12 @@ function aya_inc_load_footer_scripts()
             'pack' => 'viewerjs',
             'ver' => '1.11.7',
             'file' => 'viewer.min.js',
+            'defer' => false,
+        ],
+        [
+            'pack' => 'tocbot',
+            'ver' => '4.32.2',
+            'file' => 'tocbot.min.js',
             'defer' => false,
         ],
         /*

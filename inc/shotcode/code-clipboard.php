@@ -76,7 +76,7 @@ function clip_board_box_shortcode($atts = array(), $content = '')
         $html .= '<h5 class="mb-3 text-lg font-semibold flex items-center">' . aya_feather_icon($clip_icon, 16, 'mr-2') . $title . '</h5>';
     }
     $html .= '<div x-data="copyTextBtn(\'' . $clip_box_id . '\')">';
-    $html .= '<p class="mb-2 font-semibold"><span id="' . $clip_box_id . '">' . $content . '</span></p>';
+    $html .= '<p class="mb-2 font-semibold break-all"><span id="' . $clip_box_id . '">' . $content . '</span></p>';
     $html .= '<div class="mt-5 flex flex-wrap items-center gap-2">';
     $html .= '<button class="btn btn-primary" x-ref="copyBtn">' . __('复制', 'AIYA') . '</button>' . $ext_btn;
     $html .= '<p class="text-base font-bold my-3" x-show="isCopied">' . __('已复制！', 'AIYA') . '</p>';

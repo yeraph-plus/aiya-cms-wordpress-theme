@@ -15,7 +15,7 @@ $post_disclaimer_text = aya_opt('site_single_disclaimer_text', 'postpage');
         </div>
     <?php endif; ?>
     <div class="relative flex items-center pb-6">
-        <h1 class="text-2xl font-bold">
+        <h1 class="text-2xl font-bold line-clamp-2 whitespace-normal break-words">
             <?php aya_echo($post_data->title); ?>
         </h1>
         <span class=" flex items-center ml-4 text-2xl font-normal">

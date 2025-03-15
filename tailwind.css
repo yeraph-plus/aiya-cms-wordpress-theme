@@ -389,23 +389,23 @@ hover:text-primary hover:before:!bg-primary dark:before:bg-gray-500 dark:hover:b
         @apply container;
 
         p {
-            @apply mb-4 text-base font-medium leading-relaxed tracking-normal;
+            @apply mb-4 text-base font-medium break-words leading-relaxed tracking-normal;
         }
 
         h1,
         h2,
         h3 {
-            @apply mb-4 mt-2 flex items-center text-xl font-bold tracking-normal before:mr-2 before:inline-block before:h-4 before:w-2 before:rounded before:bg-primary before:content-[''];
+            @apply mb-4 mt-2 flex items-center text-xl font-bold break-words tracking-normal before:mr-2 before:inline-block before:h-4 before:w-2 before:rounded before:bg-primary before:content-[''];
         }
 
         h4,
         h5,
         h6 {
-            @apply mb-4 mt-2 flex text-lg font-bold tracking-normal;
+            @apply mb-4 mt-2 flex text-lg font-bold break-words tracking-normal;
         }
 
         a {
-            @apply px-1 text-primary no-underline hover:underline;
+            @apply px-1 break-words text-primary no-underline hover:underline;
         }
 
         blockquote {
@@ -413,7 +413,7 @@ hover:text-primary hover:before:!bg-primary dark:before:bg-gray-500 dark:hover:b
         }
 
         blockquote p {
-            @apply m-0 text-base not-italic text-[#515365] dark:text-white-light;
+            @apply m-0 text-base break-words not-italic text-[#515365] dark:text-white-light;
         }
 
         blockquote cite {
@@ -462,7 +462,7 @@ hover:text-primary hover:before:!bg-primary dark:before:bg-gray-500 dark:hover:b
 
         pre {
             direction: ltr;
-            @apply mb-4 overflow-auto whitespace-pre-wrap rounded bg-gray-100 p-4 font-mono dark:bg-[#060818];
+            @apply mb-4 overflow-auto whitespace-pre-wrap break-words rounded bg-gray-100 p-4 font-mono dark:bg-[#060818];
         }
 
         pre code {
@@ -845,4 +845,8 @@ hover:text-primary hover:before:!bg-primary dark:before:bg-gray-500 dark:hover:b
 
 [dir="rtl"] .apexcharts-tooltip-marker {
     @apply ml-2.5 mr-0;
+}
+
+.viewer-canvas{
+    @apply z-10;
 }

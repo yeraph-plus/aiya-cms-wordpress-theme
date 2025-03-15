@@ -10,7 +10,7 @@ aya_template_load('header');
 aya_template_load('parts/breadcrumb');
 
 ?>
-<article class="content-loop w-full p-4">
+<article class="main-boxed full-width-page w-full p-4">
     <div class="flex flex-wrap">
         <div class="w-full animate__animated" :class="[$store.app.animation]">
             <!-- content grid -->

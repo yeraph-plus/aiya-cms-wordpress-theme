@@ -5,14 +5,14 @@ $post_data = new AYA_Post_Content(0, 128);
 ?>
 <div class="panel w-full py-4 px-6">
     <div class="relative flex items-center pb-6">
-        <h1 class="text-2xl font-bold">
+        <h1 class="text-2xl font-bold line-clamp-2 whitespace-normal break-words">
             <?php aya_echo($post_data->title); ?>
         </h1>
     </div>
     <div class="relative flex-2 lg:flex items-center justify-start lg:justify-between border-b border-[#e0e6ed] dark:border-[#1b2e4b] pb-4 mb-4">
         <div class="hidden lg:flex items-center justify-start text-1xl font-bold mr-3">
             <div class="w-6 h-6 rounded-full overflow-hidden inline-block ltr:mr-2 rtl:ml-2.5">
-                <img src="<?php aya_echo($post_data->author_avatar); ?>" alt="avatar" class="flex w-full h-full items-center justify-center bg-[#515365] text-[#e0e6ed]" />
+                <img src="<?php aya_echo($post_data->author['avatar']); ?>" alt="avatar" class="flex w-full h-full items-center justify-center bg-[#515365] text-[#e0e6ed]" />
             </div>
             <span class="text-[#515365] dark:text-white-dark whitespace-nowrap">
                 <?php aya_echo(__('由 ', 'AIYA') . '<a href="' . $post_data->author['url'] . '">' . $post_data->author['name'] . '</a>' . (($post_data->author['is_submit']) ? __(' 发布', 'AIYA') : __(' 投稿', 'AIYA'))); ?>

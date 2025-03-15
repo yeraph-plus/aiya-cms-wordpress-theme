@@ -31,7 +31,7 @@ if (!defined('ABSPATH')) die('Invalid request.');
  * ------------------------------------------------------------------------------
  */
 
-define('AYA_RELEASE', '2.0.0');
+//define('AYA_RELEASE', '2.0.0');
 define('AYA_PATH', get_template_directory());
 define('AYA_URI', get_template_directory_uri());
 //define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); //MINUTE_IN_SECONDS
@@ -111,11 +111,9 @@ function aya_require($name, $path = '')
     }
 }
 
-//加载主题功能包
+//索引文件
 if (file_exists(AYA_PATH . '/plugins/plugin-startup.php')) {
-    //索引文件
     require_once AYA_PATH . '/plugins/plugin-startup.php';
-    require_once AYA_PATH . '/plugins/plugin-extra-opt.php';
 }
 //拦截加载，防止WP严重报错
 if (!class_exists('AYF') || !class_exists('AYP')) {
@@ -166,6 +164,10 @@ aya_require('code-clipboard', 'shotcode');
 //aya_require('code-collapse', 'shotcode');
 //aya_require('code-aplayer', 'shotcode');
 //aya_require('code-dplayer', 'shotcode');
+//索引文件
+if (file_exists(AYA_PATH . '/plugins/plugin-extra-opt.php')) {
+    require_once AYA_PATH . '/plugins/plugin-extra-opt.php';
+}
 
 /*
  * ------------------------------------------------------------------------------

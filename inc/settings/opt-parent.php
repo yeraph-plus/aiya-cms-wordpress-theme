@@ -21,7 +21,7 @@ AYF::new_opt([
     'title' => 'AIYA-CMS',
     'page_title' => '基本设置',
     'slug' => 'basic',
-    'desc' => 'AIYA-CMS 主题，主要功能和组件设置',
+    'desc' => 'AIYA-CMS 主题，首选项设置',
     'fields' => [
         [
             'desc' => '静态资源设置（CDN）',

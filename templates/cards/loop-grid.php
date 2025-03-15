@@ -14,7 +14,7 @@ $post_thumb = aya_post_thumb($post_data->thumb_url, $post_data->content, 400, 30
         <?php aya_single_badge_starts($post_data->id); ?>
         <?php aya_single_badge_category($post_data->id); ?>
     </div>
-    <h5 class="h-[40px] line-clamp-2 text-[#3b3f5c] text-[17px] font-bold mb-4 dark:text-white-light">
+    <h5 class="h-[40px] line-clamp-2 whitespace-normal break-words text-[#3b3f5c] text-[17px] font-bold mb-4 dark:text-white-light">
         <a href="<?php aya_echo($post_data->url); ?>" title="<?php aya_echo($post_data->attr_title); ?>" class="inset-0 hover:text-primary transition-colors duration-300">
             <?php aya_echo($post_data->title); ?>
         </a>

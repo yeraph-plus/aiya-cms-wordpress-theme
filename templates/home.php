@@ -23,7 +23,7 @@ if (is_paged()) {
             <div class="w-full mt-4 lg:w-1/4 lg:mt-0 animate__animated" :class="[$store.app.animation]">
                 <?php
                 //小工具栏
-                aya_template_load('parts/sidebar');
+                aya_widget_bar();
                 ?>
             </div>
         </div>

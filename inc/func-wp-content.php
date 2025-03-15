@@ -286,6 +286,13 @@ function aya_save_formatting($post_id)
         $formatted_title = aya_chs_type_setting($post_title, $correct_array);
     }
 
+    //是否刷新文章日期
+    if (get_post_meta($post_id, 'reset_post_datetime', true)) {
+        // 重置发布日期为当前时间
+        $reset_date_time = current_time('mysql');
+    }
+
+
     //更新文章内容
     $post_array = array();
 
@@ -296,6 +303,10 @@ function aya_save_formatting($post_id)
     }
     if (!empty($formatted_title)) {
         $post_array['post_title'] = $formatted_title;
+    }
+    if (!empty($reset_date_time)) {
+        $post_array['post_date'] = $reset_date_time;
+        $post_array['post_date_gmt'] = get_gmt_from_date($reset_date_time);
     }
     //更新文章
     wp_update_post($post_array);

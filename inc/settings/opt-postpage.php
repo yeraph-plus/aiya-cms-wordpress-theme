@@ -10,15 +10,15 @@ AYF::new_box(array(
     'add_box_in' => array('post'),
     'fields' => [
         [
-            'title' => '重置发布日期为当前时间[br/]',
-            'desc' => '重置发布日期为当前时间',
+            'title' => '重置发布日期：',
+            'desc' => '重置发布文章的日期为当前时间',
             'id' => 'reset_post_datetime',
             'type' => 'switch',
             'default'  => false,
         ],
         [
-            'title' => '文章过时提示：[br/]',
-            'desc' => '文章指定天数后显示过时提示[br/]设置为[code]0[/code]时关闭',
+            'title' => '文章过时提示：',
+            'desc' => '文章指定天数后显示过时提示，设置为[code]0[/code]时关闭',
             'id' => 'days_is_outdated',
             'type' => 'text',
             'default'  => '0',
