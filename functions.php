@@ -125,8 +125,8 @@ if (!class_exists('AYF') || !class_exists('AYP')) {
     return;
 }
 //加载 Composer 依赖
-if (file_exists(AYA_PATH . '/lib/vendor/autoload.php')) {
-    require_once AYA_PATH . '/lib/vendor/autoload.php';
+if (file_exists(AYA_PATH . '/inc/lib/vendor/autoload.php')) {
+    require_once AYA_PATH . '/inc/lib/vendor/autoload.php';
 }
 
 //主题方法
@@ -158,12 +158,12 @@ aya_require('widget-search', 'widgets');
 aya_require('widget-tag-cloud', 'widgets');
 //aya_require('widget-welcome-panel', 'widgets');
 //短代码
-aya_require('code-basic', 'shotcode');
-aya_require('code-hilight', 'shotcode');
-aya_require('code-clipboard', 'shotcode');
-//aya_require('code-collapse', 'shotcode');
-//aya_require('code-aplayer', 'shotcode');
-//aya_require('code-dplayer', 'shotcode');
+aya_require('code-basic', 'shotcodes');
+aya_require('code-hilight', 'shotcodes');
+aya_require('code-clipboard', 'shotcodes');
+//aya_require('code-collapse', 'shotcodes');
+//aya_require('code-aplayer', 'shotcodes');
+//aya_require('code-dplayer', 'shotcodes');
 //索引文件
 if (file_exists(AYA_PATH . '/plugins/plugin-extra-opt.php')) {
     require_once AYA_PATH . '/plugins/plugin-extra-opt.php';
