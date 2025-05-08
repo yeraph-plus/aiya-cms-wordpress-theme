@@ -1,0 +1,1 @@
+# aiya-cms-wordpress-theme
