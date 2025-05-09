@@ -1,0 +1,40 @@
+{
+    "name": "aiya/wordpress-cms-theme",
+    "type": "wordpress-theme",
+    "description": "一种很新的旧 WordPress 主题",
+    "keywords": [
+        "WordPress",
+        "Themes"
+    ],
+    "homepage": "https://www.yeraph.com",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Yeraph",
+            "homepage": "https://github.com/yeraph-plus"
+        }
+    ],
+    "require": {
+        "php": ">=8.2"
+    },
+    "require-dev": {
+        "php-parallel-lint/php-parallel-lint": "^1.3",
+        "wptrt/wpthemereview": "*",
+        "wp-coding-standards/wpcs": "*",
+        "wp-cli/i18n-command": "*"
+    },
+    "scripts": {
+        "php:wpcs": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
+        "php:lint": "@php ./vendor/bin/parallel-lint --exclude .git --exclude vendor .",
+        "php:make-pot": "wp i18n make-pot . languages/aiya-cms-theme.pot"
+    },
+    "support": {
+        "issues": "https://github.com/yeraph-plus/aiya-cms-wordpress-theme/issues",
+        "source": "https://github.com/yeraph-plus/aiya-cms-wordpress-theme"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}

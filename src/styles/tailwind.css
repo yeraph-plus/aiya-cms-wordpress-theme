@@ -1,0 +1,17 @@
+@import "tailwindcss";
+/* DaisyUI */
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark;
+    root: "#main";
+    logs: true;
+}
+
+@source "../**/*.{html,js,ts}";
+@source "../../templates/**/*.{html,php}";
+
+/* 变量组 */
+@layer base {
+  :root {
+    --navbar-full-width: 210px;
+  }
+}
