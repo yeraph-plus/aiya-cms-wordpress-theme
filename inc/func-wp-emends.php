@@ -1,7 +1,80 @@
 <?php
 
-if (!defined('ABSPATH'))
+if (!defined('ABSPATH')) {
     exit;
+}
+
+/*
+ * ------------------------------------------------------------------------------
+ * 重写路由
+ * -------------------s-----------------------------------------------------------
+ */
+
+//初始化时增加重写路由规则
+add_action('init', 'aya_author_change_rewrite_base');
+add_action('init', 'aya_author_add_user_rewrite_rules');
+//重写author的链接
+add_filter('author_link', 'aya_author_custom_link', 10, 2);
+//使用自定义的REST-API路径
+add_filter('rest_url_prefix', 'aya_rest_api_url_prefix');
+//兼容旧路由规则
+add_action('template_redirect', 'aya_author_template_redirect');
+//add_action('template_redirect', 'aya_rest_api_template_redirect');
+
+//生成/user/{token}格式的作者链接
+function aya_author_custom_link($link, $author_id)
+{
+    return home_url('/user/' . $author_id . '/');
+}
+
+//修改作者页面路由基准为user
+function aya_author_change_rewrite_base()
+{
+    global $wp_rewrite;
+
+    $wp_rewrite->author_base = 'user';
+    $wp_rewrite->author_structure = '/' . $wp_rewrite->author_base . '/%author%';
+}
+
+//添加 /user/ 重写规则
+function aya_author_add_user_rewrite_rules()
+{
+    add_rewrite_rule(
+        '^user/(\d+)/?$',
+        'index.php?author=$matches[1]',
+        'top'
+    );
+}
+
+//使 /author/author_name 重定向到 /user/id
+function aya_author_template_redirect()
+{
+    if (is_author() && get_query_var('author_name')) {
+
+        $user = get_user_by('slug', get_query_var('author_name'));
+
+        if ($user) {
+            //重定向
+            wp_redirect(home_url('/user/' . $user->ID . '/'), 301);
+            exit;
+        }
+    }
+}
+
+//使用自定义的API路径
+function aya_rest_api_url_prefix()
+{
+    return 'api';
+}
+
+//使 /wp-json 重定向到 /api
+function aya_rest_api_template_redirect()
+{
+    if (strpos($_SERVER['REQUEST_URI'], 'wp-json') !== false) {
+        wp_redirect(site_url(str_replace('wp-json', 'api', $_SERVER['REQUEST_URI'])), 301);
+        exit;
+    }
+}
 
 /*
  * ------------------------------------------------------------------------------

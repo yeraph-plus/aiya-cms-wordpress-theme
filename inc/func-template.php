@@ -1,7 +1,43 @@
 <?php
 
-if (!defined('ABSPATH'))
+if (!defined('ABSPATH')) {
     exit;
+}
+
+/*
+ * ------------------------------------------------------------------------------
+ * - NewType -
+ * ------------------------------------------------------------------------------
+ */
+
+function aya_blog_logo($link_class = '', $logo_class = '')
+{
+    $html = '';
+
+    $html .= '<a href="' . get_home_url() . '" class="' . $link_class . '">';
+    $html .= '<img src="' . aya_opt('site_logo_image_upload', 'basic') . '"alt="' . get_bloginfo('name') . '" class="' . $logo_class . '">';
+    $html .= '<span>' . (aya_opt('site_logo_text_bool', 'basic', 1) ? get_bloginfo('name') : '') . '</span>';
+    $html .= '</a>';
+
+    aya_echo($html);
+}
+
+function aya_blog_nav_menu($menu_name = 'primary-menu', $nav_class = '')
+{
+    $menu = aya_get_menu($menu_name);
+
+    $html = '';
+
+    $html .= '<nav class="' . $nav_class . '">';
+
+    foreach ($menu as $item) {
+        $html .= '<a href="' . $item['url'] . '" class="group ' . (($item['is_active']) ? 'item-active' : 'item-link') . '">' . $item['label'] . '</a>';
+    }
+
+    $html .= '</nav>';
+
+    aya_echo($html);
+}
 
 /*
  * ------------------------------------------------------------------------------

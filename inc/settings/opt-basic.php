@@ -21,6 +21,26 @@ AYF::new_opt([
     'desc' => 'AIYA-CMS 主题，首选项设置',
     'fields' => [
         [
+            'desc' => '站点设置',
+            'type' => 'title_1',
+        ],
+        [
+            'title' => ' LOGO 图片',
+            'desc' => ' LOGO 使用的图片地址Url',
+            'id' => 'site_logo_image_upload',
+            'type' => 'upload',
+            'button_text' => '上传',
+            'default' => AYA_URI . '/assets/image/logo.png',
+        ],
+        [
+            'title' => '显示站点名称',
+            'desc' => ' LOGO 位置显示站点名称，如果使用图标作为 LOGO 时，可以切换LOGO部分为文字显示',
+            'id' => 'site_logo_text_bool',
+            'type' => 'switch',
+            'default' => true,
+        ],
+        /*
+        [
             'desc' => '静态资源设置（CDN）',
             'type' => 'title_1',
         ],
@@ -172,21 +192,6 @@ AYF::new_opt([
             'type' => 'title_1',
         ],
         [
-            'title' => ' LOGO 图片',
-            'desc' => ' LOGO 使用的图片地址Url',
-            'id' => 'site_logo_image_upload',
-            'type' => 'upload',
-            'button_text' => '上传',
-            'default' => AYA_URI . '/assets/image/logo.png',
-        ],
-        [
-            'title' => '显示站点名称',
-            'desc' => ' LOGO 位置显示站点名称，如果使用图标作为 LOGO 时，可以切换LOGO部分为文字显示',
-            'id' => 'site_logo_text_bool',
-            'type' => 'switch',
-            'default' => true,
-        ],
-        [
             'title' => '默认文章缩略图',
             'desc' => '上传文章默认缩略图',
             'id' => 'site_default_thumb_upload',
@@ -269,5 +274,6 @@ AYF::new_opt([
             'type' => 'text',
             'default' => '',
         ],
+        */
     ]
 ]);

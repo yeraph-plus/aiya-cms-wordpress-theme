@@ -29,7 +29,7 @@ if (!defined('ABSPATH')) {
 
 define('AYA_PATH', get_template_directory());
 define('AYA_URI', get_template_directory_uri());
-define('AYA_RELEASE', false);
+//define('AYA_RELEASE', true);
 //define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); // or MINUTE_IN_SECONDS
 
 /*
@@ -48,6 +48,8 @@ function aya_echo($data, $special = false)
     }
 
     echo ($data);
+
+    return;
 }
 
 //打印输出
@@ -58,20 +60,28 @@ function aya_print($data, $return = false)
     print_r($data, $return);
 
     print_r('</pre>');
+
+    return;
 }
 
 //JSON输出
-function aya_json_echo($data)
+function aya_json_print($data)
 {
-    //$json = json_encode($data);
-    $json = json_encode($data, JSON_PRETTY_PRINT);
+    //保持换行
+    $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
     if ($json === false) {
-        $error_msg = json_last_error_msg();
-        echo "JSON encoding error: " . $error_msg;
-    } else {
-        echo $json;
+        $error = [
+            'code' => json_last_error(),
+            'message' => json_last_error_msg()
+        ];
+
+        return json_encode($error);
     }
+
+    print_r('<pre>' . $json . '</pre>');
+    
+    return;
 }
 
 //获取主题版本
@@ -102,7 +112,6 @@ function aya_require($name = '', $path = '', $special = false)
     $req_file = AYA_PATH . '/' . $path . '/' . $name . '.php';
 
     if (is_file($req_file)) {
-
         require_once $req_file;
     }
 }
@@ -125,25 +134,24 @@ if (!class_exists('AYF') || !class_exists('AYP')) {
     return;
 }
 
-//加载 Composer 依赖
-aya_require('autoload', 'lib/vendor', 1);
 //主题方法
-aya_require('func-vite-helpers');
-aya_require('func-vendor');
+aya_require('func-auto-loader');
 aya_require('func-public');
+aya_require('func-vite-helpers');
 aya_require('func-wp-emends');
 //aya_require('func-wp-scripts');
+aya_require('func-api-router');
+aya_require('func-user');
 //aya_require('func-cache');
-//aya_require('func-notify');
-aya_require('func-wp-content');
-aya_require('func-template-loader');
+aya_require('func-notify');
 aya_require('func-template');
 //接口方法
-aya_require('func-api-router');
+//aya_require('func-api-router');
 //设置页面
-aya_require('opt-parent', 'settings');
-aya_require('opt-homepage', 'settings');
-aya_require('opt-postpage', 'settings');
+aya_require('opt-basic', 'settings');
+aya_require('opt-notify', 'settings');
+//aya_require('opt-homepage', 'settings');
+//aya_require('opt-postpage', 'settings');
 //aya_require('opt-ads', 'settings');
 aya_require('opt-extra-plugin', 'plugins', 1);
 //小工具
@@ -305,3 +313,47 @@ AYP::action('Widget_Cache', true);
 AYP::action('Record_Visitors', true);
 //文章点赞量计数器插件
 AYP::action('Record_ClickLikes', true);
+
+
+/*
+ * ------------------------------------------------------------------------------
+ * 首次启动
+ * ------------------------------------------------------------------------------
+ */
+
+add_action('after_switch_theme', 'aya_theme_after_init');
+
+function aya_theme_after_init()
+{
+    //刷新站点重写规则
+    flush_rewrite_rules();
+
+    //跳转主题设置页面
+    /*
+    global $pagenow;
+
+    if ('themes.php' == $pagenow && isset($_GET['activated'])) {
+        // options-general.php 改成你的主题设置页面网址
+        wp_redirect(admin_url('?page=aya-options-basic'));
+        exit;
+    }
+    */
+}
+
+/*
+ * ------------------------------------------------------------------------------
+ * 翻译模板
+ * ------------------------------------------------------------------------------
+ */
+
+wp_localize_script('aiyacms-frontend', 'AIYA_I18N', [
+    'logout' => __('退出登录', 'AIYA'),
+    'confirm' => __('确定要删除吗？', 'AIYA'),
+]);
+/*
+import { createI18n } from 'vue-i18n';
+const i18n = createI18n({
+  locale: AIYA_I18N.locale,
+  messages: { [AIYA_I18N.locale]: AIYA_I18N.messages }
+});
+*/

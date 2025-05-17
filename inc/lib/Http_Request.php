@@ -1,6 +1,8 @@
 <?php
 
-if (!defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 /**
  * 标准 Curl 请求类
@@ -62,7 +64,7 @@ if (!class_exists('AYA_HTTP_Request')) {
         }
         public function set_proxy($proxy = '')
         {
-            self::$options[CURLOPT_PROXY] = rtrim($proxy,'/');
+            self::$options[CURLOPT_PROXY] = rtrim($proxy, '/');
         }
         public function set_useragent($useragent = '')
         {

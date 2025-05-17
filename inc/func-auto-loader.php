@@ -1,7 +1,17 @@
 <?php
 
-if (!defined('ABSPATH'))
+if (!defined('ABSPATH')) {
     exit;
+}
+
+//加载 Composer 依赖
+aya_require('autoload', 'lib/vendor');
+
+//加载其他工具类
+if (!class_exists('AYA_WP_Menu_ObjectInArray')) {
+    require_once AYA_PATH . '/inc/lib/WP_Menu.php';
+}
+
 
 /*
  * ------------------------------------------------------------------------------
@@ -9,13 +19,13 @@ if (!defined('ABSPATH'))
  * ------------------------------------------------------------------------------
  */
 
+if (!class_exists('XDE_code')) {
+    require_once AYA_PATH . '/inc/lib/XDeode.php';
+}
+
 //加密方法
 function aya_token_encode($token, $length = 15)
 {
-    if (!class_exists('XDE_code')) {
-        include_once get_template_directory() . '/inc/class/XDeode.php';
-    }
-
     $obj = new XDE_code($length);
 
     return $obj->encode($token);
@@ -24,10 +34,6 @@ function aya_token_encode($token, $length = 15)
 //解密方法
 function aya_token_decode($token, $length = 15)
 {
-    if (!class_exists('XDE_code')) {
-        include_once get_template_directory() . '/inc/class/XDeode.php';
-    }
-
     $obj = new XDE_code($length);
 
     return $obj->decode($token);
@@ -58,10 +64,11 @@ function get_bfi_thumb($url, $width = 0, $height = 0, $crop_y = 0, $crop_x = 0, 
 {
     $url = esc_url($url);
     //判断是否是本地图片
-    if (strpos($url, get_site_url()) === false)
+    if (strpos($url, get_site_url()) === false) {
         return $url;
+    }
 
-    include_once get_template_directory() . '/inc/class/BFI_Thumb.php';
+    include_once AYA_PATH . '/inc/class/BFI_Thumb.php';
 
     //图片质量设置
     $thumb_quality = 96;
@@ -103,7 +110,7 @@ function aya_curl_get_hitokoto()
     //检查是否被403
     if ($concent === false) {
         //获取本地json文件
-        $data = get_template_directory() . '/assets/json/hitokoto.json';
+        $data = AYA_PATH . '/assets/json/hitokoto.json';
         //检查文件存在
         if (!file_exists($data)) {
             return 'ERROR: Cannot read under <code>hitokoto.json</code>';
@@ -200,7 +207,7 @@ function aya_curl_baidu_translator($name)
 
 /*
  * ------------------------------------------------------------------------------
- * 加载实例方法
+ * 加载Composer的实例方法
  * ------------------------------------------------------------------------------
  */
 
@@ -209,7 +216,7 @@ use Jxlwqq\ChineseTypesetting\ChineseTypesetting;
 use Overtrue\Pinyin\Pinyin;
 use Overtrue\PHPOpenCC\OpenCC;
 //use Overtrue\PHPOpenCC\Strategy;
-//use Overtrue\ChineseCalendar\Calendar;
+use Overtrue\ChineseCalendar\Calendar;
 
 //应用中文格式化实例
 function aya_chs_type_setting($content, $correct_array)

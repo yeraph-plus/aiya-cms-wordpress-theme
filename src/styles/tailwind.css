@@ -1,17 +1,76 @@
-@import "tailwindcss";
-/* DaisyUI */
-@plugin "daisyui" {
-    themes: light --default, dark --prefersdark;
-    root: "#main";
-    logs: true;
-}
+@import "tailwindcss" source(none);
 
-@source "../**/*.{html,js,ts}";
+@source "../**/*.{html,js,ts,vue,jsx}";
 @source "../../templates/**/*.{html,php}";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
+
+@theme {
+    --font-display: "Satoshi", "sans-serif";
+}
 
 /* 变量组 */
 @layer base {
-  :root {
-    --navbar-full-width: 210px;
+    :root {
+        --navbar-full-width: 210px;
+        /*outline: 1px solid red;*/
+    }
+}
+
+[v-cloak] {
+    display: none;
+}
+
+@layer components {
+    .header-logo {
+        @apply inline-flex items-center gap-2 text-lg font-bold tracking-wide text-gray-900 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300;
+
+        img {
+            @apply inline-block size-5 text-blue-600 transition group-hover:scale-110 dark:text-blue-400;
+        }
+    }
+    .header-menu {
+        @apply flex;
+        .item-link {
+            @apply flex items-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm font-medium text-gray-800 hover:bg-blue-50 hover:text-blue-600 active:border-blue-100 dark:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-white dark:active:border-gray-600;
+        }
+        .item-active {
+            @apply flex items-center gap-2 rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-600 dark:border-transparent dark:bg-gray-700 dark:text-white;
+        }
+    }
+    .header-menu-in-mobile {
+        @apply flex flex-col gap-2 py-2;
+
+        .item-link {
+            @apply flex items-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm font-medium text-gray-800 hover:bg-blue-50 hover:text-blue-600 active:border-blue-100 dark:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-white dark:active:border-gray-600;
+        }
+        .item-active {
+            @apply flex items-center gap-2 rounded-lg border border-blue-50 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-600 dark:border-transparent dark:bg-gray-700/75 dark:text-white;
+        }
+    }
+    .header-menu-btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm leading-5 font-semibold text-gray-800 hover:border-gray-300 hover:text-gray-900 hover:shadow-xs focus:ring-3 focus:ring-gray-300/25 active:border-gray-200 active:shadow-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-gray-200 dark:focus:ring-gray-600/40 dark:active:border-gray-700;
+    }
+}
+
+@layer container{
+    .container {
+        @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+    }
+}
+
+@layer utilities {
+  .animate-shake {
+    animation: shake-x 0.6s cubic-bezier(.36,.07,.19,.97) both;
+  }
+  @keyframes shake-x {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(4px); }
+    30%, 50%, 70% { transform: translateX(-8px); }
+    40%, 60% { transform: translateX(8px); }
+    100% { transform: translateX(0); }
   }
 }

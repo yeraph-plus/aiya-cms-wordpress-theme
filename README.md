@@ -1,14 +1,12 @@
-![截图](https://github.com/yeraph-plus/aiya-cms-wordpress-theme/blob/main/screenshot.png)
-
 ## AIYA-CMS Theme for WordPress
+
+> **🎉** AIYA-CMS 船新V2.1绝赞每日build中，重一直构，打一直磨。
 
 AIYA-CMS 主题，响应式多功能 WordPress 主题，使用 Vite + Vue + Tailwindcss 构建。
 
 支持白天与暗黑模式、无刷新加载、支持多种页面布局。
 
 内置WP优化插件，查询修改、后台安全、加速、SEO一套搞定。
-
-> **🎉** AIYA-CMS 船新V2.1绝赞每日build中，重一直构，打一直磨。
 
 ### 安装主题
 
@@ -34,8 +32,6 @@ PS：不建议直接克隆或直接下载仓库的方式使用主题（虽然这
 
 > **💊** to be continue...
 
----
-
 ### 建议/BUG发现/使用问题
 
 提建议建议提 [issues](https://github.com/yeraph-plus/aiya-cms-wordpress-theme/issues) ,或者在我的博客留言，或者任何你能找的到我的地方。
@@ -43,8 +39,6 @@ PS：不建议直接克隆或直接下载仓库的方式使用主题（虽然这
 BUG反馈时请附上报错内容、截图、或尽你所能的详细描述出现的问题，这有助于我更快的定位问题。
 
 提PR也行，但是不建议PR，此主题的实现方式比较非主流，不了解代码细节的情况下容易导致灾难性重构。
-
----
 
 ### 模板文件修改指南
 

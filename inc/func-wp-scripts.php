@@ -1,7 +1,8 @@
 <?php
 
-if (!defined('ABSPATH'))
+if (!defined('ABSPATH')) {
     exit;
+}
 
 //wget -x -nH --cut-dirs=2 -P ./ https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.14.8/cdn.min.js
 
@@ -53,8 +54,8 @@ function aya_int_style($pack, $ver, $file)
 //排队后台静态文件
 //add_action('admin_enqueue_scripts', 'aya_theme_register_admin_scripts');
 //add_action('login_enqueue_scripts', 'aya_theme_register_admin_scripts');
-add_action('wp_head', 'aya_inc_load_head_scripts');
-add_action('wp_footer', 'aya_inc_load_footer_scripts');
+//add_action('wp_head', 'aya_inc_load_head_scripts');
+//add_action('wp_footer', 'aya_inc_load_footer_scripts');
 
 //静态文件加载（后台）
 function aya_theme_register_admin_scripts()
