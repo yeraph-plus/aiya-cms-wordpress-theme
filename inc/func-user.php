@@ -10,11 +10,8 @@ if (!defined('ABSPATH')) {
  * ------------------------------------------------------------------------------
  */
 
-//主题启动时初始化数据表结构
-add_action('after_switch_theme', 'aya_theme_after_init_sponsor_db');
-
-//主题自定义数据表结构
-function aya_theme_after_init_sponsor_db()
+//自定义的赞助订单数据表结构
+function aya_install_sponsor_order_db()
 {
     global $wpdb;
     //表名
@@ -339,11 +336,11 @@ function aya_user_toggle_level($user_id = 0)
 }
 
 //生成用户菜单数据
-function aya_user_get_login_data()
+function aya_user_get_login_data($logged_in = false)
 {
     $user_menu = [];
 
-    if (is_user_logged_in()) {
+    if ($logged_in) {
         //获取用户对象
         $current_user = wp_get_current_user();
         $user_id = $current_user->ID;
@@ -392,23 +389,20 @@ function aya_user_get_login_data()
         $user_menu['enable_register'] = get_option('users_can_register') ? true : false;
         //获取找回密码链接
         $user_menu['lost_password_url'] = wp_lostpassword_url();
-        //允许匿名注册
-        $user_menu['allow_anonymous_register'] = true;//aya_opt('allow_anonymous_register');
+        //TODO 社交登录
+        $user_menu['enable_sso_register'] = false; //aya_opt('allow_sso_register_switch');
         $user_menu['rest_nonce'] = wp_create_nonce('wp_rest');
     }
 
     return $user_menu;
 }
 
-//组件位置
+//登录和用户菜单组件
 function aya_vue_user_nemu_component()
 {
     if (is_user_logged_in()) {
-        return aya_vue_load('user-menu', aya_user_get_login_data());
+        return aya_vue_load('user-menu', aya_user_get_login_data(true));
     } else {
-        return aya_vue_load('login-pop', aya_user_get_login_data());
+        return aya_vue_load('login-action', aya_user_get_login_data(false));
     }
 }
-
-
-

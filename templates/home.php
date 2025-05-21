@@ -11,6 +11,7 @@
  * bloginfo('pingback_url');
  */
 //aya_json_print(aya_user_get_login_data());
+return;
 ?>
 <!-- Vue App Router -->
 <!-- Page Content -->

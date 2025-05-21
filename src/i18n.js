@@ -1,5 +1,7 @@
 const messages = {
     en: {
+        //ThemeSwitcher.vue
+        theme_switch: "Switch Color Mode",
         //NotifyList.vue
         empty_note: "No notifications",
         //UserMenu.vue
@@ -11,7 +13,7 @@ const messages = {
         log_out: "Log Out",
         logged_out_success: "Account has been Logged Out.",
         logged_out_error: "Failed to Log Out.",
-        //LoginPop.vue
+        //LoginAction.vue
         sign_panel_btn: "Sign In / Sign Up",
         sign_in: "Sign In",
         sign_up: "Sign Up",
@@ -26,8 +28,10 @@ const messages = {
         auth_username: "Username",
         auth_username_placeholder: "Enter your username",
         forgot_password: "Forgot Password?",
-        already_have_account: "Don't have an account yet?",
-        return_sign_in: "Return to Sign In",
+        need_account: "Don't have an account yet?",
+        already_have_account: "Return to Sign In",
+        anonymous_register: "Anonymous Register",
+        or_register_in: "Or Register In",
         login_failed: "Login failed",
         login_input_empty: "Email or password cannot be empty",
         password_not_match: "Passwords do not match",
@@ -36,6 +40,8 @@ const messages = {
         network_error: "Network Error",
     },
     zh: {
+        //ThemeSwitcher.vue
+        theme_switch: "切换主题",
         //NotifyList.vue
         empty_note: "没有通知",
         //UserMenu.vue
@@ -62,8 +68,10 @@ const messages = {
         auth_username: "用户名",
         auth_username_placeholder: "请输入用户名",
         forgot_password: "找回密码",
-        already_have_account: "还未注册？",
-        return_sign_in: "返回登录",
+        need_account: "还未注册？",
+        already_have_account: "返回",
+        anonymous_register: "一键注册",
+        or_register_in: "或直接注册",
         login_failed: "登录失败",
         login_input_empty: "邮箱或密码不能为空",
         password_not_match: "两次输入的密码不一致",

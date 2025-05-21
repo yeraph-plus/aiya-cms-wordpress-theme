@@ -3,7 +3,7 @@
 //https://cn.vite.dev/guide/backend-integration
 //https://cn.vuejs.org/guide/scaling-up/tooling#note-on-in-browser-template-compilation
 
-//支持旧版浏览器，可能需要 @vitejs/plugin-legacy
+//如需支持旧版浏览器，可能需要 @vitejs/plugin-legacy
 
 import { defineConfig } from 'vite'
 import { resolve } from 'node:path'
@@ -75,6 +75,11 @@ export default defineConfig({
         rollupOptions: {
             input: resolve(__dirname, 'src/main.js'),
             output: {
+                //定义输出文件名
+                entryFileNames: '[name].[hash].js',
+                chunkFileNames: 'assets/[name].[hash].js',
+                assetFileNames: 'assets/[name].[hash].[ext]',
+
                 manualChunks(id) {
                     // all third-party code will be in vendor chunk
                     if (id.includes('node_modules')) {
@@ -92,7 +97,12 @@ export default defineConfig({
     //加载模板编译器
     resolve: {
         alias: {
+            '@': resolve(__dirname, 'src'),
             vue: 'vue/dist/vue.esm-bundler.js'
         }
+    },
+    //预构建依赖
+    optimizeDeps: {
+        include: ['vue', 'vue-i18n']
     }
 })

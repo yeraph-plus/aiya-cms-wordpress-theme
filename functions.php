@@ -29,7 +29,7 @@ if (!defined('ABSPATH')) {
 
 define('AYA_PATH', get_template_directory());
 define('AYA_URI', get_template_directory_uri());
-//define('AYA_RELEASE', true);
+define('AYA_RELEASE', true);
 //define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); // or MINUTE_IN_SECONDS
 
 /*
@@ -38,81 +38,39 @@ define('AYA_URI', get_template_directory_uri());
  * ------------------------------------------------------------------------------
  */
 
-//转为输出
-function aya_echo($data, $special = false)
-{
-    //htmlspecialchars
-    if ($special) {
-        $data = strip_tags($data);
-        $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
-    }
-
-    echo ($data);
-
-    return;
-}
-
-//打印输出
-function aya_print($data, $return = false)
-{
-    print_r('<pre>');
-
-    print_r($data, $return);
-
-    print_r('</pre>');
-
-    return;
-}
-
-//JSON输出
-function aya_json_print($data)
-{
-    //保持换行
-    $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-
-    if ($json === false) {
-        $error = [
-            'code' => json_last_error(),
-            'message' => json_last_error_msg()
-        ];
-
-        return json_encode($error);
-    }
-
-    print_r('<pre>' . $json . '</pre>');
-    
-    return;
-}
-
-//获取主题版本
-function aya_theme_version()
-{
-    return wp_get_theme()->get('Version');
-}
-
-//判断开发模式
-function aya_is_dev_mode()
-{
-    return !(defined('AYA_RELEASE') && AYA_RELEASE === true);
-}
-
-//获取设置项
-function aya_opt($opt_name, $opt_slug, $opt_bool = false)
-{
-    return ($opt_bool) ? AYF::get_checked($opt_name, $opt_slug) : AYF::get_opt($opt_name, $opt_slug);
-}
-
-//require方法
-function aya_require($name = '', $path = '', $special = false)
+//require
+function aya_require($name, $path = '', $special = false)
 {
     if (!$special) {
-        $path = ($path == '') ? 'inc' : 'inc/' . $path;
+        $path = $path ? 'inc/' . trim($path, '/\\') : 'inc';
     }
 
     $req_file = AYA_PATH . '/' . $path . '/' . $name . '.php';
 
     if (is_file($req_file)) {
         require_once $req_file;
+    } else {
+        //打印一个报错
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            print("[WARNING] Require file not found: $req_file");
+        }
+    }
+}
+
+//require class
+function aya_require_class($class_name, $path)
+{
+    $path = 'inc/lib/' . trim($path, '/\\');
+
+    $req_file = AYA_PATH . '/' . $path . '.php';
+
+    if (is_file($req_file) && !class_exists($class_name)) {
+        require_once $req_file;
+    } else {
+        //打印一个报错
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            print("[WARNING] Require file not found: $req_file");
+        }
     }
 }
 
@@ -135,18 +93,18 @@ if (!class_exists('AYF') || !class_exists('AYP')) {
 }
 
 //主题方法
-aya_require('func-auto-loader');
 aya_require('func-public');
-aya_require('func-vite-helpers');
 aya_require('func-wp-emends');
 //aya_require('func-wp-scripts');
-aya_require('func-api-router');
+aya_require('func-auto-loader');
+//模板方法
+aya_require('func-vite-helpers');
 aya_require('func-user');
-//aya_require('func-cache');
 aya_require('func-notify');
+//aya_require('func-cache');
 aya_require('func-template');
 //接口方法
-//aya_require('func-api-router');
+aya_require('func-api-router');
 //设置页面
 aya_require('opt-basic', 'settings');
 aya_require('opt-notify', 'settings');
@@ -160,7 +118,7 @@ aya_require('widget-add-menu', 'widgets');
 aya_require('widget-comments', 'widgets');
 aya_require('widget-post-comments', 'widgets');
 aya_require('widget-post-views', 'widgets');
-aya_require('widget-post-custom', 'widgets');
+//aya_require('widget-post-custom', 'widgets');
 aya_require('widget-post-newest', 'widgets');
 aya_require('widget-post-random', 'widgets');
 aya_require('widget-author', 'widgets');
@@ -180,6 +138,7 @@ aya_require('code-basic', 'shotcodes');
  * 载入主题
  * 
  * Tips：以下是一些简化方法，内部定义了部分设置、路由和HTML结构，有需要时请自行修改
+ * 
  * ------------------------------------------------------------------------------
  */
 
@@ -292,14 +251,16 @@ AYP::action('Register_Menu', array(
     //'菜单ID' => '菜单名',
     'primary-menu' => __('主要菜单', 'AIYA'),
     'secondary-menu' => __('次要菜单', 'AIYA'),
+    'end-menu' => __('页脚菜单', 'AIYA'),
     'widget-menu' => __('小工具菜单', 'AIYA'),
 ));
 //注册小工具栏位
 AYP::action('Register_Sidebar', array(
     //'边栏ID' => '边栏名',
-    'archive-sitebar' => __('首页/归档页面', 'AIYA'),
-    'single-sitebar' => __('正文页面', 'AIYA'),
-    'main-sitebar' => __('工具板', 'AIYA'),
+    'index-widget' => __('首页', 'AIYA'),
+    'archive-widget' => __('归档页面', 'AIYA'),
+    'single-widget' => __('正文页面', 'AIYA'),
+    'author-widget'=> __('用户页面', 'AIYA'),
 ));
 //注册自定义模板页面
 AYP::action('Template_New_Page', array(
@@ -313,47 +274,3 @@ AYP::action('Widget_Cache', true);
 AYP::action('Record_Visitors', true);
 //文章点赞量计数器插件
 AYP::action('Record_ClickLikes', true);
-
-
-/*
- * ------------------------------------------------------------------------------
- * 首次启动
- * ------------------------------------------------------------------------------
- */
-
-add_action('after_switch_theme', 'aya_theme_after_init');
-
-function aya_theme_after_init()
-{
-    //刷新站点重写规则
-    flush_rewrite_rules();
-
-    //跳转主题设置页面
-    /*
-    global $pagenow;
-
-    if ('themes.php' == $pagenow && isset($_GET['activated'])) {
-        // options-general.php 改成你的主题设置页面网址
-        wp_redirect(admin_url('?page=aya-options-basic'));
-        exit;
-    }
-    */
-}
-
-/*
- * ------------------------------------------------------------------------------
- * 翻译模板
- * ------------------------------------------------------------------------------
- */
-
-wp_localize_script('aiyacms-frontend', 'AIYA_I18N', [
-    'logout' => __('退出登录', 'AIYA'),
-    'confirm' => __('确定要删除吗？', 'AIYA'),
-]);
-/*
-import { createI18n } from 'vue-i18n';
-const i18n = createI18n({
-  locale: AIYA_I18N.locale,
-  messages: { [AIYA_I18N.locale]: AIYA_I18N.messages }
-});
-*/

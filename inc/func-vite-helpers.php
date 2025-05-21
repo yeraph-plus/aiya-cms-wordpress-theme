@@ -96,7 +96,7 @@ function aya_vite_main_css_urls()
     $urls = [];
     $manifest = aya_vite_get_manifest();
 
-    if (!empty($manifest[VITE_ENTRY_POINT])) {
+    if (!empty($manifest[VITE_ENTRY_POINT]['css'])) {
         foreach ($manifest[VITE_ENTRY_POINT]['css'] as $css_file) {
             $urls[] = AYA_URI . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $css_file;
         }
@@ -112,7 +112,9 @@ function aya_vite_imports_script_urls()
 
     if (!empty($manifest[VITE_ENTRY_POINT]['imports'])) {
         foreach ($manifest[VITE_ENTRY_POINT]['imports'] as $import) {
-            $urls[] = AYA_URI . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $manifest[$import]['file'];
+            if (isset($manifest[$import]['file'])) {
+                $urls[] = AYA_URI . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $manifest[$import]['file'];
+            }
         }
     }
 
@@ -126,6 +128,7 @@ function aya_vite_imports_script_urls()
  */
 
 add_action('wp_head', 'aya_dist_scripts_loader');
+add_action('wp_footer', 'aya_debug_vite_assets');
 
 //模板静态资源载入函数
 function aya_dist_scripts_loader()
@@ -160,6 +163,46 @@ function aya_dist_scripts_loader()
     echo $res;
 
     return;
+}
+
+//在页面末尾添加log
+function aya_debug_vite_assets()
+{
+    echo '<div style="background:#f5f5f5; border:1px solid #ddd; padding:15px; margin:15px; font-family:monospace;">';
+    echo '<h3>Vite 资源调试信息</h3>';
+
+    // 检查 manifest 文件
+    $manifest_path = AYA_PATH . ltrim(VITE_PUBLIC_PATH, '.') . '/.vite/manifest.json';
+    echo "<p>Manifest 路径: {$manifest_path}</p>";
+    echo "<p>Manifest 存在: " . (file_exists($manifest_path) ? '是' : '否') . "</p>";
+
+    if (file_exists($manifest_path)) {
+        $manifest = json_decode(file_get_contents($manifest_path), true);
+        echo "<p>Manifest 入口点: " . (isset($manifest[VITE_ENTRY_POINT]) ? '找到' : '未找到') . "</p>";
+
+        // 检查资源文件
+        if (!empty($manifest[VITE_ENTRY_POINT]['imports'])) {
+            echo "<h4>导入的模块:</h4><ul>";
+            foreach ($manifest[VITE_ENTRY_POINT]['imports'] as $import) {
+                $import_path = AYA_PATH . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $manifest[$import]['file'];
+                echo "<li>{$import_path} - " . (file_exists($import_path) ? '存在' : '<strong style="color:red">不存在</strong>') . "</li>";
+            }
+            echo "</ul>";
+        }
+
+        // 检查CSS文件
+        if (!empty($manifest[VITE_ENTRY_POINT]['css'])) {
+            echo "<h4>CSS 文件:</h4><ul>";
+            foreach ($manifest[VITE_ENTRY_POINT]['css'] as $css) {
+                $css_path = AYA_PATH . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $css;
+                echo "<li>{$css_path} - " . (file_exists($css_path) ? '存在' : '<strong style="color:red">不存在</strong>') . "</li>";
+            }
+            echo "</ul>";
+        }
+    }
+
+    echo '</div>';
+
 }
 
 //严格编码数组到JSON
@@ -233,388 +276,80 @@ function aya_vue_load($slug = null, $attrs = [])
 
 /*
  * ------------------------------------------------------------------------------
- * 自定义一些模板方法
- * 
+ * PJAX 请求模式
  * ------------------------------------------------------------------------------
  */
 
-//页面头部插入点
-function aya_home_open()
+add_action('init', 'aya_handle_pjax_request');
+
+//判断PJAX请求头
+function aya_is_pjax_request()
 {
-    do_action('aya_home_open');
+    return !empty($_SERVER['HTTP_X_PJAX']) ||
+        (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+            $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest');
 }
 
-//页面尾部插入点
-function aya_home_end()
+//请求处理逻辑
+function aya_handle_pjax_request()
 {
-    do_action('aya_home_end');
-}
-
-//获取模板路径
-function aya_template_path()
-{
-    return get_template_directory() . '/templates/';
-}
-
-//加载组件模板
-function aya_template_load($name = null)
-{
-    $name = (string) $name;
-
-    $templates = array("templates/{$name}.php");
-
-    locate_template($templates, true, false);
-}
-
-//加载WP方式的组件模板
-function aya_template_part($slug = null, $name = null)
-{
-    $slug = (string) $slug;
-    $name = (string) $name;
-
-    //动作钩子
-    do_action('get_template_part', $slug, $name);
-
-    $templates = array();
-
-    if ($name !== '') {
-        $templates[] = "templates/{$slug}-{$name}.php";
-    }
-
-    $templates[] = "templates/{$slug}.php";
-
-    locate_template($templates, true, false);
-}
-
-/*
- * ------------------------------------------------------------------------------
- * 一些合并的WP路由判断方法
- * ------------------------------------------------------------------------------
- */
-
-//页面检查器
-function aya_is_page($where_is = NULL)
-{
-    //判断参数
-    if (empty($where_is))
-        return false;
-
-    switch ($where_is) {
-        case 'home':
-            return is_home() || is_front_page(); //首页
-        case 'paged':
-            return is_paged();
-        case 'singular':
-            return is_singular();
-        case 'page':
-            return is_page(); //页面
-        case 'single':
-            return is_single(); //文章
-        case 'attachment':
-            return is_attachment();
-        case 'archive':
-            return is_archive(); //归档
-        case 'category':
-            return is_category();
-        case 'tag':
-            return is_tag();
-        case 'author':
-            return is_author();
-        case 'date':
-            return is_date();
-        case 'year':
-            return is_year();
-        case 'month':
-            return is_month();
-        case 'day':
-            return is_day();
-        case 'time':
-            return is_time();
-        case 'tax':
-            return is_tax();
-        case 'search':
-            return is_search();
-        case '404':
-            return is_404();
-        case 'admin':
-            return is_admin();
-        case 'feed':
-            return is_feed();
-        case 'all':
-            return aya_is_where(); //打包查询
-        default:
-            return false; //其他
-    }
-}
-
-function aya_is_post_type_archive($post_type)
-{
-    return (is_post_type_archive($post_type) && is_main_query());
-}
-
-//页面判断
-function aya_is_where()
-{
-    static $here_is;
-
-    if (isset($here_is)) {
-        return $here_is;
-    }
-
-    //返回页面类型
-    if (is_home() || is_front_page()) {
-        $here_is = 'home';
-    } else if (is_singular()) {
-        $here_is = 'singular';
-        //关联判断
-        if (is_single()) {
-            $here_is = 'single';
-        } else if (is_page()) {
-            $here_is = 'page';
-        } else if (is_attachment()) {
-            $here_is = 'attachment';
-        }
-    } else if (is_archive()) {
-        $here_is = 'archive';
-        //关联判断
-        if (is_post_type_archive()) {
-            $here_is = 'post_type_archive';
-        } else if (is_category()) {
-            $here_is = 'category';
-        } else if (is_tag()) {
-            $here_is = 'tag';
-        } else if (is_author()) {
-            $here_is = 'author';
-        } else if (is_date()) {
-            $here_is = 'date';
-        } else if (is_tax()) {
-            $here_is = 'tax';
-        }
-    } else if (is_search()) {
-        $here_is = 'search';
-    } else if (is_404()) {
-        $here_is = '404';
-    } else {
-        $here_is = 'none';
-    }
-
-    return $here_is;
-}
-
-//替代文章类型查询
-function aya_post_type()
-{
-    static $type_by_post;
-
-    if (isset($type_by_post)) {
-        return $type_by_post;
-    }
-
-    $type_by_post = get_post_type();
-
-    //如果是文章类型，则返回文章格式
-    if ('post' == $type_by_post) {
-        $type_by_post = get_post_format();
-    }
-
-    //返回自定义文章的类型
-    return $type_by_post;
-}
-
-//检查是否为移动端
-function aya_is_mobile()
-{
-    //Tips：wp_is_mobile() 的替代方法，
-    $user_agent = $_SERVER['HTTP_USER_AGENT'];
-
-    if (empty($user_agent)) {
-        return false;
-    }
-
-    $preg_mobile = "/(Mobile|webOS|Android|iPhone|iPad|Kindle|BlackBerry)/i";
-
-    return preg_match($preg_mobile, $user_agent);
-}
-
-/*
- * ------------------------------------------------------------------------------
- * 文章内容条件循环模板
- * ------------------------------------------------------------------------------
- */
-
-//首页入口模板路由
-function aya_core_route_entry()
-{
-    $route_page = aya_is_where();
-
-
-    aya_template_load('header');
-
-    //模板路由
-    switch ($route_page) {
-        case 'home':
-            //首页循环
-            aya_template_load('home');
-            break;
-        case 'search':
-            //搜索结果
-            aya_template_load('search');
-            break;
-        case 'archive':
-        case 'post_type_archive':
-        case 'category':
-        case 'tag':
-        case 'date':
-        case 'tax':
-            //归档
-            aya_template_load('archive');
-            break;
-        case 'author':
-            //用户归档
-            aya_template_load('author');
-            break;
-        case 'single':
-        case 'page':
-        case 'singular':
-        case 'attachment':
-            //独立页面
-            aya_template_load('single');
-            break;
-        case '404':
-        case 'none':
-        default:
-            //error
-            aya_template_load('404');
-            break;
-    }
-
-    aya_template_load('footer');
-}
-
-//替代LOOP循环
-function aya_while_have_post()
-{
-    //如果有文章
-    if (have_posts()) {
-        $loop_mode = aya_opt('site_loop_mode_type', 'basic');
-
-        switch ($loop_mode) {
-            case 'list':
-                $loop_mode = 'loop-list';
-                break;
-            case 'waterfall':
-                $loop_mode = 'loop-waterfall';
-                break;
-            case 'blog':
-                $loop_mode = 'loop-blog';
-                break;
-            case 'grid':
-            default:
-                $loop_mode = 'loop-grid';
-                break;
-        }
-
-        //执行主循环
-        while (have_posts()) {
-            the_post();
-            aya_template_load('cards/' . $loop_mode);
-        }
-    }
-    //如果没有文章
-    else {
-        aya_template_load('cards/loop-none');
-    }
-}
-
-//替代正文循环
-function aya_while_have_content()
-{
-    //如果有文章
-    if (have_posts()) {
-        $post_type = aya_post_type();
-
-        switch ($post_type) {
-            case '':
-                //返回默认格式
-                $content_mode = 'content-default';
-                break;
-            case 'image':
-            case 'video':
-            case 'audio':
-                //返回媒体格式
-                $content_mode = 'content-media';
-                break;
-            case 'gallery':
-                //返回图集格式
-                $content_mode = 'content-gallery';
-                break;
-            case 'page':
-                //返回页面格式
-                $content_mode = 'content-page';
-                break;
-            case 'attachment':
-                //返回附件格式
-                $content_mode = 'content-attachment';
-                break;
-            default:
-                //返回自定义文章的类型
-                $content_mode = $post_type;
-                break;
-        }
-
-        //执行主循环
-        while (have_posts()) {
-            the_post();
-            aya_template_load('contents/' . $content_mode);
-        }
-    }
-    //如果没有文章
-    else {
-        aya_template_load('contents/content-none');
-    }
-}
-
-//小工具栏
-function aya_widget_bar()
-{
-    //检查页面类型
-    switch (aya_is_where()) {
-        case 'home':
-        case 'search':
-        case 'archive':
-        case 'post_type_archive':
-        case 'category':
-        case 'tag':
-        case 'author':
-        case 'date':
-        case 'tax':
-        case '404':
-        case 'none':
-            $sidebar_type = 'archive-sitebar';
-            break;
-        case 'single':
-        case 'page':
-        case 'singular':
-        case 'attachment':
-            $sidebar_type = 'single-sitebar';
-            break;
-    }
-    //小工具栏位
-    dynamic_sidebar($sidebar_type);
-}
-
-//获取评论模板
-function aya_comments_template()
-{
-    //检查评论开启
-    if (is_attachment() || is_404() || post_password_required())
+    if (!aya_is_pjax_request()) {
         return;
-
-    if (aya_opt('site_comment_disable_bool', 'basic', true) === false)
-        return;
-
-    if (comments_open() || get_comments_number()) {
-        //输出（定义这个位置必须包含"/"）
-        comments_template('/templates/comments.php', false);
     }
+
+    //使用缓冲逻辑异步捕获DOM截取需要返回的部分
+    add_action('template_redirect', 'aya_start_pjax_buffer', 1);
+    add_action('wp_footer', 'aya_end_pjax_buffer', 999);
+}
+
+
+//开始缓冲触发点
+function aya_start_pjax_buffer()
+{
+    ob_start();
+}
+
+//结束输出缓冲并返回所需内容
+function aya_end_pjax_buffer()
+{
+    $content = ob_get_clean();
+
+    // 解析HTML，提取所需内容
+    $dom = new DOMDocument();
+
+    // 禁用错误报告，避免由于HTML5标签引起的警告
+    libxml_use_internal_errors(true);
+    $dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+    libxml_clear_errors();
+
+    $xpath = new DOMXPath($dom);
+
+    // 提取标题
+    $titleNodes = $xpath->query('//title');
+    $title = '';
+    if ($titleNodes->length > 0) {
+        $title = $titleNodes->item(0)->nodeValue;
+    }
+
+    // 提取主内容区域 - 调整为与前端JS中的选择器匹配
+    $contentNodes = $xpath->query('//div[contains(@class, "pjax-container")]');
+    $content = '';
+    if ($contentNodes->length > 0) {
+        $contentNode = $contentNodes->item(0);
+        $content = $dom->saveHTML($contentNode);
+    }
+
+    // 如果找不到内容，回退到完整页面
+    if (empty($content)) {
+        echo $content;
+        exit;
+    }
+
+    // 创建新文档结构
+    $newDom = new DOMDocument();
+    $newDom->loadHTML('<!DOCTYPE html><html><head><title>' . htmlspecialchars($title) . '</title></head><body>' . $content . '</body></html>');
+
+    // 输出最终HTML
+    echo $newDom->saveHTML();
+    exit;
 }

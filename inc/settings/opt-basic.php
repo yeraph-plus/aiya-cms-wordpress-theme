@@ -39,6 +39,31 @@ AYF::new_opt([
             'type' => 'switch',
             'default' => true,
         ],
+        [
+            'desc' => '站点信息设置',
+            'type' => 'title_1',
+        ],
+        [
+            'title' => 'ICP备案',
+            'desc' => '根据《互联网信息服务管理办法》要求，设置网站 ICP 备案信息',
+            'id' => 'site_icp_beian_text',
+            'type' => 'text',
+            'default' => '', // 没ICP备11451419号-19（雾）
+        ],
+        [
+            'title' => '公安网备',
+            'desc' => '根据《计算机信息网络国际联网安全保护管理办法》要求，设置网站公网安备信息',
+            'id' => 'site_mps_beian_text',
+            'type' => 'text',
+            'default' => '',
+        ],
+        [
+            'title' => '站长邮箱',
+            'desc' => '在页脚显示站点管理员联系邮箱',
+            'id' => 'site_master_email_text',
+            'type' => 'text',
+            'default' => '',
+        ],
         /*
         [
             'desc' => '静态资源设置（CDN）',

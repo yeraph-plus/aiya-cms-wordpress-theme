@@ -11,30 +11,30 @@ if (!defined('ABSPATH')) {
  */
 
 //消息列表钩子
-add_filter('aya_notify_list', 'aya_notify_collect_hook', 10, 1);
+add_filter('aya_notify_add', 'aya_notify_collect_hook', 10, 1);
+add_filter('aya_notify_scope_filter', 'aya_notify_check_scope_wrapper');
 //调度自定义的消息列表
-add_action('aya_home_open', 'aya_notify_custom_notification_join_action');
+add_action('aya_home_open', 'aya_notify_join_custom_notification');
 
 //收集所有原始消息
-function aya_notify_collect_hook($notes)
+function aya_notify_collect_hook($note)
 {
     //存储变量
     static $stored_notes = array();
-    static $note_count = 0;
+
+    if (empty($note)) {
+        return $stored_notes;
+    }
 
     //合并到数组中
-    $stored_notes[$note_count] = $notes;
-
-    $note_count++;
+    $stored_notes[] = $note;
 
     return $stored_notes;
 }
 
-//内置的消息权限过滤器逻辑
-function aya_notify_check_scope($scope)
+//消息权限过滤器内逻辑
+function aya_notify_check_scope($scope, $is_logged)
 {
-    static $is_logged = is_user_logged_in();
-
     /**
      * 防脑死用权限检查鱼骨图
      * 
@@ -75,6 +75,23 @@ function aya_notify_check_scope($scope)
     return false;
 }
 
+//消息权限过滤器
+function aya_notify_check_scope_wrapper($notes)
+{
+    $is_logged = is_user_logged_in();
+
+    //遍历
+    foreach ($notes as $key => $note) {
+
+        if (aya_notify_check_scope($note['scope'], $is_logged)) {
+            //踢出列表
+            unset($notes[$key]);
+        }
+    }
+
+    return $notes;
+}
+
 //新增消息
 function aya_notify_create($once_note = array())
 {
@@ -101,10 +118,11 @@ function aya_notify_create($once_note = array())
         $note['scope'] = 'guest';
     }
 
-    //时间匹配为时间戳
+    //传入值不是整数
     if (!is_numeric($note['time'])) {
-        //TODO 尝试计算为时间戳
-        $note['time'] = time();
+        //尝试计算为时间戳
+        $timestamp = strtotime($note['time']);
+        $note['time'] = $timestamp ?: time();
     }
 
     $note['title'] = wp_kses_post($note['title']);
@@ -112,11 +130,11 @@ function aya_notify_create($once_note = array())
     $note['time'] = date_i18n(get_option('date_format'), $note['time']);
 
     //添加到消息列表
-    return apply_filters('aya_notify_list', $note);
+    return apply_filters('aya_notify_add', $note);
 }
 
 //内部创建消息动作触发
-function aya_notify_custom_notification_join_action()
+function aya_notify_join_custom_notification()
 {
     //加载设置表单中自定义消息列表
     $custom_notes = aya_opt('site_custom_notify_list', 'notify');
@@ -132,30 +150,103 @@ function aya_notify_custom_notification_join_action()
 
     //TODO 系统消息
 
-    return;
+    return true;
 }
 
 //收集消息
 function aya_notify_list()
 {
     //获取消息列表
-    $notes = apply_filters('aya_notify_list', []);
-    $notes = array_filter($notes);
+    $notes = apply_filters('aya_notify_add', []);
     //应用通知过滤器
-    $notes = array_filter($notes, function ($note) {
-        return aya_notify_check_scope($note['scope']);
-    });
+    $notes = apply_filters('aya_notify_check_scope_wrapper', $notes);
     //返回数据
     return $notes;
 }
 
-//组件位置
+//组件加载
 function aya_vue_notify_component()
 {
-    return aya_vue_load(
-        //组件名
-        'notify-list',
-        //传递数据
-        aya_notify_list()
-    );
+    return aya_vue_load('notify-list', aya_notify_list());
 }
+
+/*
+ * ------------------------------------------------------------------------------
+ * WP内置消息加载
+ * ------------------------------------------------------------------------------
+ */
+
+//TODO 检测到新版本、插件、主题更新
+// 检测到核心更新时触发通知
+add_action('wp_version_check', function () {
+    $update_data = get_site_transient('update_core');
+    if (!empty($update_data->updates)) {
+        aya_notify_create([
+            'level' => 'warning',
+            'scope' => 'administrator',
+            'title' => '系统更新',
+            'content' => '检测到新的 WordPress 版本可用',
+            'time' => time()
+        ]);
+    }
+});
+
+//TODO 新评论待审、文章审核状态变更、用户提及
+/*
+add_action('comment_post', function ($comment_ID, $comment_approved) {
+    if ($comment_approved === 0) {
+        $comment = get_comment($comment_ID);
+        aya_notify_create([
+            'level' => 'info',
+            'scope' => 'author', // 或根据文章作者动态设置
+            'title' => '新评论待审',
+            'content' => sprintf('文章《%s》有新评论等待审核', get_the_title($comment->comment_post_ID)),
+            'time' => time()
+        ]);
+    }
+}, 10, 2);
+*/
+
+// 新用户注册通知 (管理员)、密码重置请求（用户）
+/*
+add_action('user_register', function ($user_id) {
+    $user = get_userdata($user_id);
+    aya_notify_create([
+        'level' => 'success',
+        'scope' => 'administrator',
+        'title' => '新用户加入',
+        'content' => sprintf('新用户 %s 已注册', $user->display_name),
+        'time' => time()
+    ]);
+});
+*/
+
+// WooCommerce 新订单通知
+/*
+add_action('woocommerce_new_order', function ($order_id) {
+    aya_notify_create([
+        'level' => 'info',
+        'scope' => 'administrator',
+        'title' => '新订单',
+        'content' => sprintf('新订单 #%s 已创建', $order_id),
+        'time' => time()
+    ]);
+});
+*/
+
+// 登录失败告警
+/*
+add_action('wp_login_failed', function ($username) {
+    aya_notify_create([
+        'level' => 'error',
+        'scope' => 'administrator',
+        'title' => '登录异常',
+        'content' => sprintf('用户 %s 登录失败', $username),
+        'time' => time()
+    ]);
+});
+*/
+
+//IDEA 在用户META中设置允许的通知类型
+//IDEA 邮件通知联动
+//IDEA 在用户META中标记已读状态时间

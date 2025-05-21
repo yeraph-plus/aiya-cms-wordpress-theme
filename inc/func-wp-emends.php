@@ -6,6 +6,34 @@ if (!defined('ABSPATH')) {
 
 /*
  * ------------------------------------------------------------------------------
+ * 首次启动
+ * ------------------------------------------------------------------------------
+ */
+
+add_action('after_switch_theme', 'aya_theme_after_init');
+
+function aya_theme_after_init()
+{
+    //刷新站点重写规则
+    flush_rewrite_rules();
+
+    //跳转主题设置页面
+    /*
+    global $pagenow;
+
+    if ('themes.php' == $pagenow && isset($_GET['activated'])) {
+        // options-general.php 改成你的主题设置页面网址
+        wp_redirect(admin_url('?page=aya-options-basic'));
+        exit;
+    }
+    */
+
+    //安装数据表
+    aya_install_sponsor_order_db();
+}
+
+/*
+ * ------------------------------------------------------------------------------
  * 重写路由
  * -------------------s-----------------------------------------------------------
  */
@@ -19,7 +47,7 @@ add_filter('author_link', 'aya_author_custom_link', 10, 2);
 add_filter('rest_url_prefix', 'aya_rest_api_url_prefix');
 //兼容旧路由规则
 add_action('template_redirect', 'aya_author_template_redirect');
-//add_action('template_redirect', 'aya_rest_api_template_redirect');
+add_action('template_redirect', 'aya_rest_api_template_redirect');
 
 //生成/user/{token}格式的作者链接
 function aya_author_custom_link($link, $author_id)

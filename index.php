@@ -13,6 +13,14 @@
  * If you want create a new template file for each one
  * you can create a new file in the theme "templates" folder.
  *
+ * NOTE: All wp-head info tag:
+ * 
+ * bloginfo('html_type');
+ * bloginfo('charset');
+ * bloginfo('description');
+ * bloginfo('version');
+ * bloginfo('pingback_url');
+ * 
  */
 
 ?>
@@ -33,13 +41,8 @@
 </head>
 
 <body <?php //body_class(); ?>>
-    <div id="main-container">
-        <?php wp_body_open(); ?>
-        <?php
-        //单一入口
-        aya_core_route_entry();
-        ?>
-    </div>
+    <?php wp_body_open(); ?>
+    <?php aya_core_route_entry(); //单一入口 ?>
     <?php wp_footer(); ?>
 </body>
 
