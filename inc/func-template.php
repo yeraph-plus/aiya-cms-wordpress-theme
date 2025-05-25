@@ -6,59 +6,6 @@ if (!defined('ABSPATH')) {
 
 /*
  * ------------------------------------------------------------------------------
- * 模板组件
- * ------------------------------------------------------------------------------
- */
-
-//导航栏LOGO
-function aya_blog_logo($link_class = '', $logo_class = '')
-{
-    $logo_url = aya_opt('site_logo_image_upload', 'basic');
-    $site_name = get_bloginfo('name');
-    $is_home = is_front_page() || is_home();
-
-    $html = '';
-    $html .= '<div class="logo" itemscope itemtype="https://schema.org/Organization">';
-    $html .= '<a href="' . get_home_url() . '" class="flex items-center overflow-hidden whitespace-nowrap ' . $link_class . '" itemprop="url">';
-    $html .= '<img src="' . esc_url($logo_url) . '" alt="' . esc_attr($site_name) . '" class="' . $logo_class . '" itemprop="logo">';
-
-    if (aya_opt('site_logo_text_bool', 'basic', 1)) {
-        $text_tag = $is_home ? 'h1' : 'span';
-        $text_class = $logo_url ? 'ml-2' : '';
-        $html .= '<' . $text_tag . ' class="' . $text_class . '" itemprop="name">' . esc_html($site_name) . '</' . $text_tag . '>';
-    }
-
-    $html .= '</a>';
-    $html .= '</div>';
-
-    return aya_echo($html);
-}
-
-function aya_blog_breadcrumb()
-{
-    $items = aya_get_breadcrumb();
-
-    $html = '<nav class="breadcrumb" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">';
-    foreach ($items as $i => $item) {
-        $html .= '<span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
-        if ($item['url'] && $i < count($items) - 1) {
-            $html .= '<a href="' . esc_url($item['url']) . '" itemprop="item"><span itemprop="name">' . esc_html($item['label']) . '</span></a>';
-        } else {
-            $html .= '<span itemprop="name">' . esc_html($item['label']) . '</span>';
-        }
-        $html .= '<meta itemprop="position" content="' . ($i + 1) . '" />';
-        $html .= '</span>';
-        if ($i < count($items) - 1) {
-            $html .= ' &gt; ';
-        }
-    }
-    $html .= '</nav>';
-
-    return aya_echo($html);
-}
-
-/*
- * ------------------------------------------------------------------------------
  * 自定义一些模板方法
  * ------------------------------------------------------------------------------
  */
@@ -121,60 +68,60 @@ function aya_template_part($slug = null, $name = null)
 //首页入口模板路由
 function aya_core_route_entry()
 {
-    $route_page = aya_is_where();
+    //页头
+    aya_template_load('part/header');
 
-    //aya_template_load('header');
+    //面包屑
+    aya_template_load('part/breadcrumb');
+
+    $route_page = aya_is_where();
 
     //模板路由
     switch ($route_page) {
+        //首页循环
         case 'home':
-            //首页循环
+        case 'home_by_paged':
             aya_template_load('index');
             break;
+        //搜索结果
         case 'search':
-            //搜索结果
             aya_template_load('search');
             break;
+        //归档
         case 'archive':
         case 'post_type_archive':
         case 'category':
         case 'tag':
         case 'date':
         case 'tax':
-            //归档
             aya_template_load('archive');
             break;
+        //用户归档
         case 'author':
-            //用户归档
             aya_template_load('author');
             break;
+        //独立页面
         case 'single':
         case 'page':
         case 'singular':
         case 'attachment':
-            //独立页面
-            aya_template_load('single');
+            aya_template_load('content');
             break;
+        //处理路由错误
         case '404':
         case 'none':
         default:
-            //error
             aya_template_load('404');
             break;
     }
 
-    //aya_template_load('footer');
+    //页脚
+    aya_template_load('part/footer');
 }
 
 //替代文章类型查询
 function aya_post_type()
 {
-    static $type_by_post;
-
-    if (isset($type_by_post)) {
-        return $type_by_post;
-    }
-
     $type_by_post = get_post_type();
 
     //如果是文章类型，则返回文章格式
@@ -187,38 +134,75 @@ function aya_post_type()
 }
 
 //替代LOOP循环
-function aya_while_have_post()
+function aya_while_the_post()
 {
-    //如果有文章
-    if (have_posts()) {
-        $loop_mode = aya_opt('site_loop_mode_type', 'basic');
+    if (!have_posts()) {
+        //没有文章
+        aya_template_load('loops/none');
 
-        switch ($loop_mode) {
-            case 'list':
-                $loop_mode = 'loop-list';
+        return;
+    }
+
+    //全局设置
+    $loop_layout = aya_opt('site_loop_layout_type', 'basic');
+    $loop_grid = aya_opt('site_loop_column_type', 'basic');
+    $page_turner = aya_opt('site_loop_paged_type', 'basic');
+
+    //允许过滤器修改布局模式
+    $loop_layout = apply_filters('aya_loop_layout', $loop_layout);
+
+    //指定默认值
+    if (!in_array($loop_layout, ['waterfall', 'grid', 'list'])) {
+        $loop_layout = 'grid';
+    }
+
+    do_action('aya_before_loop', $loop_layout);
+
+    //指定布局样式
+    if ($loop_layout === 'list') {
+        //列表样式
+        $grid_class = 'flex flex-col space-y-4';
+    } else if ($loop_layout === 'waterfall') {
+        //瀑布流样式
+        $grid_class = 'relative masonry-grid w-full" data-columns="' . $loop_grid;
+    } else {
+        //网格样式
+        $grid_class = 'gap-4 grid ';
+        switch ($loop_grid) {
+            case '2':
+                $grid_class .= 'grid-cols-1 sm:grid-cols-2';
                 break;
-            case 'waterfall':
-                $loop_mode = 'loop-waterfall';
+            case '3':
+                $grid_class .= 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
                 break;
-            case 'blog':
-                $loop_mode = 'loop-blog';
-                break;
-            case 'grid':
+            case '4':
             default:
-                $loop_mode = 'loop-grid';
+                $grid_class .= 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
+                break;
+            case '5':
+                $grid_class .= 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5';
                 break;
         }
+    }
 
-        //执行主循环
-        while (have_posts()) {
-            the_post();
-            aya_template_load('cards/' . $loop_mode);
-        }
+    //before container
+    aya_echo('<div id="main-loop" class="' . $grid_class . '">');
+    //瀑布流模式列宽参考容器
+    if ($loop_layout === 'waterfall') {
+        aya_echo('<div class="masonry-sizer"></div>');
     }
-    //如果没有文章
-    else {
-        aya_template_load('cards/loop-none');
+    //执行主循环
+    while (have_posts()) {
+        the_post();
+        aya_template_load('loops/' . $loop_layout);
     }
+
+    //after container
+    aya_echo('</div>');
+
+    do_action('aya_after_loop', $loop_layout);
+    //加载分页
+    aya_template_load('part/pagination-' . $page_turner);
 }
 
 //替代正文循环
@@ -322,11 +306,86 @@ function aya_comments_template()
 
 /*
  * ------------------------------------------------------------------------------
+ * 预定义的数据处理器
+ * ------------------------------------------------------------------------------
+ */
+
+//获取菜单
+function aya_get_menu($menu_name)
+{
+    //返回对象
+    return AYA_WP_Menu_Object::get_menu($menu_name);
+}
+
+function aya_get_menu_json($menu_name)
+{
+    $menu_object = AYA_WP_Menu_Object::get_menu($menu_name);
+
+    //返回JSON
+    return json_encode($menu_object, JSON_UNESCAPED_UNICODE);
+}
+
+//获取面包屑导航
+function aya_get_breadcrumb()
+{
+    return AYA_WP_Breadcrumb_Object::get_breadcrumb();
+}
+
+//获取简单分页列表
+function aya_get_simple_pagination()
+{
+    return AYA_WP_Paged_Object::get_pagination([
+        'mid_size' => 0,
+    ], 'simple');
+}
+
+//获取分页列表
+function aya_get_pagination()
+{
+    $paged = AYA_WP_Paged_Object::get_pagination([
+        'mid_size' => 3,
+        'prev_text' => __('上一页', 'AIYA'),
+        'next_text' => __('下一页', 'AIYA'),
+    ]);
+
+    if (!empty($paged) || $paged['total'] != 1) {
+        return $paged;
+    }
+    return;
+}
+
+
+/*
+ * ------------------------------------------------------------------------------
  * 模板组件
  * ------------------------------------------------------------------------------
  */
 
-//feather-icons模板格式
+//导航栏LOGO
+function aya_blog_logo($link_class = '', $logo_class = '')
+{
+    $logo_url = aya_opt('site_logo_image_upload', 'basic');
+    $site_name = get_bloginfo('name');
+    $is_home = is_front_page() || is_home();
+
+    $html = '';
+    $html .= '<div class="logo" itemscope itemtype="https://schema.org/Organization">';
+    $html .= '<a href="' . get_home_url() . '" class="flex items-center overflow-hidden whitespace-nowrap ' . $link_class . '" itemprop="url">';
+    $html .= '<img src="' . esc_url($logo_url) . '" alt="' . esc_attr($site_name) . '" class="' . $logo_class . '" itemprop="logo">';
+
+    if (aya_opt('site_logo_text_bool', 'basic', 1)) {
+        $text_tag = $is_home ? 'h1' : 'span';
+        $text_class = $logo_url ? 'ml-2' : '';
+        $html .= '<' . $text_tag . ' class="' . $text_class . '" itemprop="name">' . esc_html($site_name) . '</' . $text_tag . '>';
+    }
+
+    $html .= '</a>';
+    $html .= '</div>';
+
+    return aya_echo($html);
+}
+
+//feather-icons标签格式
 function aya_feather_icon($icon, $size = 24, $class = '', $ext = '')
 {
     if (empty($icon)) {
@@ -339,68 +398,111 @@ function aya_feather_icon($icon, $size = 24, $class = '', $ext = '')
     return $html;
 }
 
+//BBCode语法转换方法
+function aya_preg_desc($desc)
+{
+    if (empty($desc)) {
+        return '';
+    }
+
+    $desc = htmlspecialchars($desc, ENT_QUOTES, 'UTF-8');
+
+    $bbcode_search = [
+        '/\[br\/]/',
+        '/\[(b|strong)\](.*?)\[\/(b|strong)\]/is',
+        '/\[(i|em)\](.*?)\[\/(i|em)\]/is',
+        '/\[u\](.*?)\[\/u\]/is',
+        '/\[(s|del)\](.*?)\[\/(s|del)\]/is',
+        '/\[code\](.*?)\[\/code\]/is',
+        '/\[pre\](.*?)\[\/pre\]/is',
+        '/\[url=([^\]"\'<>]+)\](.*?)\[\/url\]/is',
+    ];
+
+    $bbcode_replace = [
+        '<br />',
+        '<strong class="font-bold">$2</strong>',
+        '<em class="italic">$2</em>',
+        '<ins class="underline decoration-solid">$1</ins>',
+        '<del class="line-through">$1</del>',
+        '<code class="bg-base-200 text-base-content rounded px-1 py-0.5 text-sm font-mono">$1</code>',
+        '<pre class="bg-base-200 text-base-content rounded p-4 my-2 overflow-x-auto text-sm font-mono">$1</pre>',
+        '<a href="$1" class="link link-primary hover:link-hover" target="_blank" rel="noopener noreferrer">$2</a>',
+    ];
+
+    $desc = preg_replace($bbcode_search, $bbcode_replace, $desc);
+
+    return $desc;
+}
+
+//文章缩略图处理
+function aya_post_thumb($have_thumb_url = false, $post_content = '', $size_w = 400, $size_h = 300)
+{
+    //特色图片取到 false 时从正文遍历
+    if ($have_thumb_url === false) {
+        $the_thumb_url = aya_match_post_first_image($post_content, false);
+    } else {
+        $the_thumb_url = $have_thumb_url;
+    }
+
+    //使用主题默认
+    if ($the_thumb_url === false) {
+        $the_thumb_url = aya_opt('site_default_thumb_upload', 'basic');
+    }
+
+    //检测主题图像处理依赖是否被加载
+    if (function_exists('aya_image_trans_post_thumb')) {
+        return aya_image_trans_post_thumb($the_thumb_url, $size_w, $size_h);
+    }
+    //使用BFI处理缩略图
+    else {
+        return get_bfi_thumb($the_thumb_url, $size_w, $size_h);
+    }
+}
+
+//文章状态徽章处理
+function aya_post_status_badge($status_array = [])
+{
+    $html = '';
+
+    //匹配徽章色彩样式
+    foreach ($status_array as $status_item => $status_name) {
+
+        switch ($status_item) {
+            case 'sticky':
+                $badge_class = "badge-primary";
+                break;
+            case 'newest':
+                $badge_class = "badge-secondary";
+                break;
+            case 'password':
+            case 'private':
+                $badge_class = "badge-neutral";
+                break;
+            case 'pending':
+            case 'future':
+            case 'draft':
+            case 'auto-draft':
+                $badge_class = "badge-info";
+                break;
+            case 'inherit':
+            case 'trash':
+                $badge_class = "badge-error";
+                break;
+            default:
+                $badge_class = "badge-accent";
+        }
+
+        $html .= '<span class="badge badge-sm ' . $badge_class . '">' . $status_name . '</span>';
+    }
+
+    return aya_echo($html);
+}
+
 /*
  * ------------------------------------------------------------------------------
- * 分页
+ * 正文组件
  * ------------------------------------------------------------------------------
  */
-
-//分页链接模板方法
-function aya_pagination_item_link($paged_array, $get_data = '')
-{
-    $html_template = '<a href="%1$s" class="item %2$s">%3$s</a>';
-    //取出指定数据
-    if ($get_data != '') {
-        //返回包含样式的标签
-        if ($get_data == 'home') {
-            $value = $paged_array['page_home'];
-
-            $link_add_class = ($value['event_none']) ? '!hidden' : 'mr-2';
-            $link_name = aya_feather_icon('home', '16', 'mr-1') . '首页';
-        } else if ($get_data == 'prev') {
-            $value = $paged_array['page_prev'];
-
-            $link_add_class = ($value['event_none']) ? 'events-none' : ''; //使链接失效
-            $link_name = aya_feather_icon('chevron-left', '16', 'mr-1') . '上一页';
-        } else if ($get_data == 'next') {
-            $value = $paged_array['page_next'];
-
-            $link_add_class = ($value['event_none']) ? 'events-none' : ''; //使链接失效
-            $link_name = '下一页' . aya_feather_icon('chevron-right', '16', 'mr-1');
-        } else {
-            return '';
-        }
-
-        $link_url = ($value['event_none']) ? '#' : $value['link'];
-
-        $item_html = sprintf($html_template, $link_url, $link_add_class, $link_name);
-    }
-    //遍历生成
-    else {
-        //踢出循环
-        $paged_array = array_slice($paged_array, 1);
-
-        $item_html = '';
-        foreach ($paged_array as $item => $value) {
-            $item_class = '';
-            if ($value['event_none']) {
-                $item_class = 'events-none';
-            }
-            if ($value['is_active']) {
-                $item_class = 'active';
-            }
-            $item_html .= sprintf($html_template, $value['link'], $item_class, $value['text']);
-        }
-    }
-
-    return aya_echo($item_html);
-}
-
-//Ajax分页链接模板
-function aya_pagination_next_page()
-{
-    $page_link = get_next_posts_page_link();
-}
 
 //评论分页链接的模板方法
 function aya_comment_pagination_item_link($label_type = 'next')
@@ -430,16 +532,10 @@ function aya_comment_pagination_item_link($label_type = 'next')
 
     $html = sprintf($html_template, esc_url(get_comments_pagenum_link($get_page)), '', $label);
 
-    return aya_echo($html);
+    return aya_echo($html) . paginate_links();
 }
 
-/*
- * ------------------------------------------------------------------------------
- * 正文组件
- * ------------------------------------------------------------------------------
- */
-
-//分块标题
+//区块标题模板
 function aya_section_tittle($title, $icon = 'navigation')
 {
     if (empty($title)) {
@@ -470,52 +566,6 @@ function aya_widget_card($title, $content)
     return aya_echo($html);
 }
 
-//文章徽章标记
-function aya_single_badge_starts($post_id = 0)
-{
-    $badge = '';
-
-    //检查置顶
-    if (is_sticky($post_id)) {
-        $badge .= '<span class="title-badge bg-[#2196f3]">';
-        $badge .= aya_feather_icon('paperclip', '16', 'mr-1', '') . __('置顶', 'AIYA');
-        $badge .= '</span>';
-    }
-    //检查密码保护
-    if (post_password_required($post_id)) {
-        $badge .= '<span class="title-badge bg-[#caa70a]">';
-        $badge .= aya_feather_icon('lock', '16', 'mr-1', '') . __('密码保护', 'AIYA');
-        $badge .= '</span>';
-    }
-    //检查私密文章
-    if (get_post_status($post_id) == 'private') {
-        $badge .= '<span class="title-badge bg-[#d63384]">';
-        $badge .= aya_feather_icon('eye-off', '16', 'mr-1', '') . __('私密', 'AIYA');
-        $badge .= '</span>';
-    }
-    //检查最新文章
-    $post_date = get_the_date('U', $post_id);
-    if (date('U') - $post_date < 86400) {
-        $badge .= '<span class="title-badge bg-[#e7515a]">';
-        $badge .= aya_feather_icon('clock', '16', 'mr-1', '') . __('最新', 'AIYA');
-        $badge .= '</span>';
-    }
-
-    return aya_echo($badge);
-}
-
-//文章分类徽记标记
-function aya_single_badge_category($post_id = 0)
-{
-    $badge_before = '<span class="title-badge bg-primary">';
-    $badge_after = '</span>';
-
-    $the_cat_list = get_the_term_list($post_id, 'category', $badge_before, $badge_after . $badge_before, $badge_after);
-
-    if (!is_wp_error($the_cat_list)) {
-        return aya_echo($the_cat_list);
-    }
-}
 
 //文章末尾标签
 function aya_single_badge_tags($post_id = 0)
@@ -548,4 +598,25 @@ function aya_single_status_tags($post_id = 0)
     }
 
     return aya_echo($html);
+}
+
+/*
+ * ------------------------------------------------------------------------------
+ * 轮播组件数据处理
+ * ------------------------------------------------------------------------------
+ */
+
+function aya_carousel_component()
+{
+    return;
+
+    if (aya_is_where() !== 'home') {
+        return;
+    }
+    if (aya_opt('site_carousel_load_bool', 'land')) {
+        $carousel_layout = aya_opt('site_carousel_layout_type', 'land');
+        $carousel_list = aya_opt('site_carousel_post_list', 'land');
+
+        aya_print($carousel_list);
+    }
 }

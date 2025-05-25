@@ -39,30 +39,25 @@ const hasNewNotify = computed(() => notifyList.value.length > 0);
 
 <template>
     <div class="dropdown dropdown-end">
-        <!-- 通知按钮 -->
-        <div
+        <button
             tabindex="0"
-            role="button"
-            class="btn btn-ghost hidden lg:flex">
-            <!-- 减小内边距和按钮大小 -->
+            class="btn btn-square btn-ghost md:h-auto md:w-auto md:aspect-auto md:min-h-[2.5rem] md:px-4">
             <component
                 :is="hasNewNotify ? BellAlertIcon : BellIcon"
                 class="size-5"
                 :class="hasNewNotify ? 'animate-shake' : ''"
                 aria-hidden="true" />
-            <span class="hidden sm:inline-flex items-center">
+            <span class="hidden md:inline-flex items-center">
                 <ChevronDownIcon
                     class="size-5 opacity-40"
                     aria-hidden="true" />
             </span>
-        </div>
-
-        <!-- 下拉内容 -->
+        </button>
+        <!-- Dropdown -->
         <div
             tabindex="0"
-            class="dropdown-content z-[1] menu p-0 shadow bg-base-100 rounded-box w-72 max-h-96 overflow-auto">
-            <div class="bg-base-100 rounded-box">
-                <!-- 通知列表 -->
+            class="dropdown-content z-[1] p-0 mt-4 shadow-md overflow-auto">
+            <div class="max-h-96 w-72 bg-base-100 rounded-box">
                 <template v-if="notifyList.length">
                     <div class="divide-y divide-base-200">
                         <div
@@ -92,7 +87,7 @@ const hasNewNotify = computed(() => notifyList.value.length > 0);
                         </div>
                     </div>
                 </template>
-                <!-- 空状态 -->
+                <!-- NULL -->
                 <div
                     v-else
                     class="p-4 text-center text-base-content opacity-50">

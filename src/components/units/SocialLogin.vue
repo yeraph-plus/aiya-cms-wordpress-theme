@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 //Toast
-import { toast } from "../tools/ToastPlugin";
+import { toast } from "../../scripts/toast-plugin";
 //i18n
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();

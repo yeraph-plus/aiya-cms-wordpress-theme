@@ -17,7 +17,11 @@ export default defineConfig({
     plugins: [
         vue(),
         tailwindcss(),
-        liveReload(__dirname + '/**/*.php')
+        liveReload([
+            __dirname + '/**/*.php',
+            __dirname + '/src/**/*.vue',
+            __dirname + '/src/**/*.js'
+        ])
     ],
     //基本
     root: '',
@@ -76,7 +80,7 @@ export default defineConfig({
             input: resolve(__dirname, 'src/main.js'),
             output: {
                 //定义输出文件名
-                entryFileNames: '[name].[hash].js',
+                entryFileNames: 'assets/[name].[hash].js',
                 chunkFileNames: 'assets/[name].[hash].js',
                 assetFileNames: 'assets/[name].[hash].[ext]',
 
@@ -97,12 +101,8 @@ export default defineConfig({
     //加载模板编译器
     resolve: {
         alias: {
-            '@': resolve(__dirname, 'src'),
+            //'@': resolve(__dirname, 'src'),
             vue: 'vue/dist/vue.esm-bundler.js'
         }
-    },
-    //预构建依赖
-    optimizeDeps: {
-        include: ['vue', 'vue-i18n']
     }
 })

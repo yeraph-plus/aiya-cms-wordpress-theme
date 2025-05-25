@@ -4,6 +4,8 @@ const messages = {
         theme_switch: "Switch Color Mode",
         //NotifyList.vue
         empty_note: "No notifications",
+        //SearchForm.vue
+        search_placeholder: "Search...",
         //UserMenu.vue
         administrator: "Administrator",
         author: "Author",
@@ -44,6 +46,8 @@ const messages = {
         theme_switch: "切换主题",
         //NotifyList.vue
         empty_note: "没有通知",
+        //SearchForm.vue
+        search_placeholder: "搜索...",
         //UserMenu.vue
         administrator: "管理员",
         author: "作者",

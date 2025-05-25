@@ -41,6 +41,22 @@ const props = defineProps({
             },
         },
     },
+    top_menu: {
+        type: Object,
+        required: true,
+        default: {
+            1010: {
+                label: "TOP MENU",
+                url: "http:\/\/#",
+                is_active: true,
+            },
+            1020: {
+                label: "TOP MENU 2",
+                url: "http:\/\/#",
+                is_active: true,
+            },
+        },
+    },
 });
 
 //将对象循环为数组

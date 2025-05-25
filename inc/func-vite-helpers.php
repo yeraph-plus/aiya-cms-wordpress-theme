@@ -168,41 +168,91 @@ function aya_dist_scripts_loader()
 //在页面末尾添加log
 function aya_debug_vite_assets()
 {
-    echo '<div style="background:#f5f5f5; border:1px solid #ddd; padding:15px; margin:15px; font-family:monospace;">';
-    echo '<h3>Vite 资源调试信息</h3>';
+    if (aya_is_dev_mode()) {
+        // 创建数据数组
+        $debug_data = array(
+            'vite_server' => array(
+                'status' => aya_vite_reference() ? 'connected' : 'disconnected',
+                'host' => VITE_HOST
+            ),
+            'config' => array(
+                'entry_point' => VITE_ENTRY_POINT,
+                'public_path' => VITE_PUBLIC_PATH
+            )
+        );
 
-    // 检查 manifest 文件
-    $manifest_path = AYA_PATH . ltrim(VITE_PUBLIC_PATH, '.') . '/.vite/manifest.json';
-    echo "<p>Manifest 路径: {$manifest_path}</p>";
-    echo "<p>Manifest 存在: " . (file_exists($manifest_path) ? '是' : '否') . "</p>";
+        // 检查 manifest 并添加相关信息
+        $manifest_path = AYA_PATH . ltrim(VITE_PUBLIC_PATH, '.') . '/.vite/manifest.json';
+        $manifest_exists = file_exists($manifest_path);
 
-    if (file_exists($manifest_path)) {
-        $manifest = json_decode(file_get_contents($manifest_path), true);
-        echo "<p>Manifest 入口点: " . (isset($manifest[VITE_ENTRY_POINT]) ? '找到' : '未找到') . "</p>";
+        $debug_data['manifest'] = array(
+            'path' => $manifest_path,
+            'status' => $manifest_exists ? 'found' : 'missing'
+        );
 
-        // 检查资源文件
-        if (!empty($manifest[VITE_ENTRY_POINT]['imports'])) {
-            echo "<h4>导入的模块:</h4><ul>";
-            foreach ($manifest[VITE_ENTRY_POINT]['imports'] as $import) {
-                $import_path = AYA_PATH . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $manifest[$import]['file'];
-                echo "<li>{$import_path} - " . (file_exists($import_path) ? '存在' : '<strong style="color:red">不存在</strong>') . "</li>";
+        if ($manifest_exists) {
+            $manifest = json_decode(file_get_contents($manifest_path), true);
+            $debug_data['manifest']['last_modified'] = human_time_diff(filemtime($manifest_path)) . ' ago';
+            $debug_data['manifest']['entry_found'] = isset($manifest[VITE_ENTRY_POINT]);
+            $debug_data['manifest']['size'] = size_format(filesize($manifest_path));
+
+            // 添加主资源信息
+            if (isset($manifest[VITE_ENTRY_POINT])) {
+                $main_asset_path = AYA_PATH . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $manifest[VITE_ENTRY_POINT]['file'];
+                $main_asset_exists = file_exists($main_asset_path);
+
+                $debug_data['main_asset'] = array(
+                    'path' => $main_asset_path,
+                    'status' => $main_asset_exists ? 'found' : 'missing'
+                );
+
+                if ($main_asset_exists) {
+                    $debug_data['main_asset']['size'] = size_format(filesize($main_asset_path));
+                }
+
+                // 导入模块信息
+                if (!empty($manifest[VITE_ENTRY_POINT]['imports'])) {
+                    $debug_data['imported_modules'] = array();
+
+                    foreach ($manifest[VITE_ENTRY_POINT]['imports'] as $import) {
+                        $import_path = AYA_PATH . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $manifest[$import]['file'];
+                        $exists = file_exists($import_path);
+
+                        $debug_data['imported_modules'][] = array(
+                            'name' => basename($import_path),
+                            'status' => $exists ? 'found' : 'missing',
+                            'size' => $exists ? size_format(filesize($import_path)) : null
+                        );
+                    }
+                }
+
+                // CSS 文件信息
+                if (!empty($manifest[VITE_ENTRY_POINT]['css'])) {
+                    $debug_data['css_files'] = array();
+
+                    foreach ($manifest[VITE_ENTRY_POINT]['css'] as $css) {
+                        $css_path = AYA_PATH . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $css;
+                        $exists = file_exists($css_path);
+
+                        $debug_data['css_files'][] = array(
+                            'name' => basename($css_path),
+                            'status' => $exists ? 'found' : 'missing',
+                            'size' => $exists ? size_format(filesize($css_path)) : null
+                        );
+                    }
+                }
             }
-            echo "</ul>";
         }
 
-        // 检查CSS文件
-        if (!empty($manifest[VITE_ENTRY_POINT]['css'])) {
-            echo "<h4>CSS 文件:</h4><ul>";
-            foreach ($manifest[VITE_ENTRY_POINT]['css'] as $css) {
-                $css_path = AYA_PATH . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $css;
-                echo "<li>{$css_path} - " . (file_exists($css_path) ? '存在' : '<strong style="color:red">不存在</strong>') . "</li>";
-            }
-            echo "</ul>";
-        }
+        //输出格式
+        $html = '';
+
+        $html .= '<div style="padding: 2rem;"><h3>Vite Debug Information: </h3><pre style="background:#f5f5f5; padding:10px; overflow:auto; max-height:500px;">';
+        $html .= json_encode($debug_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $html .= '</pre></div>';
+
+        echo $html;
     }
-
-    echo '</div>';
-
 }
 
 //严格编码数组到JSON

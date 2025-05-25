@@ -3,21 +3,13 @@ import { ref, onMounted, computed, watch } from "vue";
 //Heroicons
 import { SunIcon, MoonIcon } from "@heroicons/vue/24/outline";
 
-//i18n
-import { useI18n } from "vue-i18n";
-const { t } = useI18n();
-
-const themeSwitchTip = computed(() => {
-  return t('theme_switch');
-});
-
+//当前主题
+const currentTheme = ref("light");
 //可用主题列表
 const availableThemes = [
     "light",
     "dark"
 ];
-//当前主题
-const currentTheme = ref("light");
 
 //循环切换
 const toggleTheme = () => {
@@ -89,8 +81,8 @@ onMounted(() => {
 <template>
     <div
         class="theme-switcher tooltip tooltip-bottom"
-        :data-tip="themeSwitchTip">
-        <!-- ThemeSwitcher -->
+        :data-tip="$t('theme_switch')">
+        <!-- Theme Switcher -->
         <button
             @click="toggleTheme"
             class="btn btn-square btn-ghost"

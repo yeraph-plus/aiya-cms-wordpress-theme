@@ -1,9 +1,9 @@
 @import "tailwindcss" source(none);
 
 @source "../**/*.{html,js,ts,vue,jsx}";
-@source "../../templates/**/*.{html,php}";
+@source "../../**/*.{html,php}";
 
-/*@plugin "@tailwindcss/forms";*/
+@plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";
 
 @theme {
@@ -66,10 +66,21 @@
     }
 }
 
+/* Vue JS */
 [v-cloak] {
     display: none;
 }
+/* lozad JS */
+.lozad {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
 
+.lozad.loaded {
+    opacity: 1;
+}
+
+/* Custom scrollbar styles */
 .custom-scrollbar {
     scrollbar-width: thin; /* Firefox */
     scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Firefox */

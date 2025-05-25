@@ -49,7 +49,6 @@ const childItems = computed(() => {
                 </ul>
             </details>
         </template>
-        <!-- 没有子菜单的项目 -->
         <template v-else>
             <a
                 :href="item.url"

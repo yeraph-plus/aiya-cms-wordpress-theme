@@ -152,6 +152,10 @@ function aya_is_where()
     //返回页面类型
     if (is_home() || is_front_page()) {
         $here_is = 'home';
+        //关联判断
+        if (is_paged()) {
+            $here_is = 'home_by_paged';
+        }
     } else if (is_singular()) {
         $here_is = 'singular';
         //关联判断
@@ -304,18 +308,18 @@ function aya_local_mkdir($dirname)
 }
 
 //转换URL为本地路径的方法
-function aya_local_path_with_url($path, $reverse = true)
+function aya_local_path_with_url($path_or_url, $reverse = true)
 {
     //获取WP上传目录
     $wp_content_url = set_url_scheme(WP_CONTENT_URL);
     $wp_content_dir = WP_CONTENT_DIR; //trailingslashit()
     //转换URL为本地路径
     if ($reverse) {
-        $url = esc_url($path);
+        $url = esc_url($path_or_url);
         //验证是否为本地URL
-        if (!cur_is_localhost($url) && cur_is_external_url($url))
+        if (!cur_is_localhost($url) && cur_is_external_url($url)) {
             return false;
-
+        }
         //截取URL
         $url_file = str_replace($wp_content_url, '', $url);
         //拼接为本地路径
@@ -329,12 +333,17 @@ function aya_local_path_with_url($path, $reverse = true)
     }
     //转换本地路径为URL
     else {
+        $file = $path_or_url;
+        //验证文件
+        if (!file_exists($file)) {
+            return false;
+        }
         //截取本地路径
-        $path_file = str_replace($wp_content_dir, '', $path);
+        $path_file = str_replace($wp_content_dir, '', $file);
         //拼接为URL
-        $url_file = $wp_content_url . $path_file;
+        $file_url = $wp_content_url . $path_file;
 
-        return $url_file;
+        return $file_url;
     }
 }
 

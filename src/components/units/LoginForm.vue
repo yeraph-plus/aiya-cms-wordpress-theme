@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
+//Heroicons
+import { ArrowRightEndOnRectangleIcon } from "@heroicons/vue/24/outline";
+import { EnvelopeIcon, LockClosedIcon, ArrowUturnRightIcon } from "@heroicons/vue/20/solid";
 //Toast
-import { toast } from "../tools/ToastPlugin";
+import { toast } from "../../scripts/toast-plugin";
 //i18n
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
-// Heroicons
-import { ArrowRightEndOnRectangleIcon } from "@heroicons/vue/24/outline";
-import { EnvelopeIcon, LockClosedIcon, ArrowUturnRightIcon } from "@heroicons/vue/20/solid";
-
-// 接收父组件传递的属性
+//Data
 const props = defineProps({
     lost_password_url: {
         type: String,
@@ -19,29 +18,42 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    loading: {
+        type: Boolean,
+        default: false,
+    },
+});
+//向外暴露方法
+defineExpose({
+    resetForm,
 });
 
-// 定义事件
+//定义事件
 const emit = defineEmits(["login-success", "switch-to-register", "update:loading"]);
 
-// 表单数据
+//表单数据
 const loginEmail = ref("");
 const loginPassword = ref("");
 const loginRemember = ref(false);
-const loading = ref(false);
 const errorMsg = ref("");
+//重置表单
+function resetForm() {
+    loginEmail.value = "";
+    loginPassword.value = "";
+    loginRemember.value = false;
+    errorMsg.value = "";
+}
 
 //登录操作
 async function handleLogin() {
     errorMsg.value = "";
-    //Is empty
+    //is empty
     if (!loginEmail.value || !loginPassword.value) {
         errorMsg.value = t("login_input_empty");
         return;
     }
-    loading.value = true;
+    //loading
     emit("update:loading", true);
-
     try {
         const res = await fetch("/api/aiya/v1/login", {
             method: "POST",
@@ -60,31 +72,17 @@ async function handleLogin() {
         if (!data.success) {
             errorMsg.value = data.data?.detail || data.data || t("login_failed");
         } else {
-            toast(data.data?.message);
+            //登录成功
             emit("login-success", data);
-            // 成功登录后不需要在组件内部重载页面，交由父组件处理
+            //创建页面消息
+            toast(data.data?.message, { type: "success" });
         }
     } catch (err) {
         errorMsg.value = t("network_error");
         console.error(err);
+        emit("update:loading", false);
     }
-
-    loading.value = false;
-    emit("update:loading", false);
 }
-
-// 重置表单
-function resetForm() {
-    loginEmail.value = "";
-    loginPassword.value = "";
-    loginRemember.value = false;
-    errorMsg.value = "";
-}
-
-// 向外暴露方法
-defineExpose({
-    resetForm,
-});
 </script>
 
 <template>
@@ -95,7 +93,6 @@ defineExpose({
             class="alert alert-outline alert-error mb-4">
             <span>{{ errorMsg }}</span>
         </div>
-
         <!-- LoginFrom -->
         <form
             @submit.prevent="handleLogin"
@@ -115,7 +112,6 @@ defineExpose({
                         :placeholder="$t('auth_email_placeholder')" />
                 </div>
             </div>
-
             <div class="form-control w-full">
                 <label class="label">
                     <span class="label-text">{{ $t("auth_password") }}</span>
@@ -131,28 +127,26 @@ defineExpose({
                         :placeholder="$t('auth_password_placeholder')" />
                 </div>
             </div>
-
-            <div class="flex justify-between items-center mt-4">
+            <div class="flex justify-between items-center my-4">
                 <label class="cursor-pointer label">
                     <input
                         v-model="loginRemember"
                         type="checkbox"
                         class="checkbox checkbox-sm checkbox-primary mr-2" />
-                    <span class="label-text">{{ $t("remember") }}</span>
+                    <span class="text-base-content">{{ $t("remember") }}</span>
                 </label>
                 <a
                     :href="props.lost_password_url"
-                    class="link link-primary text-sm">
+                    class="link link-primary text-base">
                     {{ $t("forgot_password") }}
                 </a>
             </div>
-
             <button
                 type="submit"
                 class="btn btn-primary w-full"
-                :disabled="loading">
+                :disabled="props.loading">
                 <span
-                    v-if="loading"
+                    v-if="props.loading"
                     class="loading loading-spinner"></span>
                 <ArrowRightEndOnRectangleIcon
                     v-else
@@ -161,7 +155,6 @@ defineExpose({
             </button>
         </form>
     </div>
-
     <!-- Switch -->
     <div class="mt-6 text-center">
         <span class="opacity-70 mr-2">{{ $t("need_account") }}</span>

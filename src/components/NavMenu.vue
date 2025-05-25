@@ -69,7 +69,7 @@ function hasChildren(item) {
 </script>
 
 <template>
-    <ul class="menu menu-md menu-horizontal rounded-box">
+    <ul class="flex items-center justify-center menu menu-md menu-horizontal rounded-box">
         <!-- For -->
         <template
             v-for="item in menuItems"

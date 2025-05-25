@@ -1,0 +1,79 @@
+/* 瀑布流布局容器 */
+.masonry-grid {
+    width: 100%;
+    margin: 0 auto;
+    min-height: 100px;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+/* 加载状态 */
+.masonry-grid.is-loading {
+    opacity: 0;
+    min-height: 300px;
+}
+
+/* 加载指示器样式 */
+.masonry-loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+    width: 100%;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary-color, #4338ca);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 用于确定列宽的元素 - 使用CSS变量动态调整 */
+.masonry-sizer,
+.masonry-grid article.card {
+    width: var(--masonry-column-width, calc(25% - 12px)); /* 默认4列布局 */
+}
+
+/* 卡片过渡效果 */
+.masonry-grid article.card {
+    margin-bottom: 16px;
+    opacity: 1;
+    transition:
+        opacity 0.5s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+/* 响应式设置 */
+@media screen and (max-width: 1280px) {
+    .masonry-grid[data-columns="3"] .masonry-sizer,
+    .masonry-grid[data-columns="3"] article.card {
+        width: calc(33.333% - 11px);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .masonry-grid[data-columns="2"] .masonry-sizer,
+    .masonry-grid[data-columns="2"] article.card {
+        width: calc(50% - 8px);
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .masonry-grid .masonry-sizer,
+    .masonry-grid article.card {
+        width: 100% !important;
+    }
+}

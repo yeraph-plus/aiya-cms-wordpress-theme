@@ -9,8 +9,9 @@ AYF::new_opt([
     'desc' => 'AIYA-CMS 主题，功能和必要组件设置',
     'fields' => [
         [
-            'desc' => '侧边栏',
+            'desc' => '顶部广告位',
             'type' => 'title_1',
         ],
+        
     ]
 ]);

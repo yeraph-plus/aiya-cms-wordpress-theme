@@ -8,10 +8,17 @@ if (!defined('ABSPATH')) {
 aya_require('autoload', 'vendor');
 //加载引用组件
 aya_require('BFI_Thumb', 'lib');
+aya_require('XDeode', 'lib');
+aya_require('Plugin_RecordClickLikes', 'core');
+aya_require('Plugin_RecordVisitors', 'core');
 //加载其他工具类
-aya_require_class('XDE_code', 'XDeode');
-aya_require_class('AYA_WP_Menu_Object', 'WP_Menu');
-aya_require_class('AYA_WP_Breadcrumb_Object', 'WP_Breadcrumb');
+aya_require('WP_Breadcrumb', 'core');
+aya_require('WP_Menu', 'core');
+aya_require('WP_Paged', 'core');
+aya_require('WP_Post', 'core');
+aya_require('WP_Post', 'core');
+//aya_require('WP_Term', 'core');
+//aya_require('WP_Query', 'core');
 
 /*
  * ------------------------------------------------------------------------------

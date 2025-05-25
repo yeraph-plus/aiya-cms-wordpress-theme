@@ -29,7 +29,7 @@ if (!defined('ABSPATH')) {
 
 define('AYA_PATH', get_template_directory());
 define('AYA_URI', get_template_directory_uri());
-define('AYA_RELEASE', true);
+//define('AYA_RELEASE', true);
 //define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); // or MINUTE_IN_SECONDS
 
 /*
@@ -52,7 +52,7 @@ function aya_require($name, $path = '', $special = false)
     } else {
         //打印一个报错
         if (defined('WP_DEBUG') && WP_DEBUG) {
-            print("[WARNING] Require file not found: $req_file");
+            print ("[WARNING] Require file not found: $req_file");
         }
     }
 }
@@ -60,22 +60,25 @@ function aya_require($name, $path = '', $special = false)
 //require class
 function aya_require_class($class_name, $path)
 {
-    $path = 'inc/lib/' . trim($path, '/\\');
+    //防止重复定义
+    if (!class_exists($class_name)) {
+        $path = 'inc/core/' . trim($path, '/\\');
 
-    $req_file = AYA_PATH . '/' . $path . '.php';
+        $req_file = AYA_PATH . '/' . $path . '.php';
 
-    if (is_file($req_file) && !class_exists($class_name)) {
-        require_once $req_file;
-    } else {
-        //打印一个报错
-        if (defined('WP_DEBUG') && WP_DEBUG) {
-            print("[WARNING] Require file not found: $req_file");
+        if (is_file($req_file)) {
+            require_once $req_file;
+        } else {
+            //打印一个报错
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                print ("[WARNING] Require file not found: $req_file");
+            }
         }
     }
 }
 
 //加载预置插件
-//aya_require('functions', 'plugins', 1);
+aya_require('functions', 'plugins', 1);
 
 //检查主题框架并拦截WP加载，防止严重报错
 if (!class_exists('AYF') || !class_exists('AYP')) {
@@ -107,24 +110,25 @@ aya_require('func-template');
 aya_require('func-api-router');
 //设置页面
 aya_require('opt-basic', 'settings');
+aya_require('opt-land', 'settings');
 aya_require('opt-notify', 'settings');
-//aya_require('opt-homepage', 'settings');
+aya_require('opt-ads', 'settings');
 //aya_require('opt-postpage', 'settings');
 //aya_require('opt-ads', 'settings');
 aya_require('opt-extra-plugin', 'plugins', 1);
 //小工具
-aya_require('widget-text-html', 'widgets');
-aya_require('widget-add-menu', 'widgets');
-aya_require('widget-comments', 'widgets');
-aya_require('widget-post-comments', 'widgets');
-aya_require('widget-post-views', 'widgets');
-//aya_require('widget-post-custom', 'widgets');
-aya_require('widget-post-newest', 'widgets');
-aya_require('widget-post-random', 'widgets');
-aya_require('widget-author', 'widgets');
-aya_require('widget-search', 'widgets');
-aya_require('widget-tag-cloud', 'widgets');
-aya_require('widget-welcome-panel', 'widgets');
+// aya_require('widget-text-html', 'widgets');
+// aya_require('widget-add-menu', 'widgets');
+// aya_require('widget-comments', 'widgets');
+// aya_require('widget-post-comments', 'widgets');
+// aya_require('widget-post-views', 'widgets');
+// //aya_require('widget-post-custom', 'widgets');
+// aya_require('widget-post-newest', 'widgets');
+// aya_require('widget-post-random', 'widgets');
+// aya_require('widget-author', 'widgets');
+// aya_require('widget-search', 'widgets');
+// aya_require('widget-tag-cloud', 'widgets');
+// aya_require('widget-welcome-panel', 'widgets');
 //短代码工具
 aya_require('code-basic', 'shotcodes');
 //aya_require('code-hilight', 'shotcodes');
@@ -211,16 +215,16 @@ AYP::action('Admin_Custom', array(
 //注册小工具 Tips：请确保此时要注册的小工具的文件已被require
 AYP::action('Widget_Load', array(
     //'小工具Class名',
-    'AYA_Widget_Text_Html',
-    'AYA_Widget_Menu',
-    'AYA_Widget_Search',
-    'AYA_Widget_Tag_Cloud',
-    'AYA_Widget_Post_Comments',
-    'AYA_Widget_Post_Views',
-    'AYA_Widget_Post_Newest',
-    'AYA_Widget_Post_Random',
-    'AYA_Widget_Author_Box',
-    'AYA_Widget_Comments',
+    // 'AYA_Widget_Text_Html',
+    // 'AYA_Widget_Menu',
+    // 'AYA_Widget_Search',
+    // 'AYA_Widget_Tag_Cloud',
+    // 'AYA_Widget_Post_Comments',
+    // 'AYA_Widget_Post_Views',
+    // 'AYA_Widget_Post_Newest',
+    // 'AYA_Widget_Post_Random',
+    // 'AYA_Widget_Author_Box',
+    // 'AYA_Widget_Comments',
     //'AYA_Widget_User_Welcome',
 ));
 //解除 WP 自带的小工具
@@ -260,17 +264,13 @@ AYP::action('Register_Sidebar', array(
     'index-widget' => __('首页', 'AIYA'),
     'archive-widget' => __('归档页面', 'AIYA'),
     'single-widget' => __('正文页面', 'AIYA'),
-    'author-widget'=> __('用户页面', 'AIYA'),
+    'author-widget' => __('用户页面', 'AIYA'),
 ));
 //注册自定义模板页面
 AYP::action('Template_New_Page', array(
     //'模板名' => '模板文件路径',
-    'go' => 'pages/external-auto',
-    'link' => 'pages/external-link',
+    'go' => 'template-pages/external-auto',
+    'link' => 'template-pages/external-link',
 ));
 //启用小工具缓存插件
 AYP::action('Widget_Cache', true);
-//文章浏览量计数器插件
-AYP::action('Record_Visitors', true);
-//文章点赞量计数器插件
-AYP::action('Record_ClickLikes', true);
