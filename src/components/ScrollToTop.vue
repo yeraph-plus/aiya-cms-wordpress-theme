@@ -40,7 +40,7 @@ function scrollToTop() {
             <button
                 @click="scrollToTop"
                 class="btn w-12 h-12 btn-circle btn-primary shadow-lg relative transition-transform duration-300 hover:-translate-y-1 active:translate-y-0">
-                <ArrowUpIcon class="w-6 h-6" />
+                <ArrowUpIcon class="size-6" />
             </button>
         </div>
     </transition>

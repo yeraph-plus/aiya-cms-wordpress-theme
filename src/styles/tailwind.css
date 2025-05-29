@@ -66,6 +66,8 @@
     }
 }
 
+/* Content */
+@import "./article.css";
 /* Vue JS */
 [v-cloak] {
     display: none;

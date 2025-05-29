@@ -85,7 +85,7 @@ function hasChildren(item) {
 </script>
 
 <template>
-    <ul class="menu menu-md font-bold rounded-box p-4 text-base-content">
+    <ul class="menu menu-md w-full font-bold rounded-box p-4 text-base-content">
         <!-- For -->
         <template
             v-for="item in menuItems"

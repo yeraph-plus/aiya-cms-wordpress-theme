@@ -15,7 +15,7 @@ $post_thumb = aya_post_thumb($post_obj->thumbnail_url, $post_obj->content, 400, 
             <div class="flex space-x-1 overflow-hidden">
                 <?php aya_post_status_badge($post_obj->status); ?>
                 <?php foreach ($post_obj->cat_list as $cat): ?>
-                    <a href="<?php aya_echo($cat['url']); ?>" class="badge badge-sm badge-primary badge-outline"><?php aya_echo($cat['name']); ?></a>
+                    <a href="<?php aya_echo($cat['url']); ?>" class="badge badge-primary badge-outline"><?php aya_echo($cat['name']); ?></a>
                 <?php endforeach; ?>
             </div>
         </div>

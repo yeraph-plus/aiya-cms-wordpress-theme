@@ -11,6 +11,8 @@ if (!defined('ABSPATH')) {
  */
 
 //自定义的赞助订单数据表结构
+add_action('aya_install', 'aya_install_sponsor_order_db');
+
 function aya_install_sponsor_order_db()
 {
     global $wpdb;

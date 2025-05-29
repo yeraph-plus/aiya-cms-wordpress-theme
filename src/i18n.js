@@ -15,6 +15,13 @@ const messages = {
         log_out: "Log Out",
         logged_out_success: "Account has been Logged Out.",
         logged_out_error: "Failed to Log Out.",
+        //PostButtonGroup.vue
+        click_operation_failed: "Operation failed, please try again",
+        click_must_logged: "Please log in first",
+        click_liked: "Liked",
+        click_like: "Like It!",
+        click_collected: "Collected",
+        click_collect: "Collect",
         //LoginAction.vue
         sign_panel_btn: "Sign In / Sign Up",
         sign_in: "Sign In",
@@ -39,7 +46,7 @@ const messages = {
         password_not_match: "Passwords do not match",
         register_input_empty: "Email, username or password cannot be empty",
         register_failed: "Register failed",
-        network_error: "Network Error",
+        network_error: "Network Error, please try again",
     },
     zh: {
         //ThemeSwitcher.vue
@@ -57,6 +64,13 @@ const messages = {
         log_out: "退出登录",
         logged_out_success: "账号已退出登录",
         logged_out_error: "退出登录失败",
+        //PostButtonGroup.vue
+        click_operation_failed: "操作失败，请重试",
+        click_must_logged: "请先登录",
+        click_liked: "点赞过",
+        click_like: "点赞",
+        click_collected: "已收藏",
+        click_collect: "收藏",
         //LoginPop.vue
         sign_panel_btn: "登录/注册",
         sign_in: "登录",

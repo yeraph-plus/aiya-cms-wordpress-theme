@@ -29,7 +29,7 @@ function aya_theme_after_init()
     */
 
     //安装数据表
-    aya_install_sponsor_order_db();
+    do_action('aya_install');
 }
 
 /*
@@ -165,7 +165,7 @@ function aya_post_content_filter_format($content)
     if (!defined('AYA_RELEASE')) {
         $end = microtime(true);
 
-        $content = 'The content load time: ' . ($end - $start) . ' seconds.' . $content;
+        $content .= '<p>The content filter load time: ' . ($end - $start) . ' seconds.</p>';
     }
 
     return $content;

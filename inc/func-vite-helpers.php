@@ -137,9 +137,9 @@ function aya_dist_scripts_loader()
     if (aya_is_dev_mode()) {
         if (aya_vite_reference()) {
             //返回client，用于支持HMR
-            echo '<script type="module" src="' . VITE_HOST . '/@vite/client"></script>';
+            echo '<script type="module" src="' . VITE_HOST . '/@vite/client"></script>' . PHP_EOL;
             //返回入口文件
-            echo '<script type="module" src="' . VITE_HOST . '/' . ltrim(VITE_ENTRY_POINT, '/') . '"></script>';
+            echo '<script type="module" src="' . VITE_HOST . '/' . ltrim(VITE_ENTRY_POINT, '/') . '"></script>' . PHP_EOL;
 
             return;
         }
@@ -147,17 +147,18 @@ function aya_dist_scripts_loader()
 
     //从生产模式配置
     $res = '';
-    $res .= '<script type="module" src="' . aya_vite_main_script_url() . '"></script>';
+
+    $res .= '<script type="module" data-cfasync="false" src="' . aya_vite_main_script_url() . '" crossorigin="anonymous"></script>' . PHP_EOL;
 
     $preload_urls = aya_vite_imports_script_urls();
     $css_urls = aya_vite_main_css_urls();
 
     foreach ($preload_urls as $url) {
-        $res .= '<link rel="modulepreload" href="' . $url . '">';
+        $res .= '<link rel="modulepreload" as="script" href="' . $url . '" crossorigin="anonymous">' . PHP_EOL;
     }
 
     foreach ($css_urls as $url) {
-        $res .= '<link rel="stylesheet" href="' . $url . '">';
+        $res .= '<link rel="stylesheet" href="' . $url . '">' . PHP_EOL;
     }
 
     echo $res;

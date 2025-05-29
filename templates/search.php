@@ -1,0 +1,1 @@
+<?php aya_while_the_post(); ?>

@@ -72,7 +72,9 @@ export default defineConfig({
 
         // 是否启用压缩
         write: true,
-        minify: true,
+        //minify: true,
+        minify: false,
+        sourcemap: true,
 
         //rollup入口
         //e.g: https://rollupjs.org/configuration-options/
@@ -82,7 +84,9 @@ export default defineConfig({
                 //定义输出文件名
                 entryFileNames: 'assets/[name].[hash].js',
                 chunkFileNames: 'assets/[name].[hash].js',
-                assetFileNames: 'assets/[name].[hash].[ext]',
+                assetFileNames: (assetInfo) => {
+                    return `assets/[name].[hash].[ext]`;
+                },
 
                 manualChunks(id) {
                     // all third-party code will be in vendor chunk

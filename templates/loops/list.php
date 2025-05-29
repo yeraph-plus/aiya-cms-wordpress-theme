@@ -6,6 +6,7 @@ $post_thumb = aya_post_thumb($post_obj->thumbnail_url, $post_obj->content, 300, 
 
 ?>
 <article class="card bg-base-100 hover:shadow-md transition-shadow border border-base-300 overflow-hidden">
+    <!-- POST ID: <?php aya_echo($post_obj->id); ?> -->
     <div class="flex flex-col sm:flex-row">
         <div class="sm:w-48 md:w-56 lg:w-72 sm:h-full overflow-hidden">
             <a href="<?php aya_echo($post_obj->url); ?>" class="block h-full">
@@ -19,13 +20,18 @@ $post_thumb = aya_post_thumb($post_obj->thumbnail_url, $post_obj->content, 300, 
                 </a>
             </h2>
             <div class="card-actions justify-start my-1 flex flex-wrap overflow-hidden">
-                <div class="flex gap-1 overflow-hidden">
+                <div class="flex gap-2 overflow-hidden">
                     <?php aya_post_status_badge($post_obj->status); ?>
                     <?php foreach ($post_obj->cat_list as $cat): ?>
-                        <a href="<?php aya_echo($cat['url']); ?>" class="badge badge-sm badge-primary badge-outline"><?php aya_echo($cat['name']); ?></a>
+                        <a href="<?php aya_echo($cat['url']); ?>" class="badge badge-primary badge-outline truncate line-clamp">
+                            <?php aya_echo($cat['name']); ?>
+                        </a>
                     <?php endforeach; ?>
                     <?php foreach ($post_obj->tag_list as $tag): ?>
-                        <a href="<?php aya_echo($tag['url']); ?>" class="badge badge-sm">#<?php aya_echo($tag['name']); ?></a>';
+                        <a href="<?php aya_echo($tag['url']); ?>" class="badge badge-outline truncate line-clamp">
+                            <icon name="hashtag" class="size-3"></icon>
+                            <?php aya_echo($tag['name']); ?>
+                        </a>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -35,30 +41,21 @@ $post_thumb = aya_post_thumb($post_obj->thumbnail_url, $post_obj->content, 300, 
             <div class="flex items-center justify-between mt-auto pt-3 text-xs text-base-content/60">
                 <div class="flex items-center gap-3">
                     <span class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+                        <icon name="clock" class="size-4 mr-1"></icon>
                         <time datetime="<?php aya_echo($post_obj->date_iso); ?>">
                             <?php aya_echo($post_obj->date); ?>
                         </time>
                     </span>
                     <span class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
+                        <icon name="eye" class="size-4 mr-1"></icon>
                         <?php aya_echo($post_obj->views); ?>
                     </span>
                     <span class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                        </svg>
+                        <icon name="chat-bubble-oval-left-ellipsis" class="size-4 mr-1"></icon>
                         <?php aya_echo($post_obj->comments); ?>
                     </span>
                     <span class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7a4 4 0 014-4c1.657 0 3.157.686 4 1.757C12.843 3.686 14.343 3 16 3a4 4 0 014 4c0 .88-.348 1.68-.9 2.25l-7.1 7.1a2.5 2.5 0 01-3.5 0l-7.1-7.1A3.999 3.999 0 013 7z" />
-                        </svg>
+                        <icon name="heart" class="size-4 mr-1"></icon>
                         <?php aya_echo($post_obj->likes); ?>
                     </span>
                 </div>

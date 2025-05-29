@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
-
 //i18n
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
-
 //Toast
 import { toast } from "../scripts/toast-plugin";
 //Heroicons

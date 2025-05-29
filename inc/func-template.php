@@ -119,20 +119,6 @@ function aya_core_route_entry()
     aya_template_load('part/footer');
 }
 
-//替代文章类型查询
-function aya_post_type()
-{
-    $type_by_post = get_post_type();
-
-    //如果是文章类型，则返回文章格式
-    if ('post' == $type_by_post) {
-        $type_by_post = get_post_format();
-    }
-
-    //返回自定义文章的类型
-    return $type_by_post;
-}
-
 //替代LOOP循环
 function aya_while_the_post()
 {
@@ -146,7 +132,6 @@ function aya_while_the_post()
     //全局设置
     $loop_layout = aya_opt('site_loop_layout_type', 'basic');
     $loop_grid = aya_opt('site_loop_column_type', 'basic');
-    $page_turner = aya_opt('site_loop_paged_type', 'basic');
 
     //允许过滤器修改布局模式
     $loop_layout = apply_filters('aya_loop_layout', $loop_layout);
@@ -201,56 +186,52 @@ function aya_while_the_post()
     aya_echo('</div>');
 
     do_action('aya_after_loop', $loop_layout);
+
     //加载分页
-    aya_template_load('part/pagination-' . $page_turner);
+    aya_template_load('part/pagination');
 }
 
 //替代正文循环
 function aya_while_have_content()
 {
-    //如果有文章
-    if (have_posts()) {
-        $post_type = aya_post_type();
+    if (!have_posts()) {
+        //没有文章
+        aya_template_load('404');
 
-        switch ($post_type) {
-            case '':
-                //返回默认格式
-                $content_mode = 'content-default';
-                break;
-            case 'image':
-            case 'video':
-            case 'audio':
-                //返回媒体格式
-                $content_mode = 'content-media';
-                break;
-            case 'gallery':
-                //返回图集格式
-                $content_mode = 'content-gallery';
-                break;
-            case 'page':
-                //返回页面格式
-                $content_mode = 'content-page';
-                break;
-            case 'attachment':
-                //返回附件格式
-                $content_mode = 'content-attachment';
-                break;
-            default:
-                //返回自定义文章的类型
-                $content_mode = $post_type;
-                break;
-        }
+        return;
+    }
 
-        //执行主循环
-        while (have_posts()) {
-            the_post();
-            aya_template_load('contents/' . $content_mode);
-        }
+    //判断文章类型
+    $post_type = get_post_type();
+
+    do_action('aya_before_content');
+
+    switch ($post_type) {
+        case 'post':
+            //返回默认格式
+            $content_layout = 'default';
+            break;
+        case 'page':
+            //返回页面格式
+            $content_layout = 'page';
+            break;
+        case 'attachment':
+            //返回附件格式
+            $content_layout = 'media';
+            break;
+        default:
+            //返回自定义文章的类型
+            $content_layout = $post_type;
+            break;
     }
-    //如果没有文章
-    else {
-        aya_template_load('contents/content-none');
+
+    //执行主循环
+    while (have_posts()) {
+        the_post();
+        aya_template_load('contents/' . $content_layout);
     }
+
+    do_action('aya_after_content');
 }
 
 //小工具栏
@@ -437,20 +418,23 @@ function aya_preg_desc($desc)
 //文章缩略图处理
 function aya_post_thumb($have_thumb_url = false, $post_content = '', $size_w = 400, $size_h = 300)
 {
+    //没有传回正文时忽略
+    if ($have_thumb_url === false && empty($post_content)) {
+        return false;
+    }
     //特色图片取到 false 时从正文遍历
     if ($have_thumb_url === false) {
-        $the_thumb_url = aya_match_post_first_image($post_content, false);
-    } else {
-        $the_thumb_url = $have_thumb_url;
+        $have_thumb_url = aya_match_post_first_image($post_content, false);
+    }
+    //正文取到 false 时使用主题默认
+    if ($have_thumb_url === false) {
+        $have_thumb_url = aya_opt('site_default_thumb_upload', 'basic');
     }
 
-    //使用主题默认
-    if ($the_thumb_url === false) {
-        $the_thumb_url = aya_opt('site_default_thumb_upload', 'basic');
-    }
+    $the_thumb_url = $have_thumb_url;
 
     //检测主题图像处理依赖是否被加载
-    if (function_exists('aya_image_trans_post_thumb')) {
+    if (function_exists('aya_image_trans_init')) {
         return aya_image_trans_post_thumb($the_thumb_url, $size_w, $size_h);
     }
     //使用BFI处理缩略图
@@ -492,11 +476,13 @@ function aya_post_status_badge($status_array = [])
                 $badge_class = "badge-accent";
         }
 
-        $html .= '<span class="badge badge-sm ' . $badge_class . '">' . $status_name . '</span>';
+        $html .= '<span class="badge ' . $badge_class . '">' . $status_name . '</span>';
     }
 
     return aya_echo($html);
 }
+
+//
 
 /*
  * ------------------------------------------------------------------------------

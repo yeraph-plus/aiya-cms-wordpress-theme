@@ -9,7 +9,7 @@ aya_require('autoload', 'vendor');
 //加载引用组件
 aya_require('BFI_Thumb', 'lib');
 aya_require('XDeode', 'lib');
-aya_require('Plugin_RecordClickLikes', 'core');
+aya_require('Plugin_UserAjaxActiveStore', 'core');
 aya_require('Plugin_RecordVisitors', 'core');
 //加载其他工具类
 aya_require('WP_Breadcrumb', 'core');

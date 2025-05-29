@@ -10,19 +10,15 @@
             <?php aya_blog_logo('max-w-[180px] overflow-hidden whitespace-nowrap text-xl font-bold ', 'h-8 w-auto'); ?>
             <!-- Sidebar Toggle -->
             <button @click="sidebarToggle = !sidebarToggle" class="btn btn-square btn-ghost ml-4">
-                <svg v-if="!sidebarToggle" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                </svg>
-                <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
-                </svg>
+                <icon v-if="!sidebarToggle" name="bars-3" class="size-5"></icon>
+                <icon v-else name="bars-3-bottom-left" class="size-5"></icon>
             </button>
         </div>
-        <div class="navbar-center hidden lg:flex">
+        <div class="navbar-center lg:w-1/2 hidden lg:flex">
             <?php aya_vue_load('nav-menu', ['menu' => aya_get_menu('secondary-menu'), 'dorpdown' => true]); ?>
         </div>
         <!-- Button Group -->
-        <div class="navbar-end gap-2">
+        <div class="navbar-end lg:w-1/4 gap-2">
             <!-- Theme Switcher -->
             <?php aya_vue_load('theme-switcher'); ?>
             <!-- Notifications -->

@@ -6,13 +6,13 @@ import "vite/modulepreload-polyfill";
 import "./styles/tailwind.css";
 //lozad
 import lozad from 'lozad';
-//masonry
-import "./scripts/masonry-init";
 //Vue
 import { createApp } from "vue";
 import { createI18n } from 'vue-i18n';
 //Vue 翻译文件
-import messages from './i18n';
+import messages from "./i18n";
+//Debug工具
+import VueDebugTools from "./scripts/debug";
 
 //标记页面加载状态
 document.body.classList.add('loading');
@@ -90,7 +90,17 @@ const components = {};
 const modules = import.meta.glob('./components/*.vue', { eager: true });
 
 for (const path in modules) {
-    components[modules[path].default.__name] = modules[path].default;
+    const component = modules[path].default;
+
+    if (component.__name) {
+        components[component.__name] = component;
+    } else if (component.name) {
+        components[component.name] = component;
+    } else {
+        // 从路径提取名称作为后备
+        const fileName = path.split('/').pop().replace('.vue', '');
+        components[fileName] = component;
+    }
 }
 
 //导入语言包
@@ -112,43 +122,52 @@ for (const el of document.getElementsByClassName('vue-app')) {
 */
 
 //实例化
-const app = createApp({
-    template: document.getElementById('vue-app').innerHTML,
-    components,
-    //Vue初始化
-    data() {
-        return {
-            isMobile: isMobile(),
-            sidebarToggle: !isMobile(),
-            mobileMenuToggle: false,
-        }
-    },
-    created() {
-        window.addEventListener('resize', () => {
-            const sidebarOpen = isMobile();
+const vueAppEl = document.getElementById('vue-app');
 
-            // 在移动设备上自动收起侧边栏，在大屏幕上自动展开
-            if (sidebarOpen && this.sidebarToggle) {
-                this.sidebarToggle = false;
-            } else if (!sidebarOpen && !this.sidebarToggle) {
-                this.sidebarToggle = true;
+if (vueAppEl) {
+    const app = createApp({
+        template: vueAppEl.innerHTML,
+        components,
+        data() {
+            return {
+                isMobile: isMobile(),
+                sidebarToggle: !isMobile(),
+                mobileMenuToggle: false,
             }
-        });
-    },
-    //Vue挂载完成
-    mounted() {
-        setTimeout(() => {
-            handleLoading();
-            // 初始化 Lozad
-            lozadObserver = initLozad();
-            //分发一个自定义事件用于触发二级逻辑
-            document.dispatchEvent(new CustomEvent('vue-initialized'));
-        }, 100);
-    }
-});
+        },
+        created() {
+            window.addEventListener('resize', () => {
+                this.isMobile = isMobile();
 
-app.use(i18n);
-app.mount('#vue-app');
+                // 在移动设备上自动收起侧边栏，在大屏幕上自动展开
+                if (this.isMobile && this.sidebarToggle) {
+                    this.sidebarToggle = false;
+                } else if (!this.isMobile && !this.sidebarToggle) {
+                    this.sidebarToggle = true;
+                }
+            });
+        },
+        mounted() {
+            // 确保 lozadObserver 被正确定义
+            let lozadObserver;
+
+            setTimeout(() => {
+                handleLoading();
+                document.dispatchEvent(new CustomEvent('vue-initialized'));
+                lozadObserver = initLozad();
+                // 全局变量
+                window.lozadObserver = lozadObserver;
+            }, 100);
+        }
+    });
+
+    app.use(VueDebugTools);
+    app.debug();
+
+    app.use(i18n);
+    app.mount('#vue-app');
+}
+
 
 //IF Load
 window.addEventListener("load", function () {
@@ -157,7 +176,8 @@ window.addEventListener("load", function () {
     }, 300);
 
     if (!document.getElementById('vue-app')) {
-        lozadObserver = initLozad();
+        // 确保变量被正确声明
+        window.lozadObserver = initLozad();
     }
 });
 

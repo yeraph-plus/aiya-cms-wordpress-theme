@@ -57,26 +57,6 @@ function aya_require($name, $path = '', $special = false)
     }
 }
 
-//require class
-function aya_require_class($class_name, $path)
-{
-    //防止重复定义
-    if (!class_exists($class_name)) {
-        $path = 'inc/core/' . trim($path, '/\\');
-
-        $req_file = AYA_PATH . '/' . $path . '.php';
-
-        if (is_file($req_file)) {
-            require_once $req_file;
-        } else {
-            //打印一个报错
-            if (defined('WP_DEBUG') && WP_DEBUG) {
-                print ("[WARNING] Require file not found: $req_file");
-            }
-        }
-    }
-}
-
 //加载预置插件
 aya_require('functions', 'plugins', 1);
 
@@ -112,10 +92,8 @@ aya_require('func-api-router');
 aya_require('opt-basic', 'settings');
 aya_require('opt-land', 'settings');
 aya_require('opt-notify', 'settings');
-aya_require('opt-ads', 'settings');
-//aya_require('opt-postpage', 'settings');
+aya_require('opt-automatic', 'settings');
 //aya_require('opt-ads', 'settings');
-aya_require('opt-extra-plugin', 'plugins', 1);
 //小工具
 // aya_require('widget-text-html', 'widgets');
 // aya_require('widget-add-menu', 'widgets');
@@ -154,6 +132,11 @@ AYP::action('EnvCheck', array(
     'php_ext' => array('session', 'curl', 'mbstring', 'exif', 'gd', 'fileinfo'),
     //WP最低版本
     'wp_last' => '6.5',
+));
+//插件检查
+AYP::action('PluginCheck', array(
+    //'经典编辑器' => 'classic-editor/classic-editor.php',
+    //'经典小工具' => 'classic-widgets/classic-widgets.php',
 ));
 //此钩子用于执行add_theme_support()
 AYP::action('After_Setup_Theme', array(

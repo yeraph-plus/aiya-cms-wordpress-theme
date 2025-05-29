@@ -1,1 +1,1 @@
-
+<?php aya_while_have_content(); ?>

@@ -229,15 +229,13 @@ if (!class_exists('AYA_WP_Post_Object')) {
                 }
                 //计数评论
                 if ($the_comment_count > 0) {
-
-                    return $the_comment_count . __('条评论', 'AIYA');
+                    return $the_comment_count . __('&nbsp;条评论', 'AIYA');
                 } else {
-
                     return __('无人评论', 'AIYA');
                 }
             }
 
-            return empty($the_comment_count) ? 0 : $the_comment_count;
+            return empty($the_comment_count) ? '0' : $the_comment_count;
         }
         //计算为几天前
         public function diff_timeago($time)
@@ -274,31 +272,43 @@ if (!class_exists('AYA_WP_Post_Object')) {
             }
         }
         //获取文章访问量
-        public function get_post_views()
+        public function get_post_views($modified = false)
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
 
             $the_views = $post->view_count;
 
+            if (empty($the_views)) {
+                $the_views = '0';
+            }
+
             //计算为千位
             if ($the_views >= 1000) {
-                return round($the_views / 1000, 1) . 'K';
-            } else {
-                return $the_views;
+                $the_views = round($the_views / 1000, 1) . 'K';
             }
+
+            if ($modified == true) {
+                return $the_views . __('&nbsp;次浏览', 'AIYA');
+            }
+
+            return $the_views;
         }
         //获取文章点赞数
-        public function get_post_likes()
+        public function get_post_likes($modified = false)
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
 
             $the_likes = $post->like_count;
 
-            if ($the_likes > 0) {
-                return $the_likes;
-            } else {
-                return '0';
+            if (empty($the_likes)) {
+                $the_likes = '0';
             }
+
+            if ($modified == true) {
+                return $the_likes . __('&nbsp;人喜欢', 'AIYA');
+            }
+
+            return $the_likes;
         }
         //获取正文
         public function get_post_content()
@@ -375,25 +385,22 @@ if (!class_exists('AYA_WP_Post_Object')) {
             $post_id = $post->ID;
             $post_type = $post->post_type;
 
+            $term_data = [];
+
             //此文章类型注册的所有分类法
             $taxonomies = get_object_taxonomies($post_type);
             //检查是否适用于当前文章类型
             if (!in_array($taxonomy, $taxonomies)) {
-                return false;
+                return $term_data;
             }
 
             $terms = get_the_terms($post_id, $taxonomy);
-
-            if (is_wp_error($terms)) {
-                return $terms;
+            //直接检查WP报错，跳过类型验证
+            if (is_wp_error($terms) || empty($terms)) {
+                return $term_data;
             }
 
-            if (empty($terms)) {
-                return false;
-            }
-
-            $term_data = [];
-
+            //遍历Term对象返回新的数组
             foreach ($terms as $term) {
 
                 $link = get_term_link($term, $taxonomy);
@@ -473,13 +480,14 @@ if (!class_exists('AYA_WP_Post_Object')) {
         //获取文章时效性
         public function the_post_is_outdated($out_day = 30)
         {
-            $post = is_object($this->post) ? $this->post : $this->get_post();
-
             $out_day = intval($out_day);
+
             //设置为0时
             if ($out_day == 0) {
                 return false;
             }
+
+            $post = is_object($this->post) ? $this->post : $this->get_post();
 
             $publish_time = get_post_time('U', false, $post, true);
             $modified_time = get_post_modified_time('U', false, $post, true);
@@ -563,8 +571,14 @@ if (!class_exists('AYA_Post_In_While')) {
                 case 'views':
                     $this->data['views'] = $this->get_post_views();
                     break;
+                case 'views_text':
+                    $this->data['views_text'] = $this->get_post_views(true);
+                    break;
                 case 'likes':
                     $this->data['likes'] = $this->get_post_likes();
+                    break;
+                case 'likes_text':
+                    $this->data['likes_text'] = $this->get_post_likes(true);
                     break;
                 case 'content':
                     $this->data['content'] = $this->get_post_content();
@@ -605,11 +619,8 @@ if (!class_exists('AYA_Post_In_While')) {
                 case '30_dyas_outdated':
                     $this->data['is_outdated'] = $this->the_post_is_outdated(30);
                     break;
-                case '60_dyas_outdated':
-                    $this->data['is_outdated'] = $this->the_post_is_outdated(60);
-                    break;
                 default:
-                    return null;
+                    return true;
             }
 
             return $this->data[$name];
@@ -623,6 +634,20 @@ if (!class_exists('AYA_Post_In_While')) {
             }
 
             return isset($this->data[$name]);
+        }
+        //上一篇文章
+        public function prev_post()
+        {
+            $prev_post = get_adjacent_post(false, '', true, 'category');
+
+            return $prev_post ? new self($prev_post) : null;
+        }
+        //下一篇文章
+        public function next_post()
+        {
+            $next_post = get_adjacent_post(false, '', false, 'category');
+
+            return $next_post ? new self($next_post) : null;
         }
     }
 }

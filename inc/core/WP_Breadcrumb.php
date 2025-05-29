@@ -145,9 +145,6 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
                         'label' => get_the_title($post),
                         'url' => get_permalink($post),
                     ];
-
-                    // 添加文章分页（如果有多页）
-                    self::add_post_pagination_item($items, $post);
                 } elseif (is_page()) {
                     // 页面
                     $post = get_queried_object();
@@ -165,9 +162,6 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
                         'label' => get_the_title($post),
                         'url' => get_permalink($post),
                     ];
-
-                    // 添加页面分页（如果有多页）
-                    self::add_post_pagination_item($items, $post);
                 }
             } elseif (is_search()) {
                 // 搜索结果页
@@ -253,18 +247,6 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
                 'label' => sprintf(__('第 %s 页', 'AIYA'), $paged),
                 'url' => get_pagenum_link($paged),
             ];
-        }
-
-        //获取文章/页面内部分页
-        private static function add_post_pagination_item(&$items, $post)
-        {
-            global $page, $pages;
-            if (count($pages) > 1 && $page > 1) {
-                $items[] = [
-                    'label' => sprintf(__('第 %s 页', 'AIYA'), $page),
-                    'url' => get_permalink($post) . 'page/' . $page,
-                ];
-            }
         }
     }
 }
