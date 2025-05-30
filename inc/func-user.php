@@ -271,34 +271,74 @@ function aya_sponsor_save_orders_user_profile($user_id)
  * ------------------------------------------------------------------------------
  */
 
-add_action('wp_ajax_toggle_post_save', 'handle_toggle_post_save');
-
-function handle_toggle_post_save()
+function aya_user_get_favorite_posts($user_id)
 {
-    //验证nonce字段
-    check_ajax_referer('save_post_nonce', 'nonce');
-
     if (!is_user_logged_in()) {
-        wp_send_json_error(array('error' => __('请先登录', 'AIYA')));
+        return false;
+    }
+    if (empty($user_id)) {
+        $user_id = get_current_user_id();
     }
 
-    $post_id = intval($_POST['post_id']);
+    $favorites = get_user_meta($user_id, 'favorite_posts', true);
+
+    //数据错误
+    if (empty($favorites) || !is_array($favorites)) {
+        return [];
+    }
+
+    $query = new AYA_Query_Post();
+
+    return $query->list_posts($favorites, ['post']);
+}
+
+//在用户后台页面添加自定义区块
+add_action('show_user_profile', 'aya_user_show_favorites_profile');
+
+function aya_user_show_favorites_profile($user)
+{
     $user_id = get_current_user_id();
-    $saved_posts = get_user_meta($user_id, 'saved_posts', true) ?: array();
-
-    if (in_array($post_id, $saved_posts)) {
-        // 取消收藏
-        $saved_posts = array_diff($saved_posts, array($post_id));
-        $is_saved = false;
-    } else {
-        // 添加收藏
-        $saved_posts[] = $post_id;
-        $is_saved = true;
+    // 只对管理员显示此区块，或者当前用户查看自己的资料
+    if (!current_user_can('manage_options') && $user_id != $user->ID) {
+        return;
     }
 
-    update_user_meta($user_id, 'saved_posts', $saved_posts);
+    // 获取收藏文章
+    $favorites = aya_user_get_favorite_posts($user_id);
 
-    wp_send_json_success(array('is_saved' => $is_saved));
+    // 开始输出区块
+    ?>
+    <h2><?php _e('收藏夹', 'AIYA'); ?></h2>
+
+    <?php if (empty($favorites)): ?>
+        <p><?php _e('暂无收藏文章', 'AIYA'); ?></p>
+    <?php else: ?>
+        <p><?php printf(__('共有 <strong>%d</strong> 篇收藏文章', 'AIYA'), count($favorites)); ?></p>
+        <div class="favorite-posts-list" style="margin-top: 15px;">
+            <table class="widefat" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th style="width: 60%;"><?php _e('文章标题', 'AIYA'); ?></th>
+                        <th><?php _e('作者', 'AIYA'); ?></th>
+                        <th><?php _e('发布日期', 'AIYA'); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($favorites as $post):
+                        //循环查询结果
+                        $post = new AYA_Post_In_While($post);
+                        ?>
+                        <tr>
+                            <td><a href="<?php echo $post->url; ?>" target="_blank"><?php echo $post->title; ?></a></td>
+                            <td><?php echo $post->author_name; ?></td>
+                            <td><?php echo $post->date; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+<?php
 }
 
 /*
@@ -389,8 +429,6 @@ function aya_user_get_login_data($logged_in = false)
     } else {
         //获取站点设置是否允许注册
         $user_menu['enable_register'] = get_option('users_can_register') ? true : false;
-        //获取找回密码链接
-        $user_menu['lost_password_url'] = wp_lostpassword_url();
         //TODO 社交登录
         $user_menu['enable_sso_register'] = false; //aya_opt('allow_sso_register_switch');
         $user_menu['rest_nonce'] = wp_create_nonce('wp_rest');

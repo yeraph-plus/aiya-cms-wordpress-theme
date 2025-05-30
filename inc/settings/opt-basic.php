@@ -127,6 +127,13 @@ AYF::new_opt([
             'default' => '本站部分内容转载自网络，作品版权归原作者及来源网站所有，任何内容转载、商业用途等均须联系原作者并注明来源。',
         ],
         [
+            'title' => '相关文章',
+            'desc' => '在文章页面显示相关文章导航卡片（使用分类和标签进行相关度检索）',
+            'id' => 'site_single_related_posts_bool',
+            'type' => 'switch',
+            'default' => false,
+        ],
+        [
             'desc' => '合规类功能设置',
             'type' => 'title_1',
         ],

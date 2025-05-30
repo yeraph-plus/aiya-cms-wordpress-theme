@@ -2,7 +2,7 @@
 import { ref } from "vue";
 //Heroicons
 import { ArrowRightEndOnRectangleIcon } from "@heroicons/vue/24/outline";
-import { EnvelopeIcon, LockClosedIcon, ArrowUturnRightIcon } from "@heroicons/vue/20/solid";
+import { EnvelopeIcon, LockClosedIcon } from "@heroicons/vue/20/solid";
 //Toast
 import { toast } from "../../scripts/toast-plugin";
 //i18n
@@ -10,10 +10,6 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 //Data
 const props = defineProps({
-    lost_password_url: {
-        type: String,
-        default: "",
-    },
     rest_nonce: {
         type: String,
         required: true,
@@ -29,13 +25,14 @@ defineExpose({
 });
 
 //定义事件
-const emit = defineEmits(["login-success", "switch-to-register", "update:loading"]);
+const emit = defineEmits(["login-success", "update:loading"]);
 
 //表单数据
 const loginEmail = ref("");
 const loginPassword = ref("");
 const loginRemember = ref(false);
 const errorMsg = ref("");
+
 //重置表单
 function resetForm() {
     loginEmail.value = "";
@@ -135,11 +132,12 @@ async function handleLogin() {
                         class="checkbox checkbox-sm checkbox-primary mr-2" />
                     <span class="text-base-content">{{ $t("remember") }}</span>
                 </label>
-                <a
-                    :href="props.lost_password_url"
-                    class="link link-primary text-base">
+                <button
+                    type="button"
+                    class="btn btn-link p-0 link-primary text-base font-normal"
+                    @click.prevent="$emit('switch-to-forgot-password')">
                     {{ $t("forgot_password") }}
-                </a>
+                </button>
             </div>
             <button
                 type="submit"
@@ -154,16 +152,5 @@ async function handleLogin() {
                 {{ $t("sign_in") }}
             </button>
         </form>
-    </div>
-    <!-- Switch -->
-    <div class="mt-6 text-center">
-        <span class="opacity-70 mr-2">{{ $t("need_account") }}</span>
-        <button
-            type="button"
-            class="link link-primary"
-            @click="$emit('switch-to-register')">
-            <ArrowUturnRightIcon class="size-3 inline-block mr-1" />
-            {{ $t("sign_up") }}
-        </button>
     </div>
 </template>

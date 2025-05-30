@@ -444,7 +444,7 @@ function aya_post_thumb($have_thumb_url = false, $post_content = '', $size_w = 4
 }
 
 //文章状态徽章处理
-function aya_post_status_badge($status_array = [])
+function aya_the_post_status_badge($status_array = [])
 {
     $html = '';
 
@@ -482,13 +482,33 @@ function aya_post_status_badge($status_array = [])
     return aya_echo($html);
 }
 
-//
-
 /*
  * ------------------------------------------------------------------------------
  * 正文组件
  * ------------------------------------------------------------------------------
  */
+
+//文章顶部中显示的小贴士信息
+function aya_the_post_tips($post_id = 0)
+{
+    $html = '';
+
+    $terms = get_the_terms($post_id, 'tips');
+
+    if ($terms && !is_wp_error($terms)) {
+        //显示全部
+        foreach ($terms as $term) {
+            //获取设置的颜色样式
+            $alert_by = get_term_meta($term->term_id, 'alert_level', true);
+
+            $html .= '<div role="alert" class="alert alert-outline alert-' . esc_attr($alert_by) . ' mb-2">';
+            $html .= '<span><b>' . esc_html($term->name) . '</b> ' . esc_html($term->description) . '</span>';
+            $html .= '</div>';
+        }
+    }
+
+    return  aya_echo($html);
+}
 
 //评论分页链接的模板方法
 function aya_comment_pagination_item_link($label_type = 'next')
@@ -553,38 +573,6 @@ function aya_widget_card($title, $content)
 }
 
 
-//文章末尾标签
-function aya_single_badge_tags($post_id = 0)
-{
-    $cats_before = '<span class="tags-badge">';
-    $cats_after = '</span>';
-    $cats_icon = aya_feather_icon('tag', '12', 'mr-1', '');
-    $tags_icon = aya_feather_icon('hash', '12', 'mr-1', '');
-
-    $the_cat_list = get_the_term_list($post_id, 'category', $cats_before . $cats_icon, $cats_after . $cats_before . $cats_icon, $cats_after);
-    $the_tag_list = get_the_term_list($post_id, 'post_tag', $cats_before . $tags_icon, $cats_after . $cats_before . $tags_icon, $cats_after);
-
-    if (!is_wp_error($the_cat_list) || !is_wp_error($the_tag_list)) {
-        return aya_echo($the_cat_list . $the_tag_list);
-    }
-}
-
-//文章顶部中显示标签
-function aya_single_status_tags($post_id = 0)
-{
-    $terms = get_the_terms($post_id, 'status');
-
-    $html = '';
-    if ($terms && !is_wp_error($terms)) {
-        foreach ($terms as $term) {
-            $html .= '<div class="relative flex items-center text-dark bg-dark-light rounded border-l-4 border-dark dark:bg-dark-dark-light dark:text-white-light dark:border-white-light/20 p-4 mb-4">';
-            $html .= aya_feather_icon('alert-octagon', '20', 'mr-2', '') . '<span><b>' . esc_html($term->name) . '</b> ' . esc_html($term->description) . '</span>';
-            $html .= '</div>';
-        }
-    }
-
-    return aya_echo($html);
-}
 
 /*
  * ------------------------------------------------------------------------------

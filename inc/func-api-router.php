@@ -175,3 +175,74 @@ $api->register_route('register', [
         ]
     ]
 ]);
+
+//找回密码
+$api->register_route('forgot_password', [
+    'methods' => 'POST',
+    'callback' => function (WP_REST_Request $request) use ($api) {
+        //获取nonce参数
+        $nonce = $request->get_header('X-WP-Nonce');
+        //验证nonce
+        if (!wp_verify_nonce($nonce, 'wp_rest')) {
+            return $api->error_response('permission_denied', ['detail' => __('客户端已失效，请刷新页面后重试', 'AIYA')]);
+        }
+
+        //接取参数
+        $email = $request->get_param('email');
+
+        //检查参数
+        if (empty($email)) {
+            return $api->error_response('invalid_param', ['detail' => __('请提供注册邮箱', 'AIYA')]);
+        }
+
+        //验证传入是否是邮箱
+        if (!is_email($email)) {
+            return $api->error_response('invalid_param', ['detail' => __('邮箱格式不正确', 'AIYA')]);
+        }
+
+        //检查邮箱是否存在
+        $user = get_user_by('email', $email);
+        if (!$user) {
+            return $api->error_response('invalid_param', ['detail' => __('该邮箱未注册', 'AIYA')]);
+        }
+
+        //生成重置密码链接
+        $key = get_password_reset_key($user);
+        if (is_wp_error($key)) {
+            return $api->error_response('server_error', ['detail' => __('无法生成密码重置链接，请稍后再试', 'AIYA')]);
+        }
+
+        //发送重置密码邮件
+        $reset_link = network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login');
+
+        //邮件标题
+        $subject = sprintf(__('[%s] 密码重置', 'AIYA'), wp_specialchars_decode(get_option('blogname')));
+
+        //邮件内容
+        $message = __('有人请求重置以下账号的密码：', 'AIYA') . "\r\n\r\n";
+        $message .= network_home_url('/') . "\r\n\r\n";
+        $message .= sprintf(__('用户名: %s', 'AIYA'), $user->user_login) . "\r\n\r\n";
+        $message .= __('如果这不是您本人的操作，请忽略此邮件。', 'AIYA') . "\r\n\r\n";
+        $message .= __('要重置密码，请访问以下链接:', 'AIYA') . "\r\n\r\n";
+        $message .= $reset_link . "\r\n";
+
+        //发送邮件
+        $mail_sent = wp_mail($user->user_email, $subject, $message);
+
+        if (!$mail_sent) {
+            return $api->error_response('server_error', ['detail' => __('发送重置密码邮件失败，请稍后再试', 'AIYA')]);
+        }
+
+        return $api->response(['message' => __('密码重置链接已发送到您的邮箱，请查收', 'AIYA')]);
+    },
+    'permission_callback' => function () {
+        return !is_user_logged_in();
+    },
+    'args' => [
+        'email' => [
+            'required' => true,
+            'type' => 'string',
+            'description' => '用户注册邮箱'
+        ]
+    ]
+]);

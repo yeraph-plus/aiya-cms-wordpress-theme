@@ -19,7 +19,7 @@ if (!class_exists('AYA_Plugin_RecordVisitors')) {
 
     class AYA_Plugin_RecordVisitors
     {
-        public function __destruct()
+        public function __construct()
         {
             add_action('wp_footer', array($this, 'record_visitors'));
             add_action('the_post', array($this, 'add_view_count_to_post_object'));

@@ -2,7 +2,7 @@
 import { ref } from "vue";
 // Heroicons
 import { UserPlusIcon } from "@heroicons/vue/24/outline";
-import { UserIcon, EnvelopeIcon, LockClosedIcon, ArrowUturnLeftIcon } from "@heroicons/vue/20/solid";
+import { UserIcon, EnvelopeIcon, LockClosedIcon } from "@heroicons/vue/20/solid";
 //Toast
 import { toast } from "../../scripts/toast-plugin";
 //i18n
@@ -29,7 +29,7 @@ defineExpose({
 });
 
 //定义事件
-const emit = defineEmits(["register-success", "switch-to-login", "update:loading"]);
+const emit = defineEmits(["register-success", "update:loading"]);
 
 //表单数据
 const regEmail = ref("");
@@ -177,16 +177,5 @@ async function handleRegister() {
                 {{ $t("sign_up") }}
             </button>
         </form>
-    </div>
-    <!-- Switch -->
-    <div class="mt-6 text-center">
-        <span class="opacity-70 mr-2">{{ $t("already_have_account") }}</span>
-        <button
-            type="button"
-            class="link link-primary"
-            @click="$emit('switch-to-login')">
-            <ArrowUturnLeftIcon class="size-3 inline-block mr-1" />
-            {{ $t("sign_in") }}
-        </button>
     </div>
 </template>

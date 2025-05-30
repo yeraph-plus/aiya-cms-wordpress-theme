@@ -1,5 +1,6 @@
 <?php
-if (!defined('ABSPATH')) exit;
+if (!defined('ABSPATH'))
+    exit;
 
 if (is_admin()) {
     //初始化简码输入框组件按钮
@@ -20,7 +21,7 @@ if (is_admin()) {
             ],
             [
                 'id' => 'inline',
-                'type'  => 'checkbox',
+                'type' => 'checkbox',
                 'label' => '作为注释输出',
                 'desc' => '使当前段落作为 html 注释输出到前台页面，或者完全不输出',
                 'default' => false,
@@ -43,7 +44,7 @@ if (is_admin()) {
             ],
             [
                 'id' => 'mailto',
-                'type'  => 'checkbox',
+                'type' => 'checkbox',
                 'label' => '使用 mailto 链接',
                 'desc' => '转换为 mailto 链接，或直接显示',
                 'default' => false,
@@ -66,7 +67,7 @@ if (is_admin()) {
             ],
             [
                 'id' => 'order',
-                'type'  => 'checkbox',
+                'type' => 'checkbox',
                 'label' => '编号列表',
                 'desc' => '启用此项将显示为编号列表，否则使用符号列表',
                 'default' => false,
@@ -89,9 +90,9 @@ if (is_admin()) {
             ],
             [
                 'id' => 'dt_width',
-                'type'  => 'select',
+                'type' => 'select',
                 'label' => '列表比例',
-                'desc'  => '选择描述列表的宽度比例',
+                'desc' => '选择描述列表的宽度比例',
                 'sub' => [
                     '1' => '1/4列表',
                     '2' => '1/2列表',
@@ -116,54 +117,67 @@ if (is_admin()) {
                 'default' => '<strong>提示，</strong>这是一个提示。',
             ],
             [
-                'id' => 'level',
-                'type'  => 'select',
-                'label' => '颜色等级',
-                'desc'  => '选择一个提示框的颜色等级',
+                'id' => 'style',
+                'type' => 'select',
+                'label' => '样式',
+                'desc' => '选择提示框的样式',
                 'sub' => [
-                    'primary' => '默认',
-                    'secondary' => '次要',
+                    'outline' => '框线',
+                    'dash' => '虚线',
+                    'soft' => '柔和',
+                    'default' => '默认',
+                ],
+                'default' => 'default',
+            ],
+            [
+                'id' => 'level',
+                'type' => 'select',
+                'label' => '颜色等级',
+                'desc' => '选择一个提示框的颜色等级',
+                'sub' => [
                     'success' => '成功',
-                    'danger' => '危险',
+                    'error' => '危险',
                     'warning' => '警告',
                     'info' => '信息',
+                    'default' => '默认',
                 ],
-                'default' => 'primary',
-            ],
+                'default' => 'default',
+            ]
         )
     ));
 
     AYA_Shortcode::shortcode_register('button-content', array(
-        'id'       => 'sc-button-content',
-        'title'    => '按钮',
-        'note'    => '创建一个按钮外观的链接，用于在文章中突出显示链接，支持多种颜色和样式',
+        'id' => 'sc-button-content',
+        'title' => '按钮',
+        'note' => '创建一个按钮外观的链接，用于在文章中突出显示链接，支持多种颜色和样式',
         'template' => '[button {{attributes}}] {{content}} [/button]',
-        'field_build'   => array(
+        'field_build' => array(
             [
                 'id' => 'href',
-                'type'  => 'text',
+                'type' => 'text',
                 'label' => '链接',
-                'desc'  => '按钮跳转的Url',
-                'default'   => '#',
+                'desc' => '按钮跳转的Url',
+                'default' => '#',
             ],
             [
                 'id' => 'content',
-                'type'  => 'text',
+                'type' => 'text',
                 'label' => '标题',
-                'desc'  => '按钮显示的标题',
-                'default'   => '点击跳转',
+                'desc' => '按钮显示的标题',
+                'default' => '跳转',
             ],
             [
                 'id' => 'color',
-                'type'  => 'select',
+                'type' => 'select',
                 'label' => '颜色',
-                'desc'  => '按钮的颜色',
+                'desc' => '按钮的颜色',
                 'sub' => [
+                    'neutral' => '中性色',
                     'primary' => '主题色',
-                    'secondary' => '主题色2',
-                    'dark' => '默认黑',
+                    'secondary' => '次要主题色',
+                    'accent' => '强调色',
                     'success' => '成功绿',
-                    'danger' => '危险红',
+                    'error' => '危险红',
                     'warning' => '警告黄',
                     'info' => '信息蓝',
                 ],
@@ -171,42 +185,61 @@ if (is_admin()) {
             ],
             [
                 'id' => 'style',
-                'type'  => 'select',
+                'type' => 'select',
                 'label' => '样式',
-                'desc'  => '按钮的样式',
-                'sub' => array(
+                'desc' => '按钮的样式',
+                'sub' => [
+                    'outline' => '框线',
+                    'dash' => '虚线',
+                    'soft' => '柔和',
+                    'ghost' => '幽灵',
+                    'link' => '链接',
                     'default' => '默认',
-                    'outline' => '反色',
-                ),
-                'default' => 'default',
+                ],
+                'default' => 'link',
+            ],
+            [
+                'id' => 'size',
+                'type' => 'select',
+                'label' => '尺寸',
+                'desc' => '按钮的尺寸',
+                'sub' => [
+                    'xs' => '超小',
+                    'sm' => '小',
+                    'md' => '中',
+                    'lg' => '大',
+                    'xl' => '超大',
+                ],
+                'default' => 'lg',
             ],
         )
     ));
 
     AYA_Shortcode::shortcode_register('badge-content', array(
-        'id'       => 'sc-badge-content',
-        'title'    => '徽标',
-        'note'    => '创建一个徽标外观的标签，用于在文章中的标题添加备注或添加提示，支持多种颜色和样式',
+        'id' => 'sc-badge-content',
+        'title' => '徽标',
+        'note' => '创建一个徽标外观的标签，用于在文章中的标题添加备注或添加提示，支持多种颜色和样式',
         'template' => '[badge {{attributes}}] {{content}} [/badge]',
-        'field_build'   => array(
+        'field_build' => array(
             [
                 'id' => 'content',
-                'type'  => 'text',
+                'type' => 'text',
                 'label' => '标题',
-                'desc'  => '徽标显示的文本',
-                'default'   => 'NEW!',
+                'desc' => '徽标显示的文本',
+                'default' => 'NEW!',
             ],
             [
                 'id' => 'color',
-                'type'  => 'select',
+                'type' => 'select',
                 'label' => '颜色',
-                'desc'  => '徽标的颜色',
+                'desc' => '徽标的颜色',
                 'sub' => [
+                    'neutral' => '中性色',
                     'primary' => '主题色',
-                    'secondary' => '主题色2',
-                    'dark' => '默认黑',
+                    'secondary' => '次要主题色',
+                    'accent' => '强调色',
                     'success' => '成功绿',
-                    'danger' => '危险红',
+                    'error' => '危险红',
                     'warning' => '警告黄',
                     'info' => '信息蓝',
                 ],
@@ -214,19 +247,60 @@ if (is_admin()) {
             ],
             [
                 'id' => 'style',
-                'type'  => 'select',
+                'type' => 'select',
                 'label' => '样式',
-                'desc'  => '徽标的样式',
+                'desc' => '徽标的样式',
                 'sub' => array(
+                    'outline' => '框线',
+                    'dash' => '虚线',
+                    'soft' => '柔和',
+                    'ghost' => '幽灵',
                     'default' => '默认',
-                    'outline' => '反色',
                 ),
                 'default' => 'default',
+            ],
+            [
+                'id' => 'size',
+                'type' => 'select',
+                'label' => '尺寸',
+                'desc' => '按钮的尺寸',
+                'sub' => [
+                    'xs' => '超小',
+                    'sm' => '小',
+                    'md' => '中',
+                    'lg' => '大',
+                    'xl' => '超大',
+                ],
+                'default' => 'lg',
+            ],
+        )
+    ));
+
+    AYA_Shortcode::shortcode_register('collapse-content', array(
+        'id' => 'sc-collapse-content',
+        'title' => '折叠面板',
+        'note' => '创建一个折叠面板，用于在文章中可以展开或收起的内容',
+        'template' => '[collapse {{attributes}}] {{content}} [/collapse]',
+        'field_build' => array(
+            [
+                'id' => 'title',
+                'type' => 'text',
+                'label' => '标题',
+                'desc' => '折叠面板的标题',
+                'default' => '点击展开内容',
+            ],
+            [
+                'id' => 'content',
+                'type' => 'textarea',
+                'label' => '标题',
+                'desc' => '折叠面板的内容',
+                'default' => '这里是折叠面板的内容。',
             ],
         )
     ));
 }
 
+//移除一些 WordPress 默认的短代码
 remove_shortcode('wp_caption');
 remove_shortcode('cn_icp');
 remove_shortcode('cn_icp_text');
@@ -240,6 +314,7 @@ add_shortcode('col_list', 'aya_shortcode_column_list_content');
 add_shortcode('alert', 'aya_shortcode_alert_content');
 add_shortcode('button', 'aya_shortcode_button_content');
 add_shortcode('badge', 'aya_shortcode_badge_content');
+add_shortcode('collapse', 'aya_shortcode_collapse_content');
 
 //AIYA-CMS 短代码组件：隐藏文字段
 function aya_shortcode_hide_content($atts = array(), $content = '')
@@ -272,7 +347,7 @@ function aya_shortcode_email_content($atts = array(), $content = null)
 
     //将电子邮件地址字符转换为 HTML 实体
     if ($atts['mailto'] == 'true' || $atts['mailto'] == 'on' || $atts['mailto'] == true) {
-        return '<a class="inline-flex btn btn-outline-primary" href="' . esc_url('mailto:' . antispambot($content)) . '">' . esc_html(antispambot($content)) . '</a>';
+        return '<a class="inline-flex btn btn-outline" href="' . esc_url('mailto:' . antispambot($content)) . '">' . esc_html(antispambot($content)) . '</a>';
     } else {
         return antispambot($content);
     }
@@ -297,8 +372,16 @@ function aya_shortcode_li_list_content($atts = array(), $content = '')
     $html = '';
     $html .= '<' . $tag . '>' . "\n";
 
-    foreach (explode("\n", $content) as $li) {
-        if ($li = trim($li)) {
+    //根据换行符分割
+    $lines = explode("\n", $content);
+
+    array_shift($lines);
+
+    foreach ($lines as $li) {
+
+        $li = trim($li);
+
+        if (!empty($li)) {
             $html .= '<li>' . do_shortcode($li) . '</li>' . "\n";
         }
     }
@@ -320,20 +403,43 @@ function aya_shortcode_column_list_content($atts = array(), $content = '')
 
     $content = str_replace(array("\r\n", "<br />\n", "</p>\n", "\n<p>"), "\n", $content);
 
-    $dt_width = intval($atts['dt_width']);
-    $dd_width = 4 - $dt_width;
+    switch ($atts['dt_width']) {
+        case '1':
+        default:
+            $dt_width = 'w-1/4';
+            $dd_width = 'w-3/4';
+            break;
+        case '2':
+            $dt_width = 'w-1/2';
+            $dd_width = 'w-1/2';
+            break;
+        case '3':
+            $dt_width = 'w-3/4';
+            $dd_width = 'w-1/4';
+            break;
+    }
 
     //循环格式
     $html = '';
-    $html .= '<dl class="flex flex-wrap">' . "\n";
-    $d = 0; //dd计数
-    foreach (explode("\n", $content) as $lc) {
-        if ($lc = trim($lc)) {
+    $html .= '<dl class="flex flex-wrap not-prose">' . "\n";
+
+    //根据换行符分割
+    $lines = explode("\n", $content);
+
+    array_shift($lines);
+
+    //dd计数
+    $d = 0;
+    foreach ($lines as $lc) {
+
+        $lc = trim($lc);
+
+        if (!empty($lc)) {
             if ($d == 0) {
-                $html .= '<dt class="w-' . $dt_width . '/4">' . do_shortcode($lc) . '</dt>' . "\n";
+                $html .= '<dt class="' . $dt_width . '">' . do_shortcode($lc) . '</dt>' . "\n";
                 $d = 1;
             } else {
-                $html .= '<dd class="w-' . $dd_width . '/4">' . do_shortcode($lc) . '</dd>' . "\n";
+                $html .= '<dd class="' . $dd_width . '">' . do_shortcode($lc) . '</dd>' . "\n";
                 $d = 0;
             }
         }
@@ -349,14 +455,15 @@ function aya_shortcode_alert_content($atts = array(), $content = '')
 {
     $atts = shortcode_atts(
         array(
-            'level' => 'primary', //primary secondary success warning danger info light dark
+            'level' => 'default', //success warning error info
+            'style' => 'default', //outline dash soft
         ),
         $atts,
     );
 
-    $html_format = '<div class="flex items-center p-3.5 my-2 rounded text-%1$s bg-%1$s-light dark:bg-%1$s-dark-light" role="alert">%2$s</div>';
+    $html_format = '<div class="alert alert-%1$s alert-%2$s my-4" role="alert">%3$s</div>';
 
-    return sprintf($html_format, $atts['level'], stripslashes($content));
+    return sprintf($html_format, $atts['level'], $atts['style'], stripslashes($content));
 }
 
 //AIYA-CMS 短代码：按钮
@@ -364,22 +471,17 @@ function aya_shortcode_button_content($atts = array(), $content = '')
 {
     $atts = shortcode_atts(
         array(
-            'style' => 'default',
+            'style' => 'link', //outline dash soft ghost link
             'color' => 'primary',
+            'size' => 'md',
             'href' => '#',
         ),
         $atts,
     );
 
-    if ($atts['style'] == 'outline') {
-        $html_format = '<a class="btn btn-outline-%1$s" href="%2$s" role="button">%3$s</a>';
-    }
-    //default
-    else {
-        $html_format = '<a class="btn btn-%1$s" href="%2$s" role="button">%3$s</a>';
-    }
+    $html_format = '<a class="btn btn-%1$s btn-%2$s btn-%3$s" href="%4$s" role="button">%5$s</a>';
 
-    return sprintf($html_format, sanitize_html_class($atts['color']), esc_url($atts['href']), esc_html($content));
+    return sprintf($html_format, esc_attr($atts['style']), esc_attr($atts['color']), esc_attr($atts['size']), esc_url($atts['href']), esc_html($content));
 }
 
 //AIYA-CMS 短代码组件：徽标
@@ -387,19 +489,33 @@ function aya_shortcode_badge_content($atts = array(), $content = '')
 {
     $atts = shortcode_atts(
         array(
-            'style' => 'default',
+            'style' => 'link', //outline dash soft ghost link
             'color' => 'primary',
+            'size' => 'md',
         ),
         $atts,
     );
 
-    if ($atts['style'] == 'outline') {
-        $html_format = '<span class="ml-4 badge badge-outline-%1$s">%2$s</span>';
-    }
-    //default
-    else {
-        $html_format = '<span class="ml-4 badge bg-%1$s">%2$s</span>';
-    }
+    $html_format = '<span class="badge badge-%1$s badge-%2$s badge-%3$s ml-4">%4$s</span>';
 
-    return sprintf($html_format, sanitize_html_class($atts['color']), esc_html($content));
+    return sprintf($html_format, esc_attr($atts['style']), esc_attr($atts['color']), esc_attr($atts['size']), esc_html($content));
+}
+
+//AIYA-CMS 短代码：折叠面板
+function aya_shortcode_collapse_content($atts = array(), $content = '')
+{
+    $atts = shortcode_atts(
+        array(
+            'title' => ''
+        ),
+        $atts,
+    );
+
+    $html = '';
+    $html .= '<div tabindex="0" class="collapse bg-base-100 border-base-300 border my-4" role="button">';
+    $html .= '<div class="collapse-title font-semibold">' . esc_html($atts['title']) . '</div>';
+    $html .= '<div class="collapse-content text-base-content">' . do_shortcode($content) . '</div>';
+    $html .= '</div>';
+
+    return $html;
 }

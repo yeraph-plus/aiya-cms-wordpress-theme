@@ -16,9 +16,8 @@ aya_require('WP_Breadcrumb', 'core');
 aya_require('WP_Menu', 'core');
 aya_require('WP_Paged', 'core');
 aya_require('WP_Post', 'core');
-aya_require('WP_Post', 'core');
+aya_require('WP_Query', 'core');
 //aya_require('WP_Term', 'core');
-//aya_require('WP_Query', 'core');
 
 /*
  * ------------------------------------------------------------------------------

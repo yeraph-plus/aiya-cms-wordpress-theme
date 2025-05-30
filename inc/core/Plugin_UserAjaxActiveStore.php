@@ -20,7 +20,7 @@ if (!class_exists('AYA_Plugin_UserAjaxActiveStore')) {
 
     class AYA_Plugin_UserAjaxActiveStore
     {
-        public function __destruct()
+        public function __construct()
         {
             //前端action事件名：click_likes
             add_action('wp_ajax_click_likes', array($this, 'set_post_click_likes'));

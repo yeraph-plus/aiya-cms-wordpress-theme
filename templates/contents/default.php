@@ -28,7 +28,7 @@ $next_post = $post_obj->next_post();
         <?php endif; ?>
         <div class="<?php aya_echo($has_thumbnail ? 'absolute bottom-0 left-0 right-0 p-4 z-10' : 'p-4'); ?>">
             <h1 class="text-2xl font-bold mb-4 flex items-center gap-2 <?php aya_echo($has_thumbnail ? 'text-white drop-shadow-lg' : 'text-base-content'); ?>">
-                <?php aya_post_status_badge($post_obj->status); ?>
+                <?php aya_the_post_status_badge($post_obj->status); ?>
                 <?php aya_echo($post_obj->title); ?>
             </h1>
             <div class="flex flex-wrap items-center gap-3 text-sm <?php aya_echo($has_thumbnail ? 'text-white/90' : 'text-base-content/70'); ?>">
@@ -66,13 +66,15 @@ $next_post = $post_obj->next_post();
         </div>
     </div>
     <!-- Content Start -->
-    <div class="article-content p-6 prose prose-base lg:prose-lg max-w-none">
+    <div class="article-content1 p-6 prose prose-base max-w-none">
         <?php if ($post_is_outdated): ?>
             <div class="alert alert-soft my-4">
                 <icon name="exclamation-triangle" class="size-4 mr-1"></icon>
                 <span><?php aya_echo(__('这篇文章的发布于&nbsp;', 'AIYA') . $post_obj->date_ago . __('&nbsp;，部分信息可能已过时。', 'AIYA')); ?></span>
             </div>
         <?php endif; ?>
+
+        <?php aya_the_post_tips($post_obj->id); ?>
 
         <?php aya_echo($post_obj->content); ?>
 
@@ -85,7 +87,7 @@ $next_post = $post_obj->next_post();
     </div>
     <!-- Content End -->
     <div class="divider px-8 lg:px-48 font-semibold text-base-content/50">THE END</div>
-    <div class="flex items-center justify-center text-sm text-base-content/50">
+    <div class="flex items-center justify-center p-6 text-sm text-base-content/50">
         <?php aya_echo($statement_content); ?>
     </div>
     <div class="flex flex-wrap gap-2 p-6">
@@ -129,6 +131,7 @@ $next_post = $post_obj->next_post();
 
 <?php
 /*
+$related = aya_opt('site_single_related_bool', 'basic');
 // 显示相关文章
 $related_posts = get_posts(array(
     'category__in' => wp_get_post_categories($post_obj->id),

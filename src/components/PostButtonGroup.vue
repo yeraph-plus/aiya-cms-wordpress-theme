@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 //i18n
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
@@ -195,7 +195,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex items-center justify-center gap-2">
+    <div class="flex items-center justify-center gap-2 p-6">
         <button
             class="btn btn-wide btn-primary gap-2"
             :class="{

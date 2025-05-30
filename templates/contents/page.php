@@ -5,7 +5,7 @@ $post_obj = new AYA_Post_In_While();
 <article data-id="<?php aya_echo($post_obj->id); ?>" class="bg-base-100 border border-base-300 rounded-lg mb-8">
     <div class="relative p-4 border-b border-base-300">
         <h1 class="text-2xl font-bold mb-4 ">
-            <?php aya_post_status_badge($post_obj->status); ?>
+            <?php aya_the_post_status_badge($post_obj->status); ?>
             <?php aya_echo($post_obj->title); ?>
         </h1>
         <div class="flex flex-wrap items-center gap-3 text-sm">

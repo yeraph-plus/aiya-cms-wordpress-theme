@@ -21,7 +21,7 @@ $post_thumb = aya_post_thumb($post_obj->thumbnail_url, $post_obj->content, 300, 
             </h2>
             <div class="card-actions justify-start my-1 flex flex-wrap overflow-hidden">
                 <div class="flex gap-2 overflow-hidden">
-                    <?php aya_post_status_badge($post_obj->status); ?>
+                    <?php aya_the_post_status_badge($post_obj->status); ?>
                     <?php foreach ($post_obj->cat_list as $cat): ?>
                         <a href="<?php aya_echo($cat['url']); ?>" class="badge badge-primary badge-outline truncate line-clamp">
                             <?php aya_echo($cat['name']); ?>
