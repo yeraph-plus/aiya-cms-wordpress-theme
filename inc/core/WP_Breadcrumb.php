@@ -19,20 +19,26 @@ if (!defined('ABSPATH')) {
 if (!class_exists('AYA_WP_Breadcrumb_Object')) {
     class AYA_WP_Breadcrumb_Object
     {
+        private static $custom_breadcrumbs = [];
+
         public static function get_breadcrumb()
         {
-            // 首页且没有分页时不显示面包屑
-            if ((is_home() || is_front_page()) && !is_paged()) {
-                return false;
-            }
-
-            // 基本的面包屑项，以首页开始
+            //基本的面包屑项，以首页开始
             $items = [
                 [
                     'label' => __('首页', 'AIYA'),
                     'url' => home_url('/'),
                 ]
             ];
+
+            //合并自定义面包屑项项目返回
+            if (!empty(self::$custom_breadcrumbs)) {
+                $custom_items = self::$custom_breadcrumbs;
+
+                $items = array_merge($items, $custom_items);
+
+                return $items;
+            }
 
             // 根据页面类型构建面包屑
             if (is_home() || is_front_page()) {
@@ -246,6 +252,16 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
             $items[] = [
                 'label' => sprintf(__('第 %s 页', 'AIYA'), $paged),
                 'url' => get_pagenum_link($paged),
+            ];
+        }
+
+        //添加自定义面包屑项
+        public static function add_item($label, $url = '')
+        {
+
+            self::$custom_breadcrumbs[] = [
+                'label' => $label,
+                'url' => $url,
             ];
         }
     }

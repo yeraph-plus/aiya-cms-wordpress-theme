@@ -68,11 +68,13 @@ function aya_template_part($slug = null, $name = null)
 //首页入口模板路由
 function aya_core_route_entry()
 {
+    //自定义页面
+    if (aya_is_land_page() !== false) {
+        return aya_land_page_route_entry();
+    }
+
     //页头
     aya_template_load('part/header');
-
-    //面包屑
-    aya_template_load('part/breadcrumb');
 
     $route_page = aya_is_where();
 
@@ -80,7 +82,7 @@ function aya_core_route_entry()
     switch ($route_page) {
         //首页循环
         case 'home':
-        case 'home_by_paged':
+        case 'home_paged':
             aya_template_load('index');
             break;
         //搜索结果
@@ -117,6 +119,50 @@ function aya_core_route_entry()
 
     //页脚
     aya_template_load('part/footer');
+}
+
+//独立页面入口模板路由
+function aya_land_page_route_entry()
+{
+    global $aya_land_page;
+
+    $page_type = aya_is_land_page();
+
+    //如果没有找到对应的页面配置，跳入404
+    if ($page_type === false) {
+
+        aya_template_load('part/header');
+
+        aya_template_load('404');
+
+        aya_template_load('part/footer');
+
+        //结束模板
+        return;
+    }
+
+    //获取页面配置
+    $page_config = $aya_land_page[$page_type];
+
+    //是否使用原始模板（带页头页脚）
+    $use_original = isset($page_config['orginal']) ? $page_config['orginal'] : true;
+
+    //页头
+    if ($use_original) {
+        aya_template_load('part/header');
+    }
+
+    //已经定义了的页面
+    if (isset($page_config['template'])) {
+        aya_template_load('page/' . $page_config['template']);
+    } else {
+        aya_template_load('404');
+    }
+
+    //页脚
+    if ($use_original) {
+        aya_template_load('part/footer');
+    }
 }
 
 //替代LOOP循环
@@ -507,7 +553,7 @@ function aya_the_post_tips($post_id = 0)
         }
     }
 
-    return  aya_echo($html);
+    return aya_echo($html);
 }
 
 //评论分页链接的模板方法

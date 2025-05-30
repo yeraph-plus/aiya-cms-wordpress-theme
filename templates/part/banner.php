@@ -1,5 +1,5 @@
 <?php
-if (aya_is_where() === 'home' && get_query_var('page_slug_vars') == '' && aya_opt('site_banner_load_bool', 'land')):
+if (aya_is_where() === 'home' && aya_opt('site_banner_load_bool', 'land')):
     $style = '';
     $style .= 'background-image: url(' . aya_opt('site_banner_image_upload', 'land') . ');';
     $style .= 'height: ' . aya_opt('site_banner_height_text', 'land') . ';';

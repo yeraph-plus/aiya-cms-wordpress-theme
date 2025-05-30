@@ -35,6 +35,16 @@ import {
     HashtagIcon,
     SlashIcon,
     XMarkIcon,
+    ArrowUturnDownIcon,
+    ArrowUturnLeftIcon,
+    ArrowUturnRightIcon,
+    ArrowUturnUpIcon,
+    ArrowDownIcon,
+    ArrowUpLeftIcon,
+    ArrowUpRightIcon,
+    ArrowLeftIcon,
+    ArrowRightIcon,
+    ArrowUpIcon,
 } from "@heroicons/vue/20/solid";
 
 const iconMap = {
@@ -52,6 +62,7 @@ const iconMap = {
     "paper-clip": PaperClipIcon,
     "paper-airplane": PaperAirplaneIcon,
     "exclamation-triangle": ExclamationTriangleIcon,
+    "chat-bubble-oval-left-ellipsis": ChatBubbleOvalLeftEllipsisIcon,
     //solid
     "shield-check": ShieldCheckIcon,
     "bars-3": Bars3Icon,
@@ -67,7 +78,16 @@ const iconMap = {
     slash: SlashIcon,
     hashtag: HashtagIcon,
     "x-mark": XMarkIcon,
-    "chat-bubble-oval-left-ellipsis": ChatBubbleOvalLeftEllipsisIcon,
+    "arrow-uturn-down": ArrowUturnDownIcon,
+    "arrow-uturn-left": ArrowUturnLeftIcon,
+    "arrow-uturn-right": ArrowUturnRightIcon,
+    "arrow-uturn-up": ArrowUturnUpIcon,
+    "arrow-down": ArrowDownIcon,
+    "arrow-up-left": ArrowUpLeftIcon,
+    "arrow-up-right": ArrowUpRightIcon,
+    "arrow-left": ArrowLeftIcon,
+    "arrow-right": ArrowRightIcon,
+    "arrow-up": ArrowUpIcon,
 };
 
 const props = defineProps({

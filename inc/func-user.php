@@ -271,7 +271,7 @@ function aya_sponsor_save_orders_user_profile($user_id)
  * ------------------------------------------------------------------------------
  */
 
-function aya_user_get_favorite_posts($user_id)
+function aya_user_get_favorite_posts($user_id = 0)
 {
     if (!is_user_logged_in()) {
         return false;
@@ -419,9 +419,9 @@ function aya_user_get_login_data($logged_in = false)
             'url' => home_url('sponsor'),
         ];
         $dorpdown_menus[] = [
-            'label' => __('查看收藏夹', 'AIYA'),
+            'label' => __('我的收藏', 'AIYA'),
             'icon' => 'inbox',
-            'url' => home_url('inbox'),
+            'url' => home_url('favlist'),
         ];
 
         $user_menu['menus'] = $dorpdown_menus;

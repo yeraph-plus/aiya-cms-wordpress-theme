@@ -29,7 +29,7 @@ if (!defined('ABSPATH')) {
 
 define('AYA_PATH', get_template_directory());
 define('AYA_URI', get_template_directory_uri());
-//define('AYA_RELEASE', true);
+// define('AYA_RELEASE', true);
 //define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); // or MINUTE_IN_SECONDS
 
 /*
@@ -248,12 +248,6 @@ AYP::action('Register_Sidebar', array(
     'archive-widget' => __('归档页面', 'AIYA'),
     'single-widget' => __('正文页面', 'AIYA'),
     'author-widget' => __('用户页面', 'AIYA'),
-));
-//注册自定义模板页面
-AYP::action('Template_New_Page', array(
-    //'模板名' => '模板文件路径',
-    'go' => 'template-pages/external-auto',
-    'link' => 'template-pages/external-link',
 ));
 //启用小工具缓存插件
 AYP::action('Widget_Cache', true);

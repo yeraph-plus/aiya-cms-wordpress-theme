@@ -66,7 +66,7 @@ $next_post = $post_obj->next_post();
         </div>
     </div>
     <!-- Content Start -->
-    <div class="article-content1 p-6 prose prose-base max-w-none">
+    <div class="article-content p-6 prose prose-base max-w-none">
         <?php if ($post_is_outdated): ?>
             <div class="alert alert-soft my-4">
                 <icon name="exclamation-triangle" class="size-4 mr-1"></icon>

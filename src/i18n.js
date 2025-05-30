@@ -48,6 +48,28 @@ const messages = {
         register_input_empty: "Email, username or password cannot be empty",
         register_failed: "Register failed",
         network_error: "Network Error, please try again",
+        //UserFavPanel.vue
+        my_favorites: "My Favorites",
+        please_login_first: "Please Login First",
+        login_to_view_favorites: "Login to view your favorite posts",
+        go_to_login: "Go to Login",
+        no_favorites_yet: "No Favorites Yet",
+        browse_and_add_favorites: "Browse posts and add them to your favorites",
+        title: "Title",
+        publish_date: "Publish Date",
+        last_updated: "Last Updated",
+        actions: "Actions",
+        view_post: "View",
+        remove_post: "Remove",
+        favorite_removed_success: "Post removed from favorites",
+        operation_failed: "Operation failed",
+        published: "Published",
+        draft: "Draft",
+        pending: "Pending",
+        private: "Private",
+        trash: "Trash",
+        scheduled: "Scheduled",
+        view: "View"
     },
     zh: {
         //ThemeSwitcher.vue
@@ -99,6 +121,28 @@ const messages = {
         register_input_empty: "邮箱、用户名或密码不能为空",
         register_failed: "注册失败",
         network_error: "网络错误",
+        //UserFavPanel.vue
+        my_favorites: "我的收藏",
+        please_login_first: "请先登录",
+        login_to_view_favorites: "登录后查看您收藏的文章",
+        go_to_login: "去登录",
+        no_favorites_yet: "暂无收藏",
+        browse_and_add_favorites: "浏览文章并添加到收藏",
+        title: "标题",
+        publish_date: "发布日期",
+        last_updated: "最后更新",
+        actions: "操作",
+        view_post: "查看",
+        remove_post: "移除",
+        favorite_removed_success: "已从收藏中移除",
+        operation_failed: "操作失败",
+        published: "已发布",
+        draft: "草稿",
+        pending: "待审核",
+        private: "私密",
+        trash: "已删除",
+        scheduled: "定时发布",
+        view: "查看"
     }
 };
 

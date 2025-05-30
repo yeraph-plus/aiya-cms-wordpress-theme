@@ -22,25 +22,99 @@
 }
 
 @layer base {
-    :root {
-        --navbar-full-width: 210px;
-        /* outline: 1px solid red; */
+    html {
+        /* Firefox */
+        scrollbar-width: thin;
+        scrollbar-color: hsl(var(--p) / 0.3) transparent;
+    }
+
+    /* Webkit (Chrome, Safari, Edge, etc) */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 0.5rem;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: hsl(var(--p) / 0.3);
+        border-radius: 0.5rem;
+        border: 4px solid transparent;
+        background-clip: content-box;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: hsl(var(--p) / 0.5);
+    }
+
+    ::-webkit-scrollbar-thumb:active {
+        background-color: hsl(var(--p) / 0.7);
+    }
+
+    /* 滚动条角落样式 */
+    ::-webkit-scrollbar-corner {
+        background: transparent;
+    }
+
+    /* 暗色模式调整 */
+    .dark {
+        scrollbar-color: hsl(var(--p) / 0.4) transparent;
+    }
+
+    .dark ::-webkit-scrollbar-thumb {
+        background-color: hsl(var(--p) / 0.4);
+    }
+
+    .dark ::-webkit-scrollbar-thumb:hover {
+        background-color: hsl(var(--p) / 0.6);
     }
 }
 
 @layer components {
-    .header-logo {
-        @apply inline-flex items-center gap-2 text-lg font-bold tracking-wide text-gray-900 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300;
+    /* Vue JS */
+    [v-cloak] {
+        display: none;
+    }
+    /* Custom scrollbar */
+    .custom-scrollbar {
+        /* Firefox */
+        scrollbar-width: thin;
+        scrollbar-color: hsl(var(--p) / 0.3) transparent;
 
-        img {
-            @apply inline-block size-5 text-blue-600 transition group-hover:scale-110 dark:text-blue-400;
+        /* Webkit (Chrome, Safari, Edge, etc) */
+        &::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 0.5rem;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: hsl(var(--p) / 0.3);
+            border-radius: 0.5rem;
+            border: 2px solid transparent;
+            background-clip: content-box;
+
+            &:hover {
+                background-color: hsl(var(--p) / 0.5);
+            }
+
+            &:active {
+                background-color: hsl(var(--p) / 0.7);
+            }
         }
     }
 }
 
 @layer utilities {
     .animate-shake {
-        animation: shake-x 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        animation: shake-x 1.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     }
     @keyframes shake-x {
         10%,
@@ -54,11 +128,11 @@
         30%,
         50%,
         70% {
-            transform: translateX(-8px);
+            transform: translateX(-6px);
         }
         40%,
         60% {
-            transform: translateX(8px);
+            transform: translateX(6px);
         }
         100% {
             transform: translateX(0);
@@ -66,49 +140,4 @@
     }
 }
 
-/* Content */
 @import "./article.css";
-/* Vue JS */
-[v-cloak] {
-    display: none;
-}
-/* lozad JS */
-.lozad {
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-}
-
-.lozad.loaded {
-    opacity: 1;
-}
-
-/* Custom scrollbar styles */
-.custom-scrollbar {
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Firefox */
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-    width: 6px; /* 细滚动条 */
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 20px;
-}
-
-/* 当不需要滚动条时完全隐藏它 */
-.custom-scrollbar:not(:hover)::-webkit-scrollbar-thumb {
-    background-color: transparent;
-}
-
-/* 可以添加这个以确保在不需要滚动时不预留空间 */
-@supports (scrollbar-gutter: stable) {
-    .custom-scrollbar {
-        scrollbar-gutter: stable;
-    }
-}

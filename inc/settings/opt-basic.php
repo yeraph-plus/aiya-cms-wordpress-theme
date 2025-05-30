@@ -54,7 +54,7 @@ AYF::new_opt([
             'id' => 'site_404_page_img_upload',
             'type' => 'upload',
             'button_text' => '上传',
-            'default' => '',
+            'default' => AYA_URI . '/assets/image/default-404-error.png',
         ],
         [
             'title' => '内容为空占位图',
@@ -62,7 +62,7 @@ AYF::new_opt([
             'id' => 'site_none_content_upload',
             'type' => 'upload',
             'button_text' => '上传',
-            'default' => '',
+            'default' => AYA_URI . '/assets/image/default-404-error.png',
         ],
         [
             'title' => '外链跳转页面占位图',
@@ -70,7 +70,7 @@ AYF::new_opt([
             'id' => 'site_ext_page_img_upload',
             'type' => 'upload',
             'button_text' => '上传',
-            'default' => '',
+            'default' => AYA_URI . '/assets/image/default-paper-plane.png',
         ],
         [
             'desc' => '页面布局设置（Layout）',

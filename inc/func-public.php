@@ -154,9 +154,11 @@ function aya_is_where()
         $here_is = 'home';
         //关联判断
         if (is_paged()) {
-            $here_is = 'home_by_paged';
+            $here_is = 'home_paged';
         }
-    } else if (is_singular()) {
+    }
+    //返回文章类型
+    else if (is_singular()) {
         $here_is = 'singular';
         //关联判断
         if (is_single()) {
@@ -166,7 +168,9 @@ function aya_is_where()
         } else if (is_attachment()) {
             $here_is = 'attachment';
         }
-    } else if (is_archive()) {
+    }
+    //返回归档类型
+    else if (is_archive()) {
         $here_is = 'archive';
         //关联判断
         if (is_post_type_archive()) {

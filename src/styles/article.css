@@ -1,3 +1,12 @@
+/* lozad JS */
+.lozad {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+.lozad.loaded {
+    opacity: 1;
+}
+/* Content */
 .article-content {
     @apply prose prose-base max-w-none;
 
@@ -28,7 +37,7 @@
     h2::before,
     h3::before {
         content: "";
-        @apply mr-2 inline-block h-4 w-2 rounded bg-accent;
+        @apply mr-2 inline-block h-4 w-2 rounded bg-primary;
     }
 
     h4,
@@ -52,11 +61,11 @@
     }
 
     blockquote {
-        @apply mb-4 rounded-r-lg border-l-4 border-l-accent border border-base-300 bg-base-200/50 p-4 not-italic;
+        @apply mb-4 rounded-r-lg border-l-4 border-l-primary border border-base-300 bg-base-200/50 p-4 not-italic;
     }
 
     .dark blockquote {
-        @apply border-l-accent bg-base-300/20;
+        @apply bg-base-300/20;
     }
 
     blockquote p {
@@ -88,7 +97,7 @@
     }
 
     pre {
-        @apply mb-4 overflow-x-auto rounded-lg bg-base-300/50 p-4 text-sm;
+        @apply mb-4 overflow-x-auto rounded-lg p-4 text-sm;
         direction: ltr;
     }
 
@@ -108,6 +117,47 @@
 
     img {
         @apply mb-4 rounded-lg bg-base-300/30 max-w-full h-auto object-cover;
+    }
+
+    /* WordPress 图片尺寸控制 */
+    img .size-full {
+        @apply w-full;
+    }
+
+    img .alignnone {
+        @apply block my-4;
+    }
+
+    img .aligncenter {
+        @apply block mx-auto my-4;
+    }
+
+    img .alignright {
+        @apply float-right ml-4 mb-4 md:ml-6;
+    }
+
+    img .alignleft {
+        @apply float-left mr-4 mb-4 md:mr-6;
+    }
+
+    /* 清除对齐后的浮动 */
+    .wp-block-image::after,
+    figure::after {
+        content: "";
+        @apply block clear-both;
+    }
+
+    /* 包含对齐图片的段落样式修复 */
+    p:has(> img.alignleft),
+    p:has(> img.alignright) {
+        @apply overflow-hidden;
+    }
+
+    @media (max-width: 640px) {
+        img.alignleft,
+        img.alignright {
+            @apply float-none mx-auto block;
+        }
     }
 
     hr {
@@ -195,5 +245,47 @@
         blockquote {
             @apply border border-base-300 break-inside-avoid;
         }
+    }
+
+    /* WordPress 密码保护文章样式 */
+    .post-password-form {
+        @apply mb-6 p-5 rounded-lg border border-base-300 bg-base-200/50;
+
+        /* 标签样式 */
+        label {
+            @apply block mb-4 font-medium;
+            color: hsl(var(--bc));
+        }
+
+        /* 密码输入框 */
+        input[type="password"] {
+            @apply w-full max-w-xs my-2 px-4 py-2 bg-base-100 border border-base-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary;
+            color: hsl(var(--bc));
+        }
+
+        /* 提交按钮 */
+        input[type="submit"] {
+            @apply inline-flex justify-center px-4 py-2 mt-2 text-sm font-medium text-white bg-primary border border-transparent rounded-md hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 640px) {
+            @apply p-4;
+
+            input[type="password"] {
+                @apply max-w-full;
+            }
+        }
+    }
+
+    /* 密码保护提示文本 */
+    .post-password-form p:first-child {
+        @apply mb-4 text-sm;
+        color: hsl(var(--bc) / 0.8);
+    }
+
+    /* 暗色模式调整 */
+    .dark .post-password-form {
+        @apply bg-base-300/20;
     }
 }

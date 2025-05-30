@@ -298,6 +298,22 @@ if (is_admin()) {
             ],
         )
     ));
+
+    AYA_Shortcode::shortcode_register('sponsor-ship-content', array(
+        'id' => 'sc-sponsor-ship-content',
+        'title' => '赞助者可见',
+        'note' => '创建一个赞助信息的面板，用于在文章中显示赞助商信息或赞助链接',
+        'template' => '[sponsor_ship] {{content}} [/sponsor_ship]',
+        'field_build' => array(
+            [
+                'id' => 'content',
+                'type' => 'textarea',
+                'label' => '内容',
+                'desc' => '赞助者可见的内容',
+                'default' => '这是赞助者可见的内容。',
+            ],
+        )
+    ));
 }
 
 //移除一些 WordPress 默认的短代码
@@ -315,6 +331,7 @@ add_shortcode('alert', 'aya_shortcode_alert_content');
 add_shortcode('button', 'aya_shortcode_button_content');
 add_shortcode('badge', 'aya_shortcode_badge_content');
 add_shortcode('collapse', 'aya_shortcode_collapse_content');
+add_shortcode('sponsor_ship', 'aya_shortcode_sponsor_ship_content');
 
 //AIYA-CMS 短代码组件：隐藏文字段
 function aya_shortcode_hide_content($atts = array(), $content = '')
@@ -347,7 +364,7 @@ function aya_shortcode_email_content($atts = array(), $content = null)
 
     //将电子邮件地址字符转换为 HTML 实体
     if ($atts['mailto'] == 'true' || $atts['mailto'] == 'on' || $atts['mailto'] == true) {
-        return '<a class="inline-flex btn btn-outline" href="' . esc_url('mailto:' . antispambot($content)) . '">' . esc_html(antispambot($content)) . '</a>';
+        return '<a class="inline-flex" href="' . esc_url('mailto:' . antispambot($content)) . '">' . esc_html(antispambot($content)) . '</a>';
     } else {
         return antispambot($content);
     }
@@ -363,8 +380,6 @@ function aya_shortcode_li_list_content($atts = array(), $content = '')
         $atts,
     );
 
-    $content = str_replace(array("\r\n", "<br />\n", "</p>\n", "\n<p>"), "\n", $content);
-
     //增加样式
     $tag = ($atts['order'] == 'true' || $atts['order'] == 'on' || $atts['order'] == true) ? 'ul' : 'ol';
 
@@ -373,6 +388,7 @@ function aya_shortcode_li_list_content($atts = array(), $content = '')
     $html .= '<' . $tag . '>' . "\n";
 
     //根据换行符分割
+    $content = str_replace(array("\r\n", "<br />\n", "</p>\n", "\n<p>"), "\n", $content);
     $lines = explode("\n", $content);
 
     array_shift($lines);
@@ -401,8 +417,6 @@ function aya_shortcode_column_list_content($atts = array(), $content = '')
         $atts,
     );
 
-    $content = str_replace(array("\r\n", "<br />\n", "</p>\n", "\n<p>"), "\n", $content);
-
     switch ($atts['dt_width']) {
         case '1':
         default:
@@ -421,6 +435,8 @@ function aya_shortcode_column_list_content($atts = array(), $content = '')
 
     //循环格式
     $html = '';
+
+    $content = str_replace(array("\r\n", "<br />\n", "</p>\n", "\n<p>"), "\n", $content);
     $html .= '<dl class="flex flex-wrap not-prose">' . "\n";
 
     //根据换行符分割
@@ -479,9 +495,30 @@ function aya_shortcode_button_content($atts = array(), $content = '')
         $atts,
     );
 
-    $html_format = '<a class="btn btn-%1$s btn-%2$s btn-%3$s" href="%4$s" role="button">%5$s</a>';
+    $button_id = 'btn-' . wp_unique_id();
 
-    return sprintf($html_format, esc_attr($atts['style']), esc_attr($atts['color']), esc_attr($atts['size']), esc_url($atts['href']), esc_html($content));
+    $html_format = '<button id="%1$s" class="btn btn-%2$s btn-%3$s btn-%4$s" type="button" data-href="%5$s">%6$s</button>';
+
+    $script = '<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var btn = document.getElementById("%1$s");
+            if(btn) {
+                btn.addEventListener("click", function() {
+                    window.location.href = this.getAttribute("data-href");
+                });
+            }
+        });
+    </script>';
+
+    return sprintf(
+        $html_format . $script,
+        esc_attr($button_id),
+        esc_attr($atts['style']),
+        esc_attr($atts['color']),
+        esc_attr($atts['size']),
+        esc_url($atts['href']),
+        esc_html($content)
+    );
 }
 
 //AIYA-CMS 短代码组件：徽标
@@ -516,6 +553,33 @@ function aya_shortcode_collapse_content($atts = array(), $content = '')
     $html .= '<div class="collapse-title font-semibold">' . esc_html($atts['title']) . '</div>';
     $html .= '<div class="collapse-content text-base-content">' . do_shortcode($content) . '</div>';
     $html .= '</div>';
+
+    return $html;
+}
+
+function aya_shortcode_sponsor_ship_content($atts = array(), $content = '')
+{
+    $user_level = aya_user_toggle_level();
+
+    $html = '';
+
+    switch ($user_level) {
+        case 'sponsor':
+        case 'author':
+        case 'administrator':
+            //管理员、赞助者或投稿权限的用户可见
+            $html .= do_shortcode($content);
+            break;
+        case 'subscriber':
+            $html .= '仅限赞助者可见，请先赞助。';
+            $html .= home_url('sponsor');
+            break;
+        case 'guest':
+        default:
+            $html .= '仅限赞助者可见，请登录后查看。';
+            $html .= aya_vue_load('login-action', aya_user_get_login_data(false));
+            break;
+    }
 
     return $html;
 }

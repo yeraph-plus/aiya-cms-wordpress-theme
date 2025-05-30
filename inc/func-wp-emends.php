@@ -38,44 +38,87 @@ function aya_theme_after_init()
  * -------------------s-----------------------------------------------------------
  */
 
+//独立页面路由参数
+$GLOBALS['aya_land_page'] = array(
+    //'URL路径' => array('template' => '模板路径','title' => '页面标题','orginal' => true/false在模板路由中是否加载页头页脚)
+    'go' => [
+        'title' => '跳转页面',
+        'template' => 'external-auto',
+        'orginal' => false,
+    ],
+    'link' => [
+        'title' => '外部链接',
+        'template' => 'external-link',
+        'orginal' => true,
+    ],
+    'favlist' => [
+        'title' => '收藏列表',
+        'template' => 'fav-list',
+        'orginal' => true,
+    ],
+    'sponsor' => [
+        'title' => '获取订阅',
+        'template' => 'sponsor-plan',
+        'orginal' => true,
+    ],
+);
+
 //初始化时增加重写路由规则
-add_action('init', 'aya_author_change_rewrite_base');
-add_action('init', 'aya_author_add_user_rewrite_rules');
+add_action('init', 'aya_rewrite_base_rule');
 //重写author的链接
-add_filter('author_link', 'aya_author_custom_link', 10, 2);
+add_filter('author_link', 'aya_rewrite_author_link', 10, 2);
+add_action('template_redirect', 'aya_rewrite_author_template_redirect');
+//注册自定义页面路由
+add_filter('query_vars', 'aya_rewrite_register_query_vars');
+add_filter('pre_get_document_title', 'aya_rewrite_land_page_document_title');
+add_filter('redirect_canonical', 'aya_rewrite_page_cancel_redirect_canonical');
 //使用自定义的REST-API路径
-add_filter('rest_url_prefix', 'aya_rest_api_url_prefix');
-//兼容旧路由规则
-add_action('template_redirect', 'aya_author_template_redirect');
-add_action('template_redirect', 'aya_rest_api_template_redirect');
+add_filter('rest_url_prefix', 'aya_rewrite_rest_api_url_prefix');
+add_action('template_redirect', 'aya_rewrite_rest_api_template_redirect');
 
-//生成/user/{token}格式的作者链接
-function aya_author_custom_link($link, $author_id)
+function aya_rewrite_base_rule()
 {
-    return home_url('/user/' . $author_id . '/');
-}
+    global $wp_rewrite, $aya_land_page;
 
-//修改作者页面路由基准为user
-function aya_author_change_rewrite_base()
-{
-    global $wp_rewrite;
-
+    //修改作者页面路由基准为user
     $wp_rewrite->author_base = 'user';
     $wp_rewrite->author_structure = '/' . $wp_rewrite->author_base . '/%author%';
-}
 
-//添加 /user/ 重写规则
-function aya_author_add_user_rewrite_rules()
-{
+    //添加 /user/ 重写规则
     add_rewrite_rule(
         '^user/(\d+)/?$',
         'index.php?author=$matches[1]',
         'top'
     );
+
+    //添加独立页面的重写规则
+    if (!empty($aya_land_page)) {
+        //循环全部
+        foreach ($aya_land_page as $slug => $page) {
+            //使用最小路由规则
+            add_rewrite_rule(
+                '^' . $slug . '/?$',
+                'index.php?land_page_vars=' . $slug,
+                'top'
+            );
+            //使用参数支持的路由规则
+            add_rewrite_rule(
+                '^' . $slug . '/([^/]+)/?$',
+                'index.php?land_page_vars=' . $slug . '&land_param=$matches[1]',
+                'top'
+            );
+        }
+    }
+}
+
+//生成/user/{token}格式的作者链接
+function aya_rewrite_author_link($link, $author_id)
+{
+    return home_url('/user/' . $author_id . '/');
 }
 
 //使 /author/author_name 重定向到 /user/id
-function aya_author_template_redirect()
+function aya_rewrite_author_template_redirect()
 {
     if (is_author() && get_query_var('author_name')) {
 
@@ -89,14 +132,79 @@ function aya_author_template_redirect()
     }
 }
 
+//注册查询变量
+function aya_rewrite_register_query_vars($vars)
+{
+    $vars[] = 'land_page_vars';
+    $vars[] = 'land_param';
+
+    return $vars;
+}
+
+//捕获自定义页面查询
+function aya_is_land_page()
+{
+    //捕获自定义页面查询变量
+    $page_type = get_query_var('land_page_vars');
+
+    //如果没有查询变量，则不是自定义页面
+    if (empty($page_type)) {
+        return false;
+    }
+
+    global $aya_land_page;
+
+    //检查页面类型是否在配置中
+    if (!isset($aya_land_page[$page_type])) {
+        return false;
+    }
+
+    //返回页面类型
+    return $page_type;
+}
+
+//处理自定义页面标题
+function aya_rewrite_land_page_document_title($title)
+{
+    //捕获自定义页面查询
+    $page_type = aya_is_land_page();
+
+    if ($page_type === false) {
+        return false;
+    }
+
+    global $aya_land_page;
+
+    //获取标题参数
+    $page_title = $aya_land_page[$page_type]['title'] ?? __('独立页面', 'AIYA');
+
+    //获取站点名称
+    $site_name = get_bloginfo('name');
+
+    return $page_title . ' - ' . $site_name;
+}
+
+//DEBUG：始终取消自定义页面自动重定向
+function aya_rewrite_page_cancel_redirect_canonical($redirect_url)
+{
+    //获取到查询参数时
+    $page_type = aya_is_land_page();
+
+    if ($page_type === false) {
+        return false;
+    }
+
+    return $redirect_url;
+}
+
 //使用自定义的API路径
-function aya_rest_api_url_prefix()
+function aya_rewrite_rest_api_url_prefix()
 {
     return 'api';
 }
 
 //使 /wp-json 重定向到 /api
-function aya_rest_api_template_redirect()
+function aya_rewrite_rest_api_template_redirect()
 {
     if (strpos($_SERVER['REQUEST_URI'], 'wp-json') !== false) {
         wp_redirect(site_url(str_replace('wp-json', 'api', $_SERVER['REQUEST_URI'])), 301);

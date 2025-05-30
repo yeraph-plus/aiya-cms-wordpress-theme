@@ -4,29 +4,13 @@
  *  
  **/
 
-//页头
-aya_template_load('header');
-//面包屑
-aya_template_load('parts/breadcrumb');
-
+aya_template_load('part/header');
 ?>
-<article class="main-boxed full-width-page w-full p-4">
-    <div class="flex flex-wrap">
-        <div class="w-full animate__animated" :class="[$store.app.animation]">
-            <!-- content grid -->
-            <div class="relative">
-                <?php
-                //文章内容
-                aya_while_have_content();
-                //评论
-                aya_comments_template();
-                ?>
-            </div>
-        </div>
+<main class="flex-1 flex flex-col">
+    <!-- Full Width Post Page -->
+    <div class="container mx-auto p-4 transition-all duration-300 ease-in-out">
+        <?php aya_template_load('part/breadcrumb'); ?>
+        <?php aya_while_have_content(); ?>
     </div>
-</article>
-
-<?php
-//页脚
-aya_template_load('footer');
-?>
+</main>
+<?php aya_template_load('part/footer'); ?>
