@@ -54,7 +54,7 @@ onMounted(() => {
             v-if="visible"
             class="toast toast-end toast-bottom z-50">
             <div :class="['alert', toastClass]">
-                <span class="text-base-content font-semibold">{{ message }}</span>
+                <span class="font-semibold">{{ message }}</span>
                 <button
                     class="btn btn-sm btn-circle btn-ghost"
                     @click="visible = false">

@@ -367,7 +367,7 @@ function aya_user_toggle_level($user_id = 0)
     else if (user_can($user_id, 'publish_posts')) {
         return 'author';
     }
-    //是赞助者
+    //是赞助用户
     else if (aya_is_sponsor($user_id)) {
         return 'sponsor';
     }

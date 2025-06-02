@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, shallowRef } from "vue";
+import { ref, shallowRef, onMounted, onUnmounted } from "vue";
 //Heroicons
 import { XMarkIcon, UserPlusIcon, UserIcon } from "@heroicons/vue/24/outline";
 import { ArrowUturnRightIcon, ArrowUturnLeftIcon } from "@heroicons/vue/20/solid";
@@ -101,6 +101,31 @@ function handleModalClick(event) {
         closeModal();
     }
 }
+
+//类型声明
+declare global {
+    interface Window {
+        LoginAction?: {
+            showLogin: (() => void) | null;
+        };
+    }
+}
+
+//注册一个全局方法
+onMounted(() => {
+    // 确保全局对象存在
+    if (!window.LoginAction) {
+        window.LoginAction = { showLogin: null };
+    }
+    // 将 openLoginModal 绑定到全局对象
+    window.LoginAction.showLogin = openLoginModal;
+});
+//清理全局方法
+onUnmounted(() => {
+    if (window.LoginAction) {
+        window.LoginAction.showLogin = null;
+    }
+});
 </script>
 
 <template>

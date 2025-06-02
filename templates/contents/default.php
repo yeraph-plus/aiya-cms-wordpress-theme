@@ -10,8 +10,6 @@ $post_deadline = aya_opt('site_single_outdate_text', 'basic');
 $post_is_outdated = $post_obj->the_post_is_outdated($post_deadline);
 //获取声明文本
 $statement_content = aya_opt('site_single_statement_text', 'basic');
-//交互功能安全参数
-$store_nonce = wp_create_nonce('aya_post_up_store');
 //获取上下篇文章
 $prev_post = $post_obj->prev_post();
 $next_post = $post_obj->next_post();
@@ -82,7 +80,7 @@ $next_post = $post_obj->next_post();
             'ajax-url' => admin_url('admin-ajax.php'),
             'post-id' => $post_obj->id,
             'like-count' => $post_obj->likes,
-            'nonce' => $store_nonce
+            'nonce' => aya_nonce_active_store(),
         ]); ?>
     </div>
     <!-- Content End -->

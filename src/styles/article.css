@@ -1,19 +1,13 @@
-/* lozad JS */
-.lozad {
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-}
-.lozad.loaded {
-    opacity: 1;
-}
 /* Content */
 .article-content {
     @apply prose prose-base max-w-none;
 
     p {
-        @apply mb-4 text-base font-medium leading-relaxed text-balance hyphens-auto;
+        @apply mb-4 text-base font-medium leading-relaxed;
+        text-wrap: pretty;
         color: hsl(var(--bc));
     }
+
     h1,
     h2,
     h3 {

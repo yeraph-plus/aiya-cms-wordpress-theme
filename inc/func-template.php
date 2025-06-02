@@ -318,17 +318,8 @@ function aya_widget_bar()
 //获取评论模板
 function aya_comments_template()
 {
-    //检查评论开启
-    if (is_attachment() || is_404() || post_password_required())
-        return;
-
-    if (aya_opt('site_comment_disable_bool', 'basic', true) === false)
-        return;
-
-    if (comments_open() || get_comments_number()) {
-        //输出（定义这个位置必须包含"/"）
-        comments_template('/templates/comments.php', false);
-    }
+    //输出（定义这个位置必须包含"/"）
+    comments_template('/templates/comments.php', false);
 }
 
 /*
@@ -555,6 +546,19 @@ function aya_the_post_tips($post_id = 0)
 
     return aya_echo($html);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //评论分页链接的模板方法
 function aya_comment_pagination_item_link($label_type = 'next')

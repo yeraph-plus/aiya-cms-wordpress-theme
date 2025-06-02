@@ -36,8 +36,8 @@
         <!-- Mobile Sidebar Mask -->
         <div v-if="sidebarToggle && isMobile" @click="sidebarToggle = false" class="fixed md:hidden inset-0 bg-base-300/30 backdrop-blur-sm transition-all duration-300 ease-in-out z-20"></div>
         <!-- Topbar -->
-        <header class="navbar fixed z-40 w-full bg-base-100 border-b border-base-300 transition-all duration-300 ease-in-out">
-            <div class="navbar-start lg:w-64 flex items-center justify-center">
+        <header class="flex fixed z-40 w-full bg-base-100 border-b border-base-300 min-h-16 p-2 transition-all duration-300 ease-in-out">
+            <div class="inline-flex w-64 items-center justify-start">
                 <!-- Logo -->
                 <?php aya_blog_logo('max-w-[180px] overflow-hidden whitespace-nowrap text-xl font-bold ', 'h-8 w-auto'); ?>
                 <!-- Sidebar Toggle -->
@@ -46,11 +46,11 @@
                     <icon v-else name="bars-3-bottom-left" class="size-5"></icon>
                 </button>
             </div>
-            <div class="navbar-center lg:w-1/2 hidden lg:flex">
+            <div class="flex-1 hidden lg:flex items-center flex-shrink-0">
                 <?php aya_vue_load('nav-menu', ['menu' => aya_get_menu('secondary-menu'), 'dorpdown' => true]); ?>
             </div>
             <!-- Button Group -->
-            <div class="navbar-end lg:w-1/4 gap-2">
+            <div class="inline-flex items-center justify-end gap-2">
                 <!-- Theme Switcher -->
                 <?php aya_vue_load('theme-switcher'); ?>
                 <!-- Notifications -->
@@ -60,7 +60,7 @@
             </div>
         </header>
         <!-- Left Sidebar -->
-        <aside class="fixed z-20 top-16 bottom-0 flex flex-col overflow-hidden bg-base-100 shadow-md border-r border-base-300 transition-all duration-300 ease-in-out" :class="[sidebarToggle ? 'w-64 left-0' : 'w-64 -translate-x-full']">
+        <aside class="fixed z-20 w-64 top-16 bottom-0 flex flex-col overflow-hidden bg-base-100 shadow-md border-r border-base-300 transition-all duration-300 ease-in-out" :class="[sidebarToggle ? 'left-0' : '-translate-x-full']">
             <!-- Scroll Box -->
             <div class="flex-grow overflow-y-auto custom-scrollbar">
                 <!-- Search Form -->

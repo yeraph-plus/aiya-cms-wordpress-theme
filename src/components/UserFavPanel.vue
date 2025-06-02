@@ -104,7 +104,7 @@ onMounted(() => {
 
 <template>
     <div class="bg-base-100 border border-base-300 rounded-lg">
-        <div class="relative p-4 border-b border-base-300 flex items-center">
+        <div class="relative p-4 flex items-center">
             <h1 class="text-xl md:text-2xl font-bold">
                 <InboxIcon class="inline w-6 h-6 mr-2" />
                 {{ t("my_favorites") }}
@@ -116,7 +116,7 @@ onMounted(() => {
             </span>
         </div>
 
-        <div class="p-0 md:p-4">
+        <div class="p-4 pt-0">
             <!-- is Logged -->
             <div
                 v-if="!isLoggedIn"
@@ -182,7 +182,7 @@ onMounted(() => {
                                             v-for="(label, key) in item.status"
                                             :key="key"
                                             class="badge badge-xs"
-                                            :class="getStatusClass(key)">
+                                            :class="getStatusClass(String(key))">
                                             {{ label }}
                                         </div>
                                         <div

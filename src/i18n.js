@@ -69,7 +69,27 @@ const messages = {
         private: "Private",
         trash: "Trash",
         scheduled: "Scheduled",
-        view: "View"
+        view: "View",
+        //Comment.vue
+        comment_load_failed: "Failed to load comments",
+        comment_content_required: "Comment content cannot be empty",
+        name_required: "Please enter your name",
+        email_required: "Please enter your email",
+        valid_email_required: "Please enter a valid email",
+        comment_submitted_success: "Comment submitted successfully",
+        comment_submission_failed: "Failed to submit comment",
+        network_error: "Network error, please try again later",
+        comment_placeholder: "Write something...",
+        reply_placeholder: "Reply to {name}...",
+        name_placeholder: "Name",
+        email_placeholder: "Email",
+        commenting_as: "Commenting as {name}",
+        replying_to: "Replying to: {name}",
+        cancel_reply: "Cancel reply",
+        submitting: "Submitting...",
+        submit_comment: "Submit Comment",
+        all_comments: "All Comments",
+        no_comments: "No comments yet. Be the first to comment!"
     },
     zh: {
         //ThemeSwitcher.vue
@@ -81,8 +101,8 @@ const messages = {
         //UserMenu.vue
         administrator: "管理员",
         author: "作者",
-        sponsor: "赞助者",
-        subscriber: "订阅者",
+        sponsor: "赞助用户",
+        subscriber: "普通用户",
         guest: "访客",
         log_out: "退出登录",
         logged_out_success: "账号已退出登录",
@@ -142,7 +162,27 @@ const messages = {
         private: "私密",
         trash: "已删除",
         scheduled: "定时发布",
-        view: "查看"
+        view: "查看",
+        //Comment.vue
+        comment_load_failed: "加载评论失败",
+        comment_content_required: "评论内容不能为空",
+        name_required: "请填写昵称",
+        email_required: "请填写邮箱",
+        valid_email_required: "请填写有效的邮箱地址",
+        comment_submitted_success: "评论提交成功",
+        comment_submission_failed: "评论提交失败",
+        network_error: "网络错误，请稍后再试",
+        comment_placeholder: "写点什么 ...",
+        reply_placeholder: "回复给 {name} ...",
+        name_placeholder: "昵称",
+        email_placeholder: "邮箱",
+        commenting_as: "以 {name} 身份评论",
+        replying_to: "回复：{name}",
+        cancel_reply: "取消回复",
+        submitting: "提交中...",
+        submit_comment: "提交评论",
+        all_comments: "所有评论",
+        no_comments: "暂无评论，成为第一个评论的人吧！"
     }
 };
 

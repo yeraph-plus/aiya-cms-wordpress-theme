@@ -67,21 +67,6 @@ function aya_inc_load_head_scripts()
 {
     //使用自定义的方法加载静态文件
     $load_js = array(
-        [
-            'pack' => 'perfect-scrollbar',
-            'ver' => '1.5.6',
-            'file' => 'perfect-scrollbar.min.js',
-        ],
-        [
-            'pack' => 'lozad.js',
-            'ver' => '1.16.0',
-            'file' => 'lozad.min.js',
-        ],
-        [
-            'pack' => 'htmx',
-            'ver' => '2.0.4',
-            'file' => 'Swup.umd.min.js',
-        ],
         'aplayer' => array(
             'pack' => 'aplayer',
             'file' => 'APlayer.min.js',
@@ -120,26 +105,6 @@ function aya_inc_load_head_scripts()
     );
     $load_css = array(
         [
-            'pack' => 'perfect-scrollbar',
-            'ver' => '1.5.6',
-            'file' => 'css/perfect-scrollbar.min.css',
-        ],
-        [
-            'pack' => 'viewerjs',
-            'ver' => '1.11.7',
-            'file' => 'viewer.min.css',
-        ],
-        [
-            'pack' => 'swiperjs',
-            'ver' => '4.1.4',
-            'file' => 'css/splide.min.css',
-        ],
-        [
-            'pack' => 'animate.css',
-            'ver' => '4.1.1',
-            'file' => 'animate.min.css',
-        ],
-        [
             'pack' => 'aplayer',
             'file' => 'APlayer.min.css',
             'ver' => '1.10.1',
@@ -163,29 +128,11 @@ function aya_inc_load_head_scripts()
 function aya_inc_load_footer_scripts()
 {
     //使用自定义的方法加载静态文件
-    $load_js2 = array(
+    $load_js = array(
         [
-            'pack' => 'alpinejs-ui',
-            'ver' => '3.14.8',
-            'file' => 'cdn.min.js',
-            'defer' => true,
-        ],
-        [
-            'pack' => 'viewerjs',
-            'ver' => '1.11.7',
-            'file' => 'viewer.min.js',
-            'defer' => false,
-        ],
-        [
-            'pack' => 'tocbot',
-            'ver' => '4.32.2',
-            'file' => 'tocbot.min.js',
-            'defer' => false,
-        ],
-        [
-            'pack' => 'splidejs',
-            'ver' => '4.1.4',
-            'file' => 'js/splide.min.js',
+            'pack' => 'feather-icons',
+            'ver' => '4.29.2',
+            'file' => 'feather.min.js',
             'defer' => false,
         ],
         [
@@ -195,59 +142,9 @@ function aya_inc_load_footer_scripts()
             'defer' => false,
         ],
         [
-            'pack' => 'sweetalert',
-            'ver' => '2.1.2',
-            'file' => 'sweetalert.min.js',
-            'defer' => false,
-        ],
-        [
             'pack' => 'masonry',
             'ver' => '4.2.2',
             'file' => 'masonry.pkgd.min.js',
-            'defer' => false,
-        ],
-    );
-    $load_js = array(
-        [
-            'pack' => 'alpinejs-persist',
-            'ver' => '3.14.9',
-            'file' => 'cdn.min.js',
-            'defer' => false,
-        ],
-        [
-            'pack' => 'alpinejs-collapse',
-            'ver' => '3.14.9',
-            'file' => 'cdn.min.js',
-            'defer' => true,
-        ],
-        [
-            'pack' => 'alpinejs-focus',
-            'ver' => '3.14.9',
-            'file' => 'cdn.min.js',
-            'defer' => true,
-        ],
-        [
-            'pack' => 'alpinejs-intersect',
-            'ver' => '3.14.9',
-            'file' => 'cdn.min.js',
-            'defer' => true,
-        ],
-        [
-            'pack' => 'alpinejs-anchor',
-            'ver' => '3.14.9',
-            'file' => 'cdn.min.js',
-            'defer' => false,
-        ],
-        [
-            'pack' => 'alpinejs',
-            'ver' => '3.14.9',
-            'file' => 'cdn.min.js',
-            'defer' => true,
-        ],
-        [
-            'pack' => 'feather-icons',
-            'ver' => '4.29.2',
-            'file' => 'feather.min.js',
             'defer' => false,
         ],
 

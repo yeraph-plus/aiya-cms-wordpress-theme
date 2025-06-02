@@ -225,6 +225,10 @@ add_filter('protected_title_format', 'aya_theme_remove_protected_title_format');
 add_filter('private_title_format', 'aya_theme_remove_protected_title_format');
 //添加钩子 修改阅读更多文本
 add_filter('excerpt_more', 'aya_theme_excerpt_more_filter');
+//添加钩子 禁用评论表单中的URL字段
+add_filter('comment_form_default_fields', 'aya_theme_disable_comment_url');
+//移除动作 禁用评论表单中的Cookies存储
+remove_action('set_comment_cookies', 'wp_set_comment_cookies');
 
 //一言
 function aya_theme_admin_hello_hitokoto()
@@ -240,6 +244,18 @@ function aya_theme_remove_protected_title_format($format)
 function aya_theme_excerpt_more_filter()
 {
     return '...';
+}
+//过滤评论表单
+function aya_theme_disable_comment_url($fields)
+{
+    if (isset($fields['url'])) {
+        unset($fields['url']);
+    }
+    if (isset($fields['cookies'])) {
+        unset($fields['cookies']);
+    }
+
+    return $fields;
 }
 
 /*

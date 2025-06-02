@@ -11,9 +11,9 @@ if (!defined('ABSPATH')) {
  */
 
 //注册文章类型
-add_action('after_setup_theme', 'aya_post_type_tweet_action');
+//add_action('after_setup_theme', 'aya_post_type_tweet_action');
 //MetaBox注册
-add_action('add_meta_boxes', 'aya_post_type_tweet_add_meta_box');
+//add_action('add_meta_boxes', 'aya_post_type_tweet_add_meta_box');
 
 function aya_post_type_tweet_action()
 {

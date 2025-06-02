@@ -568,7 +568,13 @@ function aya_shortcode_sponsor_ship_content($atts = array(), $content = '')
         case 'author':
         case 'administrator':
             //管理员、赞助者或投稿权限的用户可见
-            $html .= do_shortcode($content);
+            $html .= '<div class="sponsor-content p-4 border border-success/20 rounded-lg bg-success/5 my-4">';
+            $html .= '<div class="flex items-center gap-2 mb-2 text-success">';
+            $html .= '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"></path><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"></path></svg>';
+            $html .= '<span class="font-bold">' . __('赞助者专享内容', 'AIYA') . '</span>';
+            $html .= '</div>';
+            $html .= '<div class="sponsor-content-body">' . do_shortcode($content) . '</div>';
+            $html .= '</div>';
             break;
         case 'subscriber':
             $html .= '仅限赞助者可见，请先赞助。';
@@ -577,7 +583,7 @@ function aya_shortcode_sponsor_ship_content($atts = array(), $content = '')
         case 'guest':
         default:
             $html .= '仅限赞助者可见，请登录后查看。';
-            $html .= aya_vue_load('login-action', aya_user_get_login_data(false));
+            //$html .= aya_vue_load('login-action', aya_user_get_login_data(false));
             break;
     }
 

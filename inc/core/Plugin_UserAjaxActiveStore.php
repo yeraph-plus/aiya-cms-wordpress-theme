@@ -20,6 +20,8 @@ if (!class_exists('AYA_Plugin_UserAjaxActiveStore')) {
 
     class AYA_Plugin_UserAjaxActiveStore
     {
+        public static $nonce_name = 'aya_post_up_store';
+
         public function __construct()
         {
             //前端action事件名：click_likes
@@ -32,7 +34,7 @@ if (!class_exists('AYA_Plugin_UserAjaxActiveStore')) {
             //传递数据
             /*
             wp_localize_script('aya-click-likes-script', 'clickLikes', array(
-                'nonce' => wp_create_nonce('aya_post_up_store'),
+                'nonce' => wp_create_nonce($this->nonce_name),
                 'ajax_url' => admin_url('admin-ajax.php')
             ));
             */
@@ -56,9 +58,9 @@ if (!class_exists('AYA_Plugin_UserAjaxActiveStore')) {
         public function set_post_click_likes()
         {
             //验证请求
-            if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'aya_post_up_store') || !isset($_POST['post_id'])) {
+            if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], self::$nonce_name) || !isset($_POST['post_id'])) {
 
-                wp_send_json(array('status' => 'error', 'message' => __('非法请求', 'AIYA')));
+                wp_send_json_error(array('status' => 'error', 'message' => __('非法请求', 'AIYA')));
 
                 return;
             }
@@ -84,7 +86,7 @@ if (!class_exists('AYA_Plugin_UserAjaxActiveStore')) {
         public function set_post_click_favorites()
         {
             //验证请求
-            if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'aya_post_up_store') || !isset($_POST['post_id'])) {
+            if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], self::$nonce_name) || !isset($_POST['post_id'])) {
 
                 wp_send_json(array('status' => 'error', 'message' => __('非法请求', 'AIYA')));
 
@@ -129,7 +131,7 @@ if (!class_exists('AYA_Plugin_UserAjaxActiveStore')) {
         public function get_post_is_favorited()
         {
             //验证请求
-            if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'aya_post_up_store') || !isset($_POST['post_id'])) {
+            if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], self::$nonce_name) || !isset($_POST['post_id'])) {
 
                 wp_send_json(array('status' => 'error', 'message' => __('非法请求', 'AIYA')));
 
@@ -173,4 +175,10 @@ if (!class_exists('AYA_Plugin_UserAjaxActiveStore')) {
 
     //实例化
     new AYA_Plugin_UserAjaxActiveStore();
+
+    //为前端组件返回nonce参数
+    function aya_nonce_active_store()
+    {
+        return wp_create_nonce(AYA_Plugin_UserAjaxActiveStore::$nonce_name);
+    }
 }

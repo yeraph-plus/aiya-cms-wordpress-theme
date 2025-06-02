@@ -30,8 +30,9 @@ if ($favorites !== false && is_array($favorites)) {
         ];
     }
     //交互功能安全参数
-    $store_nonce = wp_create_nonce('aya_post_up_store');
+    $store_nonce = aya_nonce_active_store();
 }
+
 //面包屑参数
 AYA_WP_Breadcrumb_Object::add_item(__('收藏列表', 'AIYA'), home_url('favlist'));
 ?>
