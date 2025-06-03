@@ -24,6 +24,12 @@
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <meta http-equiv="Cache-Control" content="private">
     <?php wp_head(); ?>
+
+    <script type="text/javascript">
+        window.appConfig = {};
+        window.appConfig.defaultDarkMode = <?php aya_echo(aya_opt('site_default_dark_mode_bool', 'basic') ? 'true' : 'false'); ?>;
+        window.appConfig.sidebarToggle = <?php aya_echo(aya_opt('site_default_sitebar_close_bool', 'basic') ? 'false' : 'true'); ?>;
+    </script>
 </head>
 
 <body <?php if (defined('AYA_RELEASE')) {
@@ -37,7 +43,7 @@
         <div v-if="sidebarToggle && isMobile" @click="sidebarToggle = false" class="fixed md:hidden inset-0 bg-base-300/30 backdrop-blur-sm transition-all duration-300 ease-in-out z-20"></div>
         <!-- Topbar -->
         <header class="flex fixed z-40 w-full bg-base-100 border-b border-base-300 min-h-16 p-2 transition-all duration-300 ease-in-out">
-            <div class="inline-flex w-64 items-center justify-start">
+            <div class="inline-flex w-64 items-center justify-start px-4">
                 <!-- Logo -->
                 <?php aya_blog_logo('max-w-[180px] overflow-hidden whitespace-nowrap text-xl font-bold ', 'h-8 w-auto'); ?>
                 <!-- Sidebar Toggle -->

@@ -6,7 +6,7 @@ const { t } = useI18n();
 //Toast
 import { toast } from "../scripts/toast-plugin";
 //Heroicons
-import { CheckIcon, HeartIcon, InboxIcon } from "@heroicons/vue/24/outline";
+import { CheckIcon, HeartIcon, BookmarkIcon } from "@heroicons/vue/24/outline";
 
 //Props
 const props = defineProps({
@@ -197,7 +197,7 @@ onMounted(() => {
 <template>
     <div class="flex items-center justify-center gap-2 p-6">
         <button
-            class="btn btn-wide btn-primary gap-2"
+            class="btn lg:btn-wide btn-primary gap-2"
             :class="{
                 'btn-disabled': isLikeLoading || hasLiked,
                 'animate-pulse': isLikeLoading,
@@ -219,7 +219,7 @@ onMounted(() => {
             <span class="badge badge-sm">{{ likes }}</span>
         </button>
         <button
-            class="btn btn-wide btn-primary gap-2"
+            class="btn lg:btn-wide btn-primary gap-2"
             :class="{
                 'btn-disabled': isFavoriteLoading,
                 'animate-pulse': isFavoriteLoading,
@@ -229,7 +229,7 @@ onMounted(() => {
             @click="handleFavorite"
             :title="t('click_collect')">
             <span class="inline-flex items-center justify-center">
-                <InboxIcon
+                <BookmarkIcon
                     v-if="!isFavorite"
                     class="size-5 mr-2"
                     aria-hidden="true" />

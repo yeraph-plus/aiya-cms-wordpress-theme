@@ -14,7 +14,7 @@ $post_thumb = aya_post_thumb($post_obj->thumbnail_url, $post_obj->content, 300, 
             </a>
         </div>
         <div class="card-body flex-1 p-4 sm:pl-5 flex flex-col">
-            <h2 class="card-title mb-2 hover:text-primary transition-colors">
+            <h2 class="card-title mb-2 hover:text-primary">
                 <a href="<?php aya_echo($post_obj->url); ?>" title="<?php aya_echo($post_obj->attr_title); ?>">
                     <?php aya_echo($post_obj->title); ?>
                 </a>

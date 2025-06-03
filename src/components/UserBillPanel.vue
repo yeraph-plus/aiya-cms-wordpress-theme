@@ -7,6 +7,8 @@
             </h1>
         </div>
 
-        <div class="p-4 pt-0"> </div>
+        <div class="p-4 pt-0">
+            <p class="text-base-content"> To be continued... </p>
+        </div>
     </div>
 </template>

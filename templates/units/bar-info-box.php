@@ -7,7 +7,7 @@ if (aya_opt('site_info_box_bool', 'land')): ?>
                 <?php aya_echo(aya_opt('site_info_title_text', 'land')); ?>
             </h5>
             <p class="text-base-content/70">
-                <?php aya_echo(aya_preg_desc(aya_opt('site_info_desc_text', 'land'))); ?>
+                <?php aya_echo(htmlspecialchars_decode(aya_opt('site_info_desc_text', 'land'))); ?>
             </p>
         </div>
     </div>

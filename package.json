@@ -40,6 +40,6 @@
         "cli:build": "npx @tailwindcss/cli -i ./assets/tailwind/tailwind.css -o ./assets/dist/main.min.css --minify",
         "format": "prettier --write ./assets/tailwind/*.css",
         "check": "prettier --check ./assets/tailwind/*.css",
-        "archive": "dir-archiver --src ./ --dest ../aiya-cms-release.zip --exclude .DS_Store .vscode .git .gitattributes .github .gitignore .gitmodules screenshot src vendor composer.json composer.lock node_modules .npmrc package.json package-lock.json gulpfile.js webpack.config.js"
+        "archive": "dir-archiver --src ./ --dest ../aiya-cms-release.zip --exclude .DS_Store .vscode .git .gitattributes .github .gitignore .gitmodules screenshot src vendor composer.json composer.lock node_modules .npmrc package.json package-lock.json gulpfile.js webpack.config.js vite.config.ts"
     }
 }

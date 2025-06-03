@@ -17,6 +17,69 @@ import VueDebugTools from "./scripts/debug";
 //标记页面加载状态
 document.body.classList.add('loading');
 
+//主题管理
+function initThemeSwitch(defaultDarkMode = false) {
+    // 可用主题列表
+    const availableThemes = [
+        "light",
+        "dark"
+    ];
+
+    // 应用主题
+    const applyTheme = (theme) => {
+        // 根元素添加 data-theme 属性（用于 DaisyUI）
+        document.documentElement.setAttribute("data-theme", theme);
+
+        // 处理深色模式 class
+        if (theme === "dark") {
+            document.documentElement.classList.add("dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+        }
+
+        // 保存当前主题到全局变量，便于组件访问
+        window.currentTheme = theme;
+
+        // 触发主题变化事件，通知组件
+        window.dispatchEvent(new CustomEvent('theme-changed'));
+    };
+
+    // 检查系统暗色模式
+    const isSystemDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    // 从 localStorage 获取用户保存的主题
+    const savedTheme = localStorage.getItem("theme");
+
+    // 应用主题：优先使用保存的主题，其次使用 defaultDarkMode 设置，最后使用系统主题
+    if (savedTheme && availableThemes.includes(savedTheme)) {
+        applyTheme(savedTheme);
+    } else {
+        // 如果没有保存的主题或保存的主题无效，使用 defaultDarkMode 设置或系统默认
+        const defaultTheme = defaultDarkMode ? "dark" : (isSystemDarkMode ? "dark" : "light");
+        applyTheme(defaultTheme);
+    }
+
+    // 监听系统颜色方案变化
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+        // 如果没有保存的主题，则跟随系统变化
+        if (!localStorage.getItem("theme")) {
+            applyTheme(e.matches ? "dark" : "light");
+        }
+    });
+
+    // 全局主题切换函数，供组件调用
+    window.toggleTheme = () => {
+        const currentTheme = window.currentTheme || "dark";
+        const currentIndex = availableThemes.findIndex((t) => t === currentTheme);
+        const nextIndex = (currentIndex + 1) % availableThemes.length;
+        const nextTheme = availableThemes[nextIndex];
+
+        // 保存到 localStorage
+        localStorage.setItem("theme", nextTheme);
+        applyTheme(nextTheme);
+    };
+}
+
 //lozad观察器初始化逻辑
 function initLozad() {
     //将所有图片的src地址先处理为data-src
@@ -131,8 +194,8 @@ if (vueAppEl) {
         data() {
             return {
                 isMobile: isMobile(),
-                sidebarToggle: !isMobile(),
-                mobileMenuToggle: false,
+                sidebarToggle: window.appConfig.sidebarToggle,
+                defaultDarkMode: window.appConfig.defaultDarkMode,
             }
         },
         created() {
@@ -148,9 +211,11 @@ if (vueAppEl) {
             });
         },
         mounted() {
-            // 确保 lozadObserver 被正确定义
-            let lozadObserver;
+            //初始化主题切换
+            initThemeSwitch(this.defaultDarkMode);
 
+            //先声明 lozadObserver 对象确保正确定义
+            let lozadObserver;
             setTimeout(() => {
                 handleLoading();
                 document.dispatchEvent(new CustomEvent('vue-initialized'));

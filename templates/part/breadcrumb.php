@@ -1,14 +1,18 @@
 <?php
 
+//隐藏首页
+if (aya_is_where() == 'home') {
+    return '';
+}
 //预定义数据
 $items = aya_get_breadcrumb();
 ?>
-<div class="breadcrumbs text-sm pb-4" aria-label="Breadcrumb">
+<div class="breadcrumbs text-sm pb-4 overflow-hidden" aria-label="Breadcrumb">
     <ul itemscope itemtype="https://schema.org/BreadcrumbList">
         <?php foreach ($items as $i => $item): ?>
             <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
                 <?php if ($item['url'] && $i < count($items) - 1): ?>
-                    <a href="<?php aya_echo($item['url']); ?>" itemprop="item" class="text-base-content/70 hover:text-primary transition-colors">
+                    <a href="<?php aya_echo($item['url']); ?>" itemprop="item" class="text-base-content/70 hover:text-primary">
                         <?php if ($i === 0): ?>
                             <icon name="home" class="size-4 mr-1"></icon>
                         <?php endif; ?>

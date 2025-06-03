@@ -107,8 +107,8 @@ $next_post = $post_obj->next_post();
                 <a class="btn btn-md md:btn-lg gap-2 lg:gap-3 text-sm" href="<?php aya_echo($prev_post->url); ?>">
                     <icon name="chevron-left" class="size-9"></icon>
                     <div class="flex flex-col items-start gap-1 leading-[1.1] overflow-hidden">
-                        <span class="text-base-content/50 text-[0.7rem] font-semibold hidden md:flex"><?php aya_echo(__('上一篇', 'AIYA')); ?></span>
-                        <span><?php aya_echo($prev_post->title); ?></span>
+                        <span class="text-base-content/50 text-[0.7rem] font-semibold"><?php aya_echo(__('上一篇', 'AIYA')); ?></span>
+                        <span class=" hidden md:flex"><?php aya_echo($prev_post->title); ?></span>
                     </div>
                 </a>
             <?php endif; ?>
@@ -117,8 +117,8 @@ $next_post = $post_obj->next_post();
             <?php if (!empty($next_post)): ?>
                 <a class="btn btn-md md:btn-lg gap-2 lg:gap-3 text-sm" href="<?php aya_echo($next_post->url); ?>">
                     <div class="flex flex-col items-start gap-1 leading-[1.1] overflow-hidden">
-                        <span class="text-base-content/50 text-[0.7rem] font-semibold hidden md:flex"><?php aya_echo(__('下一篇', 'AIYA')); ?></span>
-                        <span><?php aya_echo($next_post->title); ?></span>
+                        <span class="text-base-content/50 text-[0.7rem] font-semibold"><?php aya_echo(__('下一篇', 'AIYA')); ?></span>
+                        <span class=" hidden md:flex"><?php aya_echo($next_post->title); ?></span>
                     </div>
                     <icon name="chevron-right" class="size-9"></icon>
                 </a>

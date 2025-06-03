@@ -157,7 +157,7 @@ defineExpose({
 </script>
 
 <template>
-    <div class="comment-form mb-8">
+    <div class="comment-form">
         <div
             v-if="error"
             class="alert alert-error mb-4">
@@ -208,7 +208,7 @@ defineExpose({
                 <div class="flex items-center gap-2">
                     <div
                         v-if="props.currentUser"
-                        class="flex items-center gap-2 mb-4">
+                        class="flex items-center gap-2">
                         <img
                             :src="props.currentUser.avatar"
                             alt="Avatar"
@@ -248,4 +248,5 @@ defineExpose({
             </div>
         </form>
     </div>
+    <div class="border-t-1 border-base-300 my-4"></div>
 </template>

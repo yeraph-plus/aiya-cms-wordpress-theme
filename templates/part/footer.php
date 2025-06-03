@@ -14,14 +14,13 @@
                             <?php endif; ?>
                             <?php if (aya_opt('site_icp_beian_text', 'basic') !== ''): ?>
                                 <!-- ICP -->
-                                <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 hover:text-primary transition-colors">
-                                    <icon name="shield-check" class="size-4"></icon>
+                                <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1 hover:text-primary">
                                     <?php aya_echo(aya_opt('site_icp_beian_text', 'basic')); ?>
                                 </a>
                             <?php endif; ?>
                             <?php if (aya_opt('site_mps_beian_text', 'basic') !== ''): ?>
                                 <!-- MPS -->
-                                <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=<?php aya_echo(aya_opt('site_mps_code_text', 'basic')); ?>" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">
+                                <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=<?php aya_echo(aya_opt('site_mps_code_text', 'basic')); ?>" target="_blank" rel="noopener noreferrer" class="hover:text-primary">
                                     <?php aya_echo(aya_opt('site_mps_beian_text', 'basic')); ?>
                                 </a>
                             <?php endif; ?>

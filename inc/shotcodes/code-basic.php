@@ -302,7 +302,7 @@ if (is_admin()) {
     AYA_Shortcode::shortcode_register('sponsor-ship-content', array(
         'id' => 'sc-sponsor-ship-content',
         'title' => '赞助者可见',
-        'note' => '创建一个赞助信息的面板，用于在文章中显示赞助商信息或赞助链接',
+        'note' => '创建一个赞助后的内容块，用于在文章中显示仅限赞助商可见的内容',
         'template' => '[sponsor_ship] {{content}} [/sponsor_ship]',
         'field_build' => array(
             [
@@ -314,6 +314,23 @@ if (is_admin()) {
             ],
         )
     ));
+
+    AYA_Shortcode::shortcode_register('logged-in-content', array(
+        'id' => 'sc-logged-in-content',
+        'title' => '登录后可见',
+        'note' => '创建一个登录后可见的内容块，用于在文章中显示仅限登录用户可见的内容',
+        'template' => '[logged_in] {{content}} [/logged_in]',
+        'field_build' => array(
+            [
+                'id' => 'content',
+                'type' => 'textarea',
+                'label' => '内容',
+                'desc' => '登录后可见的内容',
+                'default' => '这是登录后可见的内容。',
+            ],
+        )
+    ));
+
 }
 
 //移除一些 WordPress 默认的短代码
@@ -332,6 +349,7 @@ add_shortcode('button', 'aya_shortcode_button_content');
 add_shortcode('badge', 'aya_shortcode_badge_content');
 add_shortcode('collapse', 'aya_shortcode_collapse_content');
 add_shortcode('sponsor_ship', 'aya_shortcode_sponsor_ship_content');
+add_shortcode('logged_in', 'aya_shortcode_logged_in_content');
 
 //AIYA-CMS 短代码组件：隐藏文字段
 function aya_shortcode_hide_content($atts = array(), $content = '')
@@ -557,35 +575,58 @@ function aya_shortcode_collapse_content($atts = array(), $content = '')
     return $html;
 }
 
+//AIYA-CMS 短代码：赞助者可见内容
 function aya_shortcode_sponsor_ship_content($atts = array(), $content = '')
 {
     $user_level = aya_user_toggle_level();
 
     $html = '';
 
+    $html .= '<div class="border-2 border-primary/50 rounded-lg p-4 my-4">';
+    $html .= '<div class="flex items-center gap-2 mb-2 text-primary">';
+    $html .= '<icon name="wallet" class="size-6 mr-2"></icon>';
+    $html .= '<span class="font-bold">' . __('支援者限定', 'AIYA') . '</span>';
+    $html .= '</div>';
+
     switch ($user_level) {
+        //管理员、赞助者或投稿权限的用户可见
         case 'sponsor':
         case 'author':
         case 'administrator':
-            //管理员、赞助者或投稿权限的用户可见
-            $html .= '<div class="sponsor-content p-4 border border-success/20 rounded-lg bg-success/5 my-4">';
-            $html .= '<div class="flex items-center gap-2 mb-2 text-success">';
-            $html .= '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"></path><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"></path></svg>';
-            $html .= '<span class="font-bold">' . __('赞助者专享内容', 'AIYA') . '</span>';
-            $html .= '</div>';
-            $html .= '<div class="sponsor-content-body">' . do_shortcode($content) . '</div>';
-            $html .= '</div>';
+            $html .= do_shortcode($content);
             break;
         case 'subscriber':
-            $html .= '仅限赞助者可见，请先赞助。';
-            $html .= home_url('sponsor');
+            $html .= __('仅限订阅用户可见，请先：', 'AIYA') . '<a href="' . home_url('sponsor') . '" class="link">' . __('获取订阅', 'AIYA') . '</a>';
             break;
         case 'guest':
         default:
-            $html .= '仅限赞助者可见，请登录后查看。';
-            //$html .= aya_vue_load('login-action', aya_user_get_login_data(false));
+            $html .= '<div class="flex items-center gap-2 text-base-content">';
+            $html .= __('仅限订阅用户可见，请登录后获取订阅。', 'AIYA');
+            $html .= '<button type="button" class="btn btn-primary btn-sm" onclick="window.LoginAction && window.LoginAction.showLogin()">' . __('登录', 'AIYA') . '</button>';
+            $html .= '</div>';
             break;
     }
 
+    $html .= '</div>';
+
     return $html;
+}
+
+//AIYA-CMS 短代码：登录可见内容
+function aya_shortcode_logged_in_content($atts = array(), $content = '')
+{
+    $user_level = aya_user_toggle_level();
+
+    if ($user_level == 'guest') {
+        $html = '';
+        $html .= '<div class="border-2 border-secondary/20 rounded-lg p-4 my-4">';
+        $html .= '<div class="flex items-center gap-2 text-secondary">';
+        $html .= '<icon name="command-line" class="size-6 mr-2"></icon>';
+        $html .= '<span>' . __('仅限登录用户可见，请先登录', 'AIYA') . '</span>';
+        $html .= '</div></div>';
+
+        return $html;
+    }
+
+    return '<hr />' . do_shortcode($content) . '<hr />';
 }

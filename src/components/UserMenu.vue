@@ -36,11 +36,11 @@ const props = defineProps({
 function badgeColorClass(role) {
     switch (role) {
         case "administrator":
-            return "badge-success";
-        case "author":
             return "badge-error";
-        case "sponsor":
+        case "author":
             return "badge-info";
+        case "sponsor":
+            return "badge-primary";
         case "subscriber":
             return "badge-neutral";
         case "guest":

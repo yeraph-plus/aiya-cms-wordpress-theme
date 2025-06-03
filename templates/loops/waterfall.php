@@ -19,7 +19,7 @@ $post_thumb = aya_post_thumb($post_obj->thumbnail_url, $post_obj->content, 400, 
                 <?php endforeach; ?>
             </div>
         </div>
-        <h2 class="card-title line-clamp-2 hover:text-primary transition-colors">
+        <h2 class="card-title line-clamp-2 hover:text-primary">
             <a href="<?php aya_echo($post_obj->url); ?>" title="<?php aya_echo($post_obj->attr_title); ?>">
                 <?php aya_echo($post_obj->title); ?>
             </a>

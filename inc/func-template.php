@@ -547,83 +547,6 @@ function aya_the_post_tips($post_id = 0)
     return aya_echo($html);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//评论分页链接的模板方法
-function aya_comment_pagination_item_link($label_type = 'next')
-{
-    if (!is_singular()) {
-        return;
-    }
-
-    $page = get_query_var('cpage');
-
-    if ((int) $page <= 1) {
-        return;
-    }
-
-    //上一页
-    if ($label_type === 'prev') {
-        $get_page = $page - 1;
-        $label = aya_feather_icon('chevron-left', '16', '', 'stroke-width="2"') . __('Older', 'AIYA');
-    }
-    //下一页
-    else if ($label_type === 'next') {
-        $get_page = $page + 1;
-        $label = __('Newer', 'AIYA') . aya_feather_icon('chevrons-right', '16', '', 'stroke-width="2"');
-    }
-
-    $html_template = '<a href="%1$s" class="item %2$s">%3$s</a>';
-
-    $html = sprintf($html_template, esc_url(get_comments_pagenum_link($get_page)), '', $label);
-
-    return aya_echo($html) . paginate_links();
-}
-
-//区块标题模板
-function aya_section_tittle($title, $icon = 'navigation')
-{
-    if (empty($title)) {
-        return '';
-    }
-
-    $html = '';
-    $html .= '<div class="section-tittle">';
-    $html .= aya_feather_icon($icon, '24', 'mr-2 mt-1', '') . '<h2>' . $title . '</h2>';
-    $html .= '</div>';
-
-    return aya_echo($html);
-}
-
-//小工具卡片模板
-function aya_widget_card($title, $content)
-{
-    if (empty($title)) {
-        return '';
-    }
-
-    $html = '';
-    $html .= '<aside class="widget widget-panel">';
-    $html .= '<h3 class="widget-title">' . $title . '</h3>';
-    $html .= '<div class="widget-content">' . $content . '</div>';
-    $html .= '</aside>';
-
-    return aya_echo($html);
-}
-
-
-
 /*
  * ------------------------------------------------------------------------------
  * 轮播组件数据处理
@@ -632,8 +555,6 @@ function aya_widget_card($title, $content)
 
 function aya_carousel_component()
 {
-    return;
-
     if (aya_is_where() !== 'home') {
         return;
     }
@@ -641,6 +562,6 @@ function aya_carousel_component()
         $carousel_layout = aya_opt('site_carousel_layout_type', 'land');
         $carousel_list = aya_opt('site_carousel_post_list', 'land');
 
-        aya_print($carousel_list);
+        //aya_print($carousel_list);
     }
 }

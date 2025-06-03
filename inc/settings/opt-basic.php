@@ -41,6 +41,20 @@ AYF::new_opt([
             'default' => true,
         ],
         [
+            'title' => '默认使用暗色主题',
+            'desc' => '设置站点初始化加载的配色为暗色主题，关闭此项时使用白色主题',
+            'id' => 'site_default_dark_mode_bool',
+            'type' => 'switch',
+            'default' => false,
+        ],
+        [
+            'title' => '默认折叠左侧边栏',
+            'desc' => '设置站点默认状态下是否打开左侧边栏，关闭此项时左侧边栏默认展开',
+            'id' => 'site_default_sitebar_close_bool',
+            'type' => 'switch',
+            'default' => false,
+        ],
+        [
             'title' => '默认文章缩略图',
             'desc' => '上传文章默认缩略图',
             'id' => 'site_default_thumb_upload',
@@ -166,19 +180,6 @@ AYF::new_opt([
             'default' => '',
         ],
         /*
-        [
-            'title' => '导航栏浮动',
-            'desc' => '设置站点导航栏是否跟随滚动',
-            'id' => 'site_nav_sticky_type',
-            'type' => 'radio',
-            'sub'  => [
-                'navbar-sticky' => '固定',
-                'navbar-floating' => '浮动',
-                'navbar-static' => '关闭',
-
-            ],
-            'default' => 'navbar-static',
-        ],
         [
             'title' => '首页启用小工具栏',
             'desc' => '设置站点是否显示页面右 1/4 小工具栏',
