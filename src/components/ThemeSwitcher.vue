@@ -13,15 +13,15 @@ declare global {
     }
 }
 
-// 当前主题状态
+//当前主题状态
 const currentTheme = ref(window.currentTheme || "light");
 
-// 监听全局主题变化
+//监听全局主题变化
 const updateThemeState = () => {
     currentTheme.value = window.currentTheme || "dark";
 };
 
-// 切换主题
+//切换主题
 const toggleTheme = () => {
     // 调用全局主题切换函数
     window.toggleTheme();
@@ -29,11 +29,10 @@ const toggleTheme = () => {
     updateThemeState();
 };
 
-// 组件挂载时，确保状态与全局同步
+//组件挂载时，确保状态与全局同步
 onMounted(() => {
     updateThemeState();
 
-    // 监听主题变化事件（如果你想要支持多组件同步）
     window.addEventListener("theme-changed", updateThemeState);
 });
 </script>

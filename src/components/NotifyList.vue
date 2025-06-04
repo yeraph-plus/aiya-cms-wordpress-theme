@@ -12,29 +12,50 @@ const { t } = useI18n();
 const props = defineProps({
     data: {
         type: Object,
-        default: () => {},
+        default: {},
     },
 });
 
 //将对象循环为数组
-const notifyList = computed(() => {
-    if (!props.data) {
-        return [];
-    } else {
-        return Object.keys(props.data).map((key) => ({
-            id: key,
-            ...props.data[key],
-        }));
-    }
-});
+const notifyList = computed(() => Object.values(props.data));
 
-//IconMap
-const typeIconMap = {
-    success: CheckCircleIcon,
-    info: InformationCircleIcon,
-    warning: ExclamationTriangleIcon,
-    error: XCircleIcon,
-    message: ChatBubbleLeftRightIcon,
+// 消息等级映射配置
+const levelConfig = {
+    success: {
+        icon: CheckCircleIcon,
+        bgColor: "bg-success/10",
+        textColor: "text-success",
+        borderColor: "border-success/20",
+    },
+    info: {
+        icon: InformationCircleIcon,
+        bgColor: "bg-info/10",
+        textColor: "text-info",
+        borderColor: "border-info/20",
+    },
+    warning: {
+        icon: ExclamationTriangleIcon,
+        bgColor: "bg-warning/10",
+        textColor: "text-warning",
+        borderColor: "border-warning/20",
+    },
+    error: {
+        icon: XCircleIcon,
+        bgColor: "bg-error/10",
+        textColor: "text-error",
+        borderColor: "border-error/20",
+    },
+    message: {
+        icon: ChatBubbleLeftRightIcon,
+        bgColor: "bg-base-100",
+        textColor: "text-base-content",
+        borderColor: "border-base-content/10",
+    },
+};
+
+//计算消息内容的配色
+const getNotifyConfig = (level) => {
+    return levelConfig[level] || levelConfig.message;
 };
 
 const hasNewNotify = computed(() => notifyList.value.length > 0);
@@ -59,42 +80,54 @@ const hasNewNotify = computed(() => notifyList.value.length > 0);
         <!-- Dropdown -->
         <div
             tabindex="0"
-            class="dropdown-content z-[1] p-0 mt-4 shadow-md overflow-auto">
-            <div class="max-h-96 w-72 bg-base-100 rounded-box">
-                <template v-if="notifyList.length">
-                    <div class="divide-y divide-base-200">
-                        <div
-                            v-for="(note, idx) in notifyList"
-                            :key="idx"
-                            class="flex items-start gap-3 p-4 hover:bg-base-200 transition-colors">
-                            <component
-                                :is="typeIconMap[note.icon] || InformationCircleIcon"
-                                class="self-center h-6 w-6 flex-shrink-0"
-                                :class="{
-                                    'text-success': note.icon === 'success',
-                                    'text-info': note.icon === 'info',
-                                    'text-warning': note.icon === 'warning',
-                                    'text-error': note.icon === 'error',
-                                    'text-base-content opacity-60': note.icon === 'message' || !note.icon,
-                                }"
-                                aria-hidden="true" />
-                            <div class="flex-1 min-w-0">
-                                <div
-                                    class="font-medium text-base-content py-2"
-                                    v-html="note.title"></div>
-                                <div
-                                    class="text-sm text-base-content opacity-70"
-                                    v-html="note.content"></div>
-                                <div class="text-xs text-base-content opacity-50 mt-1">{{ note.time }}</div>
+            class="dropdown-content z-[1] mt-4">
+            <div class="w-80 bg-base-100 rounded-box overflow-hidden shadow-md">
+                <div class="flex items-center justify-between p-4 border-b border-base-200">
+                    <span class="text-base font-bold flex items-center gap-2">
+                        {{ t("all_notifications") }}
+                        <span class="badge badge-primary badge-sm">
+                            {{ notifyList.length }}
+                        </span>
+                    </span>
+                </div>
+                <div class="overflow-y-auto max-h-80 custom-scrollbar">
+                    <template v-if="hasNewNotify">
+                        <div class="divide-y divide-base-100">
+                            <div
+                                v-for="(note, idx) in notifyList"
+                                :key="idx"
+                                class="p-3 transition-colors"
+                                :class="[getNotifyConfig(note.level).bgColor]">
+                                <div class="flex items-start gap-3">
+                                    <component
+                                        :is="getNotifyConfig(note.level).icon"
+                                        class="self-center h-6 w-6 flex-shrink-0"
+                                        :class="[getNotifyConfig(note.level).textColor]"
+                                        aria-hidden="true" />
+                                    <!-- Msg -->
+                                    <div class="flex-1 min-w-0">
+                                        <div
+                                            class="font-medium py-1"
+                                            :class="[getNotifyConfig(note.level).textColor]"
+                                            v-html="note.title"></div>
+                                        <div
+                                            class="text-sm text-base-content opacity-80"
+                                            v-html="note.content"></div>
+                                        <div class="text-xs text-base-content opacity-50 mt-2 flex items-center justify-between">
+                                            <span>{{ note.time }}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </template>
-                <!-- NULL -->
-                <div
-                    v-else
-                    class="p-4 text-center text-base-content opacity-50">
-                    <span>{{ t("empty_note") }}</span>
+                    </template>
+                    <!-- No Msg -->
+                    <template v-else>
+                        <div class="p-8 text-center text-base-content opacity-50 flex flex-col items-center gap-2">
+                            <BellSlashIcon class="size-8 mb-2 opacity-30" />
+                            <span>{{ t("empty_note") }}</span>
+                        </div>
+                    </template>
                 </div>
             </div>
         </div>

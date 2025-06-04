@@ -172,18 +172,18 @@ function aya_notify_list()
 
 //TODO 检测到新版本、插件、主题更新
 // 检测到核心更新时触发通知
-add_action('wp_version_check', function () {
-    $update_data = get_site_transient('update_core');
-    if (!empty($update_data->updates)) {
-        aya_notify_create([
-            'level' => 'warning',
-            'scope' => 'administrator',
-            'title' => '系统更新',
-            'content' => '检测到新的 WordPress 版本可用',
-            'time' => time()
-        ]);
-    }
-});
+// add_action('wp_version_check', function () {
+//     $update_data = get_site_transient('update_core');
+//     if (!empty($update_data->updates)) {
+//         aya_notify_create([
+//             'level' => 'warning',
+//             'scope' => 'administrator',
+//             'title' => '系统更新',
+//             'content' => '检测到新的 WordPress 版本可用',
+//             'time' => time()
+//         ]);
+//     }
+// });
 
 //TODO 新评论待审、文章审核状态变更、用户提及
 /*

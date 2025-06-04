@@ -176,8 +176,9 @@ AYF::new_opt([
             'id' => 'site_carousel_template_type',
             'type' => 'radio',
             'sub' => [
-                'cms' => '三栏位（CMS模式）',
                 'full' => '经典（宽幅模式）',
+                'cms' => '三栏位（CMS模式）',
+                'mosaic' => '拼贴（四卡片）',
             ],
             'default' => 'cms',
         ],

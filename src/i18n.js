@@ -3,6 +3,7 @@ const messages = {
         //ThemeSwitcher.vue
         theme_switch: "Switch Color Mode",
         //NotifyList.vue
+        all_notifications: "Notifications",
         empty_note: "No notifications",
         //SearchForm.vue
         search_placeholder: "Search...",
@@ -99,6 +100,7 @@ const messages = {
         //ThemeSwitcher.vue
         theme_switch: "切换主题",
         //NotifyList.vue
+        all_notifications: "通知列表",
         empty_note: "没有通知",
         //SearchForm.vue
         search_placeholder: "搜索...",

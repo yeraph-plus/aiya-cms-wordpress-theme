@@ -130,7 +130,7 @@ async function handleLogout() {
                         </a>
                     </li>
                     <!-- Logout -->
-                    <li class="my-2 border-t border-base-200">
+                    <li class="mt-2 border-t border-base-200">
                         <a
                             href="#"
                             @click.prevent="handleLogout"

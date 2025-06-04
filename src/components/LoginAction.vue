@@ -28,9 +28,12 @@ const props = defineProps({
     },
 });
 
+//loading状态
+const loading = ref(false);
+
 const isSignIn = ref(true);
-const loading = ref(false); //loading状态
-// 组件引用
+
+//组件引用
 const loginFormRef = ref(null);
 const registerFormRef = ref(null);
 const forgotPasswordFormRef = ref(null);
