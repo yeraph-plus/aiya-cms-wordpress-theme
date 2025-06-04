@@ -1,3 +1,10 @@
+<?php
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+?>
 <!-- Screen Loading -->
 <div id="page-loading-mask" class="flex items-center justify-center fixed inset-0 bg-base-100 z-[9999] transition-opacity duration-300 ease-in-out">
     <div class="flex flex-col items-center">

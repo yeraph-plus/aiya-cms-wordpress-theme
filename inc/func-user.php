@@ -191,7 +191,7 @@ function aya_sponsor_show_orders_user_profile($user)
             <span style="color:red;"><?php _e('已被管理员强制取消', 'AIYA'); ?></span>
         <?php elseif ($is_valid): ?>
             <span style="color:green;"><?php _e('有效', 'AIYA'); ?>&nbsp;&nbsp;</span>
-            <strong><?php _e('剩余', 'AIYA'); ?>         <?php echo $left_days; ?>         <?php _e('天', 'AIYA'); ?></strong>
+            <?php printf(__('剩余 <strong>%d</strong> 天', 'AIYA'), $left_days); ?>
         <?php else: ?>
             <span style="color:gray;"><?php _e('无效', 'AIYA'); ?></span>
         <?php endif; ?>
@@ -213,25 +213,33 @@ function aya_sponsor_show_orders_user_profile($user)
         </tr>
     </table>
     <h3><?php _e('赞助订单记录', 'AIYA'); ?></h3>
-    <p><?php printf(__('累计已赞助: <strong>%d</strong> 天', 'AIYA'), $total_days); ?></p>
-    <table class="form-table">
-        <tr>
-            <th><?php _e('订单号', 'AIYA'); ?></th>
-            <th><?php _e('开始时间', 'AIYA'); ?></th>
-            <th><?php _e('天数', 'AIYA'); ?></th>
-            <th><?php _e('来源', 'AIYA'); ?></th>
-            <th><?php _e('状态', 'AIYA'); ?></th>
-        </tr>
-        <?php foreach ($orders as $order): ?>
-            <tr>
-                <td><?php echo esc_html($order->order_id); ?></td>
-                <td><?php echo date('Y-m-d H:i', intval($order->start_time)); ?></td>
-                <td><?php echo intval($order->duration_days); ?></td>
-                <td><?php echo esc_html($order->source); ?></td>
-                <td><?php echo esc_html($order->status); ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
+    <p>
+        <?php printf(__('累计已赞助 <strong>%d</strong> 天', 'AIYA'), $total_days); ?>
+    </p>
+    <div class="sponsor-orders-list" style="margin-top: 15px;">
+        <table class="widefat" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th><?php _e('订单号', 'AIYA'); ?></th>
+                    <th><?php _e('开始时间', 'AIYA'); ?></th>
+                    <th><?php _e('天数', 'AIYA'); ?></th>
+                    <th><?php _e('来源', 'AIYA'); ?></th>
+                    <th><?php _e('状态', 'AIYA'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($orders as $order): ?>
+                    <tr>
+                        <td><?php echo esc_html($order->order_id); ?></td>
+                        <td><?php echo date('Y-m-d H:i', intval($order->start_time)); ?></td>
+                        <td><?php echo intval($order->duration_days); ?></td>
+                        <td><?php echo esc_html($order->source); ?></td>
+                        <td><?php echo esc_html($order->status); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
     <?php
 }
 
@@ -435,14 +443,4 @@ function aya_user_get_login_data($logged_in = false)
     }
 
     return $user_menu;
-}
-
-//登录和用户菜单组件
-function aya_vue_user_nemu_component()
-{
-    if (is_user_logged_in()) {
-        return aya_vue_load('user-menu', aya_user_get_login_data(true));
-    } else {
-        return aya_vue_load('login-action', aya_user_get_login_data(false));
-    }
 }

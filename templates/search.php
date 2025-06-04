@@ -1,3 +1,10 @@
+<?php
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+?>
 <main class="flex-1 flex flex-col">
     <!-- Search Result -->
     <div class="container mx-auto p-4 transition-all duration-300 ease-in-out">

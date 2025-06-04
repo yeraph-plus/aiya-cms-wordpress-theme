@@ -1,6 +1,9 @@
 <?php
-if (!defined('ABSPATH'))
+
+if (!defined('ABSPATH')) {
     exit;
+}
+
 
 if (is_admin()) {
     //初始化简码输入框组件按钮
@@ -276,6 +279,42 @@ if (is_admin()) {
         )
     ));
 
+    AYA_Shortcode::shortcode_register('tooltip-content', array(
+        'id' => 'sc-tooltip-content',
+        'title' => '文字提示气泡',
+        'note' => '创建一个文字提示气泡，用于在文章中添加提示信息，支持多种位置',
+        'template' => '[tooltip {{attributes}}] {{content}} [/tooltip]',
+        'field_build' => array(
+            [
+                'id' => 'text',
+                'type' => 'text',
+                'label' => '提示文本',
+                'desc' => '鼠标悬停时显示的提示文本',
+                'default' => '提示信息',
+            ],
+            [
+                'id' => 'content',
+                'type' => 'textarea',
+                'label' => '内容',
+                'desc' => '提示气泡的内容',
+                'default' => '这里是会显示提示气泡的内容。',
+            ],
+            [
+                'id' => 'position',
+                'type' => 'select',
+                'label' => '位置',
+                'desc' => '提示气泡显示的位置',
+                'sub' => array(
+                    'top' => '顶部',
+                    'bottom' => '底部',
+                    'left' => '左侧',
+                    'right' => '右侧',
+                ),
+                'default' => 'top',
+            ],
+        )
+    ));
+
     AYA_Shortcode::shortcode_register('collapse-content', array(
         'id' => 'sc-collapse-content',
         'title' => '折叠面板',
@@ -292,7 +331,7 @@ if (is_admin()) {
             [
                 'id' => 'content',
                 'type' => 'textarea',
-                'label' => '标题',
+                'label' => '内容',
                 'desc' => '折叠面板的内容',
                 'default' => '这里是折叠面板的内容。',
             ],
@@ -347,6 +386,7 @@ add_shortcode('col_list', 'aya_shortcode_column_list_content');
 add_shortcode('alert', 'aya_shortcode_alert_content');
 add_shortcode('button', 'aya_shortcode_button_content');
 add_shortcode('badge', 'aya_shortcode_badge_content');
+add_shortcode('tooltip', 'aya_shortcode_tooltip_content');
 add_shortcode('collapse', 'aya_shortcode_collapse_content');
 add_shortcode('sponsor_ship', 'aya_shortcode_sponsor_ship_content');
 add_shortcode('logged_in', 'aya_shortcode_logged_in_content');
@@ -554,6 +594,23 @@ function aya_shortcode_badge_content($atts = array(), $content = '')
     $html_format = '<span class="badge badge-%1$s badge-%2$s badge-%3$s ml-4">%4$s</span>';
 
     return sprintf($html_format, esc_attr($atts['style']), esc_attr($atts['color']), esc_attr($atts['size']), esc_html($content));
+}
+
+//AIYA-CMS 短代码：文字提示气泡
+function aya_shortcode_tooltip_content($atts = array(), $content = '')
+{
+    $atts = shortcode_atts(
+        array(
+            'text' => '',
+            'position' => 'top', // top, bottom, left, right
+        ),
+        $atts,
+    );
+
+    $html = '';
+    $html .= '<span class="tooltip tooltip-' . esc_attr($atts['position']) . '" data-tip="' . esc_html($atts['text']) . '">' . do_shortcode($content) . '</span>';
+
+    return $html;
 }
 
 //AIYA-CMS 短代码：折叠面板

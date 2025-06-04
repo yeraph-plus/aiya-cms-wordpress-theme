@@ -4,12 +4,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$banner_type = aya_opt('site_banner_template_type', 'land');
-
 //仅在首页显示横幅组件
-if (aya_is_where() !== 'home' || $banner_type == 'off') {
+if (aya_is_where() !== 'home' || !aya_opt('site_banner_section_bool', 'land')) {
     return '';
 }
+
+$banner_type = aya_opt('site_banner_template_type', 'land');
 
 //背景图设置
 $bg_image = aya_opt('site_banner_bg_upload', 'land');

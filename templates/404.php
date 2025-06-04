@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 $none_page_image = aya_opt('site_404_page_img_upload', 'basic');
 ?>
 <main class="flex-1 flex flex-col">

@@ -1,4 +1,9 @@
 <?php
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 ?>
 <div class="w-full">
     <div class="card bg-base-100 border border-base-300">

@@ -205,9 +205,9 @@ if (!class_exists('AYA_WP_Post_Object')) {
                 $the_content = $post->post_content;
                 $the_content = wp_strip_all_tags(strip_shortcodes($the_content));
 
-                //$the_preview = wp_trim_words($the_content, $size);
-                //DEBUG：WP原生的摘要函数好像完全没法判断中文长度，改用PHP判断
-                $the_preview = mb_strimwidth($the_content, 0, $size, '...');
+                $the_preview = wp_trim_words($the_content, $size);
+                //DEBUG：有时候WP原生的摘要函数好像完全没法判断中文长度，改用PHP判断
+                //$the_preview = mb_strimwidth($the_content, 0, $size, '...');
 
                 return wp_kses_post($the_preview);
             }

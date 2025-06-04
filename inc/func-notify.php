@@ -164,12 +164,6 @@ function aya_notify_list()
     return $notes;
 }
 
-//组件加载
-function aya_vue_notify_component()
-{
-    return aya_vue_load('notify-list', aya_notify_list());
-}
-
 /*
  * ------------------------------------------------------------------------------
  * WP内置消息加载

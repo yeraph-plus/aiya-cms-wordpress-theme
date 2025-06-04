@@ -1,9 +1,14 @@
 <?php
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 //获取文章数据
 $post_obj = new AYA_Post_In_While();
 
 //获取特色图片生成裁剪
-$thumbnail = aya_post_thumb($post_obj->thumbnail_url, '', 1200, 0);
+$thumbnail = aya_the_post_thumb($post_obj->thumbnail_url, '', 1200, 0);
 $has_thumbnail = ($thumbnail !== false);
 //获取过期状态
 $post_deadline = aya_opt('site_single_outdate_text', 'basic');

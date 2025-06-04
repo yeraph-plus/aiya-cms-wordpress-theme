@@ -1,11 +1,22 @@
 <?php
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 //获取分页数据
 $page_turner = aya_opt('site_loop_paged_type', 'basic');
-$paged = ($page_turner == 'full') ? aya_get_pagination() : aya_get_simple_pagination();
+
+if ($page_turner == 'full') {
+    $paged = aya_get_pagination();
+} else {
+    $paged = aya_get_simple_pagination();
+}
 
 if (empty($paged)) {
-    return;
+    return '';
 }
+
 ?>
 <nav role="navigation" aria-label="Pagination">
     <?php if ($page_turner == 'full'): ?>

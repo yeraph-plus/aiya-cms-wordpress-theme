@@ -1,6 +1,9 @@
 <?php
-if (!defined('ABSPATH'))
+
+if (!defined('ABSPATH')) {
     exit;
+}
+
 
 //主题设置
 AYF::new_opt([

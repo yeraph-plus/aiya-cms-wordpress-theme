@@ -362,8 +362,10 @@ function aya_home_url_referer_check()
 {
     //判断请求头
     if (isset($_SERVER['HTTP_REFERER'])) {
-        $referer_host = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST); //来源域名
-        $site_host = parse_url(home_url(), PHP_URL_HOST); //本站域名
+        //来源域名
+        $referer_host = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
+        //本站域名
+        $site_host = parse_url(home_url(), PHP_URL_HOST);
 
         if ($referer_host !== $site_host) {
             //是外部来源

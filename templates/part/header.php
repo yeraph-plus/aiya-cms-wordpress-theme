@@ -1,4 +1,9 @@
 <?php
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 /** 
  * NOTE: All wp-head info tag:
  * 
@@ -28,11 +33,12 @@
     <script type="text/javascript">
         window.appConfig = {};
         window.appConfig.defaultDarkMode = <?php aya_echo(aya_opt('site_default_dark_mode_bool', 'basic') ? 'true' : 'false'); ?>;
-        window.appConfig.sidebarToggle = <?php aya_echo(aya_opt('site_default_sitebar_close_bool', 'basic') ? 'false' : 'true'); ?>;
+        window.appConfig.defaultSitebarClose = <?php aya_echo(aya_opt('site_default_sitebar_close_bool', 'basic') ? 'false' : 'true'); ?>;
+        window.appConfig.Lunguage = 'zh';
     </script>
 </head>
 
-<body <?php if (defined('AYA_RELEASE')) {
+<body <?php if (aya_is_dev_mode()) {
     body_class();
 } ?>>
     <?php wp_body_open(); ?>
@@ -40,7 +46,7 @@
     <?php aya_template_load('units/screen-loader'); ?>
     <div id="vue-app" class="min-h-screen overflow-hidden" style="visibility: hidden">
         <!-- Mobile Sidebar Mask -->
-        <div v-if="sidebarToggle && isMobile" @click="sidebarToggle = false" class="fixed md:hidden inset-0 bg-base-300/30 backdrop-blur-sm transition-all duration-300 ease-in-out z-20"></div>
+        <div v-if="!sidebarToggle && isMobile" @click="sidebarToggle = false" class="fixed md:hidden inset-0 bg-base-300/30 backdrop-blur-sm transition-all duration-300 ease-in-out z-20"></div>
         <!-- Topbar -->
         <header class="flex fixed z-40 w-full bg-base-100 border-b border-base-300 min-h-16 p-2 transition-all duration-300 ease-in-out">
             <div class="inline-flex w-64 items-center justify-start px-4">
@@ -60,13 +66,13 @@
                 <!-- Theme Switcher -->
                 <?php aya_vue_load('theme-switcher'); ?>
                 <!-- Notifications -->
-                <?php aya_vue_notify_component(); ?>
+                <?php aya_template_load('units/notify-box'); ?>
                 <!-- User Menu -->
-                <?php aya_vue_user_nemu_component(); ?>
+                <?php aya_template_load('units/user-login'); ?>
             </div>
         </header>
         <!-- Left Sidebar -->
-        <aside class="fixed z-20 w-64 top-16 bottom-0 flex flex-col overflow-hidden bg-base-100 shadow-md border-r border-base-300 transition-all duration-300 ease-in-out" :class="[sidebarToggle ? 'left-0' : '-translate-x-full']">
+        <aside class="fixed z-20 w-64 top-16 bottom-0 flex flex-col overflow-hidden bg-base-100 shadow-md border-r border-base-300 transition-all duration-300 ease-in-out" :class="[sidebarToggle ? '-translate-x-full' : 'left-0']">
             <!-- Scroll Box -->
             <div class="flex-grow overflow-y-auto custom-scrollbar">
                 <!-- Search Form -->
@@ -84,4 +90,4 @@
             <?php aya_template_load('units/bar-info-box'); ?>
         </aside>
         <!-- Main Content -->
-        <div class="relative flex flex-col overflow-y-auto overflow-x-hidden transition-all duration-300 ease-in-out pt-16" :class="[sidebarToggle ? 'md:ml-64' : 'ml-0']">
+        <div class="relative flex flex-col overflow-y-auto overflow-x-hidden transition-all duration-300 ease-in-out pt-16" :class="[sidebarToggle ? 'ml-0' : 'md:ml-64']">

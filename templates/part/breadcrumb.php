@@ -1,9 +1,14 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 //隐藏首页
 if (aya_is_where() == 'home') {
     return '';
 }
+
 //预定义数据
 $items = aya_get_breadcrumb();
 ?>

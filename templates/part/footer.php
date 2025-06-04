@@ -1,4 +1,11 @@
-            <!-- Scroll Top -->
+<?php
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+?>
+<!-- Scroll Top -->
             <?php aya_vue_load('scroll-to-top'); ?>
             <!-- Footer -->
             <footer class="bg-base-200 text-base-content transition-all duration-300 ease-in-out">

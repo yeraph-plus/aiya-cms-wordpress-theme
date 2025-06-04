@@ -4,4 +4,4 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-//will coming
+aya_vue_load('notify-list', aya_notify_list());

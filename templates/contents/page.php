@@ -1,4 +1,9 @@
 <?php
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 //获取文章数据
 $post_obj = new AYA_Post_In_While();
 ?>

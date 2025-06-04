@@ -270,7 +270,7 @@ add_filter('the_content', 'aya_post_content_filter_format');
 //合并方法
 function aya_post_content_filter_format($content)
 {
-    if (!defined('AYA_RELEASE')) {
+    if (aya_is_dev_mode()) {
         $start = microtime(true);
     }
 
@@ -287,7 +287,7 @@ function aya_post_content_filter_format($content)
         }
     }
 
-    if (!defined('AYA_RELEASE')) {
+    if (aya_is_dev_mode()) {
         $end = microtime(true);
 
         $content .= '<p>The content filter load time: ' . ($end - $start) . ' seconds.</p>';

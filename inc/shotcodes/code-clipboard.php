@@ -1,6 +1,9 @@
 <?php
 
-if (!defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 
 add_shortcode('clip_board', 'clip_board_box_shortcode');
 

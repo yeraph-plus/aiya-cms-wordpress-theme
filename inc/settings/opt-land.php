@@ -1,6 +1,9 @@
 <?php
-if (!defined('ABSPATH'))
+
+if (!defined('ABSPATH')) {
     exit;
+}
+
 
 //创建主题设置
 AYF::new_opt([
@@ -10,46 +13,27 @@ AYF::new_opt([
     'desc' => 'AIYA-CMS 主题，首页组件设置',
     'fields' => [
         [
-            'desc' => '侧边栏贴片（InfoBox）',
-            'type' => 'title_1',
-        ],
-        [
-            'title' => '显示贴片',
-            'desc' => '开关贴片组件显示',
-            'id' => 'site_info_box_bool',
-            'type' => 'switch',
-            'default' => true,
-        ],
-        [
-            'title' => '贴片标题',
-            'desc' => '贴片组件标题',
-            'id' => 'site_info_title_text',
-            'type' => 'text',
-            'default' => 'AIYA-CMS Pro',
-        ],
-        [
-            'title' => '贴片内容',
-            'desc' => '贴片组件描述文本，支持HTML标签',
-            'id' => 'site_info_desc_text',
-            'type' => 'textarea',
-            'default' => '一种很新的旧 WordPress 主题',
-        ],
-        [
             'desc' => '横幅设置（Banner）',
             'type' => 'title_1',
         ],
         [
-            'title' => '横幅组件显示',
+            'title' => '显示横幅组件',
             'desc' => '开关横幅组件显示',
+            'id' => 'site_banner_section_bool',
+            'type' => 'switch',
+            'default' => true,
+        ],
+        [
+            'title' => '横幅组件显示',
+            'desc' => '切换横幅组件的模板',
             'id' => 'site_banner_template_type',
             'type' => 'radio',
             'sub' => array(
-                'off' => '禁用',
                 'custom' => '自定义横幅',
                 'welcome' => '营销横幅（Welcome Banner）',
                 'hero' => '首页视觉区块（Hero）',
             ),
-            'default' => 'false',
+            'default' => 'custom',
         ],
         [
             'title' => '背景图片',
@@ -91,7 +75,7 @@ AYF::new_opt([
                     'desc' => '显示随机一条一言，关闭时使用自定义文本',
                     'id' => 'hitokoto_bool',
                     'type' => 'switch',
-                    'default' => false,
+                    'default' => true,
                 ],
                 [
                     'title' => '自定义文本',
@@ -182,21 +166,20 @@ AYF::new_opt([
         [
             'title' => '轮播组件显示',
             'desc' => '开关轮播显示',
-            'id' => 'site_carousel_load_bool',
+            'id' => 'site_carousel_section_bool',
             'type' => 'switch',
             'default' => false,
         ],
         [
             'title' => '轮播组件外观切换',
             'desc' => '切换或关闭首页轮播，CMS模式为至少需要5篇文章，宽幅模式为至少需要1篇文章',
-            'id' => 'site_carousel_layout_type',
+            'id' => 'site_carousel_template_type',
             'type' => 'radio',
             'sub' => [
-                'off' => '关闭（不显示）',
                 'cms' => '三栏位（CMS模式）',
                 'full' => '经典（宽幅模式）',
             ],
-            'default' => 'off',
+            'default' => 'cms',
         ],
         [
             'title' => '轮播列表',
@@ -205,18 +188,18 @@ AYF::new_opt([
             'type' => 'group_mult',
             'sub_type' => [
                 [
+                    'title' => '链接',
+                    'desc' => '填入任意URL、或填写文章ID或文章别名 [b]*Tips: 不支持识别分类或标签[/b]',
+                    'id' => 'url',
+                    'type' => 'text',
+                    'default' => '',
+                ],
+                [
                     'title' => '图片',
                     'desc' => '轮播卡片的大图，留空时自动获取文章特色图片',
                     'id' => 'thumbnail',
                     'type' => 'upload',
-                    'default' => 'https://',
-                ],
-                [
-                    'title' => 'ID / URL',
-                    'desc' => '填入任意URL、或直接填写文章的ID [br/][b]**Tips: 不支持识别分类或标签的ID[/b]',
-                    'id' => 'url',
-                    'type' => 'text',
-                    'default' => 'https://',
+                    'default' => '',
                 ],
                 [
                     'title' => '标题',
@@ -234,6 +217,31 @@ AYF::new_opt([
                 ],
 
             ],
+        ],
+        [
+            'desc' => '侧边栏贴片（InfoBox）',
+            'type' => 'title_1',
+        ],
+        [
+            'title' => '显示贴片',
+            'desc' => '开关贴片组件显示',
+            'id' => 'site_info_box_bool',
+            'type' => 'switch',
+            'default' => true,
+        ],
+        [
+            'title' => '贴片标题',
+            'desc' => '贴片组件标题',
+            'id' => 'site_info_title_text',
+            'type' => 'text',
+            'default' => 'AIYA-CMS Pro',
+        ],
+        [
+            'title' => '贴片内容',
+            'desc' => '贴片组件描述文本，支持HTML标签',
+            'id' => 'site_info_desc_text',
+            'type' => 'textarea',
+            'default' => '一种很新的旧 WordPress 主题',
         ],
         /*
         [

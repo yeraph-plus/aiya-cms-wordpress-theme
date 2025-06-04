@@ -60,7 +60,7 @@ if (!class_exists('AYA_WP_Menu_Object')) {
                     $is_active = self::is_current_page($item->url);
 
                     $branch_menu[$item->ID] = array(
-                        'label' => $item->title,
+                        'label' => do_shortcode($item->title),
                         'url' => $item->url,
                         'is_active' => $is_active,
                         'child' => isset($item->child) ? $item->child : array()

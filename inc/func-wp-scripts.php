@@ -119,7 +119,7 @@ function aya_inc_load_head_scripts()
         //aya_int_style($value['pack'], $value['ver'], $value['file']);
     }
     //设置版本
-    $main_pack_ver = (defined('AYA_RELEASE')) ? aya_theme_version() : time();
+    $main_pack_ver = (aya_is_dev_mode()) ? time() : aya_theme_version();
     //主题样式表
     aya_echo('<link rel="stylesheet" href="' . esc_url(get_template_directory_uri() . '/assets/dist/main.css?ver=' . $main_pack_ver) . '">' . PHP_EOL);
 
@@ -157,7 +157,7 @@ function aya_inc_load_footer_scripts()
     $add_scripts_filter = apply_filters('aya_int_add_scripts', '');
     aya_echo($add_scripts_filter);
     //主题脚本
-    $main_pack_ver = (defined('AYA_RELEASE')) ? aya_theme_version() : time();
+    $main_pack_ver = (aya_is_dev_mode()) ? time() : aya_theme_version();
     //主题启动脚本
     aya_echo('<script src="' . esc_url(get_template_directory_uri() . '/assets/src/alpine.init.js?ver=' . $main_pack_ver) . '"></script>' . PHP_EOL);
 }

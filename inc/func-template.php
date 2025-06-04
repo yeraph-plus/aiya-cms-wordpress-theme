@@ -453,7 +453,7 @@ function aya_preg_desc($desc)
 }
 
 //文章缩略图处理
-function aya_post_thumb($have_thumb_url = false, $post_content = '', $size_w = 400, $size_h = 300)
+function aya_the_post_thumb($have_thumb_url = false, $post_content = '', $size_w = 400, $size_h = 300)
 {
     //没有传回正文时忽略
     if ($have_thumb_url === false && empty($post_content)) {
@@ -519,12 +519,6 @@ function aya_the_post_status_badge($status_array = [])
     return aya_echo($html);
 }
 
-/*
- * ------------------------------------------------------------------------------
- * 正文组件
- * ------------------------------------------------------------------------------
- */
-
 //文章顶部中显示的小贴士信息
 function aya_the_post_tips($post_id = 0)
 {
@@ -545,23 +539,4 @@ function aya_the_post_tips($post_id = 0)
     }
 
     return aya_echo($html);
-}
-
-/*
- * ------------------------------------------------------------------------------
- * 轮播组件数据处理
- * ------------------------------------------------------------------------------
- */
-
-function aya_carousel_component()
-{
-    if (aya_is_where() !== 'home') {
-        return;
-    }
-    if (aya_opt('site_carousel_load_bool', 'land')) {
-        $carousel_layout = aya_opt('site_carousel_layout_type', 'land');
-        $carousel_list = aya_opt('site_carousel_post_list', 'land');
-
-        //aya_print($carousel_list);
-    }
 }

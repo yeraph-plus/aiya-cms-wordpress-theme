@@ -3,6 +3,7 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+
 //面包屑参数
 AYA_WP_Breadcrumb_Object::add_item(__('订阅功能', 'AIYA'), home_url('favlist'));
 ?>

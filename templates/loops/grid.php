@@ -1,8 +1,12 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 $post_obj = new AYA_Post_In_While();
 
-$post_thumb = aya_post_thumb($post_obj->thumbnail_url, $post_obj->content, 400, 300);
+$post_thumb = aya_the_post_thumb($post_obj->thumbnail_url, $post_obj->content, 400, 300);
 
 ?>
 <article class="card bg-base-100 hover:shadow-md transition-shadow border border-base-300 ">

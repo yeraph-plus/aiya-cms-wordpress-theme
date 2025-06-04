@@ -1,5 +1,8 @@
 <?php
-if (!defined('ABSPATH')) exit;
+
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 if (is_admin()) {
     AYA_Shortcode::shortcode_register('highlight-content', array(
