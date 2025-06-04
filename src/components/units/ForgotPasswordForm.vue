@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
+//i18n
+import { useI18n } from "vue-i18n";
 //Heroicons
 import { EnvelopeIcon } from "@heroicons/vue/20/solid";
 import { ArrowPathIcon } from "@heroicons/vue/24/outline";
 //Toast
 import { toast } from "../../scripts/toast-plugin";
-//i18n
-import { useI18n } from "vue-i18n";
+
 const { t } = useI18n();
 
 const props = defineProps({
@@ -89,7 +90,7 @@ defineExpose({
             class="space-y-4">
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">{{ $t("auth_email") }}</span>
+                    <span class="label-text">{{ t("auth_email") }}</span>
                 </label>
                 <div class="join w-full">
                     <div class="join-item flex items-center px-3 bg-base-200 border border-base-300">
@@ -99,10 +100,10 @@ defineExpose({
                         v-model="email"
                         type="email"
                         class="input input-bordered join-item flex-1 w-full"
-                        :placeholder="$t('auth_email_placeholder')" />
+                        :placeholder="t('auth_email_placeholder')" />
                 </div>
                 <label class="label mt-2">
-                    <span class="label-text-alt">{{ $t("forgot_password_hint") }}</span>
+                    <span class="label-text-alt">{{ t("forgot_password_hint") }}</span>
                 </label>
             </div>
 
@@ -116,7 +117,7 @@ defineExpose({
                 <ArrowPathIcon
                     v-else
                     class="size-5" />
-                {{ $t("reset_password") }}
+                {{ t("reset_password") }}
             </button>
         </form>
     </div>

@@ -16,7 +16,7 @@ const props = defineProps({
         required: true,
     },
     postId: {
-        type: String,
+        type: Number || String,
         default: "0",
         required: true,
     },
@@ -34,6 +34,8 @@ const props = defineProps({
 //状态
 const likes = ref(props.likeCount);
 const hasLiked = ref(false);
+
+const postId = String(props.postId);
 
 const isFavorite = ref(false);
 const isLikeLoading = ref(false);
@@ -60,8 +62,8 @@ const saveLikeStatus = () => {
     try {
         const likedPosts = getLikedPosts();
 
-        if (!likedPosts.includes(props.postId)) {
-            likedPosts.push(props.postId);
+        if (!likedPosts.includes(postId)) {
+            likedPosts.push(postId);
             localStorage.setItem(LIKED_POSTS_STORAGE, JSON.stringify(likedPosts));
         }
     } catch (e) {
@@ -75,7 +77,7 @@ const checkLocalLikeStatus = () => {
         // 获取已点赞文章ID数组
         const likedPosts = getLikedPosts();
         // 检查当前文章是否在已点赞列表中
-        hasLiked.value = likedPosts.includes(props.postId);
+        hasLiked.value = likedPosts.includes(postId);
     } catch (error) {
         console.error("Get localStorage Failed:", error);
         hasLiked.value = false;
@@ -92,7 +94,7 @@ const handleLike = async () => {
         const formData = new FormData();
         formData.append("action", "click_likes");
         formData.append("nonce", props.nonce);
-        formData.append("post_id", props.postId);
+        formData.append("post_id", postId);
 
         const response = await fetch(props.ajaxUrl, {
             method: "POST",
@@ -131,7 +133,7 @@ const handleFavorite = async () => {
         const formData = new FormData();
         formData.append("action", "click_favorites");
         formData.append("nonce", props.nonce);
-        formData.append("post_id", props.postId);
+        formData.append("post_id", postId);
 
         const response = await fetch(props.ajaxUrl, {
             method: "POST",
@@ -165,7 +167,7 @@ const checkUserFavorite = async () => {
         const formData = new FormData();
         formData.append("action", "query_favorites");
         formData.append("nonce", props.nonce);
-        formData.append("post_id", props.postId);
+        formData.append("post_id", postId);
 
         const response = await fetch(props.ajaxUrl, {
             method: "POST",

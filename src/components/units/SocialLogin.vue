@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
-//Toast
-import { toast } from "../../scripts/toast-plugin";
 //i18n
 import { useI18n } from "vue-i18n";
+//Toast
+import { toast } from "../../scripts/toast-plugin";
+
 const { t } = useI18n();
 
 // 接收父组件传递的属性
@@ -173,7 +174,7 @@ async function handleSocialLogin(provider) {
     </div>
     <div class="mx-12 my-4">
         <div class="divider">
-            <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800">{{ $t("or_register_in") }}</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800">{{ t("or_register_in") }}</span>
         </div>
     </div>
 </template>

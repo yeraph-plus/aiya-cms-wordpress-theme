@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useI18n } from "vue-i18n";
 //Heroicons
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/vue/24/outline";
+
+const { t } = useI18n();
 
 //存储搜索关键词
 const searchQuery = ref("");
@@ -54,7 +57,7 @@ onUnmounted(() => {
                 type="search"
                 name="s"
                 v-model.trim="searchQuery"
-                :placeholder="$t('search_placeholder')"
+                :placeholder="t('search_placeholder')"
                 class="input input-bordered w-full bg-base-200 rounded focus:ring-2 focus:ring-primary/30 transition-all" />
             <button
                 type="submit"

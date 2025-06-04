@@ -115,9 +115,52 @@ function initLozad() {
 }
 
 //检测屏幕宽度
-function isMobile() {
-    return window.innerWidth < 1024;
+function mobileDetector() {
+    // 当前状态
+    let _isMobile = window.innerWidth < 1024;
+
+    // 回调函数列表
+    const callbacks = [];
+
+    // 监听窗口大小变化
+    window.addEventListener('resize', () => {
+        const newState = window.innerWidth < 1024;
+
+        // 只有状态变化时才触发回调
+        if (newState !== _isMobile) {
+            _isMobile = newState;
+            // 执行所有注册的回调
+            callbacks.forEach(callback => callback(_isMobile));
+        }
+    });
+
+    // 返回增强的函数对象
+    const mobileDetector = () => _isMobile;
+
+    // 添加监听方法
+    mobileDetector.onChange = (callback) => {
+        if (typeof callback === 'function') {
+            callbacks.push(callback);
+        }
+        return mobileDetector; // 支持链式调用
+    };
+
+    // 移除监听方法
+    mobileDetector.offChange = (callback) => {
+        const index = callbacks.indexOf(callback);
+        if (index !== -1) {
+            callbacks.splice(index, 1);
+        }
+        return mobileDetector; // 支持链式调用
+    };
+
+    return mobileDetector;
 }
+
+//创建单例
+const isMobile = mobileDetector();
+
+window.isMobile = isMobile;
 
 //页面加载遮罩
 function handleLoading() {
@@ -169,7 +212,7 @@ for (const path in modules) {
 //导入语言包
 const i18n = createI18n({
     legacy: false,
-    locale: 'zh',
+    locale: window.appConfig.Lunguage,
     messages
 });
 
@@ -194,19 +237,20 @@ if (vueAppEl) {
         data() {
             return {
                 isMobile: isMobile(),
-                sidebarToggle: window.appConfig.sidebarToggle,
+                sidebarToggle: true,
                 defaultDarkMode: window.appConfig.defaultDarkMode,
+                defaultSitebarClose: window.appConfig.defaultSitebarClose,
             }
         },
         created() {
-            window.addEventListener('resize', () => {
-                this.isMobile = isMobile();
-
-                // 在移动设备上自动收起侧边栏，在大屏幕上自动展开
-                if (this.isMobile && this.sidebarToggle) {
+            //监听 resize 变化
+            isMobile.onChange(isMobile => {
+                this.isMobile = isMobile;
+                // 根据移动状态更新侧边栏
+                if (isMobile) {
                     this.sidebarToggle = false;
-                } else if (!this.isMobile && !this.sidebarToggle) {
-                    this.sidebarToggle = true;
+                } else {
+                    this.sidebarToggle = window.appConfig.defaultSitebarClose ? false : true;
                 }
             });
         },
@@ -233,7 +277,6 @@ if (vueAppEl) {
     app.mount('#vue-app');
 }
 
-
 //IF Load
 window.addEventListener("load", function () {
     setTimeout(function () {
@@ -241,7 +284,6 @@ window.addEventListener("load", function () {
     }, 300);
 
     if (!document.getElementById('vue-app')) {
-        // 确保变量被正确声明
         window.lozadObserver = initLozad();
     }
 });

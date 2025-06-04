@@ -1,18 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
 //Heroicons
 import { BellIcon, BellAlertIcon, BellSlashIcon } from "@heroicons/vue/24/outline";
 import { CheckCircleIcon, InformationCircleIcon, ExclamationTriangleIcon, XCircleIcon, ChatBubbleLeftRightIcon } from "@heroicons/vue/24/outline";
 import { ChevronDownIcon } from "@heroicons/vue/20/solid";
 
-//IconMap
-const typeIconMap = {
-    success: CheckCircleIcon,
-    info: InformationCircleIcon,
-    warning: ExclamationTriangleIcon,
-    error: XCircleIcon,
-    message: ChatBubbleLeftRightIcon,
-};
+const { t } = useI18n();
 
 //Data
 const props = defineProps({
@@ -33,6 +27,15 @@ const notifyList = computed(() => {
         }));
     }
 });
+
+//IconMap
+const typeIconMap = {
+    success: CheckCircleIcon,
+    info: InformationCircleIcon,
+    warning: ExclamationTriangleIcon,
+    error: XCircleIcon,
+    message: ChatBubbleLeftRightIcon,
+};
 
 const hasNewNotify = computed(() => notifyList.value.length > 0);
 </script>
@@ -91,7 +94,7 @@ const hasNewNotify = computed(() => notifyList.value.length > 0);
                 <div
                     v-else
                     class="p-4 text-center text-base-content opacity-50">
-                    <span>{{ $t("empty_note") }}</span>
+                    <span>{{ t("empty_note") }}</span>
                 </div>
             </div>
         </div>

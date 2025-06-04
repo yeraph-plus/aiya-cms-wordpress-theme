@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
+//i18n
+import { useI18n } from "vue-i18n";
 //Heroicons
 import { ArrowRightEndOnRectangleIcon } from "@heroicons/vue/24/outline";
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/vue/20/solid";
 //Toast
 import { toast } from "../../scripts/toast-plugin";
-//i18n
-import { useI18n } from "vue-i18n";
-const { t } = useI18n();
 //Data
 const props = defineProps({
     rest_nonce: {
@@ -24,8 +23,10 @@ defineExpose({
     resetForm,
 });
 
+const { t } = useI18n();
+
 //定义事件
-const emit = defineEmits(["login-success", "update:loading"]);
+const emit = defineEmits(["login-success", "update:loading", "switch-to-forgot-password"]);
 
 //表单数据
 const loginEmail = ref("");
@@ -96,7 +97,7 @@ async function handleLogin() {
             class="space-y-4">
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">{{ $t("auth_email") }}</span>
+                    <span class="label-text">{{ t("auth_email") }}</span>
                 </label>
                 <div class="join w-full">
                     <div class="join-item flex items-center px-3 bg-base-200 border border-base-300">
@@ -106,12 +107,12 @@ async function handleLogin() {
                         v-model="loginEmail"
                         type="email"
                         class="input input-bordered join-item flex-1 w-full"
-                        :placeholder="$t('auth_email_placeholder')" />
+                        :placeholder="t('auth_email_placeholder')" />
                 </div>
             </div>
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">{{ $t("auth_password") }}</span>
+                    <span class="label-text">{{ t("auth_password") }}</span>
                 </label>
                 <div class="join w-full">
                     <div class="join-item flex items-center px-3 bg-base-200 border border-base-300">
@@ -121,7 +122,7 @@ async function handleLogin() {
                         v-model="loginPassword"
                         type="password"
                         class="input input-bordered join-item flex-1 w-full"
-                        :placeholder="$t('auth_password_placeholder')" />
+                        :placeholder="t('auth_password_placeholder')" />
                 </div>
             </div>
             <div class="flex justify-between items-center my-4">
@@ -130,13 +131,13 @@ async function handleLogin() {
                         v-model="loginRemember"
                         type="checkbox"
                         class="checkbox checkbox-sm checkbox-primary mr-2" />
-                    <span class="text-base-content">{{ $t("remember") }}</span>
+                    <span class="text-base-content">{{ t("remember") }}</span>
                 </label>
                 <button
                     type="button"
                     class="btn btn-link p-0 link-primary text-base font-normal"
                     @click.prevent="$emit('switch-to-forgot-password')">
-                    {{ $t("forgot_password") }}
+                    {{ t("forgot_password") }}
                 </button>
             </div>
             <button
@@ -149,7 +150,7 @@ async function handleLogin() {
                 <ArrowRightEndOnRectangleIcon
                     v-else
                     class="size-5" />
-                {{ $t("sign_in") }}
+                {{ t("sign_in") }}
             </button>
         </form>
     </div>

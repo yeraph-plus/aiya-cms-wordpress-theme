@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import MenuDorpdownItem from "./units/MenuDorpdownItem.vue";
 
 //Props
@@ -69,7 +69,7 @@ function hasChildren(item) {
 </script>
 
 <template>
-    <ul class="flex items-center justify-center menu menu-md menu-horizontal rounded-box">
+    <ul class="menu menu-md menu-horizontal flex items-center justify-center rounded-box bg-gray-100/10 p-0.5">
         <!-- For -->
         <template
             v-for="item in menuItems"
@@ -84,9 +84,10 @@ function hasChildren(item) {
             <template v-else>
                 <li>
                     <a
-                        :href="item.url"
-                        :class="{ 'menu-active': item.is_active }">
-                        {{ item.label }}
+                        class="whitespace-nowrap"
+                        :class="{ 'menu-active': item.is_active }"
+                        :href="item.url">
+                        <span v-html="item.label"></span>
                     </a>
                 </li>
             </template>

@@ -33,13 +33,15 @@ const childItems = computed(() => {
 </script>
 
 <template>
-    <li>
+    <li class="w-auto">
         <template v-if="hasChild(item)">
             <details>
-                <summary @click="toggleMenu">
-                    <span>{{ item.label }}</span>
+                <summary
+                    @click="toggleMenu"
+                    class="whitespace-nowrap">
+                    <span v-html="item.label"></span>
                 </summary>
-                <ul>
+                <ul class="whitespace-nowrap">
                     <!-- Sub -->
                     <MenuDorpdownItem
                         v-for="child in childItems"
@@ -51,9 +53,10 @@ const childItems = computed(() => {
         </template>
         <template v-else>
             <a
-                :href="item.url"
-                :class="{ 'menu-active': item.is_active }">
-                {{ item.label }}
+                class="whitespace-nowrap"
+                :class="{ 'menu-active': item.is_active }"
+                :href="item.url">
+                <span v-html="item.label"></span>
             </a>
         </template>
     </li>

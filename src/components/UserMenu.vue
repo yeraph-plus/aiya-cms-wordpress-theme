@@ -107,7 +107,7 @@ async function handleLogout() {
                                 <span
                                     class="badge badge-sm"
                                     :class="badgeColorClass(props.data.role)">
-                                    {{ $t(props.data.role) }}
+                                    {{ t(props.data.role) }}
                                 </span>
                             </div>
                             <div class="text-xs text-nowrap text-base-content opacity-60 break-all">{{ props.data.email }}</div>
@@ -126,7 +126,7 @@ async function handleLogout() {
                                 :is="typeIconMap[item.icon] || typeIconMap['link']"
                                 class="size-5 opacity-60"
                                 aria-hidden="true" />
-                            <span>{{ item.label }}</span>
+                            <span v-html="item.label"></span>
                         </a>
                     </li>
                     <!-- Logout -->
@@ -138,7 +138,7 @@ async function handleLogout() {
                             <ArrowLeftStartOnRectangleIcon
                                 class="size-5 opacity-60"
                                 aria-hidden="true" />
-                            <span>{{ $t("log_out") }}</span>
+                            <span>{{ t("log_out") }}</span>
                         </a>
                     </li>
                 </ul>

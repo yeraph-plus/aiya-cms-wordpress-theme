@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
     comment: {
@@ -59,9 +62,9 @@ const hasReplies = computed(() => {
                             {{ props.comment.author.name }}
                         </span>
                         <span
-                            v-if="props.comment.author.is_user"
-                            class="badge badge-xs badge-neutral badge-outline">
-                            作者
+                            class="badge badge-xs badge-neutral badge-outline"
+                            v-if="props.comment.author.is_user">
+                            {{ t("is_user") }}
                         </span>
                     </div>
                     <span class="text-xs text-gray-500">
@@ -80,7 +83,7 @@ const hasReplies = computed(() => {
                     v-if="canReply"
                     @click="replyToComment"
                     class="btn btn-sm btn-outline">
-                    回复
+                    {{ t("replay_comment") }}
                 </button>
             </div>
         </div>

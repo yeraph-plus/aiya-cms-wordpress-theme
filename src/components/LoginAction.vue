@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, shallowRef, onMounted, onUnmounted } from "vue";
+import { useI18n } from "vue-i18n";
 //Heroicons
 import { XMarkIcon, UserPlusIcon, UserIcon } from "@heroicons/vue/24/outline";
 import { ArrowUturnRightIcon, ArrowUturnLeftIcon } from "@heroicons/vue/20/solid";
@@ -8,6 +9,9 @@ import LoginForm from "./units/LoginForm.vue";
 import RegisterForm from "./units/RegisterForm.vue";
 import SocialLogin from "./units/SocialLogin.vue";
 import ForgotPasswordForm from "./units/ForgotPasswordForm.vue";
+
+const { t } = useI18n();
+
 //Data
 const props = defineProps({
     enable_register: {
@@ -135,7 +139,7 @@ onUnmounted(() => {
             class="btn btn-primary mr-2"
             @click="openLoginModal">
             <UserIcon class="size-5" />
-            {{ $t("sign_in") }}
+            {{ t("sign_in") }}
         </button>
         <button
             v-if="props.enable_register"
@@ -143,7 +147,7 @@ onUnmounted(() => {
             class="btn btn-outline btn-primary hidden lg:flex"
             @click="openRegisterModal">
             <UserPlusIcon class="size-5" />
-            {{ $t("sign_up") }}
+            {{ t("sign_up") }}
         </button>
     </div>
     <!-- Dialog Modal -->
@@ -160,7 +164,7 @@ onUnmounted(() => {
                     <UserIcon
                         v-else
                         class="size-6 mr-2" />
-                    {{ isSignIn ? $t("sign_in") : $t("sign_up") }}
+                    {{ isSignIn ? t("sign_in") : t("sign_up") }}
                 </h5>
                 <!-- Close -->
                 <button
@@ -205,37 +209,37 @@ onUnmounted(() => {
             <!-- Switch -->
             <template v-if="isSignIn && !isForgotPassword && props.enable_register">
                 <div class="mt-6 text-center">
-                    <span class="opacity-70 mr-2">{{ $t("need_account") }}</span>
+                    <span class="opacity-70 mr-2">{{ t("need_account") }}</span>
                     <button
                         type="button"
                         class="link link-primary"
                         @click="switchToRegister">
                         <ArrowUturnRightIcon class="size-3 inline-block mr-1" />
-                        {{ $t("sign_up") }}
+                        {{ t("sign_up") }}
                     </button>
                 </div>
             </template>
             <template v-else-if="!isSignIn && !isForgotPassword">
                 <div class="mt-6 text-center">
-                    <span class="opacity-70 mr-2">{{ $t("already_have_account") }}</span>
+                    <span class="opacity-70 mr-2">{{ t("already_have_account") }}</span>
                     <button
                         type="button"
                         class="link link-primary"
                         @click="switchToLogin">
                         <ArrowUturnLeftIcon class="size-3 inline-block mr-1" />
-                        {{ $t("sign_in") }}
+                        {{ t("sign_in") }}
                     </button>
                 </div>
             </template>
             <template v-else-if="isForgotPassword">
                 <div class="mt-6 text-center">
-                    <span class="opacity-70 mr-2">{{ $t("already_have_account") }}</span>
+                    <span class="opacity-70 mr-2">{{ t("already_have_account") }}</span>
                     <button
                         type="button"
                         class="link link-primary"
                         @click="switchToLogin">
                         <ArrowUturnLeftIcon class="size-3 inline-block mr-1" />
-                        {{ $t("sign_in") }}
+                        {{ t("sign_in") }}
                     </button>
                 </div>
             </template>

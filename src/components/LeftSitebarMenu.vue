@@ -92,7 +92,9 @@ function hasChildren(item) {
             :key="item.id">
             <!-- If -->
             <template v-if="hasChildren(item)">
-                <li class="menu-title my-2">{{ item.label }}</li>
+                <li
+                    class="menu-title my-2"
+                    v-html="item.label"></li>
                 <!-- Sub For -->
                 <li
                     class="menu-dropdown pl-4"
@@ -102,7 +104,7 @@ function hasChildren(item) {
                     <template v-if="hasChildren(subItem)">
                         <details>
                             <summary>
-                                <span>{{ subItem.label }}</span>
+                                <span v-html="subItem.label"></span>
                             </summary>
                             <ul>
                                 <li
@@ -111,7 +113,7 @@ function hasChildren(item) {
                                     <a
                                         :href="subSubItem.url"
                                         :class="{ 'menu-active': subSubItem.is_active }">
-                                        {{ subSubItem.label }}
+                                        <span v-html="subSubItem.label"></span>
                                     </a>
                                 </li>
                             </ul>
@@ -122,18 +124,22 @@ function hasChildren(item) {
                         <a
                             :href="subItem.url"
                             :class="{ 'menu-active': subItem.is_active }">
-                            <span class="ml-2">{{ subItem.label }}</span>
+                            <span
+                                class="ml-2"
+                                v-html="subItem.label"></span>
                         </a>
                     </template>
                 </li>
             </template>
             <!-- Else -->
             <template v-else>
-                <li>
+                <li class="my-2">
                     <a
                         :href="item.url"
                         :class="{ 'menu-active': item.is_active }">
-                        <span class="ml-2">{{ item.label }}</span>
+                        <span
+                            class="ml-2"
+                            v-html="item.label"></span>
                     </a>
                 </li>
             </template>

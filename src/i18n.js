@@ -6,6 +6,8 @@ const messages = {
         empty_note: "No notifications",
         //SearchForm.vue
         search_placeholder: "Search...",
+        //Carousel.vue
+        view_details: "View Details",
         //UserMenu.vue
         administrator: "Administrator",
         author: "Author",
@@ -89,7 +91,9 @@ const messages = {
         submitting: "Submitting...",
         submit_comment: "Submit Comment",
         all_comments: "All Comments",
-        no_comments: "No comments yet. Be the first to comment!"
+        no_comments: "No comments yet. Be the first to comment!",
+        is_user: "User",
+        replay_comment: "Reply",
     },
     zh: {
         //ThemeSwitcher.vue
@@ -98,6 +102,8 @@ const messages = {
         empty_note: "没有通知",
         //SearchForm.vue
         search_placeholder: "搜索...",
+        //Carousel.vue
+        view_details: "查看",
         //UserMenu.vue
         administrator: "管理员",
         author: "作者",
@@ -182,7 +188,9 @@ const messages = {
         submitting: "提交中...",
         submit_comment: "提交评论",
         all_comments: "所有评论",
-        no_comments: "暂无评论，成为第一个评论的人吧！"
+        no_comments: "暂无评论，成为第一个评论的人吧！",
+        is_user: "用户",
+        replay_comment: "回复",
     }
 };
 

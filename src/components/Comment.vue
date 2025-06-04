@@ -166,14 +166,12 @@ onMounted(() => {
             @cancel-reply="cancelReply" />
         <CommentList
             :comments="comments"
-            :comments-num="commentsNum"
+            :comments-num="pagination.total_comments"
             :loading="loading"
             :error="error"
             :settings="settings"
-            @reply="setReplyTo" />
-        <CommentPagination
-            v-if="pagination.max_pages > 1"
             :pagination="pagination"
+            @reply="setReplyTo"
             @page-change="handlePageChange" />
     </div>
 </template>

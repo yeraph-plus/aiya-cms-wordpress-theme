@@ -32,19 +32,35 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    pagination: {
+        // 添加分页信息属性
+        type: Object,
+        default: () => ({
+            current_page: 1,
+            max_pages: 1,
+            total_comments: 0,
+            top_level_comments: 0,
+            per_page: 20,
+            comment_order: "asc",
+        }),
+    },
 });
 
-const emit = defineEmits(["reply"]);
+const emit = defineEmits(["reply", "page-change"]);
 
-// 回复评论
+//回复评论
 function handleReply(commentId, authorName) {
     emit("reply", commentId, authorName);
+}
+
+//处理页面切换
+function handlePageChange(page) {
+    emit("page-change", page);
 }
 </script>
 
 <template>
     <div class="comments-list">
-        <!-- 标题带徽章 -->
         <div class="flex items-center font-bold mb-4">
             <h3 class="text-lg">
                 {{ t("all_comments") }}
@@ -69,8 +85,37 @@ function handleReply(commentId, authorName) {
                     v-for="comment in props.comments"
                     :key="comment.id"
                     :comment="comment"
-                    :max-depth="settings.thread_comments_depth || 5"
+                    :max-depth="Number(settings.thread_comments_depth) || 5"
                     @reply="handleReply" />
+            </div>
+
+            <!-- 添加评论分页组件 -->
+            <div
+                v-if="props.pagination.max_pages > 1"
+                class="mt-8">
+                <div class="flex justify-center">
+                    <nav
+                        class="pagination"
+                        aria-label="Pagination">
+                        <button
+                            v-if="props.pagination.current_page > 1"
+                            @click="handlePageChange(props.pagination.current_page - 1)"
+                            class="btn btn-sm btn-outline">
+                            {{ t("prev_page") }}
+                        </button>
+
+                        <span class="mx-4 flex items-center">
+                            {{ t("page_x_of_y", { current: props.pagination.current_page, total: props.pagination.max_pages }) }}
+                        </span>
+
+                        <button
+                            v-if="props.pagination.current_page < props.pagination.max_pages"
+                            @click="handlePageChange(props.pagination.current_page + 1)"
+                            class="btn btn-sm btn-outline">
+                            {{ t("next_page") }}
+                        </button>
+                    </nav>
+                </div>
             </div>
         </div>
         <div

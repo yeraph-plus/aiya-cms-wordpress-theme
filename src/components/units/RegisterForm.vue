@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
+//i18n
+import { useI18n } from "vue-i18n";
 // Heroicons
 import { UserPlusIcon } from "@heroicons/vue/24/outline";
 import { UserIcon, EnvelopeIcon, LockClosedIcon } from "@heroicons/vue/20/solid";
 //Toast
 import { toast } from "../../scripts/toast-plugin";
-//i18n
-import { useI18n } from "vue-i18n";
-const { t } = useI18n();
 //Data
 const props = defineProps({
     allow_anonymous_register: {
@@ -27,6 +26,8 @@ const props = defineProps({
 defineExpose({
     resetForm,
 });
+
+const { t } = useI18n();
 
 //定义事件
 const emit = defineEmits(["register-success", "update:loading"]);
@@ -106,7 +107,7 @@ async function handleRegister() {
             class="space-y-4">
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">{{ $t("auth_username") }}</span>
+                    <span class="label-text">{{ t("auth_username") }}</span>
                 </label>
                 <div class="join w-full">
                     <div class="join-item flex items-center px-3 bg-base-200 border border-base-300">
@@ -116,12 +117,12 @@ async function handleRegister() {
                         v-model="regName"
                         type="text"
                         class="input input-bordered join-item flex-1 w-full"
-                        :placeholder="$t('auth_username_placeholder')" />
+                        :placeholder="t('auth_username_placeholder')" />
                 </div>
             </div>
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">{{ $t("auth_email") }}</span>
+                    <span class="label-text">{{ t("auth_email") }}</span>
                 </label>
                 <div class="join w-full">
                     <div class="join-item flex items-center px-3 bg-base-200 border border-base-300">
@@ -131,12 +132,12 @@ async function handleRegister() {
                         v-model="regEmail"
                         type="email"
                         class="input input-bordered join-item flex-1 w-full"
-                        :placeholder="$t('auth_email_placeholder')" />
+                        :placeholder="t('auth_email_placeholder')" />
                 </div>
             </div>
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">{{ $t("auth_password") }}</span>
+                    <span class="label-text">{{ t("auth_password") }}</span>
                 </label>
                 <div class="join w-full">
                     <div class="join-item flex items-center px-3 bg-base-200 border border-base-300">
@@ -146,12 +147,12 @@ async function handleRegister() {
                         v-model="regPassword"
                         type="password"
                         class="input input-bordered join-item flex-1 w-full"
-                        :placeholder="$t('auth_password_placeholder')" />
+                        :placeholder="t('auth_password_placeholder')" />
                 </div>
             </div>
             <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">{{ $t("auth_password_confirm") }}</span>
+                    <span class="label-text">{{ t("auth_password_confirm") }}</span>
                 </label>
                 <div class="join w-full">
                     <div class="join-item flex items-center px-3 bg-base-200 border border-base-300">
@@ -161,7 +162,7 @@ async function handleRegister() {
                         v-model="regPasswordConfirm"
                         type="password"
                         class="input input-bordered join-item flex-1 w-full"
-                        :placeholder="$t('auth_password_confirm_placeholder')" />
+                        :placeholder="t('auth_password_confirm_placeholder')" />
                 </div>
             </div>
             <button
@@ -174,7 +175,7 @@ async function handleRegister() {
                 <UserPlusIcon
                     v-else
                     class="size-5" />
-                {{ $t("sign_up") }}
+                {{ t("sign_up") }}
             </button>
         </form>
     </div>
