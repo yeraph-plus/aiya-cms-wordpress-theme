@@ -1,0 +1,169 @@
+/**
+ * 登录页面替换样式
+ */
+
+body.login {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+    font-family: "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+body.login h1 a {
+    display: none !important;
+}
+
+#login {
+    width: 380px;
+    padding: 40px 0;
+}
+
+.login form {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    border: none;
+}
+
+.login label {
+    font-size: 14px;
+    color: #4a5568;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.login form .input,
+.login input[type="text"],
+.login input[type="password"] {
+    font-size: 15px;
+    padding: 12px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    height: auto;
+    background-color: #f8fafc;
+    box-shadow: none;
+    color: #1a202c;
+    transition: all 0.3s ease;
+}
+
+.login form .input:focus,
+.login input[type="text"]:focus,
+.login input[type="password"]:focus {
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+    outline: none;
+    background-color: #fff;
+}
+
+.login .forgetmenot {
+    display: flex;
+    margin-top: 5px;
+    align-items: center;
+}
+
+.login .forgetmenot label {
+    font-size: 13px;
+}
+
+.login .forgetmenot input[type="checkbox"] {
+    height: 16px;
+    width: 16px;
+    border: 1px solid #cbd5e0;
+    background: #fff;
+    margin-right: 8px;
+    border-radius: 3px;
+}
+
+/* 提交按钮样式 */
+.login .submit .button {
+    background-color: #4299e1;
+    border: none;
+    color: white;
+    padding: 12px 15px;
+    font-size: 15px;
+    line-height: 1;
+    border-radius: 6px;
+    width: 100%;
+    height: auto;
+    text-shadow: none;
+    box-shadow: 0 4px 6px rgba(66, 153, 225, 0.25);
+    transition: all 0.3s ease;
+    font-weight: 500;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.login .submit .button:hover,
+.login .submit .button:focus {
+    background-color: #3182ce;
+    box-shadow: 0 5px 8px rgba(49, 130, 206, 0.3);
+    transform: translateY(-1px);
+}
+
+.login .submit .button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 5px rgba(49, 130, 206, 0.3);
+}
+
+.login #nav,
+.login #backtoblog {
+    text-align: center;
+    margin: 15px 0 0;
+    padding: 0;
+}
+
+.login #nav a,
+.login #backtoblog a {
+    color: #718096;
+    font-size: 13px;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.login #nav a:hover,
+.login #backtoblog a:hover {
+    color: #4299e1;
+    text-decoration: underline;
+}
+
+.login #login_error,
+.login .message {
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border-left-width: 4px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.login #login_error {
+    border-left-color: #e53e3e;
+    background-color: #fff5f5;
+    color: #c53030;
+}
+
+.login .message {
+    border-left-color: #38b2ac;
+    background-color: #e6fffa;
+    color: #2c7a7b;
+}
+
+.login .password-input-wrapper {
+    width: 100%;
+}
+
+.login .pw-weak {
+    margin-bottom: 15px;
+}
+
+@media screen and (max-width: 480px) {
+    #login {
+        width: 90%;
+        padding: 20px 0;
+    }
+
+    .login form {
+        padding: 20px;
+    }
+}

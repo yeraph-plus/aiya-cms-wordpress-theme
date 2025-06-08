@@ -4,8 +4,6 @@
  */
 import "vite/modulepreload-polyfill";
 import "./styles/tailwind.css";
-//lozad
-import lozad from 'lozad';
 //Vue
 import { createApp } from "vue";
 import { createI18n } from 'vue-i18n';
@@ -13,178 +11,23 @@ import { createI18n } from 'vue-i18n';
 import messages from "./i18n";
 //Debug工具
 import VueDebugTools from "./scripts/debug";
+// 导入工具函数
+import {
+    initThemeSwitch,
+    initLozad,
+    initNSFWHandlers,
+    initRedirectButtons,
+    mobileDetector,
+    handleLoading,
+    getAppConfig
+} from './init';
 
 //标记页面加载状态
 document.body.classList.add('loading');
 
-//主题管理
-function initThemeSwitch(defaultDarkMode = false) {
-    // 可用主题列表
-    const availableThemes = [
-        "light",
-        "dark"
-    ];
-
-    // 应用主题
-    const applyTheme = (theme) => {
-        // 根元素添加 data-theme 属性（用于 DaisyUI）
-        document.documentElement.setAttribute("data-theme", theme);
-
-        // 处理深色模式 class
-        if (theme === "dark") {
-            document.documentElement.classList.add("dark");
-        } else {
-            document.documentElement.classList.remove("dark");
-        }
-
-        // 保存当前主题到全局变量，便于组件访问
-        window.currentTheme = theme;
-
-        // 触发主题变化事件，通知组件
-        window.dispatchEvent(new CustomEvent('theme-changed'));
-    };
-
-    // 检查系统暗色模式
-    const isSystemDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-    // 从 localStorage 获取用户保存的主题
-    const savedTheme = localStorage.getItem("theme");
-
-    // 应用主题：优先使用保存的主题，其次使用 defaultDarkMode 设置，最后使用系统主题
-    if (savedTheme && availableThemes.includes(savedTheme)) {
-        applyTheme(savedTheme);
-    } else {
-        // 如果没有保存的主题或保存的主题无效，使用 defaultDarkMode 设置或系统默认
-        const defaultTheme = defaultDarkMode ? "dark" : (isSystemDarkMode ? "dark" : "light");
-        applyTheme(defaultTheme);
-    }
-
-    // 监听系统颜色方案变化
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-        // 如果没有保存的主题，则跟随系统变化
-        if (!localStorage.getItem("theme")) {
-            applyTheme(e.matches ? "dark" : "light");
-        }
-    });
-
-    // 全局主题切换函数，供组件调用
-    window.toggleTheme = () => {
-        const currentTheme = window.currentTheme || "dark";
-        const currentIndex = availableThemes.findIndex((t) => t === currentTheme);
-        const nextIndex = (currentIndex + 1) % availableThemes.length;
-        const nextTheme = availableThemes[nextIndex];
-
-        // 保存到 localStorage
-        localStorage.setItem("theme", nextTheme);
-        applyTheme(nextTheme);
-    };
-}
-
-//lozad观察器初始化逻辑
-function initLozad() {
-    //将所有图片的src地址先处理为data-src
-    const images = document.querySelectorAll('img:not(.ignore-lazy)');
-
-    images.forEach(img => {
-        // 如果图片已经有data-src，则跳过
-        if (!img.getAttribute('data-src') && img.src) {
-            // 保存原始src
-            img.setAttribute('data-src', img.src);
-            // 清除原始src以防止立即加载
-            img.removeAttribute('src');
-            // 添加lozad需要的class
-            img.classList.add('lozad');
-        }
-    });
-
-    //lozad init
-    const observer = lozad('.lozad', {
-        rootMargin: '10px 0px', // 图片进入视口10px时加载
-        threshold: 0.1, // 当图片可见10%时加载
-        loaded: function (el) {
-            // 图片加载后添加淡入效果
-            el.classList.add('loaded');
-        }
-    });
-
-    observer.observe();
-
-    window.lozadObserver = observer;
-
-    return observer;
-}
-
-//检测屏幕宽度
-function mobileDetector() {
-    // 当前状态
-    let _isMobile = window.innerWidth < 1024;
-
-    // 回调函数列表
-    const callbacks = [];
-
-    // 监听窗口大小变化
-    window.addEventListener('resize', () => {
-        const newState = window.innerWidth < 1024;
-
-        // 只有状态变化时才触发回调
-        if (newState !== _isMobile) {
-            _isMobile = newState;
-            // 执行所有注册的回调
-            callbacks.forEach(callback => callback(_isMobile));
-        }
-    });
-
-    // 返回增强的函数对象
-    const mobileDetector = () => _isMobile;
-
-    // 添加监听方法
-    mobileDetector.onChange = (callback) => {
-        if (typeof callback === 'function') {
-            callbacks.push(callback);
-        }
-        return mobileDetector; // 支持链式调用
-    };
-
-    // 移除监听方法
-    mobileDetector.offChange = (callback) => {
-        const index = callbacks.indexOf(callback);
-        if (index !== -1) {
-            callbacks.splice(index, 1);
-        }
-        return mobileDetector; // 支持链式调用
-    };
-
-    return mobileDetector;
-}
-
-//创建单例
+//创建页面宽度监听单例
 const isMobile = mobileDetector();
-
 window.isMobile = isMobile;
-
-//页面加载遮罩
-function handleLoading() {
-    const loadingMask = document.getElementById('page-loading-mask');
-    const vueAppEl = document.getElementById('vue-app');
-
-    // 显示Vue应用
-    if (vueAppEl) {
-        vueAppEl.style.visibility = 'visible';
-    }
-
-    // 隐藏加载遮罩
-    if (loadingMask) {
-        loadingMask.style.opacity = '0';
-        loadingMask.style.transition = 'opacity 0.3s ease-out';
-
-        setTimeout(() => {
-            loadingMask.remove();
-            document.body.classList.remove('loading');
-        }, 300);
-    } else {
-        document.body.classList.remove('loading');
-    }
-}
 
 //单独导入Vue组件
 /*
@@ -212,7 +55,17 @@ for (const path in modules) {
 //导入语言包
 const i18n = createI18n({
     legacy: false,
-    locale: window.appConfig.Lunguage,
+    locale: (() => {
+        //检查浏览器语言设置
+        const htmlLang = document.documentElement.lang;
+
+        if (htmlLang) {
+            return htmlLang.split('-')[0];
+        }
+
+        //默认使用 'zh'
+        return 'zh';
+    })(),
     messages
 });
 
@@ -230,27 +83,38 @@ for (const el of document.getElementsByClassName('vue-app')) {
 //实例化
 const vueAppEl = document.getElementById('vue-app');
 
+//读取配置
+const config = getAppConfig(vueAppEl);
+
+window.appConfig = config;
+
 if (vueAppEl) {
     const app = createApp({
         template: vueAppEl.innerHTML,
         components,
         data() {
+            const currentIsMobile = isMobile();
+            //计算初始侧边栏状态
+            const initialSidebarState = currentIsMobile ? false : !config.defaultSitebarClose;
+            //打印配置参数调试
+            //console.log('config:', config);
+
             return {
-                isMobile: isMobile(),
-                sidebarToggle: true,
-                defaultDarkMode: window.appConfig.defaultDarkMode,
-                defaultSitebarClose: window.appConfig.defaultSitebarClose,
+                isMobile: currentIsMobile,
+                sidebarToggle: initialSidebarState,
+                defaultDarkMode: config.defaultDarkMode,
+                defaultSitebarClose: config.defaultSitebarClose,
             }
         },
         created() {
             //监听 resize 变化
-            isMobile.onChange(isMobile => {
-                this.isMobile = isMobile;
-                // 根据移动状态更新侧边栏
-                if (isMobile) {
+            isMobile.onChange(mobileState => {
+                this.isMobile = mobileState;
+                //移动端始终折叠
+                if (mobileState) {
                     this.sidebarToggle = false;
                 } else {
-                    this.sidebarToggle = window.appConfig.defaultSitebarClose ? false : true;
+                    this.sidebarToggle = !this.defaultSitebarClose;
                 }
             });
         },
@@ -270,8 +134,9 @@ if (vueAppEl) {
         }
     });
 
-    app.use(VueDebugTools);
-    app.debug();
+    //创建了用于捕获错误的工具类
+    // app.use(VueDebugTools);
+    // app.debug();
 
     app.use(i18n);
     app.mount('#vue-app');
@@ -279,17 +144,33 @@ if (vueAppEl) {
 
 //IF Load
 window.addEventListener("load", function () {
+    //Screen Loading Mask
     setTimeout(function () {
         document.body.classList.remove('loading');
     }, 300);
-
+    //NSFW Click Unlock
+    setTimeout(function () {
+        initNSFWHandlers();
+        //MutationObserver
+        const observer = new MutationObserver(function () {
+            initNSFWHandlers();
+        });
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }, 1000);
+    //Image Lozad
     if (!document.getElementById('vue-app')) {
         window.lozadObserver = initLozad();
     }
 });
 
 //DOM Loaded
-document.addEventListener("DOMContentLoaded", function () { });
+document.addEventListener("DOMContentLoaded", function () {
+    //Custom Redirect Buttons
+    initRedirectButtons();
+});
 
 //Vue Loaded
 document.addEventListener("vue-initialized", function () {

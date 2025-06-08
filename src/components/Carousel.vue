@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import { computed, ref, onMounted } from "vue";
+import { computed, ref, onMounted, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 //Heroicons
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/vue/24/outline";
 import { ChevronDoubleRightIcon, PhotoIcon } from "@heroicons/vue/20/solid";
 
-// 导入 Swiper 样式
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 //Data
 const props = defineProps({
     postData: {
@@ -67,6 +63,13 @@ onMounted(() => {
 //将对象转换为数组以便迭代
 const carouselItems = computed(() => Object.values(props.postData));
 
+const swiperInstance = ref(null);
+
+//使页面渲染后再初始化Swiper
+onMounted(async () => {
+    await nextTick();
+});
+
 //如果使用拼搭布局，提取最后三项计算显示
 const mosaicItems = computed(() => {
     if (actualLayoutType.value !== "mosaic") return [];
@@ -96,6 +99,9 @@ const getSlidesConfig = computed(() => {
 const enableLoop = computed(() => {
     if (actualLayoutType.value === "full") {
         return carouselItems.value.length > 1;
+    } else if (actualLayoutType.value === "cms") {
+        const perView = getSlidesConfig.value.max;
+        return carouselItems.value.length > perView + 1;
     } else {
         return carouselItems.value.length > getSlidesConfig.value.max;
     }
@@ -109,6 +115,11 @@ const swiperSettings = computed(() => {
     };
 
     if (actualLayoutType.value === "cms") {
+        // 获取当前可显示的幻灯片数量
+        const slidesCount = carouselItems.value.length;
+        const perView = getSlidesConfig.value.max;
+        const showNavigation = slidesCount > perView;
+
         //CMS轮播
         return {
             ...basecommon,
@@ -166,10 +177,11 @@ const swiperSettings = computed(() => {
 
 <template>
     <div class="carousel-container mb-4">
-        <template v-if="carouselItems.length > 0">
-            <!-- Full Layout -->
+        <!-- Full Layout -->
+        <div
+            v-if="carouselItems.length > 0 && actualLayoutType === 'full'"
+            class="carousel-full-container">
             <swiper
-                v-if="actualLayoutType === 'full'"
                 :modules="[Navigation, Pagination, Autoplay]"
                 v-bind="swiperSettings"
                 class="w-full rounded-box overflow-hidden">
@@ -182,7 +194,7 @@ const swiperSettings = computed(() => {
                         <img
                             :src="item.thumbnail"
                             :alt="item.title"
-                            class="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105" />
+                            class="w-full h-48 md:h-96 object-cover transition-transform duration-500 group-hover:scale-105" />
                         <!-- MASK -->
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-90">
                             <a
@@ -193,7 +205,7 @@ const swiperSettings = computed(() => {
                                 </h2>
                                 <p
                                     v-if="item.description"
-                                    class="text-sm md:text-base line-clamp-3 opacity-90 transition-opacity duration-300 group-hover:opacity-100">
+                                    class="hidden md:flex text-base line-clamp-3 opacity-90 transition-opacity duration-300 group-hover:opacity-100">
                                     {{ item.description }}
                                 </p>
                                 <div class="mt-4 opacity-80 transition-all duration-300 group-hover:opacity-100">
@@ -206,186 +218,186 @@ const swiperSettings = computed(() => {
                         </div>
                     </div>
                 </swiper-slide>
-                <div class="swiper-svg-prev-button absolute left-4 top-1/2 z-10 -translate-y-1/2 bg-black/30 hover:bg-black/50 p-2 rounded-box transition-all">
+                <div class="swiper-svg-prev-button hidden md:flex absolute left-4 top-1/2 z-10 -translate-y-1/2 bg-black/30 hover:bg-black/50 p-2 rounded-box transition-all">
                     <ChevronLeftIcon class="size-6 text-white" />
                 </div>
-                <div class="swiper-svg-next-button absolute right-4 top-1/2 z-10 -translate-y-1/2 bg-black/30 hover:bg-black/50 p-2 rounded-box transition-all">
+                <div class="swiper-svg-next-button hidden md:flex absolute right-4 top-1/2 z-10 -translate-y-1/2 bg-black/30 hover:bg-black/50 p-2 rounded-box transition-all">
                     <ChevronRightIcon class="size-6 text-white" />
                 </div>
             </swiper>
-            <!-- CMS Layout -->
-            <div
-                v-else-if="actualLayoutType === 'cms'"
-                class="carousel-cms-container">
-                <swiper
-                    :modules="[Navigation, Pagination, Autoplay]"
-                    v-bind="swiperSettings"
-                    class="w-full">
-                    <swiper-slide
-                        v-for="(item, index) in carouselItems"
-                        :key="index"
-                        class="h-auto">
-                        <a
-                            :href="item.url"
-                            class="card h-full bg-base-100 shadow-xl overflow-hidden group transition-all duration-300 hover:shadow-2xl">
-                            <div class="relative w-full h-full overflow-hidden">
+        </div>
+        <!-- CMS Layout -->
+        <div
+            v-else-if="actualLayoutType === 'cms'"
+            class="carousel-cms-container">
+            <swiper
+                :modules="[Navigation, Pagination, Autoplay]"
+                v-bind="swiperSettings"
+                class="w-full">
+                <swiper-slide
+                    v-for="(item, index) in carouselItems"
+                    :key="index"
+                    class="h-auto">
+                    <a
+                        :href="item.url"
+                        class="card h-full bg-base-100 shadow-xl overflow-hidden group transition-all duration-300 hover:shadow-2xl">
+                        <div class="relative w-full h-full overflow-hidden">
+                            <!-- IMG -->
+                            <img
+                                :src="item.thumbnail"
+                                :alt="item.title"
+                                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105" />
+                            <!-- MASK -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-90">
+                                <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+                                    <h3 class="text-lg font-bold mb-1 line-clamp-1 transition-transform duration-300 group-hover:translate-y-[-3px]">
+                                        {{ item.title }}
+                                    </h3>
+                                    <div class="mt-2 opacity-80 transition-all duration-300 group-hover:opacity-100">
+                                        <span class="inline-flex items-center text-xs font-medium border-b border-white/50 pb-1 group-hover:border-white">
+                                            {{ t("view_details") }}
+                                            <ChevronDoubleRightIcon class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" />
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </swiper-slide>
+            </swiper>
+            <div class="swiper-cms-carousel-pagination flex justify-center mt-4"></div>
+        </div>
+        <!-- Mosaic Layout -->
+        <div
+            v-else-if="actualLayoutType === 'mosaic'"
+            class="carousel-mosaic-container">
+            <div class="flex flex-col md:flex-row gap-4">
+                <!-- Left:Carousel -->
+                <div class="w-1/2">
+                    <swiper
+                        :modules="[Navigation, Pagination, Autoplay]"
+                        v-bind="swiperSettings"
+                        class="w-full rounded-box overflow-hidden">
+                        <swiper-slide
+                            v-for="(item, index) in sliderItems"
+                            :key="index"
+                            class="max-h-96">
+                            <div class="card w-full h-full relative group overflow-hidden">
                                 <!-- IMG -->
                                 <img
                                     :src="item.thumbnail"
                                     :alt="item.title"
-                                    class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105" />
+                                    class="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105" />
                                 <!-- MASK -->
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-90">
-                                    <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
-                                        <h3 class="text-lg font-bold mb-1 line-clamp-1 transition-transform duration-300 group-hover:translate-y-[-3px]">
+                                    <a
+                                        :href="item.url"
+                                        class="absolute bottom-0 left-0 right-0 p-5 md:p-8 text-white block">
+                                        <h2 class="text-2xl md:text-3xl font-bold mb-3 transition-transform duration-300 group-hover:translate-y-[-5px]">
                                             {{ item.title }}
-                                        </h3>
-                                        <div class="mt-2 opacity-80 transition-all duration-300 group-hover:opacity-100">
-                                            <span class="inline-flex items-center text-xs font-medium border-b border-white/50 pb-1 group-hover:border-white">
+                                        </h2>
+                                        <p
+                                            v-if="item.description"
+                                            class="text-sm md:text-base line-clamp-3 opacity-90 transition-opacity duration-300 group-hover:opacity-100">
+                                            {{ item.description }}
+                                        </p>
+                                        <div class="mt-4 opacity-80 transition-all duration-300 group-hover:opacity-100">
+                                            <span class="inline-flex items-center text-sm font-medium border-b border-white/50 pb-1 group-hover:border-white">
                                                 {{ t("view_details") }}
                                                 <ChevronDoubleRightIcon class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" />
                                             </span>
                                         </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </swiper-slide>
+                        <div class="swiper-svg-prev-button absolute left-4 top-1/2 z-10 -translate-y-1/2 bg-black/30 hover:bg-black/50 p-2 rounded-box transition-all">
+                            <ChevronLeftIcon class="size-6 text-white" />
+                        </div>
+                        <div class="swiper-svg-next-button absolute right-4 top-1/2 z-10 -translate-y-1/2 bg-black/30 hover:bg-black/50 p-2 rounded-box transition-all">
+                            <ChevronRightIcon class="size-6 text-white" />
+                        </div>
+                    </swiper>
+                </div>
+                <!-- Right:Cards -->
+                <div class="w-1/2 flex flex-col gap-4">
+                    <a
+                        v-if="mosaicItems.length > 0"
+                        :href="mosaicItems[0].url"
+                        class="card bg-base-100 shadow-xl overflow-hidden group transition-all duration-300 hover:shadow-2xl h-46">
+                        <div class="relative w-full h-full overflow-hidden">
+                            <img
+                                :src="mosaicItems[0].thumbnail"
+                                :alt="mosaicItems[0].title"
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-90">
+                                <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+                                    <h3 class="text-lg font-bold mb-1 line-clamp-1 transition-transform duration-300 group-hover:translate-y-[-3px]">
+                                        {{ mosaicItems[0].title }}
+                                    </h3>
+                                    <div class="mt-2 opacity-80 transition-all duration-300 group-hover:opacity-100">
+                                        <span class="inline-flex items-center text-xs font-medium border-b border-white/50 pb-1 group-hover:border-white">
+                                            {{ t("view_details") }}
+                                            <ChevronDoubleRightIcon class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" />
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-                        </a>
-                    </swiper-slide>
-                </swiper>
-                <div class="swiper-cms-carousel-pagination flex justify-center mt-4"></div>
-            </div>
-            <!-- Mosaic Layout -->
-            <div
-                v-else-if="actualLayoutType === 'mosaic'"
-                class="carousel-mosaic-container">
-                <div class="flex flex-col md:flex-row gap-4">
-                    <!-- Left:Carousel -->
-                    <div class="w-1/2">
-                        <swiper
-                            :modules="[Navigation, Pagination, Autoplay]"
-                            v-bind="swiperSettings"
-                            class="w-full rounded-box overflow-hidden">
-                            <swiper-slide
-                                v-for="(item, index) in sliderItems"
-                                :key="index"
-                                class="max-h-96">
-                                <div class="card w-full h-full relative group overflow-hidden">
-                                    <!-- IMG -->
-                                    <img
-                                        :src="item.thumbnail"
-                                        :alt="item.title"
-                                        class="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-105" />
-                                    <!-- MASK -->
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-90">
-                                        <a
-                                            :href="item.url"
-                                            class="absolute bottom-0 left-0 right-0 p-5 md:p-8 text-white block">
-                                            <h2 class="text-2xl md:text-3xl font-bold mb-3 transition-transform duration-300 group-hover:translate-y-[-5px]">
-                                                {{ item.title }}
-                                            </h2>
-                                            <p
-                                                v-if="item.description"
-                                                class="text-sm md:text-base line-clamp-3 opacity-90 transition-opacity duration-300 group-hover:opacity-100">
-                                                {{ item.description }}
-                                            </p>
-                                            <div class="mt-4 opacity-80 transition-all duration-300 group-hover:opacity-100">
-                                                <span class="inline-flex items-center text-sm font-medium border-b border-white/50 pb-1 group-hover:border-white">
-                                                    {{ t("view_details") }}
-                                                    <ChevronDoubleRightIcon class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" />
-                                                </span>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </swiper-slide>
-                            <div class="swiper-svg-prev-button absolute left-4 top-1/2 z-10 -translate-y-1/2 bg-black/30 hover:bg-black/50 p-2 rounded-box transition-all">
-                                <ChevronLeftIcon class="size-6 text-white" />
-                            </div>
-                            <div class="swiper-svg-next-button absolute right-4 top-1/2 z-10 -translate-y-1/2 bg-black/30 hover:bg-black/50 p-2 rounded-box transition-all">
-                                <ChevronRightIcon class="size-6 text-white" />
-                            </div>
-                        </swiper>
-                    </div>
-                    <!-- Right:Cards -->
-                    <div class="w-1/2 flex flex-col gap-4">
+                        </div>
+                    </a>
+                    <div class="grid grid-cols-2 gap-4 flex-1">
                         <a
-                            v-if="mosaicItems.length > 0"
-                            :href="mosaicItems[0].url"
+                            v-if="mosaicItems.length > 1"
+                            :href="mosaicItems[1].url"
                             class="card bg-base-100 shadow-xl overflow-hidden group transition-all duration-300 hover:shadow-2xl h-46">
                             <div class="relative w-full h-full overflow-hidden">
                                 <img
-                                    :src="mosaicItems[0].thumbnail"
-                                    :alt="mosaicItems[0].title"
+                                    :src="mosaicItems[1].thumbnail"
+                                    :alt="mosaicItems[1].title"
                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-90">
                                     <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
-                                        <h3 class="text-lg font-bold mb-1 line-clamp-1 transition-transform duration-300 group-hover:translate-y-[-3px]">
-                                            {{ mosaicItems[0].title }}
+                                        <h3 class="text-base font-bold mb-1 line-clamp-1 transition-transform duration-300 group-hover:translate-y-[-3px]">
+                                            {{ mosaicItems[1].title }}
                                         </h3>
                                         <div class="mt-2 opacity-80 transition-all duration-300 group-hover:opacity-100">
                                             <span class="inline-flex items-center text-xs font-medium border-b border-white/50 pb-1 group-hover:border-white">
                                                 {{ t("view_details") }}
-                                                <ChevronDoubleRightIcon class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" />
+                                                <ChevronDoubleRightIcon class="h-3 w-3 ml-1 transition-transform group-hover:translate-x-1" />
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </a>
-                        <div class="grid grid-cols-2 gap-4 flex-1">
-                            <a
-                                v-if="mosaicItems.length > 1"
-                                :href="mosaicItems[1].url"
-                                class="card bg-base-100 shadow-xl overflow-hidden group transition-all duration-300 hover:shadow-2xl h-46">
-                                <div class="relative w-full h-full overflow-hidden">
-                                    <img
-                                        :src="mosaicItems[1].thumbnail"
-                                        :alt="mosaicItems[1].title"
-                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-90">
-                                        <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
-                                            <h3 class="text-base font-bold mb-1 line-clamp-1 transition-transform duration-300 group-hover:translate-y-[-3px]">
-                                                {{ mosaicItems[1].title }}
-                                            </h3>
-                                            <div class="mt-2 opacity-80 transition-all duration-300 group-hover:opacity-100">
-                                                <span class="inline-flex items-center text-xs font-medium border-b border-white/50 pb-1 group-hover:border-white">
-                                                    {{ t("view_details") }}
-                                                    <ChevronDoubleRightIcon class="h-3 w-3 ml-1 transition-transform group-hover:translate-x-1" />
-                                                </span>
-                                            </div>
+                        <a
+                            v-if="mosaicItems.length > 2"
+                            :href="mosaicItems[2].url"
+                            class="card bg-base-100 shadow-xl overflow-hidden group transition-all duration-300 hover:shadow-2xl h-46">
+                            <div class="relative w-full h-full overflow-hidden">
+                                <img
+                                    :src="mosaicItems[2].thumbnail"
+                                    :alt="mosaicItems[2].title"
+                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-90">
+                                    <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+                                        <h3 class="text-base font-bold mb-1 line-clamp-1 transition-transform duration-300 group-hover:translate-y-[-3px]">
+                                            {{ mosaicItems[2].title }}
+                                        </h3>
+                                        <div class="mt-2 opacity-80 transition-all duration-300 group-hover:opacity-100">
+                                            <span class="inline-flex items-center text-xs font-medium border-b border-white/50 pb-1 group-hover:border-white">
+                                                {{ t("view_details") }}
+                                                <ChevronDoubleRightIcon class="h-3 w-3 ml-1 transition-transform group-hover:translate-x-1" />
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
-                            </a>
-                            <a
-                                v-if="mosaicItems.length > 2"
-                                :href="mosaicItems[2].url"
-                                class="card bg-base-100 shadow-xl overflow-hidden group transition-all duration-300 hover:shadow-2xl h-46">
-                                <div class="relative w-full h-full overflow-hidden">
-                                    <img
-                                        :src="mosaicItems[2].thumbnail"
-                                        :alt="mosaicItems[2].title"
-                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-90">
-                                        <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
-                                            <h3 class="text-base font-bold mb-1 line-clamp-1 transition-transform duration-300 group-hover:translate-y-[-3px]">
-                                                {{ mosaicItems[2].title }}
-                                            </h3>
-                                            <div class="mt-2 opacity-80 transition-all duration-300 group-hover:opacity-100">
-                                                <span class="inline-flex items-center text-xs font-medium border-b border-white/50 pb-1 group-hover:border-white">
-                                                    {{ t("view_details") }}
-                                                    <ChevronDoubleRightIcon class="h-3 w-3 ml-1 transition-transform group-hover:translate-x-1" />
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
-        </template>
+        </div>
         <!-- NULL -->
         <div
             v-else

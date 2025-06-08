@@ -84,13 +84,13 @@ const removeFavorite = async (postId: string) => {
         if (data.status === "removed") {
             // 更新本地列表
             favoriteItems.value = favoriteItems.value.filter((item) => item.id !== postId);
-            toast(data.message || t("favorite_removed_success"), { type: "success" });
+            toast.success(data.message || t("favorite_removed_success"));
         } else {
-            toast(data.message || t("operation_failed"), { type: "error" });
+            toast.error(data.message || t("operation_failed"));
         }
     } catch (error) {
-        toast(t("network_error"), { type: "error" });
         console.error("Remove favorite failed:", error);
+        toast.error(t("network_error"));
     } finally {
         isLoading.value = false;
     }

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from "vue";
+//Heroicons
+import { CheckCircleIcon, ExclamationTriangleIcon, XCircleIcon, InformationCircleIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 
 const props = defineProps({
     message: { type: String, default: "" },
@@ -7,7 +9,7 @@ const props = defineProps({
     type: { type: String, default: "info" }, // 可选值: info, success, warning, error
 });
 
-const emit = defineEmits(['vanish']);
+const emit = defineEmits(["vanish"]);
 
 const visible = ref(true);
 
@@ -20,16 +22,32 @@ const toastClass = computed(() => {
             return "alert-warning";
         case "error":
             return "alert-error";
-        default:
+        case "info":
             return "alert-info";
+        default:
+            return "";
     }
 });
 
+//选择图标
+const toastIcon = computed(() => {
+    switch (props.type) {
+        case "success":
+            return CheckCircleIcon;
+        case "warning":
+            return ExclamationTriangleIcon;
+        case "error":
+            return XCircleIcon;
+        case "info":
+        default:
+            return InformationCircleIcon;
+    }
+});
 //监听可见状态变化
 watch(visible, (newValue) => {
     if (!newValue) {
         // 给动画一些时间完成
-        setTimeout(() => emit('vanish'), 200);
+        setTimeout(() => emit("vanish"), 200);
     }
 });
 
@@ -54,11 +72,14 @@ onMounted(() => {
             v-if="visible"
             class="toast toast-end toast-bottom z-50">
             <div :class="['alert', toastClass]">
-                <span class="font-semibold">{{ message }}</span>
-                <button
-                    class="btn btn-sm btn-circle btn-ghost"
-                    @click="visible = false">
-                    ✕
+                <component
+                    :is="toastIcon"
+                    class="size-6 shrink-0 stroke-current" />
+                <span class="font-semibold">
+                    {{ message }}
+                </span>
+                <button @click="visible = false">
+                    <XMarkIcon class="size-4 ml-4" />
                 </button>
             </div>
         </div>

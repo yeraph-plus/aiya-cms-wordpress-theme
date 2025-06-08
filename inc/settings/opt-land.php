@@ -177,10 +177,10 @@ AYF::new_opt([
             'type' => 'radio',
             'sub' => [
                 'full' => '经典（宽幅模式）',
-                'cms' => '三栏位（CMS模式）',
                 'mosaic' => '拼贴（四卡片）',
+                'cms' => '三栏位（CMS模式）',
             ],
-            'default' => 'cms',
+            'default' => 'mosaic',
         ],
         [
             'title' => '轮播列表',

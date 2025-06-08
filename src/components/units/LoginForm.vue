@@ -73,7 +73,7 @@ async function handleLogin() {
             //登录成功
             emit("login-success", data);
             //创建页面消息
-            toast(data.data?.message, { type: "success" });
+            toast.success(data.data?.message);
         }
     } catch (err) {
         errorMsg.value = t("network_error");

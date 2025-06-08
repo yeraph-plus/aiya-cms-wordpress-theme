@@ -1,0 +1,677 @@
+/**
+ * HUB 帖子管理后台样式
+ */
+
+.hub-admin-add-post {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 24px;
+    max-width: 800px;
+    margin: 20px 0;
+}
+
+.hub-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hub-form .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hub-form label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.hub-form textarea {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 160px;
+    resize: vertical;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+
+.hub-form textarea:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+
+.hub-form select {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 12px;
+    height: 40px;
+    font-size: 14px;
+    background-color: #fff;
+    max-width: 300px;
+}
+
+.hub-form select:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+
+.hub-form .checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.hub-form .checkbox-container input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.hub-form .description {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.hub-form button {
+    background: #2271b1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    align-self: flex-start;
+}
+
+.hub-form button:hover {
+    background: #135e96;
+}
+
+.hub-form button:disabled {
+    background: #a7aaad;
+    cursor: not-allowed;
+}
+
+/* 通知样式 */
+.notice {
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    border-left: 4px solid transparent;
+}
+
+.notice p {
+    margin: 0;
+    padding: 0;
+}
+
+.notice-success {
+    background-color: #f0f6e9;
+    border-left-color: #46b450;
+    color: #2c7636;
+}
+
+.notice-error {
+    background-color: #fdf3f3;
+    border-left-color: #d63638;
+    color: #b32d2e;
+}
+
+.notice-warning {
+    background-color: #fff8e6;
+    border-left-color: #ffb900;
+    color: #996600;
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 782px) {
+    .hub-form select {
+        max-width: 100%;
+    }
+
+    .hub-form button {
+        width: 100%;
+    }
+
+    .hub-admin-add-post {
+        padding: 16px;
+    }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#hub-post-result {
+    animation: fadeIn 0.3s ease-out;
+}
+/* 帖子编辑表单样式 */
+.hub-admin-edit-post {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 24px;
+    max-width: 800px;
+    margin: 20px 0;
+}
+
+/* 加载指示器样式 */
+.loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0;
+    color: #646970;
+    font-style: italic;
+}
+
+.loading-indicator p {
+    position: relative;
+    padding-left: 28px;
+}
+
+.loading-indicator p:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -10px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-top-color: #646970;
+    border-radius: 50%;
+    animation: loading-spin 1s linear infinite;
+}
+
+@keyframes loading-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 错误消息样式 */
+.error-message {
+    background-color: #fdf3f3;
+    border-left: 4px solid #d63638;
+    color: #b32d2e;
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.error-message p {
+    margin: 0 0 15px 0;
+    font-weight: 500;
+}
+
+.error-message .button {
+    margin-top: 5px;
+}
+
+/* 表单样式 */
+.hub-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.hub-form .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hub-form label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #1d2327;
+    margin-bottom: 4px;
+}
+
+.hub-form textarea {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 160px;
+    resize: vertical;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+
+.hub-form textarea:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+
+.hub-form select {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 12px;
+    height: 40px;
+    font-size: 14px;
+    background-color: #fff;
+    max-width: 300px;
+}
+
+.hub-form select:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+
+.hub-form .checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.hub-form .checkbox-container input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.hub-form .checkbox-container span {
+    font-size: 14px;
+}
+
+.hub-form .description {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* 按钮组样式 */
+.hub-form .form-field:last-child {
+    flex-direction: row;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.hub-form button {
+    background: #2271b1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+        background-color 0.2s,
+        transform 0.1s;
+    text-decoration: none;
+}
+
+.hub-form button:hover {
+    background: #135e96;
+}
+
+.hub-form button:active {
+    transform: translateY(1px);
+}
+
+.hub-form button:disabled {
+    background: #a7aaad;
+    cursor: not-allowed;
+}
+
+.hub-form a.button {
+    background: #f0f0f1;
+    color: #2c3338;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 9px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.hub-form a.button:hover {
+    background: #e5e5e5;
+}
+
+/* 通知样式 */
+.notice {
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    border-left: 4px solid transparent;
+}
+
+.notice p {
+    margin: 0;
+    padding: 0;
+}
+
+.notice-success {
+    background-color: #f0f6e9;
+    border-left-color: #46b450;
+    color: #2c7636;
+}
+
+.notice-error {
+    background-color: #fdf3f3;
+    border-left-color: #d63638;
+    color: #b32d2e;
+}
+
+.notice-warning {
+    background-color: #fff8e6;
+    border-left-color: #ffb900;
+    color: #996600;
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 782px) {
+    .hub-admin-edit-post {
+        padding: 16px;
+        margin: 15px 0;
+    }
+
+    .hub-form select {
+        max-width: 100%;
+    }
+
+    .hub-form .form-field:last-child {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hub-form button,
+    .hub-form a.button {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#hub-post-result,
+#edit-post-form {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.hub-admin-tabs {
+    margin: 15px 0;
+    border-bottom: 1px solid #ccd0d4;
+    padding-bottom: 0;
+}
+
+.hub-admin-tabs a {
+    display: inline-block;
+    padding: 8px 12px;
+    text-decoration: none;
+    margin-bottom: -1px;
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+
+.hub-admin-tabs a.active {
+    border: 1px solid #ccd0d4;
+    border-bottom-color: #fff;
+    background: #fff;
+}
+
+.hub-admin-search-box {
+    margin: 15px 0;
+}
+
+.hub-admin-search-box input[type="text"] {
+    padding: 5px 10px;
+    width: 300px;
+}
+
+.loading-data {
+    text-align: center;
+    padding: 20px;
+}
+
+/* 分页导航样式 */
+.hub-admin-pagination {
+    margin: 15px 0;
+    text-align: right;
+}
+
+.pagination-link {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 2px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #0073aa;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination-link:hover:not(.current, .disabled) {
+    background-color: #f0f0f0;
+    border-color: #999;
+}
+
+.pagination-link.current {
+    background: #0073aa;
+    color: white;
+    border-color: #0073aa;
+    cursor: default;
+}
+
+.pagination-link.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.pagination-ellipsis {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 2px;
+}
+
+/* 统计信息样式 */
+.hub-admin-stats {
+    margin: 15px 0 5px;
+    color: #555;
+    font-size: 13px;
+}
+
+.displaying-num,
+.displaying-detail,
+.displaying-pages {
+    margin-right: 10px;
+    font-weight: 500;
+}
+
+/* 筛选表单样式 */
+.hub-admin-filter-form {
+    background: #fff;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    border-radius: 3px;
+}
+
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.filter-item {
+    margin-right: 15px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.filter-item label {
+    margin-right: 5px;
+    font-weight: 500;
+}
+
+.search-item {
+    flex-grow: 1;
+    min-width: 200px;
+}
+
+.filter-item select,
+.filter-item input[type="text"] {
+    min-width: 120px;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+}
+
+.filter-item input[type="text"] {
+    width: 100%;
+    min-width: 240px;
+}
+
+.submit-item {
+    margin-top: 5px;
+}
+
+/* 帖子列表样式 */
+.hub-admin-posts {
+    margin-top: 15px;
+}
+
+.hub-admin-posts table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.hub-admin-posts th {
+    text-align: left;
+    background-color: #f8f8f8;
+    font-weight: 600;
+}
+
+.hub-admin-posts td,
+.hub-admin-posts th {
+    padding: 10px;
+    vertical-align: top;
+}
+
+.loading-data {
+    text-align: center;
+    padding: 20px !important;
+    color: #777;
+    font-style: italic;
+}
+
+/* 标签样式 */
+.hub-tag {
+    display: inline-block;
+    background: #e7f5fa;
+    color: #0073aa;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.hub-no-tag {
+    color: #999;
+    font-style: italic;
+}
+
+/* 操作链接样式 */
+.edit-post,
+.trash-post,
+.restore-post,
+.delete-post,
+.publish-post {
+    color: #0073aa;
+    text-decoration: none;
+    margin-right: 8px;
+}
+
+.delete-post {
+    color: #a00;
+}
+
+.delete-post:hover {
+    color: #dc3232;
+    text-decoration: underline;
+}
+
+.edit-post:hover,
+.trash-post:hover,
+.restore-post:hover,
+.publish-post:hover {
+    color: #00a0d2;
+    text-decoration: underline;
+}
+
+/* 响应式设计 */
+@media screen and (max-width: 782px) {
+    .filter-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-item {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .filter-item select,
+    .filter-item input[type="text"] {
+        width: 100%;
+    }
+
+    .hub-admin-posts th,
+    .hub-admin-posts td {
+        padding: 8px 5px;
+    }
+}

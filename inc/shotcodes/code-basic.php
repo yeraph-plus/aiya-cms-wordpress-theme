@@ -345,6 +345,13 @@ if (is_admin()) {
         'template' => '[sponsor_ship] {{content}} [/sponsor_ship]',
         'field_build' => array(
             [
+                'id' => 'title',
+                'type' => 'text',
+                'label' => '标题',
+                'desc' => '内容块的标题',
+                'default' => '支援者限定',
+            ],
+            [
                 'id' => 'content',
                 'type' => 'textarea',
                 'label' => '内容',
@@ -361,6 +368,13 @@ if (is_admin()) {
         'template' => '[logged_in] {{content}} [/logged_in]',
         'field_build' => array(
             [
+                'id' => 'title',
+                'type' => 'text',
+                'label' => '标题',
+                'desc' => '内容块的标题',
+                'default' => '登录后下载',
+            ],
+            [
                 'id' => 'content',
                 'type' => 'textarea',
                 'label' => '内容',
@@ -370,6 +384,28 @@ if (is_admin()) {
         )
     ));
 
+    AYA_Shortcode::shortcode_register('clipboard-box', array(
+        'id' => 'sc-clipboard-box',
+        'title' => '一键复制',
+        'note' => '创建一个提供复制功能的卡片，用于快捷复制文本或打开链接',
+        'template' => '[clip_board {{attributes}}] {{content}} [/clip_board]',
+        'field_build' => array(
+            [
+                'id' => 'title',
+                'type' => 'text',
+                'label' => '标题',
+                'desc' => '内容块的标题',
+                'default' => '一键复制',
+            ],
+            [
+                'id' => 'content',
+                'type' => 'textarea',
+                'label' => '内容',
+                'desc' => '需要被复制的文本或链接',
+                'default' => 'magnet:?xt=urn:btih:',
+            ]
+        )
+    ));
 }
 
 //移除一些 WordPress 默认的短代码
@@ -390,6 +426,7 @@ add_shortcode('tooltip', 'aya_shortcode_tooltip_content');
 add_shortcode('collapse', 'aya_shortcode_collapse_content');
 add_shortcode('sponsor_ship', 'aya_shortcode_sponsor_ship_content');
 add_shortcode('logged_in', 'aya_shortcode_logged_in_content');
+add_shortcode('clip_board', 'aya_shortcode_clipboard_in_content');
 
 //AIYA-CMS 短代码组件：隐藏文字段
 function aya_shortcode_hide_content($atts = array(), $content = '')
@@ -553,24 +590,12 @@ function aya_shortcode_button_content($atts = array(), $content = '')
         $atts,
     );
 
-    $button_id = 'btn-' . wp_unique_id();
+    //$button_id = 'btn-' . wp_unique_id();
 
-    $html_format = '<button id="%1$s" class="btn btn-%2$s btn-%3$s btn-%4$s" type="button" data-href="%5$s">%6$s</button>';
-
-    $script = '<script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var btn = document.getElementById("%1$s");
-            if(btn) {
-                btn.addEventListener("click", function() {
-                    window.location.href = this.getAttribute("data-href");
-                });
-            }
-        });
-    </script>';
+    $html_format = '<button class="btn btn-%1$s btn-%2$s btn-%3$s btn-redirect" type="button" data-href="%4$s">%5$s</button>';
 
     return sprintf(
-        $html_format . $script,
-        esc_attr($button_id),
+        $html_format,
         esc_attr($atts['style']),
         esc_attr($atts['color']),
         esc_attr($atts['size']),
@@ -635,16 +660,35 @@ function aya_shortcode_collapse_content($atts = array(), $content = '')
 //AIYA-CMS 短代码：赞助者可见内容
 function aya_shortcode_sponsor_ship_content($atts = array(), $content = '')
 {
+    $atts = shortcode_atts(
+        array(
+            'title' => ''
+        ),
+        $atts,
+    );
+
     $user_level = aya_user_toggle_level();
 
+    $has_title = !empty($atts['title']);
+    $is_guest = ($user_level == 'guest' || $user_level == 'subscriber');
+
+    //已登录，且组件没有设置标题
+    if (!$is_guest && !$has_title) {
+        return do_shortcode($content);
+    }
+
+    //其余情况，补充边框样式
     $html = '';
 
     $html .= '<div class="border-2 border-primary/50 rounded-lg p-4 my-4">';
-    $html .= '<div class="flex items-center gap-2 mb-2 text-primary">';
-    $html .= '<icon name="wallet" class="size-6 mr-2"></icon>';
-    $html .= '<span class="font-bold">' . __('支援者限定', 'AIYA') . '</span>';
-    $html .= '</div>';
-
+    //块标题
+    if ($atts['title'] != '') {
+        $html .= '<div class="flex items-center gap-2 mb-2 text-primary">';
+        $html .= '<icon name="wallet" class="size-6 mr-2"></icon>';
+        $html .= '<span class="font-bold">' . esc_html($atts['title']) . '</span>';
+        $html .= '</div>';
+    }
+    //配置登录提示
     switch ($user_level) {
         //管理员、赞助者或投稿权限的用户可见
         case 'sponsor':
@@ -653,7 +697,9 @@ function aya_shortcode_sponsor_ship_content($atts = array(), $content = '')
             $html .= do_shortcode($content);
             break;
         case 'subscriber':
+            $html .= '<span class="text-primary">';
             $html .= __('仅限订阅用户可见，请先：', 'AIYA') . '<a href="' . home_url('sponsor') . '" class="link">' . __('获取订阅', 'AIYA') . '</a>';
+            $html .= '</span>';
             break;
         case 'guest':
         default:
@@ -663,7 +709,6 @@ function aya_shortcode_sponsor_ship_content($atts = array(), $content = '')
             $html .= '</div>';
             break;
     }
-
     $html .= '</div>';
 
     return $html;
@@ -672,18 +717,64 @@ function aya_shortcode_sponsor_ship_content($atts = array(), $content = '')
 //AIYA-CMS 短代码：登录可见内容
 function aya_shortcode_logged_in_content($atts = array(), $content = '')
 {
+    $atts = shortcode_atts(
+        array(
+            'title' => ''
+        ),
+        $atts,
+    );
+
     $user_level = aya_user_toggle_level();
 
-    if ($user_level == 'guest') {
-        $html = '';
-        $html .= '<div class="border-2 border-secondary/20 rounded-lg p-4 my-4">';
-        $html .= '<div class="flex items-center gap-2 text-secondary">';
-        $html .= '<icon name="command-line" class="size-6 mr-2"></icon>';
-        $html .= '<span>' . __('仅限登录用户可见，请先登录', 'AIYA') . '</span>';
-        $html .= '</div></div>';
+    $has_title = !empty($atts['title']);
+    $is_guest = ($user_level == 'guest');
 
-        return $html;
+    //已登录，且组件没有设置标题
+    if (!$is_guest && !$has_title) {
+        return do_shortcode($content);
     }
 
-    return '<hr />' . do_shortcode($content) . '<hr />';
+    //其余情况，补充边框样式
+    $html = '';
+
+    $html .= '<div class="border-2 border-secondary/50 rounded-lg p-4 my-4">';
+    //块标题
+    if ($has_title) {
+        $html .= '<div class="flex items-center gap-2 mb-2 text-secondary">';
+        $html .= '<icon name="command-line" class="size-6 mr-2"></icon>';
+        $html .= '<span class="font-bold">' . esc_html($atts['title']) . '</span>';
+        $html .= '</div>';
+    }
+    //提示登录
+    if ($is_guest) {
+        $html .= '<span class="text-secondary">';
+        $html .= __('仅限登录用户可见，请先登录', 'AIYA');
+        $html .= '</span>';
+    } else {
+        $html .= do_shortcode($content);
+    }
+    $html .= '</div>';
+
+    return $html;
+}
+
+//AIYA-CMS 短代码组件：剪贴板功能卡片
+function aya_shortcode_clipboard_in_content($atts = array(), $content = '')
+{
+    //定义简码参数
+    $atts = shortcode_atts(
+        array(
+            'title' => '',
+        ),
+        $atts
+    );
+
+    $title = esc_html($atts['title']);
+
+    $content = do_shortcode($content);
+    $content = strip_tags($content);
+    $content = trim($content);
+
+    //导入Vue组件
+    return '<text-clipboard title="' . $title . '" content="' . $content . '"></text-clipboard>';
 }

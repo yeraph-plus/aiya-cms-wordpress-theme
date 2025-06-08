@@ -101,7 +101,7 @@ AYF::new_opt([
             'sub' => [
                 'list' => '列表',
                 'grid' => '网格',
-                'waterfall' => '瀑布流（ Masonry 模式）',
+                //'waterfall' => '瀑布流（ Masonry 模式）',
             ],
             'default' => 'grid',
         ],
@@ -154,6 +154,7 @@ AYF::new_opt([
             'desc' => '合规类功能设置',
             'type' => 'title_1',
         ],
+        /*
         [
             'title' => '用户授权Cookie权限弹窗',
             'desc' => '用户首次访问网站时，会弹窗提示用户授权Cookie权限',
@@ -161,6 +162,7 @@ AYF::new_opt([
             'type' => 'switch',
             'default' => false,
         ],
+        */
         [
             'title' => 'ICP备案',
             'desc' => '根据《互联网信息服务管理办法》要求的网站 ICP 备案信息',
@@ -189,22 +191,6 @@ AYF::new_opt([
             'id' => 'site_home_widget_bool',
             'type' => 'switch',
             'default' => true,
-        ],
-        [
-            'desc' => '样式兼容设置',
-            'type' => 'title_1',
-        ],
-        [
-            'title' => '暗色主题',
-            'desc' => '设置站点首次加载时的配色模式',
-            'id' => 'site_dark_scheme_type',
-            'type' => 'radio',
-            'sub'  => [
-                'light' => '浅色',
-                'dark' => '暗色',
-                'system' => '跟随系统',
-            ],
-            'default' => 'system',
         ],
         */
     ]

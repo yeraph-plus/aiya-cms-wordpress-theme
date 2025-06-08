@@ -190,51 +190,53 @@ function aya_while_the_post()
     do_action('aya_before_loop', $loop_layout);
 
     //指定布局样式
-    if ($loop_layout === 'list') {
-        //列表样式
-        $grid_class = 'flex flex-col space-y-4';
-    } else if ($loop_layout === 'waterfall') {
-        //瀑布流样式
-        $grid_class = 'relative masonry-grid w-full" data-columns="' . $loop_grid;
-    } else {
-        //网格样式
-        $grid_class = 'gap-4 grid ';
-        switch ($loop_grid) {
-            case '2':
-                $grid_class .= 'grid-cols-1 sm:grid-cols-2';
-                break;
-            case '3':
-                $grid_class .= 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
-                break;
-            case '4':
-            default:
-                $grid_class .= 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
-                break;
-            case '5':
-                $grid_class .= 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5';
-                break;
+    if ($loop_layout !== 'waterfall') {
+        //普通分页
+        if ($loop_layout === 'list') {
+            //列表样式
+            $grid_class = 'flex flex-col space-y-4';
+        } else if ($loop_layout === 'grid') {
+            //网格样式
+            $grid_class = 'gap-4 grid ';
+            switch ($loop_grid) {
+                case '2':
+                    $grid_class .= 'grid-cols-1 sm:grid-cols-2';
+                    break;
+                case '3':
+                    $grid_class .= 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
+                    break;
+                case '4':
+                default:
+                    $grid_class .= 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
+                    break;
+                case '5':
+                    $grid_class .= 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5';
+                    break;
+            }
         }
-    }
 
-    //before container
-    aya_echo('<div id="main-loop" class="' . $grid_class . '">');
-    //瀑布流模式列宽参考容器
-    if ($loop_layout === 'waterfall') {
-        aya_echo('<div class="masonry-sizer"></div>');
-    }
-    //执行主循环
-    while (have_posts()) {
-        the_post();
-        aya_template_load('loops/' . $loop_layout);
-    }
+        //before container
+        aya_echo('<div id="main-loop" class="' . $grid_class . '">');
 
-    //after container
-    aya_echo('</div>');
+        //执行主循环
+        while (have_posts()) {
+            the_post();
+            aya_template_load('loops/' . $loop_layout);
+        }
+
+        //after container
+        aya_echo('</div>');
+
+        //加载分页
+        aya_template_load('part/pagination');
+    }
+    //瀑布流布局
+    else {
+        //加载瀑布流布局
+        aya_template_load('loops/masonry');
+    }
 
     do_action('aya_after_loop', $loop_layout);
-
-    //加载分页
-    aya_template_load('part/pagination');
 }
 
 //替代正文循环

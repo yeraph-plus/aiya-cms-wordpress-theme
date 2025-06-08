@@ -62,13 +62,13 @@ async function handleLogout() {
         const data = await res.json();
 
         if (data.success) {
-            toast(t("logged_out_success"));
+            toast.success(t("logged_out_success"));
             //等待
             setTimeout(() => {
                 window.location.reload();
             }, 3000);
         } else {
-            toast(data.data?.message || t("logged_out_error"));
+            toast.error(data.data?.message || t("logged_out_error"));
         }
     } catch (err) {
         console.error(err);

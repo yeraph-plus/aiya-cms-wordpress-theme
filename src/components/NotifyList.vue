@@ -96,7 +96,7 @@ const hasNewNotify = computed(() => notifyList.value.length > 0);
                             <div
                                 v-for="(note, idx) in notifyList"
                                 :key="idx"
-                                class="p-3 transition-colors"
+                                class="p-3 transition-colors rounded-box"
                                 :class="[getNotifyConfig(note.level).bgColor]">
                                 <div class="flex items-start gap-3">
                                     <component

@@ -4,6 +4,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+$app_config = [
+    'defaultDarkMode' => aya_opt('site_default_dark_mode_bool', 'basic') ? 'true' : 'false',
+    'defaultSitebarClose' => aya_opt('site_default_sitebar_close_bool', 'basic') ? 'true' : 'false'
+];
+
 /** 
  * NOTE: All wp-head info tag:
  * 
@@ -29,22 +34,15 @@ if (!defined('ABSPATH')) {
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <meta http-equiv="Cache-Control" content="private">
     <?php wp_head(); ?>
-
-    <script type="text/javascript">
-        window.appConfig = {};
-        window.appConfig.defaultDarkMode = <?php aya_echo(aya_opt('site_default_dark_mode_bool', 'basic') ? 'true' : 'false'); ?>;
-        window.appConfig.defaultSitebarClose = <?php aya_echo(aya_opt('site_default_sitebar_close_bool', 'basic') ? 'false' : 'true'); ?>;
-        window.appConfig.Lunguage = 'zh';
-    </script>
 </head>
 
 <body <?php if (aya_is_dev_mode()) {
     body_class();
 } ?>>
+    <?php aya_template_load('units/screen-loader'); ?>
     <?php wp_body_open(); ?>
     <?php aya_home_open(); ?>
-    <?php aya_template_load('units/screen-loader'); ?>
-    <div id="vue-app" class="min-h-screen overflow-hidden" style="visibility: hidden">
+    <div id="vue-app" class="min-h-screen overflow-hidden" style="visibility: hidden" data-config="<?php aya_echo(aya_vue_json_encode($app_config)); ?>">
         <!-- Mobile Sidebar Mask -->
         <div v-if="!sidebarToggle && isMobile" @click="sidebarToggle = false" class="fixed md:hidden inset-0 bg-base-300/30 backdrop-blur-sm transition-all duration-300 ease-in-out z-20"></div>
         <!-- Topbar -->
@@ -66,7 +64,7 @@ if (!defined('ABSPATH')) {
                 <!-- Theme Switcher -->
                 <?php aya_vue_load('theme-switcher'); ?>
                 <!-- Notifications -->
-                <?php aya_template_load('units/notify-box'); ?>
+                <?php aya_vue_load('notify-list', aya_notify_list()); ?>
                 <!-- User Menu -->
                 <?php aya_template_load('units/user-login'); ?>
             </div>

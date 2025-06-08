@@ -79,7 +79,7 @@ if (!class_exists('AYF') || !class_exists('AYP')) {
 aya_require('func-auto-loader');
 aya_require('func-public');
 aya_require('func-wp-emends');
-//aya_require('func-wp-scripts');
+aya_require('func-wp-scripts');
 //模板方法
 aya_require('func-vite-helpers');
 aya_require('func-user');

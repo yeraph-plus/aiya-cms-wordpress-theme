@@ -72,7 +72,7 @@ async function handleSocialLogin(provider) {
 
             // 检查授权窗口是否被阻止
             if (!oauthWindow || oauthWindow.closed || typeof oauthWindow.closed === "undefined") {
-                toast(t("oauth_popup_blocked"));
+                toast.warning(t("oauth_popup_blocked"));
             }
 
             // 轮询检查登录状态
@@ -108,7 +108,7 @@ async function handleSocialLogin(provider) {
         }
     } catch (err) {
         console.error("Social login error:", err);
-        toast(t("oauth_error"));
+        toast.error(t("oauth_error"));
     }
 
     loadingProvider.value = "";

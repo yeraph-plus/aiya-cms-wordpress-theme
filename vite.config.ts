@@ -12,6 +12,8 @@ import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import liveReload from 'vite-plugin-live-reload'
 
+const debugMode = process.argv.includes('--debug');
+
 export default defineConfig({
     //插件列表
     plugins: [
@@ -70,11 +72,11 @@ export default defineConfig({
         //清单文件，用于PHP解析以找到带hash的文件
         manifest: true,
 
-        // 是否启用压缩
         write: true,
-        //minify: true,
-        minify: false,
-        sourcemap: true,
+        //是否启用压缩
+        minify: !debugMode,
+        //是否生成sourcemap
+        sourcemap: debugMode,
 
         //rollup入口
         //e.g: https://rollupjs.org/configuration-options/
@@ -97,7 +99,8 @@ export default defineConfig({
                     // if (id.includes('src/'components')) {
                     //   return 'components'
                     // }
-                    console.log(id)
+
+                    //console.log(id)
                 },
             },
         },

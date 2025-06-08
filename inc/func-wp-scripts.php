@@ -4,6 +4,26 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+/*
+ * ------------------------------------------------------------------------------
+ * 静态文件注册和排队
+ * ------------------------------------------------------------------------------
+ */
+
+add_action('admin_enqueue_scripts', 'aya_theme_register_admin_scripts');
+add_action('login_enqueue_scripts', 'aya_theme_register_login_scripts');
+
+//静态文件加载（后台）
+function aya_theme_register_admin_scripts()
+{
+    wp_enqueue_style('aya-login-style', AYA_URI . '/assets/admin/css/admin.style.css', [], aya_theme_version(), 'all');
+}
+//静态文件加载（登录页）
+function aya_theme_register_login_scripts()
+{
+    wp_enqueue_style('aya-login-style', AYA_URI . '/assets/admin/css/admin.login.css', [], aya_theme_version(), 'all');
+}
+
 //wget -x -nH --cut-dirs=2 -P ./ https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.14.8/cdn.min.js
 
 //从CDN加载
@@ -45,23 +65,11 @@ function aya_int_style($pack, $ver, $file)
     aya_echo('<link rel="stylesheet" href="' . aya_static_scripts_cdn() . $pack . '/' . $ver . '/' . $file . '">' . PHP_EOL);
 }
 
-/*
- * ------------------------------------------------------------------------------
- * 静态文件注册和排队
- * ------------------------------------------------------------------------------
- */
 
 //排队后台静态文件
-//add_action('admin_enqueue_scripts', 'aya_theme_register_admin_scripts');
-//add_action('login_enqueue_scripts', 'aya_theme_register_admin_scripts');
 //add_action('wp_head', 'aya_inc_load_head_scripts');
 //add_action('wp_footer', 'aya_inc_load_footer_scripts');
 
-//静态文件加载（后台）
-function aya_theme_register_admin_scripts()
-{
-    //wp_enqueue_style('aya-login-style', AYA_URI . '/assets/css/admin.login.css', array(), aya_theme_version(), 'all');
-}
 //在head中加载
 function aya_inc_load_head_scripts()
 {

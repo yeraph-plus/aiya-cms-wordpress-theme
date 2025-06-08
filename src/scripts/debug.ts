@@ -5,7 +5,7 @@ import { App, ComponentInternalInstance } from 'vue';
  */
 export class VueDebugTools {
     private app: App;
-    private originalSetAttribute: Function;
+    private originalSetAttribute: (qualifiedName: string, value: string) => void;
     private enabled: boolean = false;
 
     /**
@@ -25,45 +25,45 @@ export class VueDebugTools {
         this.setupErrorHandler();
         this.setupPerformanceMonitoring();
 
-        console.log('[DEBUG] Vue调试工具已启用');
+        console.log('[DEBUG] Vue debugging tool enabled.');
     }
 
     disable(): void {
         if (!this.enabled) return;
 
-        //恢复原始的setAttribute
+        //恢复原始的 setAttribute
         Element.prototype.setAttribute = this.originalSetAttribute;
         this.enabled = false;
 
-        console.log('[DEBUG] Vue调试工具已禁用');
+        console.log('[DEBUG] Vue debugging tool disabled.');
     }
 
     private setupAttributeInterceptor(): void {
         const self = this;
 
         Element.prototype.setAttribute = function (name: string, value: string) {
-            // 检查属性名是否有效
+            //默认检查属性名是否有效
             if (typeof name !== 'string' || /^\d/.test(name)) {
-                // 创建一个错误对象以获取堆栈信息
-                const error = new Error(`尝试设置无效的属性名: "${name}"，值为: "${value}"`);
 
-                console.warn(`尝试设置无效的属性名: "${name}"，值为: "${value}"`);
-                console.warn('DOM元素:', this);
-                console.warn('调用堆栈:', error.stack);
+                const error = new Error('Attempt to set an invalid attribute name: "${name}", value: "${value}"');
 
-                // 记录受影响的DOM元素的上下文
-                console.warn('元素HTML:', this.outerHTML);
-                console.warn('父元素:', this.parentElement);
+                console.warn('Attempt to set an invalid attribute name: "${name}", value: "${value}"');
+                console.warn('DOM Element:', this);
+                console.warn('Call Stack:', error.stack);
 
-                // 尝试记录父级Vue组件（如果可能）
+                //受影响的DOM元素的上下文
+                console.warn('Element HTML:', this.outerHTML);
+                console.warn('Parent element:', this.parentElement);
+
+                //父级Vue组件
                 if (window.__VUE__) {
                     try {
                         const instance = window.__VUE__.findNearestComponentInstance(this);
                         if (instance) {
-                            console.warn('关联的Vue组件:', instance.$options?.name || '未命名组件');
+                            console.warn('Associated Vue Components:', instance.$options?.name || 'Unnamed component');
                         }
                     } catch (e) {
-                        console.error('尝试获取Vue组件信息时出错:', e);
+                        console.error('Error attempting to Vue component:', e);
                     }
                 }
 
@@ -74,7 +74,7 @@ export class VueDebugTools {
     }
 
     private setupVueGlobalHelpers(): void {
-        // 添加全局Vue引用以帮助调试
+        //全局Vue引用
         if (typeof window !== 'undefined') {
             window.__VUE__ = {
                 findNearestComponentInstance(el: Element): any {
@@ -82,7 +82,11 @@ export class VueDebugTools {
                     while (current) {
                         const instance = (current as any).__vue_app__;
                         if (instance) return instance;
-                        current = current.parentElement;
+                        if (current.parentElement) {
+                            current = current.parentElement;
+                        } else {
+                            break;
+                        }
                     }
                     return null;
                 }
@@ -91,29 +95,29 @@ export class VueDebugTools {
     }
 
     private setupPerformanceMonitoring(): void {
-        // 如果在开发环境中，启用性能监控
-        if (process.env.NODE_ENV !== 'production') {
+        //启用性能监控
+        if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV !== 'production') {
             this.app.config.performance = true;
         }
     }
 
     private setupErrorHandler(): void {
-        // 捕获Vue错误并进行处理
-        this.app.config.errorHandler = (err: Error, vm: ComponentInternalInstance, info: string) => {
+        //捕获Vue错误并进行处理
+        this.app.config.errorHandler = (err: unknown, instance: import('vue').ComponentPublicInstance | null, info: string) => {
             console.error('Vue Error:', err);
-            console.error('Component:', (vm as any)?.$options?.name || 'Anonymous');
+            console.error('Component:', (instance as any)?.$options?.name || 'Anonymous');
             console.error('Error Info:', info);
 
-            // 特别针对属性名错误
-            if (err.message && err.message.includes('attribute name')) {
-                console.error('检测到属性名称错误，可能是某个组件尝试设置数字作为属性名');
+            //属性名错误
+            if (typeof err === 'object' && err !== null && 'message' in err && typeof (err as any).message === 'string' && (err as any).message.includes('attribute name')) {
+                console.error('Detected an incorrect attribute name, possibly due to a component attempting to set a number as the attribute name.');
 
-                // 尝试检查组件的props和data
-                if (vm) {
-                    console.error('组件props:', (vm as any).$props);
-                    console.error('组件data:', (vm as any).$data);
-                    console.error('组件实例:', vm);
-                    console.error('组件渲染上下文:', (vm as any).$);
+                //检查组件的props和data
+                if (instance) {
+                    console.error('Props:', (instance as any).$props);
+                    console.error('Data:', (instance as any).$data);
+                    console.error('Instance:', instance);
+                    console.error('Context:', (instance as any).$);
                 }
             }
         };
@@ -122,35 +126,36 @@ export class VueDebugTools {
 
 /**
  * Vue应用调试插件
+ * 
  * @param app Vue应用实例
  */
 export default {
     install: (app: App) => {
         const debugTools = new VueDebugTools(app);
 
-        // 将debug方法添加到app全局属性中
+        //将debug方法添加到app全局属性中
         app.config.globalProperties.$debug = debugTools;
 
-        // 将调试工具添加到app实例上
+        //将调试工具添加到app实例上
         app.debug = () => {
             debugTools.enable();
             return app;
         };
 
-        // 添加禁用调试的方法
+        //添加禁用调试的方法
         app.disableDebug = () => {
             debugTools.disable();
             return app;
         };
 
-        // 将调试工具添加到window对象，方便控制台访问
+        //将调试工具添加到window对象，方便控制台访问
         if (typeof window !== 'undefined') {
             window.__VUE_DEBUG_TOOLS__ = debugTools;
         }
     }
 }
 
-// 类型扩展声明
+//类型扩展声明
 declare module '@vue/runtime-core' {
     export interface App {
         debug: () => App;

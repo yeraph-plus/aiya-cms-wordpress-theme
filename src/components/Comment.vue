@@ -3,7 +3,6 @@ import { ref, onMounted, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import CommentForm from "./units/CommentForm.vue";
 import CommentList from "./units/CommentList.vue";
-import CommentPagination from "./units/CommentPagination.vue";
 
 const { t } = useI18n();
 

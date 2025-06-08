@@ -112,10 +112,10 @@ const handleLike = async () => {
 
             hasLiked.value = true;
         } else {
-            toast(data.message || t("click_operation_failed"), { type: "error" });
+            toast.error(data.message || t("click_operation_failed"));
         }
     } catch (error) {
-        toast(t("network_error"), { type: "error" });
+        toast.error(t("network_error"));
         console.error("Action Likes Failed:", error);
     } finally {
         //重置加载
@@ -145,15 +145,15 @@ const handleFavorite = async () => {
 
         if (data.status === "added") {
             isFavorite.value = true;
-            toast(data.message, { type: "success" });
+            toast.success(data.message);
         } else if (data.status === "removed") {
             isFavorite.value = false;
-            toast(data.message, { type: "info" });
+            toast.info(data.message);
         } else {
-            toast(data.message || t("click_must_logged"), { type: "error" });
+            toast.error(data.message || t("click_must_logged"));
         }
     } catch (error) {
-        toast(t("network_error"), { type: "error" });
+        toast.error(t("network_error"));
         console.error("Action Favorites Failed:", error);
     } finally {
         //重置加载
