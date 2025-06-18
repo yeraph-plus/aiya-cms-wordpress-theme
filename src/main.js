@@ -10,11 +10,12 @@ import { createI18n } from 'vue-i18n';
 //Vue 翻译文件
 import messages from "./i18n";
 //Debug工具
-import VueDebugTools from "./scripts/debug";
-// 导入工具函数
+import { VueDebugTools } from "./scripts/debug";
+import { initPrism } from './scripts/prismjs-plugin';
+import { initLozad } from './scripts/lozad-plugin';
+//导入初始化函数
 import {
     initThemeSwitch,
-    initLozad,
     initNSFWHandlers,
     initRedirectButtons,
     mobileDetector,
@@ -122,14 +123,15 @@ if (vueAppEl) {
             //初始化主题切换
             initThemeSwitch(this.defaultDarkMode);
 
-            //先声明 lozadObserver 对象确保正确定义
-            let lozadObserver;
             setTimeout(() => {
+                //操作页面加载器遮罩
                 handleLoading();
+
+                //创建Vue加载完成事件
                 document.dispatchEvent(new CustomEvent('vue-initialized'));
-                lozadObserver = initLozad();
-                // 全局变量
-                window.lozadObserver = lozadObserver;
+
+                //将图片懒加载逻辑挂载到全局
+                window.lozadObserver = initLozad();
             }, 100);
         }
     });
@@ -148,28 +150,30 @@ window.addEventListener("load", function () {
     setTimeout(function () {
         document.body.classList.remove('loading');
     }, 300);
+
     //NSFW Click Unlock
     setTimeout(function () {
         initNSFWHandlers();
+
         //MutationObserver
         const observer = new MutationObserver(function () {
             initNSFWHandlers();
         });
+
         observer.observe(document.body, {
             childList: true,
             subtree: true
         });
+
     }, 1000);
-    //Image Lozad
-    if (!document.getElementById('vue-app')) {
-        window.lozadObserver = initLozad();
-    }
 });
 
 //DOM Loaded
 document.addEventListener("DOMContentLoaded", function () {
     //Custom Redirect Buttons
     initRedirectButtons();
+    //初始化PrismJS
+    initPrism();
 });
 
 //Vue Loaded

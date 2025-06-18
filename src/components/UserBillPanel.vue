@@ -60,14 +60,7 @@ const sortedOrders = computed(() => {
 
 //订阅有效性状态消息
 const sponsor_level = computed(() => {
-    if (isLoggedIn) {
-        return {
-            title: t("bill_sub_inactive_status"),
-            description: "",
-            badge: "",
-            class: "hidden",
-        };
-    } else if (props.order_history.is_valid) {
+    if (props.order_history.is_valid) {
         return {
             title: t("bill_sub_activate_status"),
             description: t("bill_sub_activate_desc"),
@@ -82,12 +75,21 @@ const sponsor_level = computed(() => {
             class: "badge-error",
         };
     } else {
-        return {
-            title: t("bill_sub_inactive_status"),
-            description: t("bill_sub_inactive_desc"),
-            badge: t("bill_sub_inactive_badge"),
-            class: "badge-neutral",
-        };
+        if (!isLoggedIn) {
+            return {
+                title: t("bill_sub_inactive_status"),
+                description: t("bill_sub_inactive_desc"),
+                badge: t("bill_sub_inactive_badge"),
+                class: "badge-neutral",
+            };
+        } else {
+            return {
+                title: t("bill_sub_inactive_status"),
+                description: "",
+                badge: "",
+                class: "hidden",
+            };
+        }
     }
 });
 
