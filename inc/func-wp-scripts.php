@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 
 /*
  * ------------------------------------------------------------------------------
- * 静态文件注册和排队
+ * 后台静态文件注册
  * ------------------------------------------------------------------------------
  */
 
@@ -24,148 +24,261 @@ function aya_theme_register_login_scripts()
     wp_enqueue_style('aya-login-style', AYA_URI . '/assets/admin/css/admin.login.css', [], aya_theme_version(), 'all');
 }
 
+/*
+ * ------------------------------------------------------------------------------
+ * 前台外部静态文件排队
+ * ------------------------------------------------------------------------------
+ */
+
+//注册新的资源队列
+// add_action('after_setup_theme', 'aya_init_registered_assets');
+//外部资源加载打印位置
+// add_action('wp_head', 'aya_load_header_assets');
+// add_action('wp_footer', 'aya_load_footer_assets');
+
+//复制CDN资源到本地
 //wget -x -nH --cut-dirs=2 -P ./ https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.14.8/cdn.min.js
 
-//从CDN加载
-function aya_static_scripts_cdn()
+//切换CDN位置
+function aya_static_scripts_cdn($load_type)
 {
-    //获取主题设置
-    $load_type = aya_opt('site_scripts_load_type', 'basic');
-
-    //从CDN加载
     switch ($load_type) {
         case 'cdnjs':
-            $url_cdn = '//cdnjs.cloudflare.com/ajax/libs/';
+            $url_cdn = 'https://cdnjs.cloudflare.com/ajax/libs/';
             break;
         case 'zstatic':
-            $url_cdn = '//s4.zstatic.net/ajax/libs/';
+            $url_cdn = 'https://s4.zstatic.net/ajax/libs/';
             break;
         case 'bootcdn':
-            $url_cdn = '//cdn.bootcdn.net/ajax/libs/';
+            $url_cdn = 'https://cdn.bootcdn.net/ajax/libs/';
             break;
         case 'local':
         default:
-            $url_cdn = get_template_directory_uri() . '/assets/libs/';
+            $url_cdn = AYA_URI . '/assets/libs/';
             break;
     }
 
     return $url_cdn;
 }
 
-//模板script标签
-function aya_int_script($pack, $ver, $file, $defer)
+//预设全局变量存储加载队列
+function aya_init_registered_assets()
 {
-    $defer = ($defer) ? 'defer ' : '';
+    global $aya_preload_assets;
 
-    aya_echo('<script ' . $defer . 'src="' . aya_static_scripts_cdn() . $pack . '/' . $ver . '/' . $file . '"></script>' . PHP_EOL);
+    $aya_preload_assets = [
+        'styles' => [],
+        'header_scripts' => [],
+        'footer_scripts' => []
+    ];
 }
-//模板css标签
-function aya_int_style($pack, $ver, $file)
+
+//队列注册逻辑
+//Tips: 此函数仅用于工作在 wp_enqueue_scripts 钩子（即 wp_head 之前）
+function aya_register_assets($location = 'styles', $handle = 'null', $args = [])
 {
-    aya_echo('<link rel="stylesheet" href="' . aya_static_scripts_cdn() . $pack . '/' . $ver . '/' . $file . '">' . PHP_EOL);
-}
+    global $aya_preload_assets;
 
+    //内部查重
+    static $internal_assets = [];
 
-//排队后台静态文件
-//add_action('wp_head', 'aya_inc_load_head_scripts');
-//add_action('wp_footer', 'aya_inc_load_footer_scripts');
-
-//在head中加载
-function aya_inc_load_head_scripts()
-{
-    //使用自定义的方法加载静态文件
-    $load_js = array(
-        'aplayer' => array(
-            'pack' => 'aplayer',
-            'file' => 'APlayer.min.js',
-            'ver' => '1.10.1',
-        ),
-        'meting' => array(
-            'pack' => 'meting',
-            'file' => 'Meting.min.js',
-            'ver' => '2.0.1',
-        ),
-        'dplayer' => array(
-            'pack' => 'dplayer',
-            'file' => 'DPlayer.min.js',
-            'ver' => '1.27.1',
-        ),
-        'flv' => array(
-            'pack' => 'flv.js',
-            'file' => 'flv.min.js',
-            'ver' => '1.6.2',
-        ),
-        'hls' => array(
-            'pack' => 'hls.js',
-            'file' => 'hls.min.js',
-            'ver' => '1.5.1',
-        ),
-        'hls-light' => array(
-            'pack' => 'hls.js',
-            'file' => 'hls.light.min.js',
-            'ver' => '1.5.1',
-        ),
-        'marked' => array(
-            'pack' => 'marked',
-            'file' => 'marked.min.js',
-            'ver' => '13.0.3',
-        ),
-    );
-    $load_css = array(
-        [
-            'pack' => 'aplayer',
-            'file' => 'APlayer.min.css',
-            'ver' => '1.10.1',
-        ],
-    );
-    //循环打印
-    foreach ($load_js as $value) {
-        //aya_int_script($value['pack'], $value['ver'], $value['file'], false);
+    //检查是否已注册
+    if (isset($internal_assets[$handle])) {
+        return false;
     }
-    //循环打印
-    foreach ($load_css as $value) {
-        //aya_int_style($value['pack'], $value['ver'], $value['file']);
+
+    switch ($location) {
+        case 'styles':
+            $aya_preload_assets['styles'][$handle] = aya_parse_style($args);
+            break;
+        case 'header_scripts':
+            $aya_preload_assets['header_scripts'][$handle] = aya_parse_script($args);
+            break;
+        case 'footer_scripts':
+            $aya_preload_assets['footer_scripts'][$handle] = aya_parse_script($args);
+            break;
+        default:
+            return false; // 无效位置
     }
-    //设置版本
-    $main_pack_ver = (aya_is_dev_mode()) ? time() : aya_theme_version();
-    //主题样式表
-    aya_echo('<link rel="stylesheet" href="' . esc_url(get_template_directory_uri() . '/assets/dist/main.css?ver=' . $main_pack_ver) . '">' . PHP_EOL);
+
+    $internal_assets[$handle] = true;
+
+    return true;
 
 }
-//直接嵌入alpinejs和其他esm模块的标签结构
-function aya_inc_load_footer_scripts()
+
+//定义脚本资源包数据结构
+function aya_parse_script($args = [])
 {
-    //使用自定义的方法加载静态文件
-    $load_js = array(
-        [
-            'pack' => 'feather-icons',
-            'ver' => '4.29.2',
-            'file' => 'feather.min.js',
-            'defer' => false,
-        ],
-        [
-            'pack' => 'ionicons',
-            'ver' => '7.4.0',
-            'file' => 'ionicons.min.js',
-            'defer' => false,
-        ],
-        [
-            'pack' => 'masonry',
-            'ver' => '4.2.2',
-            'file' => 'masonry.pkgd.min.js',
-            'defer' => false,
-        ],
+    $defaults = [
+        'pack' => '',
+        'ver' => '',
+        'file' => '',
+        'integrity' => '', //SRI
+        'defer' => false,
+    ];
 
-    );
-    //循环打印
-    foreach ($load_js as $value) {
-        aya_int_script($value['pack'], $value['ver'], $value['file'], $value['defer']);
+    $args = wp_parse_args($args, $defaults);
+
+    if (empty($args['pack']) || empty($args['ver']) || empty($args['file'])) {
+        return false;
     }
-    //加载额外脚本
-    $add_scripts_filter = apply_filters('aya_int_add_scripts', '');
-    aya_echo($add_scripts_filter);
-    //主题脚本
-    $main_pack_ver = (aya_is_dev_mode()) ? time() : aya_theme_version();
-    //主题启动脚本
-    aya_echo('<script src="' . esc_url(get_template_directory_uri() . '/assets/src/alpine.init.js?ver=' . $main_pack_ver) . '"></script>' . PHP_EOL);
+
+    return $args;
 }
+
+//定义样式表资源包数据结构
+function aya_parse_style($args = [])
+{
+    $defaults = [
+        'pack' => '',
+        'ver' => '',
+        'file' => '',
+        'integrity' => '', //SRI
+    ];
+
+    $args = wp_parse_args($args, $defaults);
+
+    if (empty($args['pack']) || empty($args['ver']) || empty($args['file'])) {
+        return false;
+    }
+
+    return $args;
+}
+
+// /**
+//  * Load assets in header (styles and scripts)
+//  */
+// function aya_load_header_assets()
+// {
+//     global $aya_preload_assets;
+
+//     // Allow dynamic style additions via filter
+//     $list_styles = apply_filters('aya_registered_styles', $aya_registered_styles);
+//     // Allow dynamic script additions via filter
+//     $aya_registered_scripts = apply_filters('aya_registered_scripts', $aya_registered_scripts);
+
+//     $load_type = aya_opt('site_scripts_load_type', 'local');
+//     $is_external = ($load_type !== 'local');
+
+//     // Output styles
+//     if (!empty($aya_registered_styles)) {
+//         foreach ($aya_registered_styles as $style) {
+//             if ($style = aya_parse_style($style)) {
+//                 $integrity_attr = (!empty($style['integrity'])) ? 'integrity="' . esc_attr($style['integrity']) . '" ' : '';
+//                 $crossorigin = ($is_external) ? 'crossorigin="anonymous" ' : '';
+//                 $full_href = aya_static_scripts_cdn($load_type) . $style['pack'] . '/' . $style['ver'] . '/' . $style['file'];
+//                 aya_echo('<link rel="stylesheet" ' . $crossorigin . $integrity_attr . 'href="' . esc_url($full_href) . '" media="all">' . PHP_EOL);
+//             }
+//         }
+//     }
+
+//     // Output scripts
+//     if (!empty($aya_registered_scripts)) {
+//         foreach ($aya_registered_scripts as $script) {
+//             if ($script = aya_parse_script($script)) {
+//                 $integrity_attr = (!empty($script['integrity'])) ? 'integrity="' . esc_attr($script['integrity']) . '" ' : '';
+//                 $defer_attr = ($script['defer'] === true) ? 'defer ' : '';
+//                 $crossorigin = ($is_external) ? 'crossorigin="anonymous" ' : '';
+//                 $full_src = aya_static_scripts_cdn($load_type) . $script['pack'] . '/' . $script['ver'] . '/' . $script['file'];
+//                 aya_echo('<script ' . $defer_attr . $crossorigin . $integrity_attr . 'src="' . esc_url($full_src) . '"></script>' . PHP_EOL);
+//             }
+//         }
+//     }
+// }
+
+// /**
+//  * Load assets in footer (scripts only)
+//  */
+// function aya_load_footer_assets()
+// {
+//     global $aya_registered_footer_scripts;
+
+//     // Allow dynamic footer script additions via filter
+//     $aya_registered_footer_scripts = apply_filters('aya_registered_footer_scripts', $aya_registered_footer_scripts);
+
+//     $load_type = aya_opt('site_scripts_load_type', 'local');
+//     $is_external = ($load_type !== 'local');
+
+//     // Output footer scripts
+//     if (!empty($aya_registered_footer_scripts)) {
+//         foreach ($aya_registered_footer_scripts as $script) {
+//             if ($script = aya_parse_script($script)) {
+//                 $integrity_attr = (!empty($script['integrity'])) ? 'integrity="' . esc_attr($script['integrity']) . '" ' : '';
+//                 $defer_attr = ($script['defer'] === true) ? 'defer ' : '';
+//                 $crossorigin = ($is_external) ? 'crossorigin="anonymous" ' : '';
+//                 $full_src = aya_static_scripts_cdn($load_type) . $script['pack'] . '/' . $script['ver'] . '/' . $script['file'];
+//                 aya_echo('<script ' . $defer_attr . $crossorigin . $integrity_attr . 'src="' . esc_url($full_src) . '"></script>' . PHP_EOL);
+//             }
+//         }
+//     }
+// }
+
+// //初始化主题默认脚本队列
+
+
+
+// //在head中加载
+// function aya_inc_load_head_scripts()
+// {
+//     //使用自定义的方法加载静态文件
+//     $load_js = array(
+//         'aplayer' => array(
+//             'pack' => 'aplayer',
+//             'file' => 'APlayer.min.js',
+//             'ver' => '1.10.1',
+//         ),
+//         'meting' => array(
+//             'pack' => 'meting',
+//             'file' => 'Meting.min.js',
+//             'ver' => '2.0.1',
+//         ),
+//         'dplayer' => array(
+//             'pack' => 'dplayer',
+//             'file' => 'DPlayer.min.js',
+//             'ver' => '1.27.1',
+//         ),
+//         'flv' => array(
+//             'pack' => 'flv.js',
+//             'file' => 'flv.min.js',
+//             'ver' => '1.6.2',
+//         ),
+//         'hls' => array(
+//             'pack' => 'hls.js',
+//             'file' => 'hls.min.js',
+//             'ver' => '1.5.1',
+//         ),
+//         'hls-light' => array(
+//             'pack' => 'hls.js',
+//             'file' => 'hls.light.min.js',
+//             'ver' => '1.5.1',
+//         ),
+//         'marked' => array(
+//             'pack' => 'marked',
+//             'file' => 'marked.min.js',
+//             'ver' => '13.0.3',
+//         ),
+//     );
+//     $load_css = array(
+//         [
+//             'pack' => 'aplayer',
+//             'file' => 'APlayer.min.css',
+//             'ver' => '1.10.1',
+//         ],
+//     );
+//     $load_js = array(
+//         [
+//             'pack' => 'feather-icons',
+//             'ver' => '4.29.2',
+//             'file' => 'feather.min.js',
+//             'defer' => false,
+//         ],
+//         [
+//             'pack' => 'ionicons',
+//             'ver' => '7.4.0',
+//             'file' => 'ionicons.min.js',
+//             'defer' => false,
+//         ],
+
+//     );
+// }

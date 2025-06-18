@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 
 /*
  * ------------------------------------------------------------------------------
- * 订阅功能组件方法
+ * 订阅权限功能
  * ------------------------------------------------------------------------------
  */
 
@@ -46,9 +46,10 @@ function aya_install_sponsor_order_db()
 //添加赞助者订单
 function aya_sponsor_add_order($user_id, $order_id, $duration_days, $status, $source = '')
 {
-    global $wpdb;
-    //表名
-    $table = $wpdb->prefix . 'aya_sponsor_orders';
+    //验证用户ID存在
+    if (!is_numeric($user_id) || !get_userdata($user_id)) {
+        return new WP_Error('invalid_user', 'User ID is invalid');
+    }
 
     //验证天数有效性
     $duration_days = intval($duration_days);
@@ -57,6 +58,10 @@ function aya_sponsor_add_order($user_id, $order_id, $duration_days, $status, $so
         return new WP_Error('invalid_duration', 'Duration must be positive');
     }
 
+    global $wpdb;
+
+    //表名
+    $table = $wpdb->prefix . 'aya_sponsor_orders';
     // 计算最新有效期
     $now = current_time('timestamp');
     $current_expiration = aya_sponsor_get_expiration_time($user_id);
@@ -84,10 +89,87 @@ function aya_sponsor_add_order($user_id, $order_id, $duration_days, $status, $so
         return new WP_Error('db_error', $wpdb->last_error);
     }
 
-    //强制重新计算
+    //重新计算到期日
     $new_expiration = aya_sponsor_get_expiration_time($user_id);
     //缓存一条记录到用户Meta
     update_user_meta($user_id, 'sponsor_expiration', $new_expiration);
+
+    return true;
+}
+
+//简单查询订单是否存在，阻止重复插入
+function aya_sponsor_order_exists($order_id)
+{
+    global $wpdb;
+
+    //表名
+    $table = $wpdb->prefix . 'aya_sponsor_orders';
+
+    //查询订单号
+    $exists = $wpdb->get_var($wpdb->prepare(
+        "SELECT id FROM $table WHERE order_id = %s LIMIT 1",
+        $order_id
+    ));
+
+    return !empty($exists);
+}
+
+//订单状态更新
+function aya_sponsor_update_order_status($order_id, $new_status)
+{
+    global $wpdb;
+    $table = $wpdb->prefix . 'aya_sponsor_orders';
+
+    // 获取订单信息以获取用户ID
+    $order = $wpdb->get_row($wpdb->prepare(
+        "SELECT user_id FROM $table WHERE order_id = %s",
+        $order_id
+    ));
+
+    if (!$order) {
+        return new WP_Error('not_found', 'Order not found');
+    }
+
+    $result = $wpdb->update(
+        $table,
+        ['status' => $new_status],
+        ['order_id' => $order_id],
+        ['%s'],
+        ['%s']
+    );
+
+    if ($result === false) {
+        return new WP_Error('db_error', $wpdb->last_error);
+    }
+
+    // 重新计算到期时间并更新缓存
+    $user_id = $order->user_id;
+    $new_expiration = aya_sponsor_get_expiration_time($user_id);
+    update_user_meta($user_id, 'sponsor_expiration', $new_expiration);
+
+    return true;
+}
+
+//从兑换码等自助来源的订单激活（对当前用户）
+function aya_sponsor_key_activation($order_id, $order_days, $order_from)
+{
+    //查询当前用户
+    if (!is_user_logged_in()) {
+        return new WP_Error('not_logged_in', 'Please log in first');
+    }
+
+    $user_id = get_current_user_id();
+
+    $result = aya_sponsor_add_order($user_id, $order_id, intval($order_days), 'paid', $order_from);
+
+    //捕捉报错
+    if (is_wp_error($result)) {
+        //检查是否是订单重复错误
+        // if ($result->get_error_code() === 'duplicate_order') {
+        //     return false;
+        // }
+        return false;
+    }
 
     return true;
 }
@@ -100,7 +182,7 @@ function aya_sponsor_get_expiration_time($user_id)
     $table = $wpdb->prefix . 'aya_sponsor_orders';
 
     $orders = $wpdb->get_results($wpdb->prepare(
-        "SELECT start_time, duration_days FROM $table WHERE user_id = %d ORDER BY start_time ASC",
+        "SELECT start_time, duration_days FROM $table WHERE user_id = %d AND status = 'paid' ORDER BY start_time ASC",
         $user_id
     ), ARRAY_A);
 
@@ -113,6 +195,63 @@ function aya_sponsor_get_expiration_time($user_id)
     }
 
     return $expiration;
+}
+
+//获取用户历史赞助订单
+function aya_sponsor_get_user_orders($user_id = 0)
+{
+    if (!is_user_logged_in()) {
+        return false;
+    }
+
+    if (empty($user_id)) {
+        $user_id = get_current_user_id();
+    }
+
+    global $wpdb;
+
+    $table = $wpdb->prefix . 'aya_sponsor_orders';
+
+    $orders = $wpdb->get_results($wpdb->prepare(
+        "SELECT * FROM $table WHERE user_id = %d ORDER BY start_time DESC",
+        $user_id
+    ));
+
+    //如果没有订单，返回空数组
+    if (empty($orders)) {
+        return [];
+    }
+
+    //获取当前禁用状态
+    $force_cancel = get_user_meta($user_id, 'aya_force_cancel_sponsor', true);
+    //获取到期时间
+    $expiration = get_user_meta($user_id, 'sponsor_expiration', true);
+
+    //计算期时间和剩余天数
+    $now = current_time('timestamp');
+
+    $left_days = 0;
+    $is_valid = false;
+    $total_days = 0;
+
+    if ($expiration && $expiration > $now && $force_cancel != '1') {
+        $left_days = ceil(($expiration - $now) / 86400);
+        $is_valid = true;
+    }
+
+    //计算累计已赞助天数
+    foreach ($orders as $order) {
+        $total_days += intval($order->duration_days);
+    }
+
+    return [
+        'orders' => $orders,
+        'force_cancel' => $force_cancel,
+        'expiration' => $expiration,
+        'left_days' => $left_days,
+        'is_valid' => $is_valid,
+        'total_days' => $total_days,
+    ];
 }
 
 //获取用户赞助有效性
@@ -138,6 +277,35 @@ function aya_is_sponsor($user_id = 0)
     return ($expiration && $expiration > $now && $force_cancel != '1');
 }
 
+//尝试修复用户赞助数据
+function aya_sponsor_fix_user_data($user_id = 0, $review_cancel = false)
+{
+    if (empty($user_id)) {
+        return false;
+    }
+
+    //重新计算到期时间
+    $new_expiration = aya_sponsor_get_expiration_time($user_id);
+
+    //更新用户元数据
+    update_user_meta($user_id, 'sponsor_expiration', $new_expiration);
+
+    //移除强制取消标记
+    $force_cancel = get_user_meta($user_id, 'aya_force_cancel_sponsor', true);
+
+    if ($force_cancel == '1' && $new_expiration > current_time('timestamp')) {
+        if ($review_cancel) {
+            //取消强制取消标记
+            delete_user_meta($user_id, 'aya_force_cancel_sponsor');
+        } else {
+            //返回提示消息，用于后续处理
+            return 'The user id:' . $user_id . ' status has still valid. But has been forced to cancel.';
+        }
+    }
+
+    return true;
+}
+
 //在用户后台页面添加自定义区块
 add_action('show_user_profile', 'aya_sponsor_show_orders_user_profile');
 add_action('edit_user_profile', 'aya_sponsor_show_orders_user_profile');
@@ -150,38 +318,29 @@ function aya_sponsor_show_orders_user_profile($user)
     if (!current_user_can('manage_options')) {
         return;
     }
+    $order_query = aya_sponsor_get_user_orders($user->ID);
 
-    global $wpdb;
+    $orders = $order_query['orders'];
+    $force_cancel = $order_query['force_cancel'];
+    $left_days = $order_query['left_days'];
+    $is_valid = $order_query['is_valid'];
+    $total_days = $order_query['total_days'];
 
-    $table = $wpdb->prefix . 'aya_sponsor_orders';
+    // Get the current page URL to handle form submissions
+    $current_url = add_query_arg(array('user_id' => $user->ID), self_admin_url('user-edit.php'));
 
-    $orders = $wpdb->get_results($wpdb->prepare(
-        "SELECT * FROM $table WHERE user_id = %d ORDER BY start_time DESC",
-        $user->ID
-    ));
+    if (isset($_GET['fix_sponsor_data']) && $_GET['fix_sponsor_data'] == 1 && isset($_GET['user_id']) && $_GET['user_id'] == $user->ID) {
+        //恢复订阅
+        $review_cancel = (isset($_GET['review_cancel']) && $_GET['review_cancel'] == 1);
 
-    //获取当前禁用状态
-    $force_cancel = get_user_meta($user->ID, 'aya_force_cancel_sponsor', true);
-    //获取到期时间
-    $expiration = get_user_meta($user->ID, 'sponsor_expiration', true);
+        $fix_result = aya_sponsor_fix_user_data($user->ID, $review_cancel);
 
-    //计算期时间和剩余天数
-    $now = current_time('timestamp');
-
-    $left_days = 0;
-    $is_valid = false;
-    $total_days = 0;
-
-    if ($expiration && $expiration > $now && $force_cancel != '1') {
-        $left_days = ceil(($expiration - $now) / 86400);
-        $is_valid = true;
+        if ($fix_result === true) {
+            echo '<div class="updated"><p>' . __('用户订阅数据已修复', 'AIYA') . '</p></div>';
+        } elseif (is_string($fix_result)) {
+            echo '<div class="notice notice-warning"><p>' . esc_html($fix_result) . '</p></div>';
+        }
     }
-
-    //计算累计已赞助天数
-    foreach ($orders as $order) {
-        $total_days += intval($order->duration_days);
-    }
-
     //开始输出区块表单
     ?>
     <h2><?php _e('赞助者管理', 'AIYA'); ?></h2>
@@ -197,6 +356,17 @@ function aya_sponsor_show_orders_user_profile($user)
         <?php endif; ?>
     </p>
     <table class="form-table">
+        <tr>
+            <th><label><?php _e('重新验证订阅有效性', 'AIYA'); ?></label></th>
+            <td>
+                <a href="<?php echo esc_url(add_query_arg(array('fix_sponsor_data' => 1), $current_url)); ?>" class="button">
+                    <?php _e('重新计算到期日', 'AIYA'); ?>
+                </a>
+                <a href="<?php echo esc_url(add_query_arg(array('fix_sponsor_data' => 1, 'review_cancel' => 1), $current_url)); ?>" class="button" style="margin-left: 10px;">
+                    <?php _e('恢复赞助者权限', 'AIYA'); ?>
+                </a>
+            </td>
+        </tr>
         <tr>
             <th><label for="aya_force_cancel_sponsor"><?php _e('取消此用户赞助者权限', 'AIYA'); ?></label></th>
             <td>
@@ -246,8 +416,6 @@ function aya_sponsor_show_orders_user_profile($user)
 //用户后台页面区块数据保存
 function aya_sponsor_save_orders_user_profile($user_id)
 {
-    //if (!current_user_can('edit_user', $user_id)) return;
-
     if (!current_user_can('manage_options')) {
         return;
     }
@@ -263,9 +431,9 @@ function aya_sponsor_save_orders_user_profile($user_id)
         $days = intval($_POST['aya_admin_add_order_days']);
 
         //生成订单号
-        $order_id = 'system_' . wp_generate_password(4, false) . '_' . time();
+        $order_id = 'sys_' . time() . random_int(1000, 9999);
 
-        $result = aya_sponsor_add_order($user_id, $order_id, $days, 'unpaid', 'admin');
+        $result = aya_sponsor_add_order($user_id, $order_id, $days, 'paid', 'admin');
     }
     //捕捉报错
     if (is_wp_error($result)) {
@@ -279,6 +447,7 @@ function aya_sponsor_save_orders_user_profile($user_id)
  * ------------------------------------------------------------------------------
  */
 
+//取回收藏列表
 function aya_user_get_favorite_posts($user_id = 0)
 {
     if (!is_user_logged_in()) {
@@ -298,6 +467,39 @@ function aya_user_get_favorite_posts($user_id = 0)
     $query = new AYA_Query_Post();
 
     return $query->list_posts($favorites, ['post']);
+}
+
+//收藏列表数据查询结果
+function aya_user_favorite_posts_data()
+{
+    $favorites = aya_user_get_favorite_posts();
+    $the_posts = [];
+    $store_nonce = '';
+
+    if ($favorites !== false && is_array($favorites)) {
+        //循环查询结果
+        $the_posts = [];
+        foreach ($favorites as $post) {
+            $post = new AYA_Post_In_While($post);
+
+            $the_posts[$post->id] = [
+                'id' => $post->id,
+                'date' => $post->date,
+                'modified' => $post->modified,
+                'title' => $post->title,
+                'status' => $post->status,
+                'url' => $post->url,
+            ];
+        }
+        //交互功能安全参数
+        $store_nonce = aya_nonce_active_store();
+    }
+
+    return [
+        'ajax_url' => AYA_AJAX_URI,
+        'posts' => $the_posts,
+        'ajax_nonce' => $store_nonce
+    ];
 }
 
 //在用户后台页面添加自定义区块
@@ -438,9 +640,63 @@ function aya_user_get_login_data($logged_in = false)
         //获取站点设置是否允许注册
         $user_menu['enable_register'] = get_option('users_can_register') ? true : false;
         //TODO 社交登录
-        $user_menu['enable_sso_register'] = false; //aya_opt('allow_sso_register_switch');
+        $user_menu['enable_sso_register'] = false; //aya_opt('allow_sso_register_bool', 'access');
         $user_menu['rest_nonce'] = wp_create_nonce('wp_rest');
     }
 
     return $user_menu;
+}
+
+//收集可用的赞助方案列表
+function aya_sponsor_get_user_plan()
+{
+    $order_plan = [];
+
+    $order_plan = apply_filters('aya_sponsor_plan_add', $order_plan);
+
+    //防止过滤器操作出错，返回空数组阻止报错
+    if (!is_array($order_plan)) {
+        $order_plan = [];
+    }
+
+    return $order_plan;
+}
+
+//获取用户赞助方案数据
+function aya_user_sponsor_plan_data()
+{
+    //获取用户的赞助订单
+    $order_query = aya_sponsor_get_user_orders();
+
+    //未登录时取消数据加载
+    if ($order_query === false) {
+        //返回空的查询
+        return [
+            'from_source' => [],
+            'order_plan' => [],
+            'order_history' => [],
+            'rest_nonce' => '',
+        ];
+    }
+
+    //获取订阅支付方案列表
+    $order_plan = aya_sponsor_get_user_plan();
+
+    if (empty($order_query)) {
+    } else {
+        //计算到期时间戳为可读时间
+        $order_query['expiration'] = date_i18n('Y-m-d', $order_query['expiration']);
+        //被强制取消状态
+        $order_query['force_cancel'] = ($order_query['force_cancel'] === '1') ? true : false;
+    }
+
+    //系统可用的激活码来源
+    $code_from = aya_payment_allowable_activation_code();
+
+    return [
+        'from_source' => $code_from,
+        'order_plan' => $order_plan,
+        'order_history' => $order_query,
+        'rest_nonce' => wp_create_nonce('wp_rest'),
+    ];
 }

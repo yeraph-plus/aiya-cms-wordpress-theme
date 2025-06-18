@@ -72,7 +72,7 @@ AYF::new_opt([
                     'type' => 'hidden',
                     'default' => time(),
                 ],
-            ],
+            ]
         ],
 
     ]

@@ -38,31 +38,6 @@ function aya_theme_after_init()
  * -------------------s-----------------------------------------------------------
  */
 
-//独立页面路由参数
-$GLOBALS['aya_land_page'] = array(
-    //'URL路径' => array('template' => '模板路径','title' => '页面标题','orginal' => true/false在模板路由中是否加载页头页脚)
-    'go' => [
-        'title' => '跳转页面',
-        'template' => 'external-auto',
-        'orginal' => false,
-    ],
-    'link' => [
-        'title' => '外部链接',
-        'template' => 'external-link',
-        'orginal' => true,
-    ],
-    'favlist' => [
-        'title' => '收藏列表',
-        'template' => 'fav-list',
-        'orginal' => true,
-    ],
-    'sponsor' => [
-        'title' => '获取订阅',
-        'template' => 'sponsor-plan',
-        'orginal' => true,
-    ],
-);
-
 //初始化时增加重写路由规则
 add_action('init', 'aya_rewrite_base_rule');
 //重写author的链接

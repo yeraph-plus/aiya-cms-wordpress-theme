@@ -4,7 +4,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-
 if (is_admin()) {
     //初始化简码输入框组件按钮
     AYA_Shortcode::instance();
@@ -703,7 +702,7 @@ function aya_shortcode_sponsor_ship_content($atts = array(), $content = '')
             break;
         case 'guest':
         default:
-            $html .= '<div class="flex items-center gap-2 text-base-content">';
+            $html .= '<div class="flex items-center gap-2 text-primary">';
             $html .= __('仅限订阅用户可见，请登录后获取订阅。', 'AIYA');
             $html .= '<button type="button" class="btn btn-primary btn-sm" onclick="window.LoginAction && window.LoginAction.showLogin()">' . __('登录', 'AIYA') . '</button>';
             $html .= '</div>';

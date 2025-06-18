@@ -12,12 +12,12 @@ const props = defineProps({
         default: () => ({}),
         required: true,
     },
-    ajaxUrl: {
+    ajax_url: {
         type: String,
         default: "",
         required: true,
     },
-    nonce: {
+    ajax_nonce: {
         type: String,
         default: "",
         required: false,
@@ -29,7 +29,7 @@ const favoriteItems = ref<any[]>([]);
 const isLoading = ref(false);
 
 //计算属性
-const isLoggedIn = computed(() => props.nonce !== "");
+const isLoggedIn = computed(() => props.ajax_nonce !== "");
 const isEmpty = computed(() => favoriteItems.value.length === 0);
 
 //徽章状态映射
@@ -70,10 +70,10 @@ const removeFavorite = async (postId: string) => {
     try {
         const formData = new FormData();
         formData.append("action", "click_favorites");
-        formData.append("nonce", props.nonce);
+        formData.append("nonce", props.ajax_nonce);
         formData.append("post_id", postId);
 
-        const response = await fetch(props.ajaxUrl, {
+        const response = await fetch(props.ajax_url, {
             method: "POST",
             body: formData,
             credentials: "same-origin",
@@ -105,10 +105,10 @@ onMounted(() => {
 <template>
     <div class="bg-base-100 border border-base-300 rounded-lg">
         <div class="relative p-4 flex items-center">
-            <h1 class="text-xl md:text-2xl font-bold">
-                <InboxIcon class="inline w-6 h-6 mr-2" />
+            <h3 class="text-xl md:text-xl font-bold">
+                <InboxIcon class="inline size-6 mr-2" />
                 {{ t("my_favorites") }}
-            </h1>
+            </h3>
             <span
                 v-if="isLoggedIn && !isEmpty"
                 class="badge badge-primary ml-2">
@@ -116,13 +116,13 @@ onMounted(() => {
             </span>
         </div>
 
-        <div class="p-4 pt-0">
+        <div class="p-4 pt-0 space-y-4">
             <!-- is Logged -->
             <div
                 v-if="!isLoggedIn"
                 class="text-center py-10">
                 <div class="flex flex-col items-center justify-center gap-4">
-                    <HeartIcon class="w-16 h-16 text-base-300" />
+                    <HeartIcon class="size-16 text-base-300" />
                     <h3 class="text-xl font-semibold text-base-content/70">{{ t("please_login_first") }}</h3>
                     <p class="text-base-content/60">{{ t("login_to_view_favorites") }}</p>
                 </div>
@@ -138,7 +138,7 @@ onMounted(() => {
                 v-else-if="isEmpty"
                 class="text-center py-10">
                 <div class="flex flex-col items-center justify-center gap-4">
-                    <HeartIcon class="w-16 h-16 text-base-300" />
+                    <HeartIcon class="size-16 text-base-300" />
                     <h3 class="text-xl font-semibold text-base-content/70">{{ t("no_favorites_yet") }}</h3>
                     <p class="text-base-content/60">{{ t("browse_and_add_favorites") }}</p>
                 </div>
@@ -212,14 +212,14 @@ onMounted(() => {
                                     <a
                                         :href="item.url"
                                         class="btn btn-link btn-xs">
-                                        <ArrowRightIcon class="w-4 h-4" />
+                                        <ArrowRightIcon class="size-4" />
                                         {{ t("view_post") }}
                                     </a>
                                     <button
                                         @click="removeFavorite(item.id)"
-                                        class="btn btn-error btn-xs"
+                                        class="btn btn-secondary btn-xs"
                                         :disabled="isLoading">
-                                        <TrashIcon class="w-4 h-4" />
+                                        <TrashIcon class="size-4" />
                                         {{ t("remove_post") }}
                                     </button>
                                 </div>

@@ -351,6 +351,20 @@ function aya_local_path_with_url($path_or_url, $reverse = true)
     }
 }
 
+//提取URL字符串参数
+function aya_extract_url_query($url, $key)
+{
+    //查询URL字符串提取参数值
+    parse_str(parse_url($url, PHP_URL_QUERY), $params);
+
+    //检查是否有指定参数
+    if (isset($params[$key])) {
+        return $params[$key];
+    }
+
+    return false;
+}
+
 //SQL计数器
 function aya_sql_counter()
 {

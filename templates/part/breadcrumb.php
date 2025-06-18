@@ -4,13 +4,14 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+//预定义数据
+$items = aya_get_breadcrumb();
+
 //隐藏首页
-if (aya_is_where() == 'home') {
+if (count($items) <= 1) {
     return '';
 }
 
-//预定义数据
-$items = aya_get_breadcrumb();
 ?>
 <div class="breadcrumbs text-sm pb-4 overflow-hidden" aria-label="Breadcrumb">
     <ul itemscope itemtype="https://schema.org/BreadcrumbList">

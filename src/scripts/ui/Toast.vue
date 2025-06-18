@@ -71,7 +71,9 @@ onMounted(() => {
         <div
             v-if="visible"
             class="toast toast-end toast-bottom z-50">
-            <div :class="['alert', toastClass]">
+            <div
+                :class="['alert', toastClass]"
+                class="text-white">
                 <component
                     :is="toastIcon"
                     class="size-6 shrink-0 stroke-current" />

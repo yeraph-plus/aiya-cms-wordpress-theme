@@ -9,10 +9,12 @@ aya_require('autoload', 'vendor');
 //加载引用组件
 aya_require('BFI_Thumb', 'lib');
 aya_require('XDeode', 'lib');
+aya_require('Http_Request', 'lib');
+aya_require('Afdian_API', 'lib');
+//加载其他工具类
 aya_require('Plugin_RecordVisitors', 'core');
 aya_require('Plugin_UserAjaxActiveStore', 'core');
 aya_require('Plugin_CommentsAjaxFrom', 'core');
-//加载其他工具类
 aya_require('WP_Breadcrumb', 'core');
 aya_require('WP_Menu', 'core');
 aya_require('WP_Paged', 'core');
@@ -123,7 +125,7 @@ function aya_chs_type_setting($content, $correct_array)
     return $formatted_content;
 }
 
-//应用拼音转 SLUG 换实例
+//应用拼音转换 SLUG 实例
 function aya_pinyin_permalink($slug, $abbr = false)
 {
     //传入如果不是字符串

@@ -431,7 +431,7 @@ onUnmounted(() => {
                         </div>
 
                         <div
-                            class="text-base p-4"
+                            class="prose prose-base p-4 max-w-none"
                             v-html="post.content">
                         </div>
 

@@ -27,10 +27,16 @@ if (!defined('ABSPATH')) {
  *
  */
 
+//目录定位
 define('AYA_PATH', get_template_directory());
 define('AYA_URI', get_template_directory_uri());
+define('AYA_AJAX_URI', admin_url('admin-ajax.php'));
+//隐藏DEBUG组件
 // define('AYA_RELEASE', true);
+//缓存时间
 //define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); // or MINUTE_IN_SECONDS
+//浏览量倍率作弊
+//define('AYA_MODIFY_VISITORS', 10);
 
 /*
  * ------------------------------------------------------------------------------
@@ -51,11 +57,36 @@ function aya_require($name, $path = '', $special = false)
         require_once $req_file;
     } else {
         //打印一个报错
-        if (defined('WP_DEBUG') && WP_DEBUG) {
+        if (defined('WP_DEBUG') && WP_DEBUG && !$special) {
             print ("[WARNING] Require file not found: $req_file");
         }
     }
 }
+
+//独立页面路由参数
+$GLOBALS['aya_land_page'] = array(
+    //'URL路径' => array('template' => '模板路径','title' => '页面标题','orginal' => true/false在模板路由中是否加载页头页脚)
+    'go' => [
+        'title' => '跳转页面',
+        'template' => 'external-auto',
+        'orginal' => false,
+    ],
+    'link' => [
+        'title' => '外部链接',
+        'template' => 'external-link',
+        'orginal' => true,
+    ],
+    'favlist' => [
+        'title' => '收藏列表',
+        'template' => 'fav-list',
+        'orginal' => true,
+    ],
+    'sponsor' => [
+        'title' => '获取订阅',
+        'template' => 'sponsor-plan',
+        'orginal' => true,
+    ],
+);
 
 //加载预置插件
 aya_require('functions', 'plugins', 1);
@@ -88,11 +119,13 @@ aya_require('func-notify');
 aya_require('func-template');
 //接口方法
 aya_require('func-api-router');
+aya_require('func-payment');
 //设置页面
 aya_require('opt-basic', 'settings');
 aya_require('opt-land', 'settings');
 aya_require('opt-notify', 'settings');
 aya_require('opt-automatic', 'settings');
+aya_require('opt-access', 'settings');
 //aya_require('opt-ads', 'settings');
 //小工具
 // aya_require('widget-text-html', 'widgets');
@@ -100,7 +133,7 @@ aya_require('opt-automatic', 'settings');
 // aya_require('widget-comments', 'widgets');
 // aya_require('widget-post-comments', 'widgets');
 // aya_require('widget-post-views', 'widgets');
-// //aya_require('widget-post-custom', 'widgets');
+// aya_require('widget-post-custom', 'widgets');
 // aya_require('widget-post-newest', 'widgets');
 // aya_require('widget-post-random', 'widgets');
 // aya_require('widget-author', 'widgets');
@@ -110,8 +143,6 @@ aya_require('opt-automatic', 'settings');
 //短代码工具
 aya_require('code-basic', 'shotcodes');
 //aya_require('code-hilight', 'shotcodes');
-//aya_require('code-clipboard', 'shotcodes');
-//aya_require('code-collapse', 'shotcodes');
 //aya_require('code-aplayer', 'hotcodes');
 //aya_require('code-dplayer', 'shotcodes');
 
@@ -142,6 +173,8 @@ AYP::action('PluginCheck', array(
 AYP::action('After_Setup_Theme', array(
     //将默认的帖子和评论RSS提要链接添加到<head>
     'automatic-feed-links' => '',
+    //支持 BuddyPress 主题
+    'buddypress' => '',
     //支持标签
     'title-tag' => '',
     //支持菜单

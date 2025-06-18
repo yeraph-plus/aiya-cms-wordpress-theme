@@ -22,8 +22,6 @@ $post_id = $post->ID;
 $comments_number = get_comments_number($post);
 $comments_open = comments_open($post_id);
 $comment_settings = aya_get_comments_settings();
-
-$ajax_url = admin_url('admin-ajax.php');
 ?>
 <div id="comments" class="comments-area bg-base-100 border border-base-300 rounded-lg p-4">
     <h3 class="comments-title text-lg font-bold mb-4">
@@ -59,7 +57,7 @@ $ajax_url = admin_url('admin-ajax.php');
         <?php else: ?>
         <?php endif; ?>
         <?php aya_vue_load('comment', [
-            'ajax-url' => $ajax_url,
+            'ajax-url' => AYA_AJAX_URI,
             'post-id' => $post_id,
             'comments-num' => $comments_number,
             'comments-open' => $comments_open,
