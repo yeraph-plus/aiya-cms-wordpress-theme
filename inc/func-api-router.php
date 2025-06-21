@@ -247,8 +247,26 @@ $api->register_route('forgot_password', [
     ]
 ]);
 
+//基于 Hybridauth 的 OAuth 授权接口
+$api->register_route('hybridauth/auth', [
+    'methods' => ['GET', 'POST'],
+    'callback' => function (WP_REST_Request $request) use ($api) {
+        //获取nonce参数
+        $nonce = $request->get_header('X-WP-Nonce');
+        //验证nonce
+        if (!wp_verify_nonce($nonce, 'wp_rest')) {
+            return $api->error_response('permission_denied', ['detail' => __('客户端已失效，请刷新页面后重试', 'AIYA')]);
+        }
+
+        return; //handle_hybridauth_oauth();
+    },
+    'permission_callback' => function () {
+        return true;
+    }
+]);
+
 //赞助者订单自助激活逻辑
-$api->register_route('sponsor_activate_by_code', [
+$api->register_route('sponsor_activate', [
     'methods' => 'POST',
     'callback' => function (WP_REST_Request $request) use ($api) {
         //获取nonce参数
@@ -262,51 +280,33 @@ $api->register_route('sponsor_activate_by_code', [
         $order_by = $request->get_param('order_by');
         $order = $request->get_param('order');
 
-        if (empty($order_by)) {
+        //订单查询接口函数名单
+        $allowed_order_by = ['code', 'afdian', 'patreon', 'mbd', 'kofi', 'gumroad'];
+
+        if (empty($order_by) || !in_array($order_by, $allowed_order_by)) {
             return $api->error_response('invalid_param', ['detail' => __('未定义的接口', 'AIYA')]);
         }
 
-        //爱发电订单查询
-        if ($order_by === 'afdian') {
-            //接口地址不可用
-            if (aya_afdian_ping_server() === false) {
-                return $api->error_response('server_error', ['detail' => __('爱发电接口不可用，请联系管理员', 'AIYA')]);
-            }
+        //调用接口函数
+        $verify_func = 'aya_verify_code_by_' . $order_by;
+        /**
+         * TIPS 此处返回 [ 'status' => (bool), 'detail' =>'', ] 结构的数组简化定义
+         */
+        if (function_exists($verify_func)) {
+            $verify = call_user_func($verify_func, $order);
+        } else {
+            $verify = ['status' => false, 'detail' => __('系统错误', 'AIYA')];
+        }
 
-            //检查订单是否存在
-            if (aya_sponsor_order_exists('afd_' . $order)) {
-                return $api->error_response('server_error', ['detail' => __('此订单已被激活过了，请查看订单记录', 'AIYA')]);
-            }
-
-            //发起查询
-            $afd_order = aya_afdian_query_order($order);
-
-            //查询失败
-            if ($afd_order === false) {
-                return $api->error_response('server_error', ['detail' => __('没有查询到订单，请确认订单号是否正确，或于爱发电平台私信作者询问', 'AIYA')]);
-            }
-
-            //查询成功
-            $activate_order = 'afd_' . $afd_order['out_trade_no']; //order id
-    
-            //创建系统内赞助者激活
-            $activate_days = intval($afd_order['month']) * 31; //days
-    
-            $result = aya_sponsor_key_activation($activate_order, $activate_days, 'afdian');
-
+        if ($verify['status']) {
             //处理完成
             return $api->response([
                 'message' => __('订单激活成功', 'AIYA'),
-                'order_info' => [
-                    '订单号：' . $afd_order['out_trade_no'],
-                    '赞助方案：' . $afd_order['plan_title'],
-                    '赞助周期：' . $afd_order['month'] . '个月',
-                    '金额：' . $afd_order['show_amount'] . '（折后 ' . $afd_order['total_amount'] . ' ）',
-                    '留言：' . (!empty($afd_order['remark']) ? $afd_order['remark'] : '无'),
-                    '兑换码：' . (!empty($afd_order['redeem_id']) ? $afd_order['redeem_id'] : '无'),
-                    '刷新页面即可查看激活记录'
-                ]
+                'description' => $verify['detail']
             ]);
+        } else {
+            //查询失败
+            return $api->error_response('verify_failed', ['detail' => $verify['detail']]);
         }
     },
     'permission_callback' => function () {

@@ -410,14 +410,12 @@ onUnmounted(() => {
                 </select>
             </div>
         </div>
-
         <div
             v-if="isLoading"
             class="flex justify-center items-center py-12">
             <span class="loading loading-spinner loading-lg text-primary"></span>
             <span class="ml-2"> LOADING... </span>
         </div>
-
         <!-- List -->
         <div v-else-if="posts.length > 0">
             <MasonryLayout
@@ -429,12 +427,10 @@ onUnmounted(() => {
                         <div class="flex justify-start items-center text-sm text-gray-500 px-4 py-2 border-b border-base-300">
                             <span> PID-{{ post.id }}#{{ formatDate(post.created_at) }} </span>
                         </div>
-
                         <div
-                            class="prose prose-base p-4 max-w-none"
+                            class="prose prose-base p-4 max-w-none overflow-hidden whitespace-pre-wrap break-words"
                             v-html="post.content">
                         </div>
-
                         <div
                             v-if="post.tags && post.tags.length > 0"
                             class="flex flex-wrap gap-1 p-4">
@@ -446,7 +442,6 @@ onUnmounted(() => {
                                 #{{ tag }}#
                             </span>
                         </div>
-
                         <div class="flex justify-start gap-2 px-4 py-2">
                             <button
                                 class="btn btn-sm btn-outline gap-1"
@@ -469,7 +464,6 @@ onUnmounted(() => {
                     </div>
                 </template>
             </MasonryLayout>
-
             <!-- Load More -->
             <div class="mt-8 text-center">
                 <div
@@ -498,7 +492,6 @@ onUnmounted(() => {
                 </div>
             </div>
         </div>
-
         <!-- NULL -->
         <div
             v-else

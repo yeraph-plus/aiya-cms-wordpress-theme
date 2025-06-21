@@ -169,24 +169,15 @@ export function handleLoading() {
 }
 
 //切换默认初始化配置
-export function getAppConfig(element) {
+export function getAppConfig() {
     const defaultConfig = {
         defaultDarkMode: false,
         defaultSitebarClose: false,
     };
 
-    if (!element) return defaultConfig;
-
-    try {
-        //解析 data-config 属性
-        const dataConfig = element.dataset.config;
-        if (!dataConfig) return defaultConfig;
-
-        const parsedConfig = JSON.parse(dataConfig);
-
-        return { ...defaultConfig, ...parsedConfig };
-    } catch (e) {
-        console.error('配置解析错误:', e);
+    if (window.AIYACMS_CONFIG) {
+        return { ...defaultConfig, ...window.AIYACMS_CONFIG };
+    } else {
         return defaultConfig;
     }
 }

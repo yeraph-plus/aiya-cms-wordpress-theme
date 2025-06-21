@@ -53,10 +53,10 @@ export default class PrismJSPlugin {
     }
 }
 
-export function initPrism(selector: string = '.article-content'): void {
+export function initPrism(): void {
 
     //只在文章页面触发初始化
-    if (document.getElementsByClassName(selector)) {
+    if (document.getElementsByClassName('.article-content')) {
         new PrismJSPlugin();
     }
 }

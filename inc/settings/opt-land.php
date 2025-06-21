@@ -4,7 +4,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-
 //创建主题设置
 AYF::new_opt([
     'title' => '首页组件',

@@ -32,7 +32,7 @@ define('AYA_PATH', get_template_directory());
 define('AYA_URI', get_template_directory_uri());
 define('AYA_AJAX_URI', admin_url('admin-ajax.php'));
 //隐藏DEBUG组件
-// define('AYA_RELEASE', true);
+//define('AYA_RELEASE', true);
 //缓存时间
 //define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); // or MINUTE_IN_SECONDS
 //浏览量倍率作弊
@@ -89,7 +89,7 @@ $GLOBALS['aya_land_page'] = array(
 );
 
 //加载预置插件
-aya_require('functions', 'plugins', 1);
+aya_require('functions', 'plugins', true);
 
 //检查主题框架并拦截WP加载，防止严重报错
 if (!class_exists('AYF') || !class_exists('AYP')) {
@@ -103,7 +103,7 @@ if (!class_exists('AYF') || !class_exists('AYP')) {
         exit;
     }
 
-    return;
+    return aya_magic();
 }
 
 //主题方法

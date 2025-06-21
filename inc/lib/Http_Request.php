@@ -7,12 +7,14 @@ if (!defined('ABSPATH')) {
 /**
  * 标准 Curl 请求类
  * 
- * Author Yeraph.
- * Version 1.0
+ * Author: Yeraph Studio
+ * Author URI: http://www.yeraph.com/
+ * License: GPLv3
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
+ *
+ * @version 1.0
  * 
- * https://www.yeraph.com/
- * 
- */
+ **/
 
 if (!class_exists('AYA_HTTP_Request')) {
     class AYA_HTTP_Request

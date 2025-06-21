@@ -10,17 +10,47 @@ if (!defined('ABSPATH')) {
  * ------------------------------------------------------------------------------
  */
 
-//预设系统可用的赞助者激活码来源
-function aya_payment_allowable_activation_code()
+//收集可用的赞助者激活码来源
+function aya_payment_sponsor_activation_code()
 {
-    return [
-        'afdian',
-        //'code',
-        //'mbd',
-        //'gumroad',
-        //'patreon',
-        //'kofi',
-    ];
+    $order_code_from = [];
+    $order_code_from = apply_filters('aya_add_sponsor_from', $order_code_from);
+
+    //清理重复
+    $order_code_from = array_unique($order_code_from);
+
+    return $order_code_from;
+}
+
+//收集可用的赞助方案列表
+function aya_payment_sponsor_order_plan()
+{
+    $order_plan = [];
+
+    $order_plan = apply_filters('aya_add_sponsor_plan', $order_plan);
+
+    //防止过滤器操作出错，返回空数组阻止报错
+    if (!is_array($order_plan)) {
+        $order_plan = [];
+    }
+
+    return $order_plan;
+}
+//写入日志文件
+function aya_payment_callback_save_log($log_name, $log_data)
+{
+    //日志目录
+    $log_dir = aya_local_mkdir('/webhook_logs');
+    $today = date('Y-m-d');
+
+    //文件名加盐
+    $rand_name = substr(md5($today . AUTH_SALT), 0, 6);
+
+    $log_file = $log_dir . '/webhook-' . $today . '-' . $rand_name . '.log';
+
+    $log_content = date('[Y-m-d H:i:s]') . ' ' . $log_name . PHP_EOL . $log_data . PHP_EOL . PHP_EOL;
+
+    file_put_contents($log_file, $log_content, FILE_APPEND);
 }
 
 /*
@@ -31,9 +61,9 @@ function aya_payment_allowable_activation_code()
 
 //在REST-API中响应爱发电的 WebHook 接口
 add_action('rest_api_init', 'aya_register_afdian_api_routes', 10, 0);
-add_filter('rest_authentication_errors', 'aya_disable_afdian_nonce_check', 99);
 //在系统中添加爱发电赞助计划
-add_filter('aya_sponsor_plan_add', 'aya_add_afdian_sponsor_plans', 10);
+add_filter('aya_add_sponsor_from', 'aya_add_afdian_order_activate', 10);
+add_filter('aya_add_sponsor_plan', 'aya_add_afdian_sponsor_plans', 10);
 
 //爱发电链接
 function aya_get_afdian_link()
@@ -171,7 +201,7 @@ function aya_afdian_query_sponsor_list($page = 1, $per_page = 50)
     return $result;
 }
 
-//爱发电订单创建系统内赞助者激活
+//爱发电订单回调自动创建系统内赞助者激活
 function aya_afdian_callback_auto_activation($order)
 {
     //查询成功，创建系统内赞助者激活
@@ -197,10 +227,10 @@ function aya_afdian_callback_auto_activation($order)
     return 'The order:"' . $order['out_trade_no'] . '" has been entered repeatedly.';
 }
 
-//用于回调爱发电 WebHook 数据的 REST-API 路由
+//用于回调爱发电 WebHook 数据的 REST-API 接口
 function aya_register_afdian_api_routes()
 {
-    register_rest_route('afdian', 'response', [
+    register_rest_route('afdian', 'callbacks', [
         'methods' => 'POST',
         'callback' => function ($request) {
             // 接收POST数据
@@ -211,14 +241,7 @@ function aya_register_afdian_api_routes()
             //记录接收到的数据以便调试
             if ($need_save_log) {
                 //日志目录
-                $log_dir = aya_local_mkdir('/afdian_logs');
-                //补充文件名随机编码
-                $rand_name = wp_generate_password(6, false);
-
-                $log_file = $log_dir . '/webhook-' . date('Y-m-d') . '-' . $rand_name . '.log';
-                $log_content = date('[Y-m-d H:i:s]') . " Afdian API received data:\n" . $post_data . "\n\n";
-
-                file_put_contents($log_file, $log_content, FILE_APPEND);
+                aya_payment_callback_save_log('Afdian API received data:', $post_data);
             }
 
             //处理数据
@@ -232,8 +255,8 @@ function aya_register_afdian_api_routes()
                     $activation_to = aya_afdian_callback_auto_activation($order_data);
 
                     if ($need_save_log) {
-                        $log_content = date('[Y-m-d H:i:s]') . $activation_to . "\n\n";
-                        file_put_contents($log_file, $log_content, FILE_APPEND);
+                        //日志目录
+                        aya_payment_callback_save_log('', $activation_to);
                     }
                 }
             }
@@ -252,18 +275,30 @@ function aya_register_afdian_api_routes()
 }
 
 //取消爱发电回调接口的Cookie验证
-function aya_disable_afdian_nonce_check($errors)
-{
+add_filter('rest_authentication_errors', function ($errors) {
     //获取当前请求的路径
     $request_uri = $_SERVER['REQUEST_URI'];
-
     //检查请求
-    if (strpos($request_uri, '/api/afdian/response') !== false) {
-        //对爱发电发回的webhook请求，跳过Cookie认证
+    if (strpos($request_uri, '/api/afdian/callbacks') !== false) {
+        //始终响应爱发电发回的webhook请求，跳过Cookie认证
         return true;
     }
 
     return $errors;
+}, 99);
+
+//允许爱发电赞助订单号激活
+function aya_add_afdian_order_activate($code_from)
+{
+    //启用爱发电订阅接入
+    $afd_home = aya_get_afdian_home_link();
+    //只有设置了主页时启用接口
+    if ($afd_home !== false) {
+
+        $code_from[] = 'afdian';
+    }
+
+    return $code_from;
 }
 
 //爱发电赞助方案数据
@@ -276,7 +311,6 @@ function aya_add_afdian_sponsor_plans()
 
     //只有设置了主页时启用接口
     if ($afd_home !== false) {
-
         //爱发电主页链接
         $afd_order_plan['afdian'] = [
             'name' => __('查看爱发电创作者主页', 'AIYA'),
@@ -345,4 +379,60 @@ function aya_add_afdian_sponsor_plans()
     }
 
     return $afd_order_plan;
+}
+
+//爱发电接口订单查询逻辑
+function aya_verify_code_by_afdian($order_id)
+{
+    //接口地址不可用
+    if (aya_afdian_ping_server() === false) {
+        return [
+            'status' => false,
+            'detail' => __('爱发电接口不可用，请联系管理员', 'AIYA'),
+        ];
+    }
+
+    //检查订单是否存在
+    if (aya_sponsor_order_exists('afd_' . $order_id)) {
+        return [
+            'status' => false,
+            'detail' => __('此订单已被激活过了，请查看订单记录', 'AIYA'),
+        ];
+    }
+
+    //发起查询
+    $afd_order = aya_afdian_query_order($order_id);
+
+    //查询失败
+    if ($afd_order === false) {
+        return [
+            'status' => false,
+            'detail' => __('没有查询到订单，请确认订单号是否正确，或于爱发电平台私信作者询问', 'AIYA'),
+        ];
+    }
+
+    //查询成功
+    $activate_order = 'afd_' . $afd_order['out_trade_no']; //order id
+
+    //创建系统内赞助者激活
+    $activate_days = intval($afd_order['month']) * 31; //days
+
+    $result = aya_sponsor_key_activation($activate_order, $activate_days, 'afdian');
+
+    //合并订单信息
+    $order_info = '<br>';
+    $order_info .= '订单号：' . $afd_order['out_trade_no'] . '<br>';
+    $order_info .= '赞助方案：' . $afd_order['plan_title'] . '<br>';
+    $order_info .= '赞助周期：' . $afd_order['month'] . '个月<br>';
+    $order_info .= '金额：' . $afd_order['show_amount'] . '（折后 ' . $afd_order['total_amount'] . ' ）<br>';
+    $order_info .= '留言：' . (!empty($afd_order['remark']) ? $afd_order['remark'] : '无') . '<br>';
+    $order_info .= '兑换码：' . (!empty($afd_order['redeem_id']) ? $afd_order['redeem_id'] : '无') . '<br>';
+
+    $success = ($result) ? __('刷新页面即可查看激活记录', 'AIYA') : __('当前无法创建激活，稍后重试', 'AIYA');
+
+    //返回订单信息
+    return [
+        'status' => $result,
+        'detail' => $success . $order_info,
+    ];
 }

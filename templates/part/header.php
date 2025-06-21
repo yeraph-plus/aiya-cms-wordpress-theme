@@ -33,6 +33,9 @@ $app_config = [
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <meta http-equiv="Cache-Control" content="private">
+    <script>
+        window.AIYACMS_CONFIG = <?php echo json_encode($app_config); ?>;
+    </script>
     <?php wp_head(); ?>
 </head>
 
@@ -42,7 +45,7 @@ $app_config = [
     <?php aya_template_load('units/screen-loader'); ?>
     <?php wp_body_open(); ?>
     <?php aya_home_open(); ?>
-    <div id="vue-app" class="min-h-screen overflow-hidden" style="visibility: hidden" data-config="<?php aya_echo(aya_vue_json_encode($app_config)); ?>">
+    <div id="vue-app" class="min-h-screen overflow-hidden" style="visibility: hidden">
         <!-- Mobile Sidebar Mask -->
         <div v-if="!sidebarToggle && isMobile" @click="sidebarToggle = false" class="fixed md:hidden inset-0 bg-base-300/30 backdrop-blur-sm transition-all duration-300 ease-in-out z-20"></div>
         <!-- Topbar -->

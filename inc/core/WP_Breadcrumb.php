@@ -88,7 +88,54 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
                 }
             } elseif (is_singular()) {
                 // 单页内容 (文章、页面、自定义文章类型)
-                if (is_single()) {
+                if (is_attachment()) {
+                    // 处理附件页面
+                    $attachment = get_queried_object();
+
+                    // 获取附件的父级内容
+                    $parent_id = $attachment->post_parent;
+                    if ($parent_id > 0) {
+                        $parent = get_post($parent_id);
+
+                        // 如果父级是标准文章，添加分类路径
+                        if ($parent->post_type === 'post') {
+                            $cats = get_the_category($parent->ID);
+                            if (!empty($cats)) {
+                                $cat = $cats[0];
+                                $ancestors = array_reverse(get_ancestors($cat->term_id, 'category'));
+                                foreach ($ancestors as $ancestor_id) {
+                                    $ancestor = get_category($ancestor_id);
+                                    $items[] = [
+                                        'label' => $ancestor->name,
+                                        'url' => get_category_link($ancestor),
+                                    ];
+                                }
+                                $items[] = [
+                                    'label' => $cat->name,
+                                    'url' => get_category_link($cat),
+                                ];
+                            }
+                        }
+
+                        // 添加父级内容
+                        $items[] = [
+                            'label' => get_the_title($parent),
+                            'url' => get_permalink($parent),
+                        ];
+                    } else {
+                        // 如果没有父级，添加"媒体"标签
+                        $items[] = [
+                            'label' => __('媒体库', 'AIYA'),
+                            'url' => '',
+                        ];
+                    }
+
+                    // 添加当前附件
+                    $items[] = [
+                        'label' => get_the_title($attachment),
+                        'url' => get_permalink($attachment),
+                    ];
+                } elseif (is_single()) {
                     // 普通文章和自定义文章类型
                     $post = get_queried_object();
                     $post_type = get_post_type();
@@ -190,11 +237,16 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
 
             return $items;
         }
+
         //递归分类法和分类法父级
         private static function add_term_ancestors(&$items)
         {
             $term = get_queried_object();
-            if ($term && $term->parent) {
+            if (!$term || !is_object($term) || !isset($term->taxonomy)) {
+                return;
+            }
+
+            if ($term->parent) {
                 $ancestors = array_reverse(get_ancestors($term->term_id, $term->taxonomy));
                 foreach ($ancestors as $ancestor_id) {
                     $ancestor = get_term($ancestor_id, $term->taxonomy);

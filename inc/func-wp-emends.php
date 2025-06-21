@@ -38,6 +38,13 @@ function aya_theme_after_init()
  * -------------------s-----------------------------------------------------------
  */
 
+function aya_rewrite_home_url($slug = '')
+{
+    // 使用当前请求的域名和协议，而不是固定的 home_url
+    $current_url_base = get_site_url(null, '', is_ssl() ? 'https' : 'http');
+    return $current_url_base . $slug;
+}
+
 //初始化时增加重写路由规则
 add_action('init', 'aya_rewrite_base_rule');
 //重写author的链接

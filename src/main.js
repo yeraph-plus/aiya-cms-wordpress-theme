@@ -11,8 +11,10 @@ import { createI18n } from 'vue-i18n';
 import messages from "./i18n";
 //Debug工具
 import { VueDebugTools } from "./scripts/debug";
+//页面挂载
 import { initPrism } from './scripts/prismjs-plugin';
 import { initLozad } from './scripts/lozad-plugin';
+import { initLightbox } from './scripts/swiper-plugin';
 //导入初始化函数
 import {
     initThemeSwitch,
@@ -84,29 +86,27 @@ for (const el of document.getElementsByClassName('vue-app')) {
 //实例化
 const vueAppEl = document.getElementById('vue-app');
 
-//读取配置
-const config = getAppConfig(vueAppEl);
-
-window.appConfig = config;
-
 if (vueAppEl) {
     const app = createApp({
         template: vueAppEl.innerHTML,
         components,
         data() {
+            //读取配置
+            const appConfig = getAppConfig();
             const currentIsMobile = isMobile();
             //计算初始侧边栏状态
-            const initialSidebarState = currentIsMobile ? false : !config.defaultSitebarClose;
+            const initialSidebarState = currentIsMobile ? false : !appConfig.defaultSitebarClose;
             //打印配置参数调试
-            //console.log('config:', config);
+            console.log('appConfig:', appConfig);
 
             return {
                 isMobile: currentIsMobile,
                 sidebarToggle: initialSidebarState,
-                defaultDarkMode: config.defaultDarkMode,
-                defaultSitebarClose: config.defaultSitebarClose,
+                defaultDarkMode: appConfig.defaultDarkMode,
+                defaultSitebarClose: appConfig.defaultSitebarClose,
             }
         },
+
         created() {
             //监听 resize 变化
             isMobile.onChange(mobileState => {
@@ -174,6 +174,8 @@ document.addEventListener("DOMContentLoaded", function () {
     initRedirectButtons();
     //初始化PrismJS
     initPrism();
+    //初始化Swiper
+    initLightbox();
 });
 
 //Vue Loaded

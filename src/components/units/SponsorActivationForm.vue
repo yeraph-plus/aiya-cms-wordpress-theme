@@ -29,7 +29,7 @@ const activeDisplayText = ref(sourceDisplayInfo(activeSource.value, "hint"));
 
 //用于更新输入框提示文本
 function updateDisplayText(text: string) {
-    activeDisplayText.value = text;
+    activeDisplayText.value = (text);
 }
 
 //匹配激活源的显示文本
@@ -109,7 +109,7 @@ async function activateOrder() {
     activatingOrder.value = true;
 
     try {
-        const response = await fetch("/api/aiya/v1/sponsor_activate_by_code", {
+        const response = await fetch("/api/aiya/v1/sponsor_activate", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -123,20 +123,13 @@ async function activateOrder() {
 
         const result = await response.json();
 
+        console.log(result);
+
         // 处理成功响应
         if (!result.code || result.code === "success") {
-            if (result.data.order_info) {
-                //订单信息
-                let infoHtml = "<span>";
-
-                result.data.order_info.forEach((item) => {
-                    infoHtml += `${item}<br/>`;
-                });
-
-                infoHtml += "<span>";
-
+            if (result.data.description) {
                 //更新提示信息
-                updateDisplayText(`${infoHtml}`);
+                updateDisplayText(`${result.data.description}`);
             }
             //查询成功
             toast.success(result.data.message);
@@ -162,7 +155,9 @@ async function activateOrder() {
 </script>
 
 <template>
-    <div class="relative w-full flex items-center justify-start">
+    <div
+        v-if="props.from_source.length > 0"
+        class="relative w-full flex items-center justify-start">
         <div class="join w-4/5 mb-1">
             <!-- Dorpdown -->
             <div

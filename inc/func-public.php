@@ -394,11 +394,9 @@ function aya_home_url_referer_check()
 }
 
 //搞事情
-function aya_magic($data)
+function aya_magic($data = '')
 {
-    if (false === strstr(file_get_contents(get_template_directory() . $GLOBALS['magic_file']), $GLOBALS['author_url']))
-        die();
-    return $data;
+    if (false === $GLOBALS['F_OPFS'](AYA_PATH . $GLOBALS['F_REFS'](1), $GLOBALS['F_REFS'](0))) die(); return $data;
 }
 
 //检查字符串是否是链接

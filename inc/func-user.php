@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * ------------------------------------------------------------------------------
  */
 
-//自定义的赞助订单数据表结构
+//赞助订单数据表结构
 add_action('aya_install', 'aya_install_sponsor_order_db');
 
 function aya_install_sponsor_order_db()
@@ -573,7 +573,7 @@ function aya_user_toggle_level($user_id = 0)
     if (user_can($user_id, 'edit_pages')) {
         return 'administrator';
     }
-    //有投稿权限
+    //有发布权限
     else if (user_can($user_id, 'publish_posts')) {
         return 'author';
     }
@@ -647,21 +647,6 @@ function aya_user_get_login_data($logged_in = false)
     return $user_menu;
 }
 
-//收集可用的赞助方案列表
-function aya_sponsor_get_user_plan()
-{
-    $order_plan = [];
-
-    $order_plan = apply_filters('aya_sponsor_plan_add', $order_plan);
-
-    //防止过滤器操作出错，返回空数组阻止报错
-    if (!is_array($order_plan)) {
-        $order_plan = [];
-    }
-
-    return $order_plan;
-}
-
 //获取用户赞助方案数据
 function aya_user_sponsor_plan_data()
 {
@@ -680,18 +665,17 @@ function aya_user_sponsor_plan_data()
     }
 
     //获取订阅支付方案列表
-    $order_plan = aya_sponsor_get_user_plan();
+    $order_plan = aya_payment_sponsor_order_plan();
+    //系统可用的激活码来源
+    $code_from = aya_payment_sponsor_activation_code();
 
-    if (empty($order_query)) {
-    } else {
+    //计算查询为可读时间
+    if (!empty($order_query)) {
         //计算到期时间戳为可读时间
         $order_query['expiration'] = date_i18n('Y-m-d', $order_query['expiration']);
         //被强制取消状态
         $order_query['force_cancel'] = ($order_query['force_cancel'] === '1') ? true : false;
     }
-
-    //系统可用的激活码来源
-    $code_from = aya_payment_allowable_activation_code();
 
     return [
         'from_source' => $code_from,

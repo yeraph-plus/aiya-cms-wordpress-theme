@@ -4,6 +4,18 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+/**
+ * 爱发电平台 API 
+ * 
+ * Author: Yeraph Studio
+ * Author URI: http://www.yeraph.com/
+ * License: GPLv3
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
+ *
+ * @version 2.0
+ * 
+ **/
+
 if (!class_exists('Afdian_API')) {
     class Afdian_API
     {

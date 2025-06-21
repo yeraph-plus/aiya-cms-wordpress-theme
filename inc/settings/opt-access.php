@@ -10,7 +10,7 @@ AYF::new_opt([
     'parent' => 'basic',
     'slug' => 'access',
     'desc' => 'AIYA-CMS 主题，第三方系统接口设置',
-    'fields' => [
+    'fields' => aya_opt_access_add_exists([
         [
             'desc' => '爱发电接口设置',
             'type' => 'title_2',
@@ -18,7 +18,7 @@ AYF::new_opt([
         [
             'desc' => '此接口用于完成爱发电平台订阅与站内赞助者系统联动，请根据 [url=https://afdian.com/dashboard/dev]爱发电开发者[/url] 页面完成设置（账号需要为爱发电认证用户）。[br/][br/]
             * 此系统仅验证用户在爱发电平台来源的赞助订单有效性，不会限制赞助金额，如果希望限制用户赞助最小金额，请在你的赞助方案设置中隐藏自选金额赞助。[br/][br/]
-            ** 使用自动回调时，请在爱发电开发者页面中设置此站点的回调地址：[code]' . home_url('api/afdian/response') . ' [/code]',
+            ** 使用自动回调时，请在爱发电开发者页面中设置此站点的回调地址：[code]' . home_url('api/afdian/callbacks') . ' [/code]',
             'type' => 'content',
         ],
         [
@@ -62,8 +62,8 @@ AYF::new_opt([
             'default' => '',
         ],
         [
-            'title' => '保存 WebHook 数据日志',
-            'desc' => '启用后，保存爱发电的平台发回的订阅信息到 LOG ，用于回查激活记录，日志文件保存位置 [code]./wp-content/afdian_logs[/code] ',
+            'title' => '保存爱发电 WebHook 数据日志',
+            'desc' => '启用后，保存爱发电的平台发回的订阅信息到 LOG ，用于回查激活记录，日志文件保存位置 [code]./wp-content/webhook_logs[/code] ',
             'id' => 'site_afdian_savelog_bool',
             'type' => 'switch',
             'default' => true,
@@ -74,12 +74,74 @@ AYF::new_opt([
             'type' => 'title_2',
         ],
         [
-            'title' => 'Github 登录',
-            'desc' => '启用 Github 登录接入',
-            'id' => 'site_github_oauth_url',
+            'title' => 'OpenID 登录',
+            'desc' => '启用 OpenID 登录接入',
+            'id' => 'site_oauth_openid_bool',
             'type' => 'switch',
             'default' => false,
-        ]
+        ],
+        [
+            'title' => 'Github 登录',
+            'desc' => '启用 Github 登录接入',
+            'id' => 'site_oauth_github_bool',
+            'type' => 'switch',
+            'default' => false,
+        ],
+        [
+            'title' => 'Github Client ID',
+            'desc' => 'Github OAuth Client ID',
+            'id' => 'site_oauth_github_client_id',
+            'type' => 'text',
+            'default' => '',
+        ],
+        [
+            'title' => 'Github Client Secret',
+            'desc' => 'Github OAuth Client Secret',
+            'id' => 'site_oauth_github_client_secret',
+            'type' => 'text',
+            'default' => '',
+        ],
+        [
+            'title' => 'Google 登录',
+            'desc' => '启用 Google 登录接入',
+            'id' => 'site_oauth_google_bool',
+            'type' => 'switch',
+            'default' => false,
+        ],
+        [
+            'title' => 'Google Client ID',
+            'desc' => 'Google OAuth Client ID',
+            'id' => 'site_oauth_google_client_id',
+            'type' => 'text',
+            'default' => '',
+        ],
+        [
+            'title' => 'Google Client Secret',
+            'desc' => 'Google OAuth Client Secret',
+            'id' => 'site_oauth_google_client_secret',
+            'type' => 'text',
+            'default' => '',
+        ],
         */
-    ]
+    ]),
 ]);
+
+function aya_opt_access_add_exists($fields)
+{
+    $func_list = [
+        'aya_add_opt_epay_core_settings',
+        'aya_add_opt_redeem_core_settings'
+    ];
+
+    //循环追加设置来源
+    foreach ($func_list as $func) {
+        if (function_exists($func)) {
+            $func_field = call_user_func($func);
+            if (is_array($func_field)) {
+                $fields = array_merge($fields, $func_field);
+            }
+        }
+    }
+
+    return $fields;
+}
