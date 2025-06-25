@@ -24,7 +24,9 @@ if (!class_exists('AYA_HTTP_Request')) {
 
         public function __construct()
         {
+            //初始化
             $this->curl = curl_init();
+
             //默认参数
             self::$options = [
                 //CURLOPT_URL => $url,
@@ -44,6 +46,7 @@ if (!class_exists('AYA_HTTP_Request')) {
 
         public function __destruct()
         {
+            //结束请求
             curl_close($this->curl);
         }
 
@@ -55,19 +58,23 @@ if (!class_exists('AYA_HTTP_Request')) {
             }
             self::$options[CURLOPT_HTTPHEADER] = $headers;
         }
+        //设置参数
         public function set_referer($referer = '')
         {
             self::$options[CURLOPT_REFERER] = $referer;
             self::$options[CURLOPT_AUTOREFERER] = true;
         }
+        //设置Cookie
         public function set_cookie($cookie = '')
         {
             self::$options[CURLOPT_COOKIE] = $cookie;
         }
+        //设置代理
         public function set_proxy($proxy = '')
         {
             self::$options[CURLOPT_PROXY] = rtrim($proxy, '/');
         }
+        //设置UA
         public function set_useragent($useragent = '')
         {
             if (empty($useragent)) {
@@ -76,51 +83,7 @@ if (!class_exists('AYA_HTTP_Request')) {
             self::$options[CURLOPT_USERAGENT] = $useragent;
         }
 
-        //HTTP方法
-        public function get($url, $params = [])
-        {
-            $param = '';
-
-            if (!empty($params)) {
-                $param = '?' . http_build_query($params);
-            }
-            self::$options[CURLOPT_URL] = $url . $param;
-            self::$options[CURLOPT_CUSTOMREQUEST] = 'GET';
-
-            return $this->request();
-        }
-        public function post($url, $post_data = [])
-        {
-            self::$options[CURLOPT_URL] = $url;
-            self::$options[CURLOPT_CUSTOMREQUEST] = 'POST';
-
-            self::$options[CURLOPT_POST] = true;
-            if (is_array($post_data)) {
-                self::$options[CURLOPT_POSTFIELDS] = http_build_query($post_data);
-            } else {
-                self::$options[CURLOPT_POSTFIELDS] = $post_data;
-            }
-
-            return $this->request();
-        }
-        public function put($url, $from_data)
-        {
-            self::$options[CURLOPT_URL] = $url;
-            self::$options[CURLOPT_CUSTOMREQUEST] = 'PUT';
-            self::$options[CURLOPT_POSTFIELDS] = $from_data;
-
-            return $this->request();
-        }
-        public function delete($url, $from_data)
-        {
-            self::$options[CURLOPT_URL] = $url;
-            self::$options[CURLOPT_CUSTOMREQUEST] = 'DELETE';
-            self::$options[CURLOPT_POSTFIELDS] = $from_data;
-
-            return $this->request();
-        }
-
-        //发起请求
+        //发起HTTP请求
         private function request()
         {
             //检查响应头格式
@@ -151,6 +114,53 @@ if (!class_exists('AYA_HTTP_Request')) {
 
             //转换为一个对象打包返回
             return new AYA_HTTP_Response($http_status, $ress_headers, $response);
+        }
+
+        //GET方法
+        public function get($url, $params = [])
+        {
+            $param = '';
+
+            if (!empty($params)) {
+                $param = '?' . http_build_query($params);
+            }
+            self::$options[CURLOPT_URL] = $url . $param;
+            self::$options[CURLOPT_CUSTOMREQUEST] = 'GET';
+
+            return $this->request();
+        }
+        //POST方法
+        public function post($url, $post_data = [])
+        {
+            self::$options[CURLOPT_URL] = $url;
+            self::$options[CURLOPT_CUSTOMREQUEST] = 'POST';
+
+            self::$options[CURLOPT_POST] = true;
+            if (is_array($post_data)) {
+                self::$options[CURLOPT_POSTFIELDS] = http_build_query($post_data);
+            } else {
+                self::$options[CURLOPT_POSTFIELDS] = $post_data;
+            }
+
+            return $this->request();
+        }
+        //PUT方法
+        public function put($url, $from_data)
+        {
+            self::$options[CURLOPT_URL] = $url;
+            self::$options[CURLOPT_CUSTOMREQUEST] = 'PUT';
+            self::$options[CURLOPT_POSTFIELDS] = $from_data;
+
+            return $this->request();
+        }
+        //DELETE方法
+        public function delete($url, $from_data)
+        {
+            self::$options[CURLOPT_URL] = $url;
+            self::$options[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+            self::$options[CURLOPT_POSTFIELDS] = $from_data;
+
+            return $this->request();
         }
     }
 

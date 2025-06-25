@@ -35,7 +35,7 @@ if (!class_exists('AYA_Plugin_UserAjaxActiveStore')) {
             /*
             wp_localize_script('aya-click-likes-script', 'clickLikes', array(
                 'nonce' => wp_create_nonce($this->nonce_name),
-                'ajax_url' => AYA_AJAX_URI,
+                'ajax_url' => aya_ajax_url(),
             ));
             */
 

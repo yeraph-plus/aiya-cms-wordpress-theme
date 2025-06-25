@@ -86,7 +86,7 @@ function aya_vite_main_script_url()
     $manifest = aya_vite_get_manifest();
 
     if (isset($manifest[VITE_ENTRY_POINT])) {
-        return AYA_URI . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $manifest[VITE_ENTRY_POINT]['file'];
+        return get_template_directory_uri() . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $manifest[VITE_ENTRY_POINT]['file'];
     }
     return null;
 }
@@ -98,7 +98,7 @@ function aya_vite_main_css_urls()
 
     if (!empty($manifest[VITE_ENTRY_POINT]['css'])) {
         foreach ($manifest[VITE_ENTRY_POINT]['css'] as $css_file) {
-            $urls[] = AYA_URI . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $css_file;
+            $urls[] = get_template_directory_uri() . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $css_file;
         }
     }
 
@@ -113,7 +113,7 @@ function aya_vite_imports_script_urls()
     if (!empty($manifest[VITE_ENTRY_POINT]['imports'])) {
         foreach ($manifest[VITE_ENTRY_POINT]['imports'] as $import) {
             if (isset($manifest[$import]['file'])) {
-                $urls[] = AYA_URI . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $manifest[$import]['file'];
+                $urls[] = get_template_directory_uri() . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $manifest[$import]['file'];
             }
         }
     }

@@ -103,131 +103,129 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="bg-base-100 border border-base-300 rounded-lg">
-        <div class="relative p-4 flex items-center">
-            <h3 class="text-xl md:text-xl font-bold">
-                <InboxIcon class="inline size-6 mr-2" />
-                {{ t("my_favorites") }}
-            </h3>
-            <span
-                v-if="isLoggedIn && !isEmpty"
-                class="badge badge-primary ml-2">
-                {{ favoriteItems.length }}
-            </span>
-        </div>
+    <div class="relative p-4 flex items-center">
+        <h3 class="text-xl md:text-xl font-bold">
+            <InboxIcon class="inline size-6 mr-2" />
+            {{ t("my_favorites") }}
+        </h3>
+        <span
+            v-if="isLoggedIn && !isEmpty"
+            class="badge badge-primary ml-2">
+            {{ favoriteItems.length }}
+        </span>
+    </div>
 
-        <div class="p-4 pt-0 space-y-4">
-            <!-- is Logged -->
-            <div
-                v-if="!isLoggedIn"
-                class="text-center py-10">
-                <div class="flex flex-col items-center justify-center gap-4">
-                    <HeartIcon class="size-16 text-base-300" />
-                    <h3 class="text-xl font-semibold text-base-content/70">{{ t("please_login_first") }}</h3>
-                    <p class="text-base-content/60">{{ t("login_to_view_favorites") }}</p>
-                </div>
+    <div class="p-4 pt-0 space-y-4">
+        <!-- is Logged -->
+        <div
+            v-if="!isLoggedIn"
+            class="text-center py-10">
+            <div class="flex flex-col items-center justify-center gap-4">
+                <HeartIcon class="size-16 text-base-300" />
+                <h3 class="text-xl font-semibold text-base-content/70">{{ t("please_login_first") }}</h3>
+                <p class="text-base-content/60">{{ t("login_to_view_favorites") }}</p>
             </div>
-            <!-- loading dot -->
-            <div
-                v-else-if="isLoading && isEmpty"
-                class="flex justify-center my-6">
-                <span class="loading loading-dots loading-lg"></span>
+        </div>
+        <!-- loading dot -->
+        <div
+            v-else-if="isLoading && isEmpty"
+            class="flex justify-center my-6">
+            <span class="loading loading-dots loading-lg"></span>
+        </div>
+        <!-- is Empty -->
+        <div
+            v-else-if="isEmpty"
+            class="text-center py-10">
+            <div class="flex flex-col items-center justify-center gap-4">
+                <HeartIcon class="size-16 text-base-300" />
+                <h3 class="text-xl font-semibold text-base-content/70">{{ t("no_favorites_yet") }}</h3>
+                <p class="text-base-content/60">{{ t("browse_and_add_favorites") }}</p>
             </div>
-            <!-- is Empty -->
-            <div
-                v-else-if="isEmpty"
-                class="text-center py-10">
-                <div class="flex flex-col items-center justify-center gap-4">
-                    <HeartIcon class="size-16 text-base-300" />
-                    <h3 class="text-xl font-semibold text-base-content/70">{{ t("no_favorites_yet") }}</h3>
-                    <p class="text-base-content/60">{{ t("browse_and_add_favorites") }}</p>
-                </div>
-            </div>
-            <!-- Table -->
-            <div
-                v-else
-                class="overflow-x-auto w-full">
-                <table class="table table-zebra">
-                    <thead>
-                        <tr>
-                            <th>
-                                {{ t("title") }}
-                            </th>
-                            <th class="hidden md:table-cell">
-                                {{ t("publish_date") }}
-                            </th>
-                            <th class="hidden md:table-cell">
-                                {{ t("last_updated") }}
-                            </th>
-                            <th class="text-center">
-                                {{ t("actions") }}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                            v-for="item in favoriteItems"
-                            :key="item.id"
-                            class="hover">
-                            <td>
-                                <div class="flex flex-col">
-                                    <div class="flex flex-wrap items-center gap-1">
-                                        <a
-                                            :href="item.url"
-                                            class="link link-hover font-medium">
-                                            {{ item.title }}
-                                        </a>
-                                        <div
-                                            v-if="typeof item.status === 'object'"
-                                            v-for="(label, key) in item.status"
-                                            :key="key"
-                                            class="badge badge-xs"
-                                            :class="getStatusClass(String(key))">
-                                            {{ label }}
-                                        </div>
-                                        <div
-                                            v-else-if="item.status"
-                                            class="badge badge-xs"
-                                            :class="getStatusClass(item.status)">
-                                            {{ item.status }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="hidden md:table-cell text-base-content/70">
-                                <div class="flex items-center gap-1">
-                                    {{ item.date }}
-                                </div>
-                            </td>
-                            <td class="hidden md:table-cell text-base-content/70">
-                                <div
-                                    v-if="item.modified"
-                                    class="flex items-center gap-1">
-                                    {{ item.modified }}
-                                </div>
-                                <span v-else>-</span>
-                            </td>
-                            <td>
-                                <div class="flex items-center justify-center gap-2">
+        </div>
+        <!-- Table -->
+        <div
+            v-else
+            class="overflow-x-auto w-full">
+            <table class="table table-zebra">
+                <thead>
+                    <tr>
+                        <th>
+                            {{ t("title") }}
+                        </th>
+                        <th class="hidden md:table-cell">
+                            {{ t("publish_date") }}
+                        </th>
+                        <th class="hidden md:table-cell">
+                            {{ t("last_updated") }}
+                        </th>
+                        <th class="text-center">
+                            {{ t("actions") }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="item in favoriteItems"
+                        :key="item.id"
+                        class="hover">
+                        <td>
+                            <div class="flex flex-col">
+                                <div class="flex flex-wrap items-center gap-1">
                                     <a
                                         :href="item.url"
-                                        class="btn btn-link btn-xs">
-                                        <ArrowRightIcon class="size-4" />
-                                        {{ t("view_post") }}
+                                        class="link link-hover font-medium">
+                                        {{ item.title }}
                                     </a>
-                                    <button
-                                        @click="removeFavorite(item.id)"
-                                        class="btn btn-secondary btn-xs"
-                                        :disabled="isLoading">
-                                        <TrashIcon class="size-4" />
-                                        {{ t("remove_post") }}
-                                    </button>
+                                    <div
+                                        v-if="typeof item.status === 'object'"
+                                        v-for="(label, key) in item.status"
+                                        :key="key"
+                                        class="badge badge-xs"
+                                        :class="getStatusClass(String(key))">
+                                        {{ label }}
+                                    </div>
+                                    <div
+                                        v-else-if="item.status"
+                                        class="badge badge-xs"
+                                        :class="getStatusClass(item.status)">
+                                        {{ item.status }}
+                                    </div>
                                 </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                            </div>
+                        </td>
+                        <td class="hidden md:table-cell text-base-content/70">
+                            <div class="flex items-center gap-1">
+                                {{ item.date }}
+                            </div>
+                        </td>
+                        <td class="hidden md:table-cell text-base-content/70">
+                            <div
+                                v-if="item.modified"
+                                class="flex items-center gap-1">
+                                {{ item.modified }}
+                            </div>
+                            <span v-else>-</span>
+                        </td>
+                        <td>
+                            <div class="flex items-center justify-center gap-2">
+                                <a
+                                    :href="item.url"
+                                    class="btn btn-link btn-xs">
+                                    <ArrowRightIcon class="size-4" />
+                                    {{ t("view_post") }}
+                                </a>
+                                <button
+                                    @click="removeFavorite(item.id)"
+                                    class="btn btn-secondary btn-xs"
+                                    :disabled="isLoading">
+                                    <TrashIcon class="size-4" />
+                                    {{ t("remove_post") }}
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>

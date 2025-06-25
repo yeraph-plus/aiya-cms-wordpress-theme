@@ -57,7 +57,7 @@ $comment_settings = aya_get_comments_settings();
         <?php else: ?>
         <?php endif; ?>
         <?php aya_vue_load('comment', [
-            'ajax-url' => AYA_AJAX_URI,
+            'ajax-url' => aya_ajax_url(),
             'post-id' => $post_id,
             'comments-num' => $comments_number,
             'comments-open' => $comments_open,

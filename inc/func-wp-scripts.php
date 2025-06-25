@@ -16,12 +16,12 @@ add_action('login_enqueue_scripts', 'aya_theme_register_login_scripts');
 //静态文件加载（后台）
 function aya_theme_register_admin_scripts()
 {
-    wp_enqueue_style('aya-login-style', AYA_URI . '/assets/admin/css/admin.style.css', [], aya_theme_version(), 'all');
+    wp_enqueue_style('aya-login-style', get_template_directory_uri() . '/assets/admin/css/admin.style.css', [], aya_theme_version(), 'all');
 }
 //静态文件加载（登录页）
 function aya_theme_register_login_scripts()
 {
-    wp_enqueue_style('aya-login-style', AYA_URI . '/assets/admin/css/admin.login.css', [], aya_theme_version(), 'all');
+    wp_enqueue_style('aya-login-style', get_template_directory_uri() . '/assets/admin/css/admin.login.css', [], aya_theme_version(), 'all');
 }
 
 /*
@@ -54,7 +54,7 @@ function aya_static_scripts_cdn($load_type)
             break;
         case 'local':
         default:
-            $url_cdn = AYA_URI . '/assets/libs/';
+            $url_cdn = get_template_directory_uri() . '/assets/libs/';
             break;
     }
 

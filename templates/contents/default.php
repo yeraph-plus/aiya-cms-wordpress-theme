@@ -82,7 +82,7 @@ $next_post = $post_obj->next_post();
         <?php aya_echo($post_obj->content); ?>
 
         <?php aya_vue_load('post-button-group', [
-            'ajax-url' => AYA_AJAX_URI,
+            'ajax-url' => aya_ajax_url(),
             'post-id' => $post_obj->id,
             'like-count' => $post_obj->likes,
             'nonce' => aya_nonce_active_store(),

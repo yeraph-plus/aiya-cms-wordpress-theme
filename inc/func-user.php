@@ -496,7 +496,7 @@ function aya_user_favorite_posts_data()
     }
 
     return [
-        'ajax_url' => AYA_AJAX_URI,
+        'ajax_url' => aya_ajax_url(),
         'posts' => $the_posts,
         'ajax_nonce' => $store_nonce
     ];
@@ -618,16 +618,22 @@ function aya_user_get_login_data($logged_in = false)
                 'targe_blank' => true
             ];
         }
+        /*
         $dorpdown_menus[] = [
             'label' => __('个人中心', 'AIYA'),
             'icon' => 'profile',
             'url' => get_author_posts_url($user_id),
         ];
-        $dorpdown_menus[] = [
-            'label' => __('获取订阅', 'AIYA'),
-            'icon' => 'sponsor',
-            'url' => home_url('sponsor'),
-        ];
+        */
+
+        if (aya_opt('site_sponsor_module_bool', 'access')) {
+            $dorpdown_menus[] = [
+                'label' => __('获取订阅', 'AIYA'),
+                'icon' => 'sponsor',
+                'url' => home_url('sponsor'),
+            ];
+        }
+
         $dorpdown_menus[] = [
             'label' => __('我的收藏', 'AIYA'),
             'icon' => 'inbox',

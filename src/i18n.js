@@ -256,11 +256,11 @@ const messages = {
             afdian: {
                 name: "爱发电",
                 placeholder: "请输入爱发电订单号，格式为27位数字",
-                hint: "*输入爱发电平台来源的订单号激活本站点的访问权限",
+                hint: "输入爱发电平台来源的订单号激活本站点的访问权限",
             },
             mbd: {
                 name: "面包多",
-                placeholder: "输入面包多支付订单号",
+                placeholder: "输入面包多支付订单号激活本站点的访问权限",
                 hint: "",
             },
             kofi: {
@@ -281,7 +281,7 @@ const messages = {
             code: {
                 name: "激活码",
                 placeholder: "输入激活码",
-                hint: "",
+                hint: "输入激活码激活本站点的访问权限",
             },
         },
         bill_sub_order_history: "订单记录",

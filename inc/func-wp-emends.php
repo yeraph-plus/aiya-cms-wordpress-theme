@@ -38,13 +38,6 @@ function aya_theme_after_init()
  * -------------------s-----------------------------------------------------------
  */
 
-function aya_rewrite_home_url($slug = '')
-{
-    // 使用当前请求的域名和协议，而不是固定的 home_url
-    $current_url_base = get_site_url(null, '', is_ssl() ? 'https' : 'http');
-    return $current_url_base . $slug;
-}
-
 //初始化时增加重写路由规则
 add_action('init', 'aya_rewrite_base_rule');
 //重写author的链接
@@ -58,6 +51,7 @@ add_filter('redirect_canonical', 'aya_rewrite_page_cancel_redirect_canonical');
 add_filter('rest_url_prefix', 'aya_rewrite_rest_api_url_prefix');
 add_action('template_redirect', 'aya_rewrite_rest_api_template_redirect');
 
+//根据主题设置，追加新的页面重写规则
 function aya_rewrite_base_rule()
 {
     global $wp_rewrite, $aya_land_page;
@@ -190,6 +184,7 @@ function aya_rewrite_rest_api_template_redirect()
 {
     if (strpos($_SERVER['REQUEST_URI'], 'wp-json') !== false) {
         wp_redirect(site_url(str_replace('wp-json', 'api', $_SERVER['REQUEST_URI'])), 301);
+
         exit;
     }
 }

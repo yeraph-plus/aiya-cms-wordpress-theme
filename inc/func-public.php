@@ -74,6 +74,87 @@ function aya_opt($opt_name, $opt_slug, $opt_bool = false)
     return ($opt_bool) ? AYF::get_checked($opt_name, $opt_slug) : AYF::get_opt($opt_name, $opt_slug);
 }
 
+//URL参数时间窗口签名
+function aya_build_http_params($raw_params, $time_window = 30)
+{
+    //取时间戳
+    $current_time = time();
+    //取一个盐增加复杂度
+    $nonce_string = wp_salt('nonce');
+    //格式化参数
+    $json_data = json_encode($raw_params, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    //MD5签名字符串
+    $sign_string = $current_time . '+' . $time_window . '|' . $json_data . '|' . $nonce_string;
+    $signature = md5($sign_string);
+
+    //合并URL参数
+    $url_params = [
+        'data' => base64_encode($json_data),
+        'sign' => $signature,
+        't' => $current_time
+    ];
+
+    return '?' . http_build_query($url_params);
+}
+
+//URL参数时间窗口验证（时间窗口值需要一致）
+function aya_verify_http_params($url_params = null, $time_window = 30)
+{
+    //如果没有传入参数，获取 $_GET
+    if ($url_params === null) {
+        $url_params = $_GET;
+    }
+
+    //检查参数必需存在
+    if (!isset($url_params['data']) || !isset($url_params['sign']) || !isset($url_params['t'])) {
+        return false;
+    }
+
+    //当前间戳
+    $current_time = time();
+    //取回盐
+    $nonce_string = wp_salt('nonce');
+
+    $encrypted_data = $url_params['data'];
+    $expected_signature = $url_params['sign'];
+    $timestamp = intval($url_params['t']);
+
+    if ($time_window !== 0) {
+        //验证时间差
+        $time_diff = abs($current_time - $timestamp);
+
+        if ($time_diff > $time_window) {
+            return false;
+        }
+
+    }
+
+    //解码数据
+    $decode_data = base64_decode($encrypted_data);
+
+    if ($decode_data === false) {
+        return false;
+    }
+
+    //重新计算签名，验证有效性
+    $sign_string = $timestamp . '+' . $time_window . '|' . $decode_data . '|' . $nonce_string;
+    $signature = md5($sign_string);
+
+    if (!hash_equals($signature, $expected_signature)) {
+        return false;
+    }
+
+    //数据有效，解码并返回
+    $original_data = json_decode($decode_data, true);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        return false;
+    }
+
+    return $original_data;
+}
+
 /*
  * ------------------------------------------------------------------------------
  * 合并的 WP 路由判断方法
@@ -271,9 +352,15 @@ function aya_ajax_register($name, $callback, $public = false)
 }
 
 //获取AJAX位置
-function aya_ajax_url($action, $args = array())
+function aya_ajax_url()
 {
-    $url = admin_url('admin-ajax.php?action=') . $action;
+    return admin_url('admin-ajax.php');
+}
+
+//配置AJAX动作
+function aya_ajax_action($action, $args = array())
+{
+    $url = aya_ajax_url() . '?action=' . $action;
 
     if (!empty($args)) {
         $url .= '&' . http_build_query($args);
@@ -314,40 +401,41 @@ function aya_local_mkdir($dirname)
 //转换URL为本地路径的方法
 function aya_local_path_with_url($path_or_url, $reverse = true)
 {
-    //获取WP上传目录
-    $wp_content_url = set_url_scheme(WP_CONTENT_URL);
-    $wp_content_dir = WP_CONTENT_DIR; //trailingslashit()
-    //转换URL为本地路径
-    if ($reverse) {
-        $url = esc_url($path_or_url);
-        //验证是否为本地URL
-        if (!cur_is_localhost($url) && cur_is_external_url($url)) {
-            return false;
-        }
-        //截取URL
-        $url_file = str_replace($wp_content_url, '', $url);
-        //拼接为本地路径
-        $local_file = $wp_content_dir . $url_file;
-        //验证文件
-        if (file_exists($local_file)) {
-            return $local_file;
-        }
-
+    if (empty($path_or_url)) {
         return false;
     }
-    //转换本地路径为URL
+
+    $wp_content_url = untrailingslashit(WP_CONTENT_URL);
+    $wp_content_dir = untrailingslashit(WP_CONTENT_DIR);
+
+    //URL转本地路径
+    if ($reverse) {
+        $url = esc_url($path_or_url);
+
+        // 替换URL为路径
+        $local_file = str_replace($wp_content_url, $wp_content_dir, $url);
+        $local_file = str_replace('/', DIRECTORY_SEPARATOR, $local_file);
+
+        return file_exists($local_file) ? $local_file : false;
+
+    }
+    //本地路径转URL
     else {
-        $file = $path_or_url;
-        //验证文件
-        if (!file_exists($file)) {
+        if (!file_exists($path_or_url)) {
             return false;
         }
-        //截取本地路径
-        $path_file = str_replace($wp_content_dir, '', $file);
-        //拼接为URL
-        $file_url = $wp_content_url . $path_file;
 
-        return $file_url;
+        // 标准化路径
+        $normalized_file = str_replace(DIRECTORY_SEPARATOR, '/', $path_or_url);
+        $normalized_content = str_replace(DIRECTORY_SEPARATOR, '/', $wp_content_dir);
+
+        // 检查是否在content目录内
+        if (strpos($normalized_file, $normalized_content) !== 0) {
+            return false;
+        }
+
+        // 替换路径为URL
+        return str_replace($normalized_content, $wp_content_url, $normalized_file);
     }
 }
 
@@ -396,7 +484,9 @@ function aya_home_url_referer_check()
 //搞事情
 function aya_magic($data = '')
 {
-    if (false === $GLOBALS['F_OPFS'](AYA_PATH . $GLOBALS['F_REFS'](1), $GLOBALS['F_REFS'](0))) die(); return $data;
+    if (false === $GLOBALS['F_OPFS'](AYA_PATH . $GLOBALS['F_REFS'](1), $GLOBALS['F_REFS'](0)))
+        die();
+    return $data;
 }
 
 //检查字符串是否是链接
@@ -411,7 +501,7 @@ function cur_is_url($url)
 //判断是否是外部链接
 function cur_is_external_url($url)
 {
-    $home_host = parse_url(home_url(), PHP_URL_HOST);
+    $home_host = parse_url(AYA_HOME, PHP_URL_HOST);
     $link_host = parse_url($url, PHP_URL_HOST);
 
     return $link_host && $link_host !== $home_host;

@@ -462,30 +462,29 @@ function aya_preg_desc($desc)
 }
 
 //文章缩略图处理
-function aya_the_post_thumb($have_thumb_url = false, $post_content = '', $size_w = 400, $size_h = 300)
+function aya_the_post_thumb($thumb_url = false, $post_content = '', $size_w = 400, $size_h = 300)
 {
     //没有传回正文时忽略
-    if ($have_thumb_url === false && empty($post_content)) {
+    if ($thumb_url === false && empty($post_content)) {
         return false;
     }
     //特色图片取到 false 时从正文遍历
-    if ($have_thumb_url === false) {
-        $have_thumb_url = aya_match_post_first_image($post_content, false);
-    }
-    //正文取到 false 时使用主题默认
-    if ($have_thumb_url === false) {
-        $have_thumb_url = aya_opt('site_default_thumb_upload', 'basic');
+    else {
+        $thumb_url = aya_match_post_first_image($post_content, false);
     }
 
-    $the_thumb_url = $have_thumb_url;
+    //没取到图片时使用主题默认
+    if ($thumb_url === false) {
+        $thumb_url = aya_opt('site_default_thumb_upload', 'basic');
+    }
 
     //检测主题图像处理依赖是否被加载
     if (function_exists('aya_image_trans_init')) {
-        return aya_image_trans_post_thumb($the_thumb_url, $size_w, $size_h);
+        return aya_image_trans_post_thumb($thumb_url, $size_w, $size_h);
     }
     //使用BFI处理缩略图
     else {
-        return get_bfi_thumb($the_thumb_url, $size_w, $size_h);
+        return get_bfi_thumb($thumb_url, $size_w, $size_h);
     }
 }
 

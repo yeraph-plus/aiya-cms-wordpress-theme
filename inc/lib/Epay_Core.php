@@ -167,7 +167,7 @@ if (!class_exists('EPAY_SDK')) {
             }
 
             $html .= '<input type="submit" value="LOADING..."/></form>';
-            $html .= '<script> document.getElementById("' . $from_id . '").submit(); </script>';
+            //$html .= '<script> document.getElementById("' . $from_id . '").submit(); </script>';
 
             return $html;
         }
@@ -184,7 +184,7 @@ if (!class_exists('EPAY_SDK')) {
 
             if (!isset($param_tmp['out_trade_no'])) {
                 //拼接一个临时订单号
-                $param_tmp['out_trade_no'] = time() . mt_rand(100000, 999999);
+                $param_tmp['out_trade_no'] = date('Ymd') . mt_rand(10000, 99999) . time();
             }
 
             $param_tmp['clientip'] = $this->get_client_ip();
@@ -228,7 +228,6 @@ if (!class_exists('EPAY_SDK')) {
         //回调验证逻辑
         public function verify_callback($param)
         {
-            //接收$_GET参数（notify_url、return_url）
             if (empty($param)) {
                 return false;
             }
@@ -239,8 +238,9 @@ if (!class_exists('EPAY_SDK')) {
         }
 
         //回调数据
-        public function callback_data()
+        public function get_callback_params()
         {
+            //接收$_GET参数（notify_url、return_url）
             if (empty($_GET)) {
                 return false;
             }

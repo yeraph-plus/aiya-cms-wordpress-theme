@@ -69,7 +69,7 @@ function get_bfi_thumb($url, $width = 0, $height = 0, $crop_y = 0, $crop_x = 0, 
 {
     $url = esc_url($url);
     //判断是否是本地图片
-    if (strpos($url, get_site_url()) === false) {
+    if (strpos($url, AYA_HOME) === false) {
         return $url;
     }
 

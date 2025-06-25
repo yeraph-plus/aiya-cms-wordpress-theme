@@ -36,6 +36,7 @@ function aya_payment_sponsor_order_plan()
 
     return $order_plan;
 }
+
 //写入日志文件
 function aya_payment_callback_save_log($log_name, $log_data)
 {
@@ -201,32 +202,6 @@ function aya_afdian_query_sponsor_list($page = 1, $per_page = 50)
     return $result;
 }
 
-//爱发电订单回调自动创建系统内赞助者激活
-function aya_afdian_callback_auto_activation($order)
-{
-    //查询成功，创建系统内赞助者激活
-    $activate_order = 'afd_' . $order['out_trade_no']; //order id
-    $activate_days = intval($order['month']) * 31; //days
-
-    $activate_user_token = aya_token_decode($order['custom_order_id'], 8);
-    $activate_user = intval($activate_user_token); //user
-
-    //检查订单是否已存在
-    if (!aya_sponsor_order_exists($activate_order)) {
-        $activate_result = aya_sponsor_add_order($activate_user, $activate_order, $activate_days, 'paid', 'afdian');
-
-        //处理完成
-        if ($activate_result === true) {
-            return 'system id:' . $activate_user . ' is activated.';
-        } else {
-            return 'system id:' . $activate_user . ' activation failed.';
-
-        }
-    }
-
-    return 'The order:"' . $order['out_trade_no'] . '" has been entered repeatedly.';
-}
-
 //用于回调爱发电 WebHook 数据的 REST-API 接口
 function aya_register_afdian_api_routes()
 {
@@ -252,21 +227,40 @@ function aya_register_afdian_api_routes()
 
                 //如果设置了订单回调ID，处理激活
                 if (isset($order_data['custom_order_id'])) {
-                    $activation_to = aya_afdian_callback_auto_activation($order_data);
+                    //order id
+                    $activate_order = 'afd_' . $order_data['out_trade_no'];
+                    //days
+                    $activate_days = intval($order_data['month']) * 31;
+                    //user
+                    $activate_user_token = aya_token_decode($order_data['custom_order_id'], 8);
+                    $activate_user = intval($activate_user_token);
+
+                    //检查订单是否已存在
+                    if (!aya_sponsor_order_exists($activate_order)) {
+                        //查询成功，创建系统内赞助者激活
+                        $activate_result = aya_sponsor_add_order($activate_user, $activate_order, $activate_days, 'paid', 'afdian');
+                    }
 
                     if ($need_save_log) {
+                        //处理完成
+                        $activation_to = 'The order:"' . $activate_order . '" User id:' . $activate_user;
+
+                        if ($activate_result === true) {
+                            $activation_to .= ' activation completed .';
+                        } else {
+                            $activation_to .= ' activation failed .';
+                        }
                         //日志目录
                         aya_payment_callback_save_log('', $activation_to);
                     }
                 }
             }
 
-            //返回成功响应
+            //任何情况下都返回成功响应
             return new WP_REST_Response([
                 'ec' => 200,
                 'em' => 'done'
             ], 200);
-
         },
         'permission_callback' => function () {
             return true;
@@ -278,8 +272,10 @@ function aya_register_afdian_api_routes()
 add_filter('rest_authentication_errors', function ($errors) {
     //获取当前请求的路径
     $request_uri = $_SERVER['REQUEST_URI'];
+    //需要跳过的请求路径
+    $pos_uri = '/' . aya_rewrite_rest_api_url_prefix() . '/afdian/callbacks';
     //检查请求
-    if (strpos($request_uri, '/api/afdian/callbacks') !== false) {
+    if (strpos($request_uri, $pos_uri) !== false) {
         //始终响应爱发电发回的webhook请求，跳过Cookie认证
         return true;
     }
@@ -290,10 +286,7 @@ add_filter('rest_authentication_errors', function ($errors) {
 //允许爱发电赞助订单号激活
 function aya_add_afdian_order_activate($code_from)
 {
-    //启用爱发电订阅接入
-    $afd_home = aya_get_afdian_home_link();
-    //只有设置了主页时启用接口
-    if ($afd_home !== false) {
+    if (aya_opt('site_afdian_convert_bool', 'access')) {
 
         $code_from[] = 'afdian';
     }
@@ -302,17 +295,15 @@ function aya_add_afdian_order_activate($code_from)
 }
 
 //爱发电赞助方案数据
-function aya_add_afdian_sponsor_plans()
+function aya_add_afdian_sponsor_plans($order_plan)
 {
     //启用爱发电订阅接入
-    $afd_home = aya_get_afdian_home_link();
+    if (aya_opt('site_afdian_convert_bool', 'access')) {
+        //爱发电主页
+        $afd_home = aya_get_afdian_home_link();
 
-    $afd_order_plan = [];
-
-    //只有设置了主页时启用接口
-    if ($afd_home !== false) {
-        //爱发电主页链接
-        $afd_order_plan['afdian'] = [
+        //爱发电主页方案
+        $order_plan['afdian'] = [
             'name' => __('查看爱发电创作者主页', 'AIYA'),
             'color' => '#946ce6',
             'alt' => 'afdian homepage url',
@@ -322,7 +313,7 @@ function aya_add_afdian_sponsor_plans()
             'refresh' => false,
         ];
 
-        //预设方案切换
+        //自动回调时预设方案
         $afd_plan_type = aya_opt('site_afdian_plan_type', 'access');
 
         //配置回调时需求的数据
@@ -345,7 +336,7 @@ function aya_add_afdian_sponsor_plans()
             //拼接回调链接
             $plan_url = "{$afd_order_create}user_id={$afd_user_id}&custom_order_id={$custom_id}&remark={$remark_msg}";
 
-            $afd_order_plan['afdian_optional'] = [
+            $order_plan['afdian_optional'] = [
                 'name' => __('在爱发电支持我', 'AIYA'),
                 'color' => '#946ce6',
                 'alt' => 'afdian homepage url',
@@ -365,7 +356,7 @@ function aya_add_afdian_sponsor_plans()
                 //拼接回调链接
                 $plan_url = "{$afd_order_create}plan_id={$afd_plan_id}&custom_order_id={$custom_id}&remark={$remark_msg}";
 
-                $afd_order_plan['afdian_preset'] = [
+                $order_plan['afdian_preset'] = [
                     'name' => __('订阅我的赞助方案', 'AIYA'),
                     'color' => '#946ce6',
                     'alt' => 'afdian homepage url',
@@ -378,7 +369,7 @@ function aya_add_afdian_sponsor_plans()
         }
     }
 
-    return $afd_order_plan;
+    return $order_plan;
 }
 
 //爱发电接口订单查询逻辑

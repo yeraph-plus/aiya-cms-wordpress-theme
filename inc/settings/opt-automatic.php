@@ -80,7 +80,7 @@ AYF::new_opt([
             'desc' => '接续上一项设置，选择需要启用的格式过滤器，详细说明请查阅相关项目文档',
             'id' => 'site_post_chs_compose_type',
             'type' => 'checkbox',
-            'sub' => array(
+            'sub' => [
                 'insertSpace' => '中英文空格补正',
                 'removeSpace' => '清除全角标点空格',
                 'full2Half' => '全角转半角',
@@ -92,8 +92,8 @@ AYF::new_opt([
                 'removeEmptyParagraph' => '清除空的段落标签',
                 'removeEmptyTag' => '清除所有空的标签',
                 'removeIndent' => '清除段首缩进',
-            ),
-            'default' => array('insertSpace', 'removeSpace', 'full2Half'),
+            ],
+            'default' => ['insertSpace', 'removeSpace', 'full2Half'],
         ],
         [
             'desc' => '提示条目分类法模板',
