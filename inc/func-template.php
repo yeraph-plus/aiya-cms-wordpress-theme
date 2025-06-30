@@ -76,52 +76,47 @@ function aya_core_route_entry()
     //页头
     aya_template_load('part/header');
 
-    //BuddyPress 入口路由
-    if (function_exists('is_buddypress') && is_buddypress()) {
-        aya_template_load('buddy');
-    }
-    //默认模板路由
-    else {
-        $route_page = aya_is_where();
 
-        //模板路由
-        switch ($route_page) {
-            //首页循环
-            case 'home':
-            case 'home_paged':
-                aya_template_load('index');
-                break;
-            //搜索结果
-            case 'search':
-                aya_template_load('search');
-                break;
-            //归档
-            case 'archive':
-            case 'post_type_archive':
-            case 'category':
-            case 'tag':
-            case 'date':
-            case 'tax':
-                aya_template_load('archive');
-                break;
-            //用户归档
-            case 'author':
-                aya_template_load('author');
-                break;
-            //独立页面
-            case 'single':
-            case 'page':
-            case 'singular':
-            case 'attachment':
-                aya_template_load('content');
-                break;
-            //处理路由错误
-            case '404':
-            case 'none':
-            default:
-                aya_template_load('404');
-                break;
-        }
+    //默认模板路由
+    $route_page = aya_is_where();
+
+    //模板路由
+    switch ($route_page) {
+        //首页循环
+        case 'home':
+        case 'home_d':
+            aya_template_load('index');
+            break;
+        //搜索结果
+        case 'search':
+            aya_template_load('search');
+            break;
+        //归档
+        case 'archive':
+        case 'post_type_archive':
+        case 'category':
+        case 'tag':
+        case 'date':
+        case 'tax':
+            aya_template_load('archive');
+            break;
+        //用户归档
+        case 'author':
+            aya_template_load('author');
+            break;
+        //独立页面
+        case 'single':
+        case 'page':
+        case 'singular':
+        case 'attachment':
+            aya_template_load('content');
+            break;
+        //处理路由错误
+        case '404':
+        case 'none':
+        default:
+            aya_template_load('404');
+            break;
     }
 
     //页脚
@@ -393,7 +388,7 @@ function aya_blog_logo($link_class = '', $logo_class = '')
 {
     $logo_url = aya_opt('site_logo_image_upload', 'basic');
     $site_name = get_bloginfo('name');
-    $is_home = is_front_page() || is_home();
+    $is_home = aya_page_is('home');
 
     $html = '';
     $html .= '<div class="logo" itemscope itemtype="https://schema.org/Organization">';

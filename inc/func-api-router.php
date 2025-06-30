@@ -247,24 +247,6 @@ $api->register_route('forgot_password', [
     ]
 ]);
 
-//基于 Hybridauth 的 OAuth 授权接口
-$api->register_route('hybridauth/auth', [
-    'methods' => ['GET', 'POST'],
-    'callback' => function (WP_REST_Request $request) use ($api) {
-        //获取nonce参数
-        $nonce = $request->get_header('X-WP-Nonce');
-        //验证nonce
-        if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return $api->error_response('permission_denied', ['detail' => __('客户端已失效，请刷新页面后重试', 'AIYA')]);
-        }
-
-        return; //handle_hybridauth_oauth();
-    },
-    'permission_callback' => function () {
-        return true;
-    }
-]);
-
 //赞助者订单自助激活逻辑
 $api->register_route('sponsor_activate', [
     'methods' => 'POST',

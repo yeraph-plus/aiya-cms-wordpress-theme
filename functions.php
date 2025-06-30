@@ -31,8 +31,10 @@ if (!defined('ABSPATH')) {
 define('AYA_PATH', get_template_directory());
 define('AYA_HOME', home_url());
 define('AYA_URI', get_template_directory_uri());
-//隐藏DEBUG组件
+
+//开关 DEBUG 组件
 define('AYA_RELEASE', true);
+
 //缓存时间
 //define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); // or MINUTE_IN_SECONDS
 //浏览量倍率作弊
@@ -43,6 +45,8 @@ define('AYA_RELEASE', true);
  * 载入初始化方法和页面组件
  * ------------------------------------------------------------------------------
  */
+
+global $aya_post_type, $aya_land_page, $aya_tax_type;
 
 //require
 function aya_require($name, $path = '', $special = false)

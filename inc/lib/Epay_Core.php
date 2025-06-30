@@ -167,7 +167,7 @@ if (!class_exists('EPAY_SDK')) {
             }
 
             $html .= '<input type="submit" value="LOADING..."/></form>';
-            //$html .= '<script> document.getElementById("' . $from_id . '").submit(); </script>';
+            $html .= '<script> document.getElementById("' . $from_id . '").submit(); </script>';
 
             return $html;
         }

@@ -20,7 +20,7 @@ if (!class_exists('AYA_Plugin_CommentsAjaxFrom')) {
     class AYA_Plugin_CommentsAjaxFrom
     {
         public static $nonce_name = 'aya_post_comment_submit';
-        public static $comments_settings = [];
+        public $comments_settings = [];
 
         public function __construct()
         {
@@ -33,11 +33,11 @@ if (!class_exists('AYA_Plugin_CommentsAjaxFrom')) {
             add_action('wp_ajax_nopriv_get_comments', array($this, 'get_comments'));
 
             //初始化评论设置
-            self::$comments_settings = self::init_wp_comments_settings();
+            $this->comments_settings = $this->init_wp_comments_settings();
         }
 
         //获取WP评论设置
-        public function init_wp_comments_settings()
+        private function init_wp_comments_settings()
         {
             return [
                 //提交前检查
@@ -55,6 +55,11 @@ if (!class_exists('AYA_Plugin_CommentsAjaxFrom')) {
                 'default_comments_page' => get_option('default_comments_page', 'newest'),
                 'comment_order' => get_option('comment_order', 'asc'),
             ];
+        }
+
+        public function get_comments_settings()
+        {
+            return $this->comments_settings;
         }
 
         //处理评论提交
@@ -452,6 +457,12 @@ if (!class_exists('AYA_Plugin_CommentsAjaxFrom')) {
     //为前端组件返回评论设置
     function aya_get_comments_settings()
     {
-        return AYA_Plugin_CommentsAjaxFrom::$comments_settings;
+        static $instance = null;
+
+        if ($instance === null) {
+            $instance = new AYA_Plugin_CommentsAjaxFrom();
+        }
+
+        return $instance->get_comments_settings();
     }
 }

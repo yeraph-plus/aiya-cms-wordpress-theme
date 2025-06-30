@@ -1,0 +1,100 @@
+name: AIYA-CMS Theme Release
+
+on:
+    push:
+        tags:
+            - "v*"
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Extract theme version from tag
+              id: release_version
+              run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+            - name: Generate changelog from commits
+              id: changelog
+              run: |
+                  # fetch all git history
+                  # git fetch --prune --unshallow 2>/dev/null || true
+                  # previous tag
+                  ALL_TAGS=$(git tag --sort=-v:refname)
+                  PREVIOUS_TAG=$(echo "$ALL_TAGS" | grep -B1 "$CURRENT_TAG" | head -n1 | grep -v "$CURRENT_TAG" || echo "")
+                  echo "Previous tag: $PREVIOUS_TAG"
+                  echo "Total commits: $(git rev-list --count HEAD)"
+                  # if no previous tag, generate changelog from all commits
+                  if [ -z "$PREVIOUS_TAG" ]; then
+                      CHANGELOG=$(git log --pretty=format:"- %s" --no-merges)
+                      echo "Generating changelog from all commits"
+                  else
+                      CHANGELOG=$(git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s" --no-merges)
+                      echo "Generating changelog from ${PREVIOUS_TAG}..HEAD"
+                  fi
+                  # GITHUB_OUTPUT
+                  echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+                  echo "$CHANGELOG" >> $GITHUB_OUTPUT
+                  echo "EOF" >> $GITHUB_OUTPUT
+
+            - name: Temporary Clone framework plugin repository
+              run: |
+                  git clone https://github.com/yeraph-plus/aiya-cms-theme-framework.git aiya-cms-framework-plugin
+
+            - name: Setup node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: "npm"
+
+            - name: Install dependencies
+              run: |
+                  npm ci
+
+            - name: Vite Build
+              run: npm run build
+
+            - name: Update theme version in style.css file
+              run: |
+                  sed -i "s/Version: .*/Version: ${{ steps.release_version.outputs.VERSION }}/" style.css
+
+            - name: Archive theme package for zip
+              run: npx dir-archiver --src ./ --dest ../aiya-cms-release.zip --includebasedir true --exclude .DS_Store .vscode .git .gitattributes .github .gitignore .gitmodules screenshot src vendor composer.json composer.lock node_modules .npmrc package.json package-lock.json gulpfile.js webpack.config.js vite.config.ts aiya-cms-framework-plugin aiya-cms-framework-plugin.zip
+
+            - name: Archive plugin package for zip
+              run: npx dir-archiver --src ./aiya-cms-framework-plugin --dest ../aiya-cms-framework-plugin.zip --includebasedir true --exclude .DS_Stor .vscode .github .git .gitattributes .gitignore .gitmodules screenshot
+
+            - name: Rename files for release
+              run: |
+                  mv ../aiya-cms-framework-plugin.zip ../aiya-cms-framework-plugin-${{ steps.release_version.outputs.VERSION }}.zip
+                  mv ../aiya-cms-release.zip ../aiya-cms-theme-${{ steps.release_version.outputs.VERSION }}.zip
+                  ls -la ../aiya-cms-framework-plugin-${{ steps.release_version.outputs.VERSION }}.zip
+                  ls -la ../aiya-cms-theme-${{ steps.release_version.outputs.VERSION }}.zip
+
+            - name: Create Release
+              id: create_release
+              uses: softprops/action-gh-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ github.ref }}
+                  release_name: ${{ steps.release_version.outputs.VERSION }}
+                  body: |
+                      AIYA-CMS Theme for WordPress ${{ steps.release_version.outputs.VERSION }}
+
+                      #### Files Included
+                      - aiya-cms-theme-${{ steps.release_version.outputs.VERSION }}.zip
+                      - aiya-cms-framework-plugin-${{ steps.release_version.outputs.VERSION }}.zip
+
+                      #### Changes
+                      ${{ steps.changelog.outputs.CHANGELOG }}
+                  files: |
+                      ../aiya-cms-theme-${{ steps.release_version.outputs.VERSION }}.zip
+                      ../aiya-cms-framework-plugin-${{ steps.release_version.outputs.VERSION }}.zip
+                  draft: false
+                  prerelease: false

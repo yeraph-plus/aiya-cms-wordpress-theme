@@ -19,9 +19,9 @@ $current_user = $user->exists() ? [
 $post = get_post();
 $post_id = $post->ID;
 
+$comment_settings = aya_get_comments_settings();
 $comments_number = get_comments_number($post);
 $comments_open = comments_open($post_id);
-$comment_settings = aya_get_comments_settings();
 ?>
 <div id="comments" class="comments-area bg-base-100 border border-base-300 rounded-lg p-4">
     <h3 class="comments-title text-lg font-bold mb-4">

@@ -162,11 +162,12 @@ function aya_verify_http_params($url_params = null, $time_window = 30)
  */
 
 //页面检查器
-function aya_is_page($where_is = NULL)
+function aya_page_is($where_is = NULL)
 {
     //判断参数
-    if (empty($where_is))
+    if (empty($where_is)) {
         return false;
+    }
 
     switch ($where_is) {
         case 'home':
@@ -209,8 +210,6 @@ function aya_is_page($where_is = NULL)
             return is_admin();
         case 'feed':
             return is_feed();
-        case 'all':
-            return aya_is_where(); //打包查询
         default:
             return false; //其他
     }
@@ -230,12 +229,16 @@ function aya_is_where()
         return $here_is;
     }
 
+    //BuddyPress 入口路由
+    if (function_exists('is_buddypress') && is_buddypress()) {
+        $here_is = 'buddy';
+    }
     //返回页面类型
-    if (is_home() || is_front_page()) {
+    else if (is_home() || is_front_page()) {
         $here_is = 'home';
         //关联判断
         if (is_paged()) {
-            $here_is = 'home_paged';
+            $here_is = 'home_d';
         }
     }
     //返回文章类型
