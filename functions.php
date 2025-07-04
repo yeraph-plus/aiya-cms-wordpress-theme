@@ -130,7 +130,7 @@ aya_require('opt-land', 'settings');
 aya_require('opt-notify', 'settings');
 aya_require('opt-automatic', 'settings');
 aya_require('opt-access', 'settings');
-//aya_require('opt-ads', 'settings');
+aya_require('opt-ads', 'settings');
 //小工具
 // aya_require('widget-text-html', 'widgets');
 // aya_require('widget-add-menu', 'widgets');
@@ -146,9 +146,8 @@ aya_require('opt-access', 'settings');
 // aya_require('widget-welcome-panel', 'widgets');
 //短代码工具
 aya_require('code-basic', 'shotcodes');
-//aya_require('code-hilight', 'shotcodes');
-//aya_require('code-aplayer', 'hotcodes');
-//aya_require('code-dplayer', 'shotcodes');
+aya_require('code-iframe', 'shotcodes');
+//aya_require('code-player', 'shotcodes');
 
 /*
  * ------------------------------------------------------------------------------

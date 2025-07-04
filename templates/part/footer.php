@@ -5,7 +5,8 @@ if (!defined('ABSPATH')) {
 }
 
 ?>
-<!-- Scroll Top -->
+            <?php aya_template_load('units/ad-card-in-after'); ?>
+            <!-- Scroll Top -->
             <?php aya_vue_load('scroll-to-top'); ?>
             <!-- Footer -->
             <footer class="bg-base-200 text-base-content transition-all duration-300 ease-in-out">

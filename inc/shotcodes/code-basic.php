@@ -341,7 +341,7 @@ if (is_admin()) {
         'id' => 'sc-sponsor-ship-content',
         'title' => '赞助者可见',
         'note' => '创建一个赞助后的内容块，用于在文章中显示仅限赞助商可见的内容',
-        'template' => '[sponsor_ship] {{content}} [/sponsor_ship]',
+        'template' => '[sponsor_ship {{attributes}}] {{content}} [/sponsor_ship]',
         'field_build' => array(
             [
                 'id' => 'title',
@@ -364,7 +364,7 @@ if (is_admin()) {
         'id' => 'sc-logged-in-content',
         'title' => '登录后可见',
         'note' => '创建一个登录后可见的内容块，用于在文章中显示仅限登录用户可见的内容',
-        'template' => '[logged_in] {{content}} [/logged_in]',
+        'template' => '[logged_in {{attributes}}] {{content}} [/logged_in]',
         'field_build' => array(
             [
                 'id' => 'title',
@@ -436,8 +436,8 @@ function aya_shortcode_hide_content($atts = array(), $content = '')
         ),
         $atts,
     );
-    //
-    if ($atts['inline'] == 'true' || $atts['inline'] == 'on' || $atts['inline'] == true) {
+
+    if (filter_var($atts['inline'], FILTER_VALIDATE_BOOLEAN)) {
         return '<!--' . esc_html($content) . '-->';
     } else {
         return '';
@@ -457,7 +457,7 @@ function aya_shortcode_email_content($atts = array(), $content = null)
     $content = wp_kses($content, 'post');
 
     //将电子邮件地址字符转换为 HTML 实体
-    if ($atts['mailto'] == 'true' || $atts['mailto'] == 'on' || $atts['mailto'] == true) {
+    if (filter_var($atts['mailto'], FILTER_VALIDATE_BOOLEAN)) {
         return '<a class="inline-flex" href="' . esc_url('mailto:' . antispambot($content)) . '">' . esc_html(antispambot($content)) . '</a>';
     } else {
         return antispambot($content);
@@ -475,7 +475,7 @@ function aya_shortcode_li_list_content($atts = array(), $content = '')
     );
 
     //增加样式
-    $tag = ($atts['order'] == 'true' || $atts['order'] == 'on' || $atts['order'] == true) ? 'ul' : 'ol';
+    $tag = (filter_var($atts['order'], FILTER_VALIDATE_BOOLEAN)) ? 'ul' : 'ol';
 
     //循环格式
     $html = '';
@@ -667,32 +667,28 @@ function aya_shortcode_sponsor_ship_content($atts = array(), $content = '')
     );
 
     $user_level = aya_user_toggle_level();
+    $has_title = ((!empty($atts['title'])) || (!in_array($user_level, ['administrator', 'author', 'sponsor'])));
 
-    $has_title = !empty($atts['title']);
-    $is_guest = ($user_level == 'guest' || $user_level == 'subscriber');
-
-    //已登录，且组件没有设置标题
-    if (!$is_guest && !$has_title) {
-        return do_shortcode($content);
-    }
-
-    //其余情况，补充边框样式
     $html = '';
 
-    $html .= '<div class="border-2 border-primary/50 rounded-lg p-4 my-4">';
-    //块标题
-    if ($atts['title'] != '') {
+    if ($has_title) {
+        //边框样式
+        $html .= '<div class="border-2 border-primary/50 rounded-lg p-4 my-4">';
+        //块标题
         $html .= '<div class="flex items-center gap-2 mb-2 text-primary">';
         $html .= '<icon name="wallet" class="size-6 mr-2"></icon>';
         $html .= '<span class="font-bold">' . esc_html($atts['title']) . '</span>';
         $html .= '</div>';
     }
-    //配置登录提示
+
     switch ($user_level) {
-        //管理员、赞助者或投稿权限的用户可见
-        case 'sponsor':
-        case 'author':
         case 'administrator':
+        case 'author':
+            //管理员、赞助者或投稿权限的用户可见
+            $html .= do_shortcode($content);
+            break;
+        case 'sponsor':
+            aya_sponsor_user_trigger_count(); //触发计数器
             $html .= do_shortcode($content);
             break;
         case 'subscriber':
@@ -708,7 +704,10 @@ function aya_shortcode_sponsor_ship_content($atts = array(), $content = '')
             $html .= '</div>';
             break;
     }
-    $html .= '</div>';
+
+    if ($has_title) {
+        $html .= '</div>';
+    }
 
     return $html;
 }
@@ -723,36 +722,31 @@ function aya_shortcode_logged_in_content($atts = array(), $content = '')
         $atts,
     );
 
-    $user_level = aya_user_toggle_level();
+    $is_allowed = (aya_user_toggle_level() !== 'guest');
+    $has_title = ((!empty($atts['title'])) || !$is_allowed);
 
-    $has_title = !empty($atts['title']);
-    $is_guest = ($user_level == 'guest');
-
-    //已登录，且组件没有设置标题
-    if (!$is_guest && !$has_title) {
-        return do_shortcode($content);
-    }
-
-    //其余情况，补充边框样式
     $html = '';
 
-    $html .= '<div class="border-2 border-secondary/50 rounded-lg p-4 my-4">';
-    //块标题
     if ($has_title) {
+        //边框样式
+        $html .= '<div class="border-2 border-secondary/50 rounded-lg p-4 my-4">';
+        //块标题
         $html .= '<div class="flex items-center gap-2 mb-2 text-secondary">';
         $html .= '<icon name="command-line" class="size-6 mr-2"></icon>';
         $html .= '<span class="font-bold">' . esc_html($atts['title']) . '</span>';
         $html .= '</div>';
     }
-    //提示登录
-    if ($is_guest) {
-        $html .= '<span class="text-secondary">';
-        $html .= __('仅限登录用户可见，请先登录', 'AIYA');
-        $html .= '</span>';
-    } else {
+
+    if ($is_allowed) {
         $html .= do_shortcode($content);
+    } else {
+        //提示登录
+        $html .= '<span class="text-secondary">' . __('仅限登录后查看，请先登录', 'AIYA') . '</span>';
     }
-    $html .= '</div>';
+
+    if ($has_title) {
+        $html .= '</div>';
+    }
 
     return $html;
 }
@@ -760,7 +754,6 @@ function aya_shortcode_logged_in_content($atts = array(), $content = '')
 //AIYA-CMS 短代码组件：剪贴板功能卡片
 function aya_shortcode_clipboard_in_content($atts = array(), $content = '')
 {
-    //定义简码参数
     $atts = shortcode_atts(
         array(
             'title' => '',

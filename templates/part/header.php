@@ -92,3 +92,4 @@ $app_config = [
         </aside>
         <!-- Main Content -->
         <div class="relative flex flex-col overflow-y-auto overflow-x-hidden transition-all duration-300 ease-in-out pt-16" :class="[sidebarToggle ? 'ml-0' : 'md:ml-64']">
+            <?php aya_template_load('units/ad-card-in-before'); ?>

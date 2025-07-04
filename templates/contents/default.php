@@ -70,6 +70,12 @@ $next_post = $post_obj->next_post();
     </div>
     <!-- Content Start -->
     <div class="article-content p-6 prose prose-base max-w-none">
+        <?php if (aya_opt('site_ad_post_before', 'ads') !== ''): ?>
+            <!-- Advertisement -->
+            <div class="border-2 border-neutral/50 rounded-lg p-4">
+                <?php aya_echo(aya_opt('site_ad_post_before', 'ads')); ?>
+            </div>
+        <?php endif; ?>
         <?php if ($post_is_outdated): ?>
             <div class="alert alert-soft my-4">
                 <icon name="exclamation-triangle" class="size-4 mr-1"></icon>
@@ -80,6 +86,13 @@ $next_post = $post_obj->next_post();
         <?php aya_the_post_tips($post_obj->id); ?>
 
         <?php aya_echo($post_obj->content); ?>
+
+        <?php if (aya_opt('site_ad_post_after', 'ads') !== ''): ?>
+            <!-- Advertisement -->
+            <div class="border-2 border-neutral/50 rounded-lg p-4">
+                <?php aya_echo(aya_opt('site_ad_post_after', 'ads')); ?>
+            </div>
+        <?php endif; ?>
 
         <?php aya_vue_load('post-button-group', [
             'ajax-url' => aya_ajax_url(),

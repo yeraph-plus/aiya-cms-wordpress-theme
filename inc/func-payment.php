@@ -286,7 +286,7 @@ add_filter('rest_authentication_errors', function ($errors) {
 //允许爱发电赞助订单号激活
 function aya_add_afdian_order_activate($code_from)
 {
-    if (aya_opt('site_afdian_convert_bool', 'access')) {
+    if (aya_opt('stie_afdian_homepage_text', 'access') !== '') {
 
         $code_from[] = 'afdian';
     }

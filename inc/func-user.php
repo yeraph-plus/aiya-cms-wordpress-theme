@@ -306,6 +306,27 @@ function aya_sponsor_fix_user_data($user_id = 0, $review_cancel = false)
     return true;
 }
 
+//赞助权限被使用的计数器
+function aya_sponsor_user_trigger_count($user_id = 0)
+{
+    //如果未指定用户ID，则使用当前用户
+    if (empty($user_id)) {
+        if (!is_user_logged_in()) {
+            return false;
+        }
+
+        $user_id = get_current_user_id();
+    }
+
+    $trigger_count = get_user_meta($user_id, 'aya_trigger_count_sponsor', true);
+
+    if (empty($trigger_count)) {
+        add_user_meta($user_id, 'aya_trigger_count_sponsor', 1, true);
+    } else {
+        update_user_meta($user_id, 'aya_trigger_count_sponsor', $trigger_count + 1);
+    }
+}
+
 //在用户后台页面添加自定义区块
 add_action('show_user_profile', 'aya_sponsor_show_orders_user_profile');
 add_action('edit_user_profile', 'aya_sponsor_show_orders_user_profile');
