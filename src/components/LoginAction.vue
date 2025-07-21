@@ -80,12 +80,12 @@ function openRegisterModal() {
 function closeModal() {
     if (modalRef.value) modalRef.value.close();
 
-    // 重置表单
+    //重置表单
     setTimeout(() => {
         if (loginFormRef.value) loginFormRef.value.resetForm();
         if (registerFormRef.value) registerFormRef.value.resetForm();
         if (forgotPasswordFormRef.value) forgotPasswordFormRef.value.resetForm();
-        // 重置状态
+        //重置状态
         isSignIn.value = true;
         isForgotPassword.value = false;
     }, 300);
@@ -102,14 +102,7 @@ function switchToRegister() {
     isSignIn.value = false;
 }
 
-//处理点击模态框外部关闭
-function handleModalClick(event) {
-    if (event.target === modalRef.value) {
-        closeModal();
-    }
-}
-
-//类型声明
+//注册一个全局方法
 declare global {
     interface Window {
         LoginAction?: {
@@ -118,7 +111,6 @@ declare global {
     }
 }
 
-//注册一个全局方法
 onMounted(() => {
     // 确保全局对象存在
     if (!window.LoginAction) {
@@ -156,8 +148,7 @@ onUnmounted(() => {
     <!-- Dialog Modal -->
     <dialog
         ref="modalRef"
-        class="modal modal-bottom sm:modal-middle"
-        @click="handleModalClick">
+        class="modal modal-bottom sm:modal-middle">
         <div class="modal-box relative">
             <div class="flex items-center justify-between mb-4">
                 <h5 class="font-bold text-lg flex items-center">

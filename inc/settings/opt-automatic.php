@@ -47,6 +47,23 @@ AYF::new_opt([
         [
             'title' => '内链格式设置',
             'desc' => '接上一项设置，可选跳转方式',
+            'id' => 'site_content_shotcode_remove_type',
+            'type' => 'radio',
+            'sub' => array(
+                'link' => '提示外部页面',
+                'go' => '使用内链跳转',
+                'false' => '直接跳转（不处理）',
+            ),
+            'default' => 'link',
+        ],
+        /*
+        [
+            'desc' => '禁用简码功能',
+            'type' => 'title_1',
+        ],
+        [
+            'title' => '禁用一些不需要使用的简码',
+            'desc' => '禁用一些不需要使用的简码功能',
             'id' => 'site_content_link_jump_page_type',
             'type' => 'radio',
             'sub' => array(
@@ -56,6 +73,7 @@ AYF::new_opt([
             ),
             'default' => 'link',
         ],
+        */
         [
             'desc' => '中文排版纠正',
             'type' => 'title_1',

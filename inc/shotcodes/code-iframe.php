@@ -9,7 +9,7 @@ if (is_admin()) {
         'id' => 'sc-bili-card',
         'title' => '嵌入B站视频',
         'note' => '嵌入B站的H5播放器到页面',
-        'template' => '[bili_card {{attributes}} /]',
+        'template' => '[bili_iframe {{attributes}} /]',
         'field_build' => array(
             [
                 'id' => 'bvid',
@@ -32,7 +32,7 @@ if (is_admin()) {
         'id' => 'sc-afdian-card',
         'title' => '嵌入爱发电主页',
         'note' => '嵌入爱发电的主页或按钮到页面',
-        'template' => '[afdian_card {{attributes}} /]',
+        'template' => '[afdian_iframe {{attributes}} /]',
         'field_build' => array(
             [
                 'id' => 'slug',
@@ -52,25 +52,26 @@ if (is_admin()) {
     ));
 
     AYA_Shortcode::shortcode_register('github-iframe', array(
-        'id' => 'sc-github-card',
+        'id' => 'sc-github-repo',
         'title' => '嵌入GitHub仓库',
-        'note' => '嵌入GitHub仓库卡片到页面',
+        'note' => '嵌入GitHub仓库卡片到页面（填写“用户名/仓库名”）',
         'template' => '[github_card {{attributes}} /]',
         'field_build' => array(
             [
                 'id' => 'repo',
                 'type' => 'text',
-                'label' => '用户名/仓库名',
+                'label' => '<user>/<repo>',
                 'desc' => '',
                 'default' => '',
             ],
         )
     ));
+
 }
 
-add_shortcode('bili_card', 'aya_shortcode_bilibili_iframe');
-add_shortcode('afdian_card', 'aya_shortcode_afdian_iframe');
-add_shortcode('github_card', 'aya_shortcode_github_iframe');
+add_shortcode('bili_iframe', 'aya_shortcode_bilibili_iframe');
+add_shortcode('afdian_iframe', 'aya_shortcode_afdian_iframe');
+add_shortcode('github_card', 'aya_shortcode_github_repo_iframe');
 
 //AIYA-CMS 短代码组件：Iframe嵌入页面
 function aya_shortcode_bilibili_iframe($atts)
@@ -88,10 +89,20 @@ function aya_shortcode_bilibili_iframe($atts)
     }
 
     if (filter_var($atts['h5_player'], FILTER_VALIDATE_BOOLEAN)) {
-        return '<iframe src="//www.bilibili.com/blackboard/html5mobileplayer.html?isOutside=true&bvid=' . $atts['bvid'] . '" width="640" height="360" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>';
+        $src = '//www.bilibili.com/blackboard/html5mobileplayer.html?isOutside=true&bvid=' . $atts['bvid'];
     } else {
-        return '<iframe src="//player.bilibili.com/player.html?isOutside=true&bvid=' . $atts['bvid'] . '" width="640" height="360" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>';
+        $src = '//player.bilibili.com/player.html?isOutside=true&bvid=' . $atts['bvid'];
     }
+
+    $html = '';
+
+    $html .= '<div class="iframe-container">';
+    $html .= '<iframe src="' . $src . '" width="640" height="360" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy">';
+    $html .= '<p class="text-center py-8 text-gray-500">No specified.</p>';
+    $html .= '</iframe>';
+    $html .= '</div>';
+
+    return $html;
 }
 
 //AIYA-CMS 短代码组件：爱发电卡片
@@ -111,15 +122,31 @@ function aya_shortcode_afdian_iframe($atts)
         return '';
     }
 
+    $html = '';
+
     if (filter_var($atts['type_btn'], FILTER_VALIDATE_BOOLEAN)) {
-        return '<a href="' . aya_get_afdian_link() . $afdian_slug . '" target="_blank"><img width="200" src="https://pic1.afdiancdn.com/static/img/welcome/button-sponsorme.png" alt=""></a>';
+        $src = aya_get_afdian_link() . $afdian_slug;
+
+        $html .= '<a href="' . $src . '" target="_blank">';
+        $html .= '<img width="200" src="https://pic1.afdiancdn.com/static/img/welcome/button-sponsorme.png" alt="">';
+        $html .= '</a>';
     } else {
-        return '<iframe src="' . aya_get_afdian_link() . 'leaflet?slug=' . $afdian_slug . '" width="640" height="200" scrolling="no" frameborder="0"></iframe>';
+        $src = aya_get_afdian_link() . 'leaflet?slug=' . $afdian_slug;
+
+        $html .= '<div class="iframe-container">';
+        $html .= '<iframe src="' . $src . '" width="640" height="200" scrolling="no" frameborder="0" loading="lazy">';
+        $html .= '<p class="text-center py-8 text-gray-500">No specified.</p>';
+        $html .= '</iframe>';
+        $html .= '</div>';
     }
+
+    $html .= '</div>';
+
+    return $html;
 }
 
 //AIYA-CMS 短代码组件：GitHub仓库卡片
-function aya_shortcode_github_iframe($atts)
+function aya_shortcode_github_repo_iframe($atts)
 {
     $atts = shortcode_atts(
         array(
@@ -132,14 +159,16 @@ function aya_shortcode_github_iframe($atts)
         return '';
     }
 
-    return '<div id="github-card"></div><script>fetch("https://api.github.com/repos/' . $atts['repo'] . '").then(res => res.json()).then(data => {
-            const card = `
-            <a href="${data.html_url}" target="_blank" class="card">
-                <h5>${data.name}</h5>
-                <p>⭐ ${data.stargazers_count} | 🍴 ${data.forks_count}</p>
-                <p>${data.description}</p>
-            </a>
-            `;
-            document.getElementById("github-card").innerHTML = card;
-        });</script>';
+    $card_src = 'https://gh-card.dev/repos/' . esc_html($atts['repo']) . '.svg';
+
+    $html = '';
+
+    $html .= '<div class="iframe-container">';
+    $html .= '<iframe src="' . $card_src . '" loading="lazy">';
+    $html .= '<p class="text-center py-8 text-gray-500">No specified.</p>';
+    $html .= '</iframe>';
+    $html .= '</div>';
+
+    return $html;
+
 }

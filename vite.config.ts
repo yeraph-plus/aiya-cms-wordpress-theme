@@ -21,6 +21,7 @@ export default defineConfig({
         tailwindcss(),
         liveReload([
             __dirname + '/**/*.php',
+            __dirname + '/src/styles/*.css',
             __dirname + '/src/**/*.vue',
             __dirname + '/src/**/*.js'
         ])

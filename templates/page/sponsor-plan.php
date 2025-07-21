@@ -9,7 +9,7 @@ $page_title = get_post($page_id)->post_title;
 $page_content = apply_filters('the_content', get_post($page_id)->post_content);
 
 //面包屑参数
-AYA_WP_Breadcrumb_Object::add_item(__('订阅功能', 'AIYA'), home_url('sponsor'));
+aya_add_breadcrumb_item(__('订阅功能', 'AIYA'), home_url('sponsor'));
 ?>
 <main class="flex-1 flex flex-col">
     <!-- Full Width Post Page -->

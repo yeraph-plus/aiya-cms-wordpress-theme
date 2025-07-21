@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
                     <div class="text-sm flex justify-center md:justify-end">
                         <div class="flex flex-col items-center md:items-end gap-2">
                             <p>Copyright © {{new Date().getFullYear()}} Aiya-CMS All rights reserved.</p>
-                            <?php if (aya_is_dev_mode()): ?>
+                            <?php if (aya_is_debug()): ?>
                                 <p class="text-xs"><?php aya_echo(aya_sql_counter()); ?></p>
                             <?php endif; ?>
                             <?php if (aya_opt('site_icp_beian_text', 'basic') !== ''): ?>

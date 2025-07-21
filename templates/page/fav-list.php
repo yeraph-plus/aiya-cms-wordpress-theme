@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 //面包屑参数
-AYA_WP_Breadcrumb_Object::add_item(__('收藏列表', 'AIYA'), home_url('favlist'));
+aya_add_breadcrumb_item(__('收藏列表', 'AIYA'), home_url('favlist'));
 ?>
 <main class="flex-1 flex flex-col">
     <!-- Full Width Post Page -->

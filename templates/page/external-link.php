@@ -23,7 +23,7 @@ if (!cur_is_url($external_url)) {
 }
 
 //面包屑参数
-AYA_WP_Breadcrumb_Object::add_item(__('外部链接提示', 'AIYA'), '#');
+aya_add_breadcrumb_item(__('外部链接提示', 'AIYA'), '#');
 ?>
 <main class="flex-1 flex flex-col">
     <!-- External Link Tips -->

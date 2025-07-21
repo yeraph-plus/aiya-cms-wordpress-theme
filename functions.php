@@ -30,11 +30,6 @@ if (!defined('ABSPATH')) {
 //目录定位
 define('AYA_PATH', get_template_directory());
 define('AYA_HOME', home_url());
-define('AYA_URI', get_template_directory_uri());
-
-//开关 DEBUG 组件
-define('AYA_RELEASE', true);
-
 //缓存时间
 //define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); // or MINUTE_IN_SECONDS
 //浏览量倍率作弊
@@ -130,7 +125,6 @@ aya_require('opt-land', 'settings');
 aya_require('opt-notify', 'settings');
 aya_require('opt-automatic', 'settings');
 aya_require('opt-access', 'settings');
-aya_require('opt-ads', 'settings');
 //小工具
 // aya_require('widget-text-html', 'widgets');
 // aya_require('widget-add-menu', 'widgets');

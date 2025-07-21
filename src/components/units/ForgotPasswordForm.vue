@@ -60,7 +60,7 @@ async function handleForgotPassword() {
             errorMsg.value = data.data?.detail || t("forgot_password_failed");
         } else {
             emit("forgot-password-success", data);
-            toast.success(data.data?.message || t("reset_link_sent"));
+            toast.success(data.data?.message);
         }
     } catch (err) {
         errorMsg.value = t("network_error");

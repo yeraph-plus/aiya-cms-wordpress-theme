@@ -405,6 +405,7 @@ if (is_admin()) {
             ]
         )
     ));
+
 }
 
 //移除一些 WordPress 默认的短代码
@@ -767,6 +768,5 @@ function aya_shortcode_clipboard_in_content($atts = array(), $content = '')
     $content = strip_tags($content);
     $content = trim($content);
 
-    //导入Vue组件
     return '<text-clipboard title="' . $title . '" content="' . $content . '"></text-clipboard>';
 }

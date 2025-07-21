@@ -34,7 +34,7 @@ AYF::new_opt([
             'id' => 'site_logo_image_upload',
             'type' => 'upload',
             'button_text' => '上传',
-            'default' => AYA_URI . '/assets/image/logo.png',
+            'default' => get_template_directory_uri() . '/assets/image/logo.png',
         ],
         [
             'title' => '显示站点名称',
@@ -63,7 +63,7 @@ AYF::new_opt([
             'id' => 'site_default_thumb_upload',
             'type' => 'upload',
             'button_text' => '上传',
-            'default' => AYA_URI . '/assets/image/default-thumb.png',
+            'default' => get_template_directory_uri() . '/assets/image/default-thumb.png',
         ],
         [
             'title' => '页面 404 占位图',
@@ -71,7 +71,7 @@ AYF::new_opt([
             'id' => 'site_404_page_img_upload',
             'type' => 'upload',
             'button_text' => '上传',
-            'default' => AYA_URI . '/assets/image/default-404-error.png',
+            'default' => get_template_directory_uri() . '/assets/image/default-404-error.png',
         ],
         [
             'title' => '内容为空占位图',
@@ -79,7 +79,7 @@ AYF::new_opt([
             'id' => 'site_none_content_upload',
             'type' => 'upload',
             'button_text' => '上传',
-            'default' => AYA_URI . '/assets/image/default-404-error.png',
+            'default' => get_template_directory_uri() . '/assets/image/default-404-error.png',
         ],
         [
             'title' => '外链跳转页面占位图',
@@ -87,7 +87,7 @@ AYF::new_opt([
             'id' => 'site_ext_page_img_upload',
             'type' => 'upload',
             'button_text' => '上传',
-            'default' => AYA_URI . '/assets/image/default-paper-plane.png',
+            'default' => get_template_directory_uri() . '/assets/image/default-paper-plane.png',
         ],
         [
             'desc' => '页面布局设置（Layout）',
@@ -143,6 +143,7 @@ AYF::new_opt([
             'type' => 'textarea',
             'default' => '本站部分内容转载自网络，作品版权归原作者及来源网站所有，任何内容转载、商业用途等均须联系原作者并注明来源。',
         ],
+        /*
         [
             'title' => '相关文章',
             'desc' => '在文章页面显示相关文章导航卡片（使用分类和标签进行相关度检索）',
@@ -150,6 +151,7 @@ AYF::new_opt([
             'type' => 'switch',
             'default' => false,
         ],
+        */
         [
             'desc' => '合规类功能设置',
             'type' => 'title_1',

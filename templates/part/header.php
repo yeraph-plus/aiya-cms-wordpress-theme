@@ -39,7 +39,7 @@ $app_config = [
     <?php wp_head(); ?>
 </head>
 
-<body <?php if (aya_is_dev_mode()) {
+<body <?php if (aya_is_debug()) {
     body_class();
 } ?>>
     <?php aya_template_load('units/screen-loader'); ?>

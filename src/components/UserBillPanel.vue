@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+//i18n
 import { useI18n } from "vue-i18n";
+//Heroicons
 import { BoltSlashIcon, BoltIcon, TicketIcon, EyeSlashIcon } from "@heroicons/vue/24/outline";
 import SponsorActivationForm from "./units/SponsorActivationForm.vue";
+//Modal
 import { showModal } from "../scripts/modal-plugin";
-
-const { t } = useI18n();
 //Data
 const props = defineProps({
     from_source: {
@@ -29,6 +30,8 @@ const props = defineProps({
         required: false,
     },
 });
+
+const { t } = useI18n();
 
 //表格排序
 const sortKey = ref("start_time");

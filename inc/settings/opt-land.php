@@ -6,10 +6,10 @@ if (!defined('ABSPATH')) {
 
 //创建主题设置
 AYF::new_opt([
-    'title' => '首页组件',
+    'title' => '页面组件',
     'parent' => 'basic',
     'slug' => 'land',
-    'desc' => 'AIYA-CMS 主题，首页组件设置',
+    'desc' => 'AIYA-CMS 主题，页面组件设置',
     'fields' => [
         [
             'desc' => '横幅设置（Banner）',
@@ -40,7 +40,7 @@ AYF::new_opt([
             'id' => 'site_banner_bg_upload',
             'type' => 'upload',
             'button_text' => '上传',
-            'default' => AYA_URI . '/assets/image/default-banner.png',
+            'default' => get_template_directory_uri() . '/assets/image/default-banner.png',
         ],
         [
             'title' => '背景滤镜',
@@ -290,5 +290,61 @@ AYF::new_opt([
             ),
         ],
         */
+        [
+            'desc' => '页面广告位（AD）',
+            'type' => 'title_1',
+        ],
+        [
+            'title' => '全局顶部',
+            'desc' => '站点顶部广告位，支持 HTML ',
+            'id' => 'site_ad_home_before',
+            'type' => 'code_editor',
+            'settings' => [
+                'lineNumbers' => true,
+                'tabSize' => 2,
+                'theme' => 'monokai',
+                'mode' => 'javascript',
+            ],
+            'default' => '',
+        ],
+        [
+            'title' => '全局底部',
+            'desc' => '站点底部广告位，支持 HTML ',
+            'id' => 'site_ad_home_after',
+            'type' => 'code_editor',
+            'settings' => [
+                'lineNumbers' => true,
+                'tabSize' => 2,
+                'theme' => 'monokai',
+                'mode' => 'javascript',
+            ],
+            'default' => '',
+        ],
+        [
+            'title' => '文章顶部',
+            'desc' => '插入到文章开头的广告位，支持 HTML ',
+            'id' => 'site_ad_post_before',
+            'type' => 'code_editor',
+            'settings' => [
+                'lineNumbers' => true,
+                'tabSize' => 2,
+                'theme' => 'monokai',
+                'mode' => 'javascript',
+            ],
+            'default' => '',
+        ],
+        [
+            'title' => '文章底部',
+            'desc' => '插入到文章结尾的广告位，支持 HTML ',
+            'id' => 'site_ad_post_after',
+            'type' => 'code_editor',
+            'settings' => [
+                'lineNumbers' => true,
+                'tabSize' => 2,
+                'theme' => 'monokai',
+                'mode' => 'javascript',
+            ],
+            'default' => '',
+        ],
     ]
 ]);

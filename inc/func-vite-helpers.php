@@ -134,7 +134,7 @@ add_action('wp_footer', 'aya_debug_vite_assets');
 function aya_dist_scripts_loader()
 {
     //如果是开发模式，载入Vite构造文件
-    if (aya_is_dev_mode()) {
+    if (aya_is_debug()) {
         if (aya_vite_reference()) {
             //返回client，用于支持HMR
             echo '<script type="module" src="' . VITE_HOST . '/@vite/client"></script>' . PHP_EOL;
@@ -169,7 +169,7 @@ function aya_dist_scripts_loader()
 //在页面末尾添加log
 function aya_debug_vite_assets()
 {
-    if (aya_is_dev_mode()) {
+    if (aya_is_debug()) {
         // 创建数据数组
         $debug_data = array(
             'vite_server' => array(

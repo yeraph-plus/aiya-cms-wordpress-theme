@@ -146,37 +146,6 @@ $next_post = $post_obj->next_post();
 </article>
 
 <?php
-/*
-$related = aya_opt('site_single_related_bool', 'basic');
-// 显示相关文章
-$related_posts = get_posts(array(
-    'category__in' => wp_get_post_categories($post_obj->id),
-    'numberposts' => 3,
-    'post__not_in' => array($post_obj->id)
-));
-
-if (!empty($related_posts)):
-    ?>
-    <div class="related-posts mt-8 bg-base-100 border border-base-300 rounded-lg shadow-sm p-6">
-        <h3 class="text-xl font-bold mb-4"><?php _e('相关文章', 'AIYA'); ?></h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <?php foreach ($related_posts as $related_post): ?>
-                <a href="<?php echo get_permalink($related_post->ID); ?>" class="card bg-base-200 hover:shadow-md transition-shadow">
-                    <div class="card-body p-4">
-                        <h4 class="card-title text-base line-clamp-2"><?php echo esc_html($related_post->post_title); ?></h4>
-                        <p class="text-xs text-base-content/70">
-                            <?php echo get_the_date('', $related_post->ID); ?>
-                        </p>
-                    </div>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    </div>
-<?php endif; ?>
-*/
-?>
-
-<?php
 // 加载评论模板
 aya_comments_template();
 ?>

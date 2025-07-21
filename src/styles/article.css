@@ -100,6 +100,14 @@
         color: hsl(var(--bc));
     }
 
+    .iframe-container {
+        @apply w-auto max-w-2xl relative flex items-center justify-center mx-auto my-4;
+    }
+
+    iframe {
+        @apply bg-transparent;
+    }
+
     figure {
         @apply relative mx-auto my-6 max-w-2xl;
     }

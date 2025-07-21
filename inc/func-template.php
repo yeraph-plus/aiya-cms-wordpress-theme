@@ -347,12 +347,6 @@ function aya_get_menu_json($menu_name)
     return json_encode($menu_object, JSON_UNESCAPED_UNICODE);
 }
 
-//获取面包屑导航
-function aya_get_breadcrumb()
-{
-    return AYA_WP_Breadcrumb_Object::get_breadcrumb();
-}
-
 //获取简单分页列表
 function aya_get_simple_pagination()
 {
@@ -376,6 +370,17 @@ function aya_get_pagination()
     return;
 }
 
+//获取面包屑导航
+function aya_get_breadcrumb()
+{
+    return AYA_WP_Breadcrumb_Object::get_breadcrumb();
+}
+
+//面包屑自定义层级
+function aya_add_breadcrumb_item($item, $url)
+{
+    return AYA_WP_Breadcrumb_Object::add_item($item, $url);
+}
 
 /*
  * ------------------------------------------------------------------------------

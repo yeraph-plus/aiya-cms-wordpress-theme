@@ -63,9 +63,9 @@ function aya_theme_version()
 }
 
 //判断开发模式
-function aya_is_dev_mode()
+function aya_is_debug()
 {
-    return !(defined('AYA_RELEASE') && AYA_RELEASE === true);
+    return (defined('WP_DEBUG') && WP_DEBUG === true);
 }
 
 //获取设置项
