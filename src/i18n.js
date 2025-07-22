@@ -348,10 +348,10 @@ const messages = {
         oplist_button_rpc_cancel: "取消",
         oplist_button_rpc_save: "保存",
         oplist_rpc_not_configured: "未配置 RPC 链接地址",
-        oplist_rpc_download_started: "已开始下载 {file} ",
-        oplist_rpc_download_failed: "下载任务启动失败 {file} ",
+        oplist_rpc_download_started: "已开始下载 {file} 请到客户端查看",
+        oplist_rpc_download_failed: "下载任务启动失败 {file} 请到客户端查看",
         oplist_rpc_connection_failed: "连接失败，客户端没有响应",
-        oplist_rpc_error: "链接错误，请检查配置",
+        oplist_rpc_error: "无法连接到客户端，请检查配置",
     }
 };
 

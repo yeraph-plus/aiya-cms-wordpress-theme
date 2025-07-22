@@ -28,20 +28,13 @@ const props = defineProps({
 
 const { t } = useI18n();
 
-//全局声明获取window.isMobile
-declare global {
-    interface Window {
-        isMobile?: (() => boolean) & { onChange?: (cb: (status: boolean) => void) => void };
-    }
-}
-
-//检测移动设备状态
-const isMobile = ref(window.isMobile ? window.isMobile() : false);
+//检测移动设备
+const isMobile = window.innerWidth < 1024;
 
 //布局自动自动降级逻辑
 const actualLayoutType = computed(() => {
     //移动设备始终使用全宽模板
-    if (isMobile.value) return "full";
+    if (isMobile) return "full";
 
     //拼搭模式项目数量小于4个时使用全宽模板
     if (props.layoutType === "mosaic" && Object.keys(props.postData).length < 4) {
@@ -49,15 +42,6 @@ const actualLayoutType = computed(() => {
     }
 
     return props.layoutType;
-});
-
-//组件挂载时订阅移动设备状态变化
-onMounted(() => {
-    if (window.isMobile && window.isMobile.onChange) {
-        window.isMobile.onChange((status) => {
-            isMobile.value = status;
-        });
-    }
 });
 
 //将对象转换为数组以便迭代

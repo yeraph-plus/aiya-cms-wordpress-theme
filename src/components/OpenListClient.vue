@@ -13,7 +13,7 @@ import OpenListClientSettings from "./units/OpenListClientSettings.vue";
 const props = defineProps({
     fs: {
         type: Object,
-        default: {
+        default: () => ({
             fs_method: "get",
             path: "/",
             password: "",
@@ -24,7 +24,7 @@ const props = defineProps({
             parent: "/",
             keywords: "",
             scope: 0,
-        },
+        }),
         required: true,
     },
     rest_nonce: {
@@ -280,14 +280,22 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="bg-base-100 shadow-md rounded-lg">
-        <table class="table table-zebra w-full !my-0">
-            <thead>
-                <tr class="bg-base-200">
-                    <th class="w-2/5">{{ t("oplist_table_name") }}</th>
-                    <th class="w-1/6">{{ t("oplist_table_size") }}</th>
-                    <th class="w-1/6">{{ t("oplist_table_modified") }}</th>
-                    <th class="w-1/4">{{ t("oplist_table_actions") }}</th>
+    <div class="card bg-base-100 shadow-md">
+        <table class="table table-zebra !my-0">
+            <thead class="bg-base-200">
+                <tr>
+                    <th class="w-3/5 lg:w-2/5">
+                        {{ t("oplist_table_name") }}
+                    </th>
+                    <th class="hidden lg:table-cell lg:w-1/6">
+                        {{ t("oplist_table_size") }}
+                    </th>
+                    <th class="hidden lg:table-cell lg:w-1/6">
+                        {{ t("oplist_table_modified") }}
+                    </th>
+                    <th class="w-1/4">
+                        {{ t("oplist_table_actions") }}
+                    </th>
                 </tr>
             </thead>
             <!-- IF LOADING -->
@@ -332,12 +340,12 @@ onMounted(() => {
                             </span>
                         </span>
                     </td>
-                    <td>
+                    <td class="hidden lg:table-cell">
                         <span class="text-sm text-base-content/70">
                             {{ formatFileSize(item.size) }}
                         </span>
                     </td>
-                    <td>
+                    <td class="hidden lg:table-cell">
                         <span class="text-sm text-base-content/70">
                             {{ formatDate(item.modified) }}
                         </span>
@@ -366,6 +374,7 @@ onMounted(() => {
                             <button
                                 v-if="isClientEnabled && item.type != 'folder'"
                                 class="btn btn-soft btn-sm btn-secondary"
+                                :class="setFileLog.has(item.url) ? '' : 'btn-primary'"
                                 @click="sendToAria2(item.url, item.name)"
                                 :title="t('oplist_button_client_title')">
                                 <ArrowTurnDownRightIcon class="size-4 mr-1" />
@@ -379,24 +388,26 @@ onMounted(() => {
         <!-- Toolbar -->
         <div class="flex justify-between items-center p-4">
             <!-- Pagination -->
-            <div class="flex items-center join">
-                <template
-                    v-if="fsPagination && fsPagination.total > fsPagination.per_page"
-                    v-for="page in loadPageNumbers()"
-                    :key="page">
-                    <button
-                        v-if="page !== '...'"
-                        class="join-item btn btn-sm"
-                        :class="{ 'btn-active': page === fsPagination.page }"
-                        @click="handlePageChange(page)">
-                        {{ page }}
-                    </button>
-                    <span
-                        v-else
-                        class="join-item btn btn-sm btn-disabled">
-                        ...
-                    </span>
-                </template>
+            <div class="flex items-center">
+                <div class="join">
+                    <template
+                        v-if="fsPagination && fsPagination.total > fsPagination.per_page"
+                        v-for="page in loadPageNumbers()"
+                        :key="page">
+                        <button
+                            v-if="page !== '...'"
+                            class="join-item btn btn-sm"
+                            :class="{ 'btn-active': page === fsPagination.page }"
+                            @click="handlePageChange(page)">
+                            {{ page }}
+                        </button>
+                        <span
+                            v-else
+                            class="join-item btn btn-sm btn-disabled">
+                            ...
+                        </span>
+                    </template>
+                </div>
                 <span
                     v-if="fsTotalInfo != ''"
                     class="ml-3 text-sm font-medium text-base-content/50">

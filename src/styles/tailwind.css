@@ -86,37 +86,14 @@
     .lozad.loaded {
         opacity: 1;
     }
-    /* Custom scrollbar */
-    .custom-scrollbar {
-        /* Firefox */
-        scrollbar-width: thin;
-        scrollbar-color: hsl(var(--p) / 0.3) transparent;
-
-        /* Webkit (Chrome, Safari, Edge, etc) */
-        &::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
-        }
-
-        &::-webkit-scrollbar-track {
-            background: transparent;
-            border-radius: 0.5rem;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background-color: hsl(var(--p) / 0.3);
-            border-radius: 0.5rem;
-            border: 2px solid transparent;
-            background-clip: content-box;
-
-            &:hover {
-                background-color: hsl(var(--p) / 0.5);
-            }
-
-            &:active {
-                background-color: hsl(var(--p) / 0.7);
-            }
-        }
+    .hidden-scrollbar {
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .hidden-scrollbar:-webkit-scrollbar {
+        display: none;
     }
 }
 

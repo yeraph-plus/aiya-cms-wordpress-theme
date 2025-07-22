@@ -24,39 +24,28 @@ import 'prismjs/components/prism-csharp';
 export default class PrismJSPlugin {
 
     constructor(container?: string | Element) {
-        this.init(container);
-    }
-
-    init(container?: string | Element) {
-        // 添加行号支持
-        this.addLineNumbersClass(container);
-        this.highlightAll();
-    }
-
-    // 为所有代码块添加行号类
-    addLineNumbersClass(container?: string | Element) {
         //定位根元素
         const root = container
             ? (typeof container === 'string' ? document.querySelector(container) : container)
             : document;
-
         if (!root) return;
 
-        const codeBlocks = root.querySelectorAll('pre:not(.no-line-numbers)');
-
-        codeBlocks.forEach(block => block.classList.add('line-numbers'));
+        this.init(root);
     }
 
-    highlightAll() {
-        // 应用Prism代码高亮
-        Prism.highlightAll();
+    init(root) {
+        //添加行号支持
+        const codeBlocks = root.querySelectorAll('pre:not(.no-line-numbers)');
+        codeBlocks.forEach(block => block.classList.add('line-numbers'));
+
+        //应用Prism代码高亮
+        Prism.highlightAllUnder(root);
     }
 }
 
 export function initPrism(): void {
-
     //只在文章页面触发初始化
     if (document.getElementsByClassName('.article-content')) {
-        new PrismJSPlugin();
+        new PrismJSPlugin('.article-content');
     }
 }

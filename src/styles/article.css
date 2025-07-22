@@ -196,7 +196,11 @@
     }
 
     table {
-        @apply w-full border-collapse;
+        @apply w-full rounded-lg border-collapse;
+    }
+
+    table thead {
+        @apply rounded-t-lg;
     }
 
     table thead tr,

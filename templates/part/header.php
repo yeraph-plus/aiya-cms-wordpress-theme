@@ -5,8 +5,8 @@ if (!defined('ABSPATH')) {
 }
 
 $app_config = [
-    'defaultDarkMode' => aya_opt('site_default_dark_mode_bool', 'basic') ? 'true' : 'false',
-    'defaultSitebarClose' => aya_opt('site_default_sitebar_close_bool', 'basic') ? 'true' : 'false'
+    'defaultDarkMode' => aya_opt('site_default_dark_mode_bool', 'basic') ? true : false,
+    'defaultSitebarClose' => aya_opt('site_default_sitebar_close_bool', 'basic') ? true : false
 ];
 
 /** 
@@ -47,7 +47,7 @@ $app_config = [
     <?php aya_home_open(); ?>
     <div id="vue-app" class="min-h-screen overflow-hidden" style="visibility: hidden">
         <!-- Mobile Sidebar Mask -->
-        <div v-if="!sidebarToggle && isMobile" @click="sidebarToggle = false" class="fixed md:hidden inset-0 bg-base-300/30 backdrop-blur-sm transition-all duration-300 ease-in-out z-20"></div>
+        <div v-if="sidebarToggle && isMobile" @click="sidebarToggle = false" class="fixed z-20 md:hidden inset-0 bg-base-300/30 backdrop-blur-sm transition-all duration-300 ease-in-out"></div>
         <!-- Topbar -->
         <header class="flex fixed z-40 w-full bg-base-100 border-b border-base-300 min-h-16 p-2 transition-all duration-300 ease-in-out">
             <div class="inline-flex w-64 items-center justify-start px-4">
@@ -73,9 +73,9 @@ $app_config = [
             </div>
         </header>
         <!-- Left Sidebar -->
-        <aside class="fixed z-20 w-64 top-16 bottom-0 flex flex-col overflow-hidden bg-base-100 shadow-md border-r border-base-300 transition-all duration-300 ease-in-out" :class="[sidebarToggle ? '-translate-x-full' : 'left-0']">
+        <aside class="fixed z-20 w-64 top-16 bottom-0 flex flex-col overflow-hidden bg-base-100 shadow-md border-r border-base-300 transition-all duration-300 ease-in-out" :class="[sidebarToggle ? 'left-0' : '-translate-x-full']">
             <!-- Scroll Box -->
-            <div class="flex-grow overflow-y-auto custom-scrollbar">
+            <div class="flex-grow overflow-y-auto hidden-scrollbar">
                 <!-- Search Form -->
                 <div class="relative px-4 pt-6">
                     <?php aya_vue_load('search-form'); ?>
@@ -91,5 +91,5 @@ $app_config = [
             <?php aya_template_load('units/bar-info-box'); ?>
         </aside>
         <!-- Main Content -->
-        <div class="relative flex flex-col overflow-y-auto overflow-x-hidden transition-all duration-300 ease-in-out pt-16" :class="[sidebarToggle ? 'ml-0' : 'md:ml-64']">
+        <div class="relative flex flex-col overflow-y-auto overflow-x-hidden transition-all duration-300 ease-in-out pt-16" :class="[sidebarToggle ? 'md:ml-64 ml-0' : 'ml-0']">
             <?php aya_template_load('units/ad-card-in-before'); ?>

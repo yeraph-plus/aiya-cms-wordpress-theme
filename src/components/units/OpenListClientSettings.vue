@@ -115,7 +115,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex items-center space-x-2">
+    <div class="hidden lg:flex items-center space-x-2">
         <div
             class="dropdown dropdown-end lg:dropdown-top"
             :class="{ 'dropdown-open': isDropdownOpen }">
