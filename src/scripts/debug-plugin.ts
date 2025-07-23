@@ -12,6 +12,9 @@ export class VueDebugTools {
      * @param app Vue App
      */
     constructor(app: App) {
+        if (!app) {
+            throw new Error('Vue app instance is required');
+        }
         this.app = app;
         this.originalSetAttribute = Element.prototype.setAttribute;
     }
@@ -25,7 +28,7 @@ export class VueDebugTools {
         this.setupErrorHandler();
         this.setupPerformanceMonitoring();
 
-        console.log('[DEBUG] Vue debugging tool enabled.');
+        //console.log('[DEBUG] Vue debugging tool enabled.');
     }
 
     disable(): void {
@@ -124,36 +127,29 @@ export class VueDebugTools {
     }
 }
 
-/**
- * Vue应用调试插件
- * 
- * @param app Vue应用实例
- */
-export default {
+export const VueDebugPlugin = {
     install: (app: App) => {
         const debugTools = new VueDebugTools(app);
 
-        //将debug方法添加到app全局属性中
         app.config.globalProperties.$debug = debugTools;
 
-        //将调试工具添加到app实例上
-        app.debug = () => {
+        app.debug = function () {
             debugTools.enable();
             return app;
         };
 
-        //添加禁用调试的方法
-        app.disableDebug = () => {
+        app.disableDebug = function () {
             debugTools.disable();
             return app;
         };
 
-        //将调试工具添加到window对象，方便控制台访问
         if (typeof window !== 'undefined') {
             window.__VUE_DEBUG_TOOLS__ = debugTools;
         }
     }
-}
+};
+
+export default VueDebugPlugin;
 
 //类型扩展声明
 declare module '@vue/runtime-core' {

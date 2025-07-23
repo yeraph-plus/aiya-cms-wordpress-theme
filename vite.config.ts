@@ -67,7 +67,6 @@ export default defineConfig({
         //生产文件的输出目录
         outDir: './build',
         emptyOutDir: true,
-
         //指定esbuild版本
         //target: 'es2018',
         //清单文件，用于PHP解析以找到带hash的文件
@@ -78,6 +77,8 @@ export default defineConfig({
         minify: !debugMode,
         //是否生成sourcemap
         sourcemap: debugMode,
+        //调整chunk警告
+        chunkSizeWarningLimit: 1024,
 
         //rollup入口
         //e.g: https://rollupjs.org/configuration-options/

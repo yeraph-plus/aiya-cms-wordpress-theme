@@ -39,7 +39,7 @@ $post_thumb = aya_the_post_thumb($post_obj->thumbnail_url, $post_obj->content, 3
                     <?php endforeach; ?>
                 </div>
             </div>
-            <p class="line-clamp-2 sm:line-clamp-3 text-sm text-base-content/70 flex-grow">
+            <p class="line-clamp-2 sm:line-clamp-2 text-sm text-base-content/70 flex-grow">
                 <?php aya_echo($post_obj->preview); ?>
             </p>
             <div class="flex items-center justify-between mt-auto pt-3 text-xs text-base-content/60">

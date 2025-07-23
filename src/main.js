@@ -10,16 +10,16 @@ import { createI18n } from 'vue-i18n';
 //Vue 翻译文件
 import messages from "./i18n";
 //Debug工具
-import { VueDebugTools } from "./scripts/debug";
+import { VueDebugPlugin } from './scripts/debug-plugin';
 //页面挂载
-import { initPrism } from './scripts/prismjs-plugin';
 import { initLozad } from './scripts/lozad-plugin';
+import { initThemeSwitch } from './scripts/theme-switch-plugin';
 import { initViewer } from './scripts/viewerjs-plugin';
+import { initPrism } from './scripts/prismjs-plugin';
 import {
-    initThemeSwitch,
     initNSFWHandlers,
     initRedirectButtons,
-} from './init';
+} from './functions';
 
 //标记页面加载状态
 document.body.classList.add('loading');
@@ -76,12 +76,10 @@ const i18n = createI18n({
     locale: (() => {
         //检查浏览器语言设置
         const htmlLang = document.documentElement.lang;
-
         if (htmlLang) {
             return htmlLang.split('-')[0];
         }
-
-        //默认使用 'zh'
+        //默认中文
         return 'zh';
     })(),
     messages
@@ -133,22 +131,25 @@ if (vueAppElement) {
                 sidebarToggle: (isMobile) ? false : appConfig.defaultSitebarClose,
             }
         },
+        created() {
+            //...
+        },
         mounted() {
+            //将图片懒加载逻辑挂载到全局
+            window.lozadObserver = initLozad();
             //创建Vue加载完成事件
             setTimeout(() => {
                 document.dispatchEvent(new CustomEvent('vue-initialized'));
-            }, 100);
-            //将图片懒加载逻辑挂载到全局
-            window.lozadObserver = initLozad();
+            }, 500);
         },
-        created() {
+        updated() {
             //...
         }
     });
 
     //创建了用于捕获错误的工具类
-    // app.use(VueDebugTools);
-    // app.debug();
+    app.use(VueDebugPlugin);
+    app.debug();
 
     app.use(i18n);
     app.mount('#vue-app');
@@ -192,5 +193,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //Vue Loaded
 document.addEventListener("vue-initialized", function () {
+    //object label
     console.log("\n\n %c AIYA-CMS %c https://www.yeraph.com", "color:#f1ab0e;background:#222222;padding:5px;", "background:#eee;padding:5px;");
 });

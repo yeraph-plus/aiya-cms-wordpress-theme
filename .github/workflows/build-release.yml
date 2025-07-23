@@ -98,3 +98,6 @@ jobs:
                       ../aiya-cms-framework-plugin-${{ steps.release_version.outputs.VERSION }}.zip
                   draft: false
                   prerelease: false
+
+            - name: Release is completed
+              run: echo "Done!"

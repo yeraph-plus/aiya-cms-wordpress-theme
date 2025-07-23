@@ -604,7 +604,7 @@ function aya_match_post_first_url($the_content, $callback = false)
 function aya_match_post_first_image($the_content, $callback = false)
 {
     //遍历内容提取图片
-    $match_all = preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $the_content, $matches);
+    $match_all = preg_match_all('/<img[^>]*?src=[\'"]([^\'"]+)[\'"][^>]*?>/i', $the_content, $matches);
 
     //返回
     if (isset($matches[1][0])) {

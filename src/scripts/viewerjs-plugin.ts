@@ -1,37 +1,58 @@
 import Viewer from 'viewerjs';
-import 'viewerjs/dist/viewer.css';
 
-export default class ViewerJSPlugin {
-    constructor(container?: string | Element) {
-        //定位根元素
-        const root = container
-            ? (typeof container === 'string' ? document.querySelector(container) : container)
-            : document;
-        if (!root) return;
+//初始化 ViewerJS 图片查看器
+export function initViewer() {
+    const container = document.querySelector('.article-content') as HTMLElement;
 
-        this.init(root);
+    //检查ViewerJS是否需要初始化
+    if (!container || container.dataset.viewerInitialized === "done") {
+        return;
     }
 
-    init(root) {
-        //初始化Viewer
-        const viewer = new Viewer(root, {
-            url: 'data-src', 
+    //查询所有图片
+    const images = container.querySelectorAll('img');
+
+    if (images.length === 0) {
+        return;
+    }
+
+    try {
+        //标记已初始化
+        container.dataset.viewerInitialized = "done";
+
+        const viewer = new Viewer(container, {
+            url: 'data-src',
             inline: false,
             keyboard: false,
             toolbar: false,
             viewed() {
                 viewer.zoomTo(0.8);
             },
-        });
-        console.log(viewer);
-        //viewer.show();
-    }
-}
+            //完成时添加一条Log
+            ready() {
+                console.log('ViewerJS wrapper is activated.');
+            },
+            //显示时检查图片加载状态
+            show() {
+                const currentImage = (viewer as any).image;
 
-// 导出一个函数，用于初始化查看器
-export function initViewer(): void {
-    //只在文章页面触发初始化
-    if (document.getElementsByClassName('.article-content')) {
-        new ViewerJSPlugin('.article-content');
+                if (currentImage && !currentImage.complete) {
+                    currentImage.onload = () => {
+                        viewer.zoomTo(0.8);
+                    };
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Failed to load ViewerJS:', error);
+        /*
+        //降级方法：打开新窗口查看图片
+        images.forEach(img => {
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', function () {
+                window.open(this.src, '_blank');
+            });
+        });
+        */
     }
 }

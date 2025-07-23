@@ -19,8 +19,8 @@ export function initLozad() {
 
     //lozad init
     const observer = lozad('.lozad', {
-        rootMargin: '10px 0px', // 图片进入视口10px时加载
-        threshold: 0.1, // 当图片可见10%时加载
+        rootMargin: '10px 0px', //图片进入视口10px时加载
+        threshold: 0.1, //当图片可见10%时加载
         loaded: function (el) {
             // 图片加载后添加淡入效果
             el.classList.add('loaded');
