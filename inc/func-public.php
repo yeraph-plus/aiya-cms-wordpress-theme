@@ -127,7 +127,6 @@ function aya_verify_http_params($url_params = null, $time_window = 30)
         if ($time_diff > $time_window) {
             return false;
         }
-
     }
 
     //解码数据
@@ -153,6 +152,42 @@ function aya_verify_http_params($url_params = null, $time_window = 30)
     }
 
     return $original_data;
+}
+
+//BBCode语法转换方法
+function aya_preg_desc($desc)
+{
+    if (empty($desc)) {
+        return '';
+    }
+
+    $desc = htmlspecialchars($desc, ENT_QUOTES, 'UTF-8');
+
+    $bbcode_search = [
+        '/\[br\/]/',
+        '/\[(b|strong)\](.*?)\[\/(b|strong)\]/is',
+        '/\[(i|em)\](.*?)\[\/(i|em)\]/is',
+        '/\[u\](.*?)\[\/u\]/is',
+        '/\[(s|del)\](.*?)\[\/(s|del)\]/is',
+        '/\[code\](.*?)\[\/code\]/is',
+        '/\[pre\](.*?)\[\/pre\]/is',
+        '/\[url=([^\]"\'<>]+)\](.*?)\[\/url\]/is',
+    ];
+
+    $bbcode_replace = [
+        '<br />',
+        '<strong class="font-bold">$2</strong>',
+        '<em class="italic">$2</em>',
+        '<ins class="underline decoration-solid">$1</ins>',
+        '<del class="line-through">$1</del>',
+        '<code class="bg-base-200 text-base-content rounded px-1 py-0.5 text-sm font-mono">$1</code>',
+        '<pre class="bg-base-200 text-base-content rounded p-4 my-2 overflow-x-auto text-sm font-mono">$1</pre>',
+        '<a href="$1" class="link link-primary hover:link-hover" target="_blank" rel="noopener noreferrer">$2</a>',
+    ];
+
+    $desc = preg_replace($bbcode_search, $bbcode_replace, $desc);
+
+    return $desc;
 }
 
 /*
@@ -228,17 +263,12 @@ function aya_is_where()
     if (isset($here_is)) {
         return $here_is;
     }
-
-    //BuddyPress 入口路由
-    if (function_exists('is_buddypress') && is_buddypress()) {
-        $here_is = 'buddy';
-    }
     //返回页面类型
     else if (is_home() || is_front_page()) {
         $here_is = 'home';
         //关联判断
         if (is_paged()) {
-            $here_is = 'home_d';
+            $here_is = 'home_pre';
         }
     }
     //返回文章类型
@@ -258,7 +288,7 @@ function aya_is_where()
         $here_is = 'archive';
         //关联判断
         if (is_post_type_archive()) {
-            $here_is = 'post_type_archive';
+            $here_is = 'custom_archive';
         } else if (is_category()) {
             $here_is = 'category';
         } else if (is_tag()) {
@@ -420,7 +450,6 @@ function aya_local_path_with_url($path_or_url, $reverse = true)
         $local_file = str_replace('/', DIRECTORY_SEPARATOR, $local_file);
 
         return file_exists($local_file) ? $local_file : false;
-
     }
     //本地路径转URL
     else {

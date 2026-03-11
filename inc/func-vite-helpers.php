@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
  */
 
 define('VITE_HOST', 'http://localhost:5173');
-define('VITE_ENTRY_POINT', 'src/main.js');
+define('VITE_ENTRY_POINT', 'src/main.tsx');
 define('VITE_PUBLIC_PATH', './build');
 
 //检查Vite启动状态
@@ -36,7 +36,7 @@ function aya_vite_reference()
     //检查请求是否成功
     $error = curl_errno($handle);
     //关闭请求
-    curl_close($handle);
+    unset($handle);
 
     //返回
     return ($error === 0) ? true : false;
@@ -62,7 +62,6 @@ function aya_vite_get_manifest()
         $exists = json_decode($manifest_content, true);
 
         return $exists;
-
     }
     //产生报错
     else {
@@ -77,7 +76,6 @@ function aya_vite_get_manifest()
 
         return false;
     }
-
 }
 
 //解析静态资源位置
@@ -128,7 +126,7 @@ function aya_vite_imports_script_urls()
  */
 
 add_action('wp_head', 'aya_dist_scripts_loader');
-add_action('wp_footer', 'aya_debug_vite_assets');
+//add_action('wp_footer', 'aya_debug_vite_assets');
 
 //模板静态资源载入函数
 function aya_dist_scripts_loader()
@@ -138,6 +136,14 @@ function aya_dist_scripts_loader()
         if (aya_vite_reference()) {
             //返回client，用于支持HMR
             echo '<script type="module" src="' . VITE_HOST . '/@vite/client"></script>' . PHP_EOL;
+            // 注入 React preamble
+            echo '<script type="module">' . PHP_EOL;
+            echo 'import RefreshRuntime from "' . VITE_HOST . '/@react-refresh";' . PHP_EOL;
+            echo 'RefreshRuntime.injectIntoGlobalHook(window);' . PHP_EOL;
+            echo 'window.$RefreshReg$ = () => {};' . PHP_EOL;
+            echo 'window.$RefreshSig$ = () => (type) => type;' . PHP_EOL;
+            echo 'window.__vite_plugin_react_preamble_installed__ = true;' . PHP_EOL;
+            echo '</script>' . PHP_EOL;
             //返回入口文件
             echo '<script type="module" src="' . VITE_HOST . '/' . ltrim(VITE_ENTRY_POINT, '/') . '"></script>' . PHP_EOL;
 
@@ -256,71 +262,40 @@ function aya_debug_vite_assets()
     }
 }
 
-//严格编码数组到JSON
-function aya_vue_json_encode($value)
+//严格编码数组到JSON（用于 HTML attribute 传递 props）
+function aya_json_strict_encode($value)
 {
-    if (is_array($value)) {
-        $value = json_encode($value, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+    $json = wp_json_encode($value, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+
+    if ($json === false || $json === null) {
+        $json = 'null';
     }
 
-    return htmlspecialchars($value, ENT_QUOTES);
+    return htmlspecialchars((string) $json, ENT_QUOTES);
 }
 
-//简化 Vue 标签拼接
-function aya_vue_load($slug = null, $attrs = [])
+//构造 React 群岛节点输出
+function aya_react_island($slug = null, $props = [], $server_html = '')
 {
-    //清理组件名
     $slug = preg_replace('/[^a-zA-Z0-9_-]/', '', (string) $slug);
 
     if (empty($slug)) {
-        //在PHP注册一个报错
-        trigger_error('Vue component slug is empty or invalid.', E_USER_WARNING);
+        trigger_error('Island component slug is empty or invalid.', E_USER_WARNING);
 
         return '';
     }
 
-    //驼峰转换
-    //$slug = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $slug));
+    // 生成容器ID
+    $data_id = uniqid();
 
-    $props = '';
+    $html_attrs = ' data-id="' . esc_attr($data_id) . '"' . ' data-island="' . esc_attr($slug) . '"';
 
-    if (!empty($attrs)) {
-        //检查关联数组
-        $is_assoc = is_array($attrs) && !array_is_list($attrs);
-
-        //处理参数，作为多个独立props传递
-        if ($is_assoc) {
-            foreach ($attrs as $key => $value) {
-                //清理字符
-                $prop_name = preg_replace('/[^a-zA-Z0-9_-]/', '', $key);
-
-                if ($prop_name === '') {
-                    continue;
-                }
-
-                //限定props支持绑定的数据类型判断布尔、数字、数组、字符串
-                if ($value === null) {
-                    $props .= ' :' . $prop_name . '="null"';
-                } elseif (is_bool($value)) {
-                    $props .= ' :' . $prop_name . '=' . ($value ? '"true"' : '"false"');
-                } elseif (is_numeric($value)) {
-                    $props .= ' :' . $prop_name . '="' . $value . '"';
-                } elseif (is_array($value)) {
-                    $props .= ' :' . $prop_name . '="' . aya_vue_json_encode($value) . '"';
-                } else {
-                    //不是以上类型则作为静态绑定
-                    $props .= ' ' . $prop_name . '="' . htmlspecialchars($value, ENT_QUOTES) . '"';
-                }
-            }
-
-        }
-        //直接编码
-        else {
-            $props .= ' :data="' . aya_vue_json_encode($attrs) . '"';
-        }
+    if ($props !== null && $props !== []) {
+        $html_attrs .= ' data-props="' . aya_json_strict_encode($props) . '"';
     }
 
-    echo sprintf('<%1$s%2$s></%1$s>', $slug, $props);
+
+    echo '<div' . $html_attrs . '>' . $server_html . '</div>' . PHP_EOL;
 
     return;
 }
@@ -348,59 +323,5 @@ function aya_handle_pjax_request()
         return;
     }
 
-    //使用缓冲逻辑异步捕获DOM截取需要返回的部分
-    add_action('template_redirect', 'aya_start_pjax_buffer', 1);
-    add_action('wp_footer', 'aya_end_pjax_buffer', 999);
-}
-
-
-//开始缓冲触发点
-function aya_start_pjax_buffer()
-{
-    ob_start();
-}
-
-//结束输出缓冲并返回所需内容
-function aya_end_pjax_buffer()
-{
-    $content = ob_get_clean();
-
-    // 解析HTML，提取所需内容
-    $dom = new DOMDocument();
-
-    // 禁用错误报告，避免由于HTML5标签引起的警告
-    libxml_use_internal_errors(true);
-    $dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
-    libxml_clear_errors();
-
-    $xpath = new DOMXPath($dom);
-
-    // 提取标题
-    $titleNodes = $xpath->query('//title');
-    $title = '';
-    if ($titleNodes->length > 0) {
-        $title = $titleNodes->item(0)->nodeValue;
-    }
-
-    // 提取主内容区域 - 调整为与前端JS中的选择器匹配
-    $contentNodes = $xpath->query('//div[contains(@class, "pjax-container")]');
-    $content = '';
-    if ($contentNodes->length > 0) {
-        $contentNode = $contentNodes->item(0);
-        $content = $dom->saveHTML($contentNode);
-    }
-
-    // 如果找不到内容，回退到完整页面
-    if (empty($content)) {
-        echo $content;
-        exit;
-    }
-
-    // 创建新文档结构
-    $newDom = new DOMDocument();
-    $newDom->loadHTML('<!DOCTYPE html><html><head><title>' . htmlspecialchars($title) . '</title></head><body>' . $content . '</body></html>');
-
-    // 输出最终HTML
-    echo $newDom->saveHTML();
-    exit;
+    //TODO 缓冲逻辑异步捕获DOM截取需要返回的部分
 }

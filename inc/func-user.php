@@ -6,6 +6,89 @@ if (!defined('ABSPATH')) {
 
 /*
  * ------------------------------------------------------------------------------
+ * 用户收藏夹功能
+ * ------------------------------------------------------------------------------
+ */
+
+//取回收藏列表
+function aya_user_get_favorite_posts($user_id = 0)
+{
+    if (!is_user_logged_in()) {
+        return [];
+    }
+    if (empty($user_id)) {
+        $user_id = get_current_user_id();
+    }
+
+    $favorites = get_user_meta($user_id, 'favorite_posts', true);
+
+    //数据错误
+    if (empty($favorites) || !is_array($favorites)) {
+        return [];
+    }
+
+    return $favorites;
+}
+
+//判断文章是否在用户收藏
+function aya_user_get_favorite_posts_check($post_id, $user_id = 0)
+{
+    $favorites = aya_user_get_favorite_posts($user_id);
+
+    return in_array($post_id, $favorites);
+}
+
+//在用户后台页面添加自定义区块
+add_action('show_user_profile', 'aya_user_show_favorites_profile');
+
+function aya_user_show_favorites_profile($user)
+{
+    $user_id = get_current_user_id();
+    // 只对管理员显示此区块，或者当前用户查看自己的资料
+    if (!current_user_can('manage_options') && $user_id != $user->ID) {
+        return;
+    }
+
+    // 获取收藏文章
+    $favorites = aya_user_get_favorite_posts($user_id);
+
+    // 开始输出区块
+?>
+    <h2><?php _e('收藏夹', 'AIYA'); ?></h2>
+
+    <?php if (empty($favorites)): ?>
+        <p><?php _e('暂无收藏文章', 'AIYA'); ?></p>
+    <?php else: ?>
+        <p><?php printf(__('共有 <strong>%d</strong> 篇收藏文章', 'AIYA'), count($favorites)); ?></p>
+        <div class="favorite-posts-list" style="margin-top: 15px;">
+            <table class="widefat" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th style="width: 60%;"><?php _e('文章标题', 'AIYA'); ?></th>
+                        <th><?php _e('作者', 'AIYA'); ?></th>
+                        <th><?php _e('发布日期', 'AIYA'); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($favorites as $post):
+                        //循环查询结果
+                        $post = new AYA_Post_In_While($post);
+                    ?>
+                        <tr>
+                            <td><a href="<?php echo $post->url; ?>" target="_blank"><?php echo $post->title; ?></a></td>
+                            <td><?php echo $post->author_name; ?></td>
+                            <td><?php echo $post->date; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+<?php
+}
+
+/*
+ * ------------------------------------------------------------------------------
  * 订阅权限功能
  * ------------------------------------------------------------------------------
  */
@@ -226,6 +309,8 @@ function aya_sponsor_get_user_orders($user_id = 0)
     $force_cancel = get_user_meta($user_id, 'aya_force_cancel_sponsor', true);
     //获取到期时间
     $expiration = get_user_meta($user_id, 'sponsor_expiration', true);
+    //获取赞助计数器使用次数
+    $used_count = get_user_meta($user_id, 'aya_trigger_count_sponsor', true);
 
     //计算期时间和剩余天数
     $now = current_time('timestamp');
@@ -245,12 +330,13 @@ function aya_sponsor_get_user_orders($user_id = 0)
     }
 
     return [
-        'orders' => $orders,
         'force_cancel' => $force_cancel,
         'expiration' => $expiration,
-        'left_days' => $left_days,
+        'left_days' => intval($left_days),
         'is_valid' => $is_valid,
-        'total_days' => $total_days,
+        'total_days' => intval($total_days),
+        'used_count' => intval($used_count),
+        'orders' => $orders,
     ];
 }
 
@@ -264,6 +350,11 @@ function aya_is_sponsor($user_id = 0)
         }
 
         $user_id = get_current_user_id();
+    }
+
+    //如果是编辑以上权限用户
+    if (user_can($user_id, 'edit_pages')) {
+        return true;
     }
 
     //获取当前禁用状态
@@ -306,23 +397,73 @@ function aya_sponsor_fix_user_data($user_id = 0, $review_cancel = false)
     return true;
 }
 
+/*
+ * ------------------------------------------------------------------------------
+ * 订阅功能相关后台UI
+ * ------------------------------------------------------------------------------
+ */
+
+// 在用户列表添加赞助权限使用计数列
+add_filter('manage_users_columns', 'aya_sponsor_add_trigger_count_column');
+// 显示赞助权限使用计数列内容
+add_filter('manage_users_custom_column', 'aya_sponsor_show_trigger_count_column', 10, 3);
+// 使赞助权限使用计数列可排序
+add_filter('manage_users_sortable_columns', 'aya_sponsor_sortable_trigger_count_column');
+// 处理赞助权限使用计数列排序查询
+add_action('pre_get_users', 'aya_sponsor_sort_trigger_count_users');
+
+function aya_sponsor_add_trigger_count_column($columns)
+{
+    $columns['aya_sponsor_trigger_count'] = __('赞助权限计数器', 'AIYA');
+    return $columns;
+}
+
+function aya_sponsor_show_trigger_count_column($value, $column_name, $user_id)
+{
+    if ('aya_sponsor_trigger_count' === $column_name) {
+        $count = get_user_meta($user_id, 'aya_trigger_count_sponsor', true);
+        return intval($count);
+    }
+    return $value;
+}
+
+function aya_sponsor_sortable_trigger_count_column($columns)
+{
+    $columns['aya_sponsor_trigger_count'] = 'aya_sponsor_trigger_count';
+    return $columns;
+}
+
+// 处理赞助权限使用计数列排序查询Key
+function aya_sponsor_sort_trigger_count_users($query)
+{
+    if (!is_admin()) {
+        return;
+    }
+
+    $orderby = $query->get('orderby');
+
+    if ('aya_sponsor_trigger_count' === $orderby) {
+        $query->set('meta_key', 'aya_trigger_count_sponsor');
+        $query->set('orderby', 'meta_value_num');
+    }
+}
+
 //赞助权限被使用的计数器
-function aya_sponsor_user_trigger_count($user_id = 0)
+function aya_sponsor_user_auto_trigger_count($user_id = 0)
 {
     //如果未指定用户ID，则使用当前用户
     if (empty($user_id)) {
         if (!is_user_logged_in()) {
-            return false;
+            return '';
         }
 
         $user_id = get_current_user_id();
     }
 
-    $trigger_count = get_user_meta($user_id, 'aya_trigger_count_sponsor', true);
+    //如果是赞助用户，则计数器+1
+    if (aya_is_sponsor($user_id)) {
+        $trigger_count = (int) get_user_meta($user_id, 'aya_trigger_count_sponsor', true);
 
-    if (empty($trigger_count)) {
-        add_user_meta($user_id, 'aya_trigger_count_sponsor', 1, true);
-    } else {
         update_user_meta($user_id, 'aya_trigger_count_sponsor', $trigger_count + 1);
     }
 }
@@ -363,7 +504,7 @@ function aya_sponsor_show_orders_user_profile($user)
         }
     }
     //开始输出区块表单
-    ?>
+?>
     <h2><?php _e('赞助者管理', 'AIYA'); ?></h2>
     <p>
         <?php _e('当前订阅状态：', 'AIYA'); ?>
@@ -431,7 +572,7 @@ function aya_sponsor_show_orders_user_profile($user)
             </tbody>
         </table>
     </div>
-    <?php
+<?php
 }
 
 //用户后台页面区块数据保存
@@ -464,116 +605,6 @@ function aya_sponsor_save_orders_user_profile($user_id)
 
 /*
  * ------------------------------------------------------------------------------
- * 用户收藏夹功能
- * ------------------------------------------------------------------------------
- */
-
-//取回收藏列表
-function aya_user_get_favorite_posts($user_id = 0)
-{
-    if (!is_user_logged_in()) {
-        return false;
-    }
-    if (empty($user_id)) {
-        $user_id = get_current_user_id();
-    }
-
-    $favorites = get_user_meta($user_id, 'favorite_posts', true);
-
-    //数据错误
-    if (empty($favorites) || !is_array($favorites)) {
-        return [];
-    }
-
-    $query = new AYA_Query_Post();
-
-    return $query->list_posts($favorites, ['post']);
-}
-
-//收藏列表数据查询结果
-function aya_user_favorite_posts_data()
-{
-    $favorites = aya_user_get_favorite_posts();
-    $the_posts = [];
-    $store_nonce = '';
-
-    if ($favorites !== false && is_array($favorites)) {
-        //循环查询结果
-        $the_posts = [];
-        foreach ($favorites as $post) {
-            $post = new AYA_Post_In_While($post);
-
-            $the_posts[$post->id] = [
-                'id' => $post->id,
-                'date' => $post->date,
-                'modified' => $post->modified,
-                'title' => $post->title,
-                'status' => $post->status,
-                'url' => $post->url,
-            ];
-        }
-        //交互功能安全参数
-        $store_nonce = aya_nonce_active_store();
-    }
-
-    return [
-        'ajax_url' => aya_ajax_url(),
-        'posts' => $the_posts,
-        'ajax_nonce' => $store_nonce
-    ];
-}
-
-//在用户后台页面添加自定义区块
-add_action('show_user_profile', 'aya_user_show_favorites_profile');
-
-function aya_user_show_favorites_profile($user)
-{
-    $user_id = get_current_user_id();
-    // 只对管理员显示此区块，或者当前用户查看自己的资料
-    if (!current_user_can('manage_options') && $user_id != $user->ID) {
-        return;
-    }
-
-    // 获取收藏文章
-    $favorites = aya_user_get_favorite_posts($user_id);
-
-    // 开始输出区块
-    ?>
-    <h2><?php _e('收藏夹', 'AIYA'); ?></h2>
-
-    <?php if (empty($favorites)): ?>
-        <p><?php _e('暂无收藏文章', 'AIYA'); ?></p>
-    <?php else: ?>
-        <p><?php printf(__('共有 <strong>%d</strong> 篇收藏文章', 'AIYA'), count($favorites)); ?></p>
-        <div class="favorite-posts-list" style="margin-top: 15px;">
-            <table class="widefat" style="width: 100%;">
-                <thead>
-                    <tr>
-                        <th style="width: 60%;"><?php _e('文章标题', 'AIYA'); ?></th>
-                        <th><?php _e('作者', 'AIYA'); ?></th>
-                        <th><?php _e('发布日期', 'AIYA'); ?></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($favorites as $post):
-                        //循环查询结果
-                        $post = new AYA_Post_In_While($post);
-                        ?>
-                        <tr>
-                            <td><a href="<?php echo $post->url; ?>" target="_blank"><?php echo $post->title; ?></a></td>
-                            <td><?php echo $post->author_name; ?></td>
-                            <td><?php echo $post->date; ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    <?php endif; ?>
-<?php
-}
-
-/*
- * ------------------------------------------------------------------------------
  * 用户菜单数据
  * ------------------------------------------------------------------------------
  */
@@ -590,7 +621,7 @@ function aya_user_toggle_level($user_id = 0)
         $user_id = get_current_user_id();
     }
 
-    //编辑及以上统一认为是管理员
+    //编辑及以上认为是管理员
     if (user_can($user_id, 'edit_pages')) {
         return 'administrator';
     }
@@ -609,11 +640,11 @@ function aya_user_toggle_level($user_id = 0)
 }
 
 //生成用户菜单数据
-function aya_user_get_login_data($logged_in = false)
+function aya_user_get_login_data()
 {
     $user_menu = [];
 
-    if ($logged_in) {
+    if (is_user_logged_in()) {
         //获取用户对象
         $current_user = wp_get_current_user();
         $user_id = $current_user->ID;
@@ -639,13 +670,12 @@ function aya_user_get_login_data($logged_in = false)
                 'targe_blank' => true
             ];
         }
-        /*
+
         $dorpdown_menus[] = [
-            'label' => __('个人中心', 'AIYA'),
+            'label' => __('个人主页', 'AIYA'),
             'icon' => 'profile',
             'url' => get_author_posts_url($user_id),
         ];
-        */
 
         if (aya_opt('site_sponsor_module_bool', 'access')) {
             $dorpdown_menus[] = [
@@ -658,56 +688,20 @@ function aya_user_get_login_data($logged_in = false)
         $dorpdown_menus[] = [
             'label' => __('我的收藏', 'AIYA'),
             'icon' => 'inbox',
-            'url' => home_url('favlist'),
+            'url' => home_url('user-favlist'),
+        ];
+
+        $dorpdown_menus[] = [
+            'label' => __('个人资料', 'AIYA'),
+            'icon' => 'settings',
+            'url' => home_url('user-settings'),
         ];
 
         $user_menu['menus'] = $dorpdown_menus;
-        $user_menu['rest_nonce'] = wp_create_nonce('wp_rest');
     } else {
         //获取站点设置是否允许注册
         $user_menu['enable_register'] = get_option('users_can_register') ? true : false;
-        //TODO 社交登录
-        $user_menu['enable_sso_register'] = false; //aya_opt('allow_sso_register_bool', 'access');
-        $user_menu['rest_nonce'] = wp_create_nonce('wp_rest');
     }
 
     return $user_menu;
-}
-
-//获取用户赞助方案数据
-function aya_user_sponsor_plan_data()
-{
-    //获取用户的赞助订单
-    $order_query = aya_sponsor_get_user_orders();
-
-    //未登录时取消数据加载
-    if ($order_query === false) {
-        //返回空的查询
-        return [
-            'from_source' => [],
-            'order_plan' => [],
-            'order_history' => [],
-            'rest_nonce' => '',
-        ];
-    }
-
-    //获取订阅支付方案列表
-    $order_plan = aya_payment_sponsor_order_plan();
-    //系统可用的激活码来源
-    $code_from = aya_payment_sponsor_activation_code();
-
-    //计算查询为可读时间
-    if (!empty($order_query)) {
-        //计算到期时间戳为可读时间
-        $order_query['expiration'] = date_i18n('Y-m-d', $order_query['expiration']);
-        //被强制取消状态
-        $order_query['force_cancel'] = ($order_query['force_cancel'] === '1') ? true : false;
-    }
-
-    return [
-        'from_source' => $code_from,
-        'order_plan' => $order_plan,
-        'order_history' => $order_query,
-        'rest_nonce' => wp_create_nonce('wp_rest'),
-    ];
 }

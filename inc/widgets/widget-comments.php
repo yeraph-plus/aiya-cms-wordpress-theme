@@ -14,9 +14,15 @@ class AYA_Widget_Comments extends AYA_Widget
             'field_build' => array(
                 array(
                     'type' => 'input',
+                    'id' => 'title',
+                    'name' => '标题',
+                    'default' => '最近评论',
+                ),
+                array(
+                    'type' => 'input',
                     'id' => 'limit',
                     'name' => '显示数量',
-                    'default' => '5',
+                    'default' => '10',
                 ),
             ),
         );
@@ -26,36 +32,35 @@ class AYA_Widget_Comments extends AYA_Widget
 
     function widget_func()
     {
+        $title = parent::widget_opt('title');
         $limit = parent::widget_opt('limit');
 
         $args = array(
             'number' => $limit,
             'status' => 'approve',
-            'author__not_in' => 1
+            'author__not_in' => true
         );
 
-        $html = '';
-        $html .= '<div class="space-y-4">';
-
-        global $comment;
-
+        $comments_data = [];
         $comments = get_comments($args);
-
-        //生成评论列表
-        foreach ($comments as $key => $comment) {
-            $html .= '<div class="relative flex overflow-hidden">';
-            $html .= '<div class="w-12 h-12 rounded-full bg-white shadow dark:bg-[#0e1726] dark:shadow-none p-1 mr-2"><img class="rounded-full" src="' . get_avatar_url($comment, 32) . '" alt="avatar"></div>';
-            $html .= '<div class="flex-1 rounded-md bg-white shadow dark:bg-[#0e1726] dark:shadow-none p-4">';
-            $html .= '<div class="flex items-center justify-between">';
-            $html .= '<h2 class="text-sm font-medium">' . $comment->comment_author . '</h2>';
-            $html .= '<small class="text-xs text-gray-600">' . __('发布于', 'AIYA') . human_time_diff(get_comment_date('U'), current_time('timestamp')) . __('前', 'AIYA') . '</small>';
-            $html .= '</div>';
-            $html .= '<p class="mt-2 text-sm text-white-dark">' . $comment->comment_content . '&nbsp;[<a href="' . get_comment_link($comment->comment_ID) . '" rel="nofollow">' . __('查看文章', 'AIYA') . '</a>]</p>';
-            $html .= '</div></div>';
+//您在本站有<?php echo comment_count($comment['comment_author_email'], true); 条评论
+        if (!empty($comments)) {
+            foreach ($comments as $comment) {
+                $comments_data[] = [
+                    'id' => $comment->comment_ID,
+                    'author' => get_comment_author($comment),
+                    'avatar' => get_avatar_url($comment, ['size' => 64]),
+                    'content' => wp_trim_words(get_comment_text($comment), 20),
+                    'date' => human_time_diff(get_comment_date('U', $comment), current_time('timestamp')) . '前',
+                    'url' => get_comment_link($comment),
+                    'post_title' => get_the_title($comment->comment_post_ID),
+                ];
+            }
         }
 
-        $html .= '</div>';
-
-        aya_echo($html);
+        aya_react_island(
+            'widget-comments',
+            ['comments' => $comments_data, 'widgetTitle' => $title]
+        );
     }
 }

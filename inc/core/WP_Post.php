@@ -55,7 +55,7 @@ if (!class_exists('AYA_WP_Post_Object')) {
                 $post = get_post($post_id);
             }
             //获取成功
-            if (!empty($post)) {
+            if (!empty($post) && is_object($post)) {
 
                 $this->post = $post;
 
@@ -69,12 +69,20 @@ if (!class_exists('AYA_WP_Post_Object')) {
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
 
+            if (!$post) {
+                return 0;
+            }
+
             return $post->ID;
         }
         //获取URL
         public function get_post_url()
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
+
+            if (!$post) {
+                return '';
+            }
 
             $the_url = get_permalink($post);
 
@@ -84,6 +92,10 @@ if (!class_exists('AYA_WP_Post_Object')) {
         public function get_post_type()
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
+
+            if (!$post) {
+                return 'post';
+            }
 
             $the_type = $post->post_type;
 
@@ -99,10 +111,14 @@ if (!class_exists('AYA_WP_Post_Object')) {
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
 
+            if (!$post) {
+                return '';
+            }
+
             $the_title = $post->post_title;
 
             //检查文章标题
-            if (strlen($the_title) === 0) {
+            if (empty($the_title)) {
                 $the_title = __('无标题', 'AIYA');
             }
             //清理HTML输出
@@ -116,6 +132,10 @@ if (!class_exists('AYA_WP_Post_Object')) {
         public function get_post_status()
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
+
+            if (!$post) {
+                return [];
+            }
 
             $status = $post->post_status;
             $post_id = $post->ID;
@@ -171,6 +191,10 @@ if (!class_exists('AYA_WP_Post_Object')) {
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
 
+            if (!$post) {
+                return '';
+            }
+
             $the_excerpt = $post->post_excerpt;
 
             return wp_kses_post($the_excerpt);
@@ -180,6 +204,10 @@ if (!class_exists('AYA_WP_Post_Object')) {
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
 
+            if (!$post) {
+                return false;
+            }
+
             $the_password = $post->post_password;
 
             return empty($the_password) ? false : $the_password;
@@ -188,6 +216,10 @@ if (!class_exists('AYA_WP_Post_Object')) {
         public function get_post_preview($size = 225)
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
+
+            if (!$post) {
+                return '';
+            }
 
             //如果文章加密
             if (!empty($post->post_password)) {
@@ -206,7 +238,7 @@ if (!class_exists('AYA_WP_Post_Object')) {
                 $the_content = wp_strip_all_tags(strip_shortcodes($the_content));
 
                 $the_preview = wp_trim_words($the_content, $size);
-                //DEBUG：有时候WP原生的摘要函数好像完全没法判断中文长度，改用PHP判断
+                //DEBUG：使用PHP判断中文长度
                 //$the_preview = mb_strimwidth($the_content, 0, $size, '...');
 
                 return wp_kses_post($the_preview);
@@ -219,6 +251,10 @@ if (!class_exists('AYA_WP_Post_Object')) {
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
 
+            if (!$post) {
+                return '0';
+            }
+
             $the_comment_count = $post->comment_count;
             $the_comment_status = $post->comment_status;
 
@@ -229,7 +265,7 @@ if (!class_exists('AYA_WP_Post_Object')) {
                 }
                 //计数评论
                 if ($the_comment_count > 0) {
-                    return $the_comment_count . __('&nbsp;条评论', 'AIYA');
+                    return $the_comment_count . __('条评论', 'AIYA');
                 } else {
                     return __('无人评论', 'AIYA');
                 }
@@ -247,6 +283,10 @@ if (!class_exists('AYA_WP_Post_Object')) {
         public function get_post_date($date_mod = 'publish_date')
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
+
+            if (!$post) {
+                return '';
+            }
 
             //获取WP时间格式设置
             static $date_format = get_option('date_format');
@@ -272,9 +312,13 @@ if (!class_exists('AYA_WP_Post_Object')) {
             }
         }
         //获取文章访问量
-        public function get_post_views($modified = false)
+        public function get_post_views()
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
+
+            if (!$post) {
+                return '0';
+            }
 
             $the_views = $post->view_count;
 
@@ -287,25 +331,21 @@ if (!class_exists('AYA_WP_Post_Object')) {
                 $the_views = round($the_views / 1000, 1) . 'K';
             }
 
-            if ($modified == true) {
-                return $the_views . __('&nbsp;次浏览', 'AIYA');
-            }
-
             return $the_views;
         }
         //获取文章点赞数
-        public function get_post_likes($modified = false)
+        public function get_post_likes()
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
+
+            if (!$post) {
+                return '0';
+            }
 
             $the_likes = $post->like_count;
 
             if (empty($the_likes)) {
                 $the_likes = '0';
-            }
-
-            if ($modified == true) {
-                return $the_likes . __('&nbsp;人喜欢', 'AIYA');
             }
 
             return $the_likes;
@@ -314,6 +354,10 @@ if (!class_exists('AYA_WP_Post_Object')) {
         public function get_post_content()
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
+
+            if (!$post) {
+                return '';
+            }
 
             $the_content = get_the_content(null, false, $post);
 
@@ -329,6 +373,10 @@ if (!class_exists('AYA_WP_Post_Object')) {
             //可以获取 WP 定义的 image video audio text application 附件类型
             $post = is_object($this->post) ? $this->post : $this->get_post();
 
+            if (!$post) {
+                return false;
+            }
+
             $the_attachments = get_attached_media($media, $post);
 
             return $the_attachments; //返回查询到的对象
@@ -337,6 +385,10 @@ if (!class_exists('AYA_WP_Post_Object')) {
         public function get_post_thumbnail($deepl = false, $extract_url = false, $size = 'full')
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
+
+            if (!$post) {
+                return false;
+            }
 
             $post_id = $post->ID;
 
@@ -382,6 +434,10 @@ if (!class_exists('AYA_WP_Post_Object')) {
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
 
+            if (!$post) {
+                return [];
+            }
+
             $post_id = $post->ID;
             $post_type = $post->post_type;
 
@@ -423,6 +479,10 @@ if (!class_exists('AYA_WP_Post_Object')) {
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
 
+            if (!$post) {
+                return 0;
+            }
+
             return $post->post_author;
         }
         //获取作者头像
@@ -458,6 +518,10 @@ if (!class_exists('AYA_WP_Post_Object')) {
         {
             $post = is_object($this->post) ? $this->post : $this->get_post();
 
+            if (!$post) {
+                return '';
+            }
+
             $post_id = $post->ID;
 
             return get_post_meta($post_id, $meta_key, true);
@@ -478,7 +542,7 @@ if (!class_exists('AYA_WP_Post_Object')) {
             return ($current_user_id == $post_author_id);
         }
         //获取文章时效性
-        public function the_post_is_outdated($out_day = 30)
+        public function the_post_is_outdated($out_day = 45)
         {
             $out_day = intval($out_day);
 
@@ -489,13 +553,17 @@ if (!class_exists('AYA_WP_Post_Object')) {
 
             $post = is_object($this->post) ? $this->post : $this->get_post();
 
+            if (!$post) {
+                return false;
+            }
+
             $publish_time = get_post_time('U', false, $post, true);
             $modified_time = get_post_modified_time('U', false, $post, true);
             //判断更新时间取最近
             $last_time = ($modified_time > $publish_time) ? $modified_time : $publish_time;
 
-            //时间30天
-            return (time() > $last_time + 86400 * $out_day);
+            //时间45天
+            return (time() > $last_time + (86400 * $out_day));
         }
     }
 }
@@ -559,7 +627,7 @@ if (!class_exists('AYA_Post_In_While')) {
                 case 'date_ago':
                     $this->data['date_ago'] = $this->get_post_date('publish_timeago');
                     break;
-                case 'datetime':
+                case 'date_iso':
                     $this->data['date_iso'] = $this->get_post_date('iso');
                     break;
                 case 'modified':
@@ -571,14 +639,8 @@ if (!class_exists('AYA_Post_In_While')) {
                 case 'views':
                     $this->data['views'] = $this->get_post_views();
                     break;
-                case 'views_text':
-                    $this->data['views_text'] = $this->get_post_views(true);
-                    break;
                 case 'likes':
                     $this->data['likes'] = $this->get_post_likes();
-                    break;
-                case 'likes_text':
-                    $this->data['likes_text'] = $this->get_post_likes(true);
                     break;
                 case 'content':
                     $this->data['content'] = $this->get_post_content();
@@ -615,9 +677,6 @@ if (!class_exists('AYA_Post_In_While')) {
                     break;
                 case 'is_author':
                     $this->data['is_post_author'] = $this->user_is_post_author();
-                    break;
-                case '30_dyas_outdated':
-                    $this->data['is_outdated'] = $this->the_post_is_outdated(30);
                     break;
                 default:
                     return true;

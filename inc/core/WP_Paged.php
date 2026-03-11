@@ -101,6 +101,7 @@ if (!class_exists('AYA_WP_Paged_Object')) {
             //构建分页数据
             $this->build_paged_data();
         }
+
         //处理查询参数
         private function prepare_args()
         {
@@ -162,6 +163,7 @@ if (!class_exists('AYA_WP_Paged_Object')) {
                 }
             }
         }
+
         //使用页码拼接URL
         private function get_paginated_url($page_num)
         {
@@ -185,6 +187,7 @@ if (!class_exists('AYA_WP_Paged_Object')) {
 
             return $url;
         }
+
         //构建分页数据数组
         private function build_paged_data()
         {
@@ -283,5 +286,75 @@ if (!class_exists('AYA_WP_Paged_Object')) {
                 ];
             }
         }
+    }
+
+    //获取简单分页列表
+    function aya_get_simple_pagination()
+    {
+        return AYA_WP_Paged_Object::get_pagination([
+            'mid_size' => 0,
+        ], 'simple');
+    }
+
+    //获取分页列表
+    function aya_get_pagination()
+    {
+        $paged = AYA_WP_Paged_Object::get_pagination([
+            'mid_size' => 3,
+            'prev_text' => __('上一页', 'AIYA'),
+            'next_text' => __('下一页', 'AIYA'),
+        ]);
+
+        if (!empty($paged) || $paged['total'] != 1) {
+            return $paged;
+        }
+        return;
+    }
+
+    function aya_get_pagination_html($paged = array())
+    {
+        //$paged = aya_get_pagination();
+        $html = '<nav role="navigation" aria-label="Pagination">';
+
+        foreach ($paged['links'] as $link) {
+
+            $type = isset($link['type']) ? (string) $link['type'] : '';
+            $label = isset($link['label']) ? (string) $link['label'] : '';
+            $active = isset($link['active']) ? (string) 'active' : '';
+
+            $rel = '';
+            $aria_label = '';
+            $aria_current = '';
+            $aria_hidden = '';
+
+            switch ($type) {
+                case 'current':
+                    $aria_current = ' aria-current="page"';
+                    break;
+                case 'prev':
+                    $rel = ' rel="prev"';
+                    $aria_label = ' aria-label="Go previous page"';
+                    break;
+                case 'next':
+                    $rel = ' rel="next"';
+                    $aria_label = ' aria-label="Go next page"';
+                    break;
+                case 'page':
+                    $aria_label = ' aria-label="Go ' . esc_attr($label) . ' page"';
+                    break;
+                case 'dots':
+                    $aria_hidden = ' aria-hidden="true"';
+                    break;
+                default:
+                    break;
+            }
+
+            $html .= '<a href="' . esc_url($link['url']) . '"  ' . esc_attr($active) . '"' . $rel . $aria_label . $aria_current . $aria_hidden . '>' . esc_html($link['text']) . '</a>';
+        }
+
+        $html .= sprintf(__('第 %s 页，共 %s 页', 'AIYA'), $paged['current'], $paged['total']);
+        $html .= '</nav>';
+
+        return $html;
     }
 }

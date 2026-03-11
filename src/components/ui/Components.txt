@@ -1,0 +1,60 @@
+Components 组件
+Accordion 手风琴
+Alert 警告
+Alert Dialog 警告对话框
+Aspect Ratio
+Avatar 头像
+Badge 徽章
+Breadcrumb 面包屑
+Button 按钮
+Button Group
+Calendar 日历
+Card 卡片
+Carousel 轮播
+Chart 图表
+Checkbox 复选框
+Collapsible 可折叠面板
+Combobox 下拉框
+Command 命令
+Context Menu 上下文菜单
+Data Table  数据表
+Date Picker 日期选择器
+Dialog 对话框
+Direction 方向
+Drawer 抽屉
+Dropdown Menu 下拉菜单
+Empty 空
+Field 字段
+Hover Card 悬浮卡
+Input 输入框
+Input Group 输入组
+Input OTP 输入 OTP
+Item 项目
+Kbd 键盘
+Label 标签
+Menubar 菜单栏
+Native Select 原生选择器
+Navigation Menu 导航菜单
+Pagination 分页
+Popover 弹出层
+Progress 进度条
+Radio Group 单选组
+Resizable 可调整大小
+Scroll Area 滚动区域
+Select 选择
+Separator 分隔符
+Sheet 工作表
+Sidebar 侧边栏
+Skeleton 骨架
+Slider 滑块
+Sonner
+Spinner
+Switch 
+Table 表格
+Tabs 
+Textarea 文本域
+Toast 提示框
+Toggle 切换按钮
+Toggle Group 切换组
+Tooltip 工具提示
+Typography 文本排版

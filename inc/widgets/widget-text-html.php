@@ -38,12 +38,7 @@ class AYA_Widget_Text_Html extends AYA_Widget
         if ($esc_html == 'true') {
             aya_echo(esc_html($content));
         } else {
-            $html = '';
-            $html .= '<div class="widget-content">';
-            $html .= esc_attr($content);
-            $html .= '</div>';
-
-            aya_echo($html);
+            aya_echo(esc_attr($content));
         }
     }
 }

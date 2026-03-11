@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 
 //主题设置
 AYF::new_opt([
-    'title' => '格式处理',
+    'title' => '自动功能',
     'parent' => 'basic',
     'slug' => 'automatic',
     'desc' => 'AIYA-CMS 主题，文章内容过滤器组件设置',
@@ -17,7 +17,7 @@ AYF::new_opt([
             'type' => 'title_1',
         ],
         [
-            'title' => '使用 DOMDocument 处理',
+            'title' => '使用 DOMDocument 处理器',
             'desc' => ' HTML 属性匹配更精准，但性能略差 [del]什么年代了还在用传统 preg_match_all()[/del]',
             'id' => 'site_content_dom_handler_bool',
             'type' => 'switch',
@@ -31,13 +31,6 @@ AYF::new_opt([
             'default' => true,
         ],
         [
-            'title' => '添加标题锚点',
-            'desc' => '给文章正文内标题标签自动添加锚点id属性',
-            'id' => 'site_content_title_filter_bool',
-            'type' => 'switch',
-            'default' => true,
-        ],
-        [
             'title' => '添加链接内链',
             'desc' => '给文章正文内链接标签自动添加 [code]rel="nofollow"[/code] 和 [code]target="_blank"[/code] 属性（仅对外部链接生效）',
             'id' => 'site_content_link_filter_bool',
@@ -47,33 +40,15 @@ AYF::new_opt([
         [
             'title' => '内链格式设置',
             'desc' => '接上一项设置，可选跳转方式',
-            'id' => 'site_content_shotcode_remove_type',
-            'type' => 'radio',
-            'sub' => array(
-                'link' => '提示外部页面',
-                'go' => '使用内链跳转',
-                'false' => '直接跳转（不处理）',
-            ),
-            'default' => 'link',
-        ],
-        /*
-        [
-            'desc' => '禁用简码功能',
-            'type' => 'title_1',
-        ],
-        [
-            'title' => '禁用一些不需要使用的简码',
-            'desc' => '禁用一些不需要使用的简码功能',
             'id' => 'site_content_link_jump_page_type',
             'type' => 'radio',
-            'sub' => array(
+            'sub' => [
                 'link' => '提示外部页面',
                 'go' => '使用内链跳转',
                 'false' => '直接跳转（不处理）',
-            ),
+            ],
             'default' => 'link',
         ],
-        */
         [
             'desc' => '中文排版纠正',
             'type' => 'title_1',
@@ -83,7 +58,7 @@ AYF::new_opt([
             'type' => 'warning',
         ],
         [
-            'desc' => '*此功能使用 [code]jxlwqq/chinese-typesetting[/code] 项目创建：[url=https://github.com/jxlwqq/chinese-typesetting]查看文档[/url]',
+            'desc' => '*此功能使用 [code]jxlwqq/chinese-typesetting[/code] 项目：[url=https://github.com/jxlwqq/chinese-typesetting]查看文档[/url]',
             'type' => 'message',
         ],
         [
@@ -112,24 +87,6 @@ AYF::new_opt([
                 'removeIndent' => '清除段首缩进',
             ],
             'default' => ['insertSpace', 'removeSpace', 'full2Half'],
-        ],
-        [
-            'desc' => '提示条目分类法模板',
-            'type' => 'title_1',
-        ],
-        [
-            'title' => '启用提示条目分类法',
-            'desc' => '为文章创建新的分类法，在文章开头位置输出文章完成状态（更新中、已停更），或提示读者风险操作，等有用的提示',
-            'id' => 'site_post_tips_terms_bool',
-            'type' => 'switch',
-            'default' => false,
-        ],
-        [
-            'title' => '加载默认提示条目模板',
-            'desc' => '加载一次即可，如需要删除和修改默认提示模板，请先禁用此项，否则会重新创建',
-            'id' => 'site_post_tips_default_terms_bool',
-            'type' => 'switch',
-            'default' => false,
         ],
         [
             'desc' => '自动别名',

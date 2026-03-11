@@ -317,4 +317,43 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
             ];
         }
     }
+
+    //面包屑注入自定义层级
+    function aya_add_breadcrumb_item($item, $url)
+    {
+        return AYA_WP_Breadcrumb_Object::add_item($item, $url);
+    }
+
+    //获取面包屑导航
+    function aya_get_breadcrumb()
+    {
+        return AYA_WP_Breadcrumb_Object::get_breadcrumb();
+    }
+
+    function aya_get_breadcrumb_html($items = [])
+    {
+        //$items = aya_get_breadcrumb();
+
+        $html = '';
+        //隐藏首页
+        if (count($items) <= 1) {
+            return $html;
+        }
+        foreach ($items as $i => $item) {
+            $html .= '<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
+            if ($item['url'] && $i < count($items) - 1) {
+                $html .= '<a href="' . esc_url($item['url']) . '" itemprop="item">';
+                if ($i === 0) {
+                    $html .= '<icon name="home"></icon>';
+                }
+                $html .= '<span itemprop="name">' . esc_html($item['label']) . '</span></a>';
+            } else {
+                $html .= '<span itemprop="name">' . esc_html($item['label']) . '</span>';
+            }
+            $html .= '<meta itemprop="position" content="' . ($i + 1) . '" /></li>';
+        }
+        $html .= '</ul>';
+
+        return $html;
+    }
 }

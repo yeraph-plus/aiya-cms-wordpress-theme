@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
 add_filter('aya_notify_add', 'aya_notify_collect_hook', 10, 1);
 add_filter('aya_notify_scope_filter', 'aya_notify_check_scope_wrapper');
 //调度自定义的消息列表
-add_action('aya_home_open', 'aya_notify_join_custom_notification');
+add_action('wp_head', 'aya_notify_join_custom_notification');
 
 //收集所有原始消息
 function aya_notify_collect_hook($note)
@@ -41,7 +41,7 @@ function aya_notify_check_scope($scope, $is_logged)
      * 全局（guest） -> yes -> true
      *   ->no
      * 检查已登录 -> no -> false
-     *    -> yes
+     *   -> yes
      * 是已登录的用户（user） -> yes -> true
      *   ->no
      * 是作者（author） -> yes -> 检查 edit_posts 权限
@@ -83,7 +83,7 @@ function aya_notify_check_scope_wrapper($notes)
     //遍历
     foreach ($notes as $key => $note) {
 
-        if (aya_notify_check_scope($note['scope'], $is_logged)) {
+        if (!aya_notify_check_scope($note['scope'], $is_logged)) {
             //踢出列表
             unset($notes[$key]);
         }
@@ -159,7 +159,7 @@ function aya_notify_list()
     //获取消息列表
     $notes = apply_filters('aya_notify_add', []);
     //应用通知过滤器
-    $notes = apply_filters('aya_notify_check_scope_wrapper', $notes);
+    $notes = apply_filters('aya_notify_scope_filter', $notes);
     //返回数据
     return $notes;
 }
@@ -241,6 +241,21 @@ add_action('wp_login_failed', function ($username) {
 });
 */
 
-//IDEA 在用户META中设置允许的通知类型
-//IDEA 邮件通知联动
-//IDEA 在用户META中标记已读状态时间
+// IDEA 邮件通知联动
+// - 账户与登录
+// - 登录成功/退出成功/会话过期（前台 toast）
+// - 密码重置邮件已发送、重置成功
+// - 异常登录/连续失败登录（管理员/用户）
+// - 评论与互动（对作者/参与者）
+// - 你的文章有新评论/评论待审/评论被回复
+// - 文章收到点赞/收藏（如果你站点有这些功能）
+// - 被 @ 提及（如果你做了 mention）
+// - 内容状态（对作者/编辑）
+// - 文章草稿/待审/已发布/被退回的状态变化
+// - 定时发布失败、媒体处理失败（比如缩略图生成失败）
+// - 订阅与支付（对用户/管理员）
+// - 订阅开通/续费成功/到期提醒/支付失败
+// - 订单创建/退款/争议（管理员侧也可前台提示）
+// - 系统与运维（对管理员）
+// - 核心/主题/插件更新可用（WP 后台本来就有，但你可以在前台给管理员一个轻提示）
+// - 站点进入维护模式/缓存异常/关键任务失败（cron、外部 API 连接失败）

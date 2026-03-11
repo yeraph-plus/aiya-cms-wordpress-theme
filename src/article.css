@@ -1,0 +1,239 @@
+/* Content */
+#article-content {
+    @apply prose prose-base max-w-none dark:prose-invert;
+
+    p {
+        @apply mb-4 text-base font-medium leading-relaxed text-foreground;
+        text-wrap: pretty;
+    }
+
+    h1,
+    h2,
+    h3 {
+        @apply flex items-center mb-4 mt-6 font-bold text-balance text-foreground;
+    }
+
+    h1 {
+        @apply text-2xl md:text-3xl;
+    }
+
+    h2 {
+        @apply text-xl md:text-2xl;
+    }
+
+    h3 {
+        @apply text-lg md:text-xl;
+    }
+
+    h1::before,
+    h2::before,
+    h3::before {
+        content: "";
+        @apply mr-2 inline-block h-4 w-2 rounded bg-primary;
+    }
+
+    h4,
+    h5,
+    h6 {
+        @apply mb-4 mt-4 font-bold text-balance text-foreground;
+    }
+
+    h4 {
+        @apply text-lg;
+    }
+
+    h5,
+    h6 {
+        @apply text-base;
+    }
+
+    a {
+        @apply px-0.5 text-primary hover:underline decoration-2 underline-offset-2 transition-colors duration-200;
+    }
+
+    blockquote {
+        @apply mb-4 rounded-r-lg border-l-4 border-l-primary border border-border bg-muted/50 p-4 not-italic;
+    }
+
+    blockquote p {
+        @apply m-0 text-base font-normal text-muted-foreground;
+    }
+
+    blockquote cite {
+        @apply mt-2 block w-full text-xs font-normal text-muted-foreground/80;
+    }
+
+    blockquote cite::before {
+        content: "";
+        @apply relative -top-1 inline-block h-px w-3 bg-current opacity-50 mr-1;
+    }
+
+    strong {
+        @apply font-semibold;
+    }
+
+    em {
+        @apply italic;
+    }
+
+    code {
+        @apply rounded px-1 py-0.5 text-sm font-mono bg-muted text-destructive;
+    }
+
+    pre {
+        @apply mb-4 overflow-x-auto rounded-lg p-4 text-sm;
+        direction: ltr;
+    }
+
+    pre code {
+        @apply bg-transparent p-0;
+    }
+
+    .iframe-container {
+        @apply w-auto max-w-2xl relative flex items-center justify-center mx-auto my-4;
+    }
+
+    iframe {
+        @apply bg-transparent;
+    }
+
+    figure {
+        @apply relative mx-auto my-6 max-w-2xl;
+    }
+
+    figure figcaption {
+        @apply mt-2 text-center text-sm text-muted-foreground;
+    }
+
+    img {
+        @apply mb-4 rounded-lg bg-muted/30 max-w-full h-auto object-cover;
+    }
+
+    /* WordPress 图片尺寸控制 */
+    .alignnone {
+        @apply block my-4;
+    }
+
+    .aligncenter {
+        @apply block mx-auto my-4;
+    }
+
+    .alignright {
+        @apply float-right ml-4 mb-4 md:ml-6;
+    }
+
+    .alignleft {
+        @apply float-left mr-4 mb-4 md:mr-6;
+    }
+
+    /* 清除对齐后的浮动 */
+    .wp-block-image::after,
+    figure::after {
+        content: "";
+        @apply block clear-both;
+    }
+
+    /* 包含对齐图片的段落样式修复 */
+    p:has(> img.alignleft),
+    p:has(> img.alignright) {
+        @apply overflow-hidden;
+    }
+
+    @media (max-width: 640px) {
+
+        img.alignleft,
+        img.alignright {
+            @apply float-none mx-auto block;
+        }
+    }
+
+    hr {
+        @apply my-8 h-px border-0 bg-border;
+    }
+
+    ul,
+    ol {
+        @apply mb-4 pl-5 space-y-2;
+    }
+
+    ul {
+        @apply list-disc;
+    }
+
+    ol {
+        @apply list-decimal;
+    }
+
+    ul ul,
+    ol ol,
+    ul ol,
+    ol ul {
+        @apply mt-2 mb-0 pl-4 md:pl-6;
+    }
+
+    li {
+        @apply mb-1 text-base text-foreground;
+    }
+
+    .table-responsive {
+        @apply overflow-x-auto mb-4;
+    }
+
+    table {
+        @apply w-full rounded-lg border-collapse;
+    }
+
+    table thead {
+        @apply rounded-t-lg;
+    }
+
+    /* Password Protected Form */
+    .post-password-form {
+        @apply my-8 max-w-md space-y-4 rounded-lg border border-border bg-card p-6 shadow-sm mx-auto;
+    }
+
+    .post-password-form p {
+        @apply mb-2;
+    }
+
+    .post-password-form label {
+        @apply block text-sm font-medium text-foreground mb-2;
+    }
+
+    .post-password-form input[type="password"] {
+        @apply flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 mb-4;
+    }
+
+    .post-password-form input[type="submit"] {
+        @apply inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 cursor-pointer;
+    }
+
+    /* Collapse Component */
+    details.art-collapse {
+        @apply my-4 border-2 border-secondary/50 p-4 transition-all rounded-lg;
+    }
+
+    details.art-collapse[open] {
+        @apply border-2 border-primary;
+    }
+
+    details.art-collapse summary.art-collapse-title {
+        @apply flex items-center justify-between font-bold cursor-pointer list-none select-none text-foreground hover:text-primary transition-colors py-1;
+    }
+
+    details.art-collapse summary.art-collapse-title::-webkit-details-marker {
+        display: none;
+    }
+
+    details.art-collapse .art-collapse-icon {
+        @apply w-4 h-4 opacity-50 transition-transform duration-200;
+    }
+
+    details.art-collapse[open] .art-collapse-icon {
+        @apply rotate-180 opacity-100 text-primary;
+    }
+
+    details.art-collapse .art-collapse-content {
+        @apply pt-2 text-muted-foreground;
+    }
+}

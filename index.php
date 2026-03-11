@@ -15,5 +15,5 @@
  *
  */
 
-aya_core_route_entry(); //单一入口
+aya_route_core(); //单一入口
 ?>

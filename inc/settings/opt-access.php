@@ -6,10 +6,10 @@ if (!defined('ABSPATH')) {
 
 //创建主题设置
 AYF::new_opt([
-    'title' => '外部接入',
+    'title' => '订阅接入',
     'parent' => 'basic',
     'slug' => 'access',
-    'desc' => 'AIYA-CMS 主题，第三方系统接口设置',
+    'desc' => 'AIYA-CMS 主题，第三方平台接口设置',
     'fields' => aya_opt_access_add_exists(),
 ]);
 
@@ -17,65 +17,6 @@ function aya_opt_access_add_exists()
 {
     $fields = [];
     $fields = array_merge($fields, [
-        [
-            'desc' => '社交登录设置',
-            'type' => 'title_1',
-        ],
-        [
-            'desc' => 'To be continued ...',
-            'type' => 'content',
-        ],
-        /*
-        [
-            'title' => 'OpenID 登录',
-            'desc' => '启用 OpenID 登录接入',
-            'id' => 'site_oauth_openid_bool',
-            'type' => 'switch',
-            'default' => false,
-        ],
-        [
-            'title' => 'Github 登录',
-            'desc' => '启用 Github 登录接入',
-            'id' => 'site_oauth_github_bool',
-            'type' => 'switch',
-            'default' => false,
-        ],
-        [
-            'title' => 'Github Client ID',
-            'desc' => 'Github OAuth Client ID',
-            'id' => 'site_oauth_github_client_id',
-            'type' => 'text',
-            'default' => '',
-        ],
-        [
-            'title' => 'Github Client Secret',
-            'desc' => 'Github OAuth Client Secret',
-            'id' => 'site_oauth_github_client_secret',
-            'type' => 'text',
-            'default' => '',
-        ],
-        [
-            'title' => 'Google 登录',
-            'desc' => '启用 Google 登录接入',
-            'id' => 'site_oauth_google_bool',
-            'type' => 'switch',
-            'default' => false,
-        ],
-        [
-            'title' => 'Google Client ID',
-            'desc' => 'Google OAuth Client ID',
-            'id' => 'site_oauth_google_client_id',
-            'type' => 'text',
-            'default' => '',
-        ],
-        [
-            'title' => 'Google Client Secret',
-            'desc' => 'Google OAuth Client Secret',
-            'id' => 'site_oauth_google_client_secret',
-            'type' => 'text',
-            'default' => '',
-        ],
-        */
         [
             'desc' => '赞助者订阅设置',
             'type' => 'title_1',
@@ -165,9 +106,24 @@ function aya_opt_access_add_exists()
             'type' => 'switch',
             'default' => true,
         ],
+        [
+            'desc' => '激活码接口设置',
+            'type' => 'title_2',
+        ],
+        [
+            'desc' => '此接口为通用发卡兑换接口，启用后，会在后台添加独立的激活码管理页面',
+            'type' => 'content',
+        ],
+        [
+            'title' => '使用激活码兑换订阅',
+            'desc' => '会在订阅权限组件中显示“激活码”的兑换选项',
+            'id' => 'site_sponsor_convert_bool',
+            'type' => 'switch',
+            'default' => true,
+        ],
     ]);
 
-    //支付模块
+    //订阅支付模块
     if (function_exists('aya_epay_core_init')) {
         $fields = array_merge($fields, [
             [
@@ -220,19 +176,19 @@ function aya_opt_access_add_exists()
                 'desc' => '用户可以通过易支付平台支付后获得网站内的赞助者权限',
                 'id' => 'site_epay_convert_bool',
                 'type' => 'switch',
-                'default' => true,
+                'default' => false,
             ],
             [
                 'title' => '赞助者权限商品设置',
                 'desc' => '配置用于购买赞助者权限的商品',
                 'id' => 'site_epay_purchas_plan',
-                'type' => 'group',
+                'type' => 'group_mult',
                 'sub_type' => [
                     [
-                        'title' => '商品名称',
+                        'title' => '订阅名称',
                         'id' => 'name',
                         'type' => 'text',
-                        'default' => '获取订阅',
+                        'default' => '月度订阅',
                     ],
                     [
                         'title' => '商品价格（￥）',
@@ -269,106 +225,8 @@ function aya_opt_access_add_exists()
                 'type' => 'switch',
                 'default' => true,
             ],
-            /*
-            [
-                'desc' => '激活码接口设置',
-                'type' => 'title_2',
-            ],
-            [
-                'desc' => '此接口为通用发卡兑换接口，启用后，会在后台添加独立的激活码管理页面',
-                'type' => 'content',
-            ],
-            [
-                'title' => '使用激活码兑换注册',
-                'desc' => '会在用户注册时要求“激活码”选项',
-                'id' => 'site_register_convert_bool',
-                'type' => 'switch',
-                'default' => true,
-            ],
-            [
-                'title' => '使用激活码兑换订阅',
-                'desc' => '会在订阅权限组件中显示“激活码”的兑换选项',
-                'id' => 'site_sponsor_convert_bool',
-                'type' => 'switch',
-                'default' => true,
-            ],
-            */
         ]);
     }
 
-    //OpenList组件
-    if (function_exists('aya_oplist_cli_init')) {
-        $fields = array_merge($fields, [
-            [
-                'desc' => ' OpenList 客户端模块设置',
-                'type' => 'title_1',
-            ],
-            [
-                'desc' => ' OpenList 是一个开源的网盘列表程序，此模块用于直接调用 OpenList 的文件列表显示在文章页面上',
-                'type' => 'content',
-            ],
-            aya_oplist_server_option_test_request(),
-            [
-                'title' => '服务器地址',
-                'desc' => ' OpenList 的服务器地址',
-                'id' => 'site_oplist_server_url',
-                'type' => 'text',
-                'default' => 'https://your.openlist.server',
-            ],
-            [
-                'title' => '用户名',
-                'desc' => '用于请求 OpenList API 登录的用户',
-                'id' => 'site_oplist_server_user',
-                'type' => 'text',
-                'default' => 'username',
-            ],
-            [
-                'title' => '密码',
-                'desc' => '用于请求 OpenList API 登录的用户',
-                'id' => 'site_oplist_server_pswd',
-                'type' => 'text',
-                'default' => 'password',
-            ],
-            [
-                'title' => '令牌缓存时间',
-                'desc' => ' OpenList 的 JWt Token 缓存时间（小时），设置为 [code]0[/code] 则每次都重新请求令牌（*取决于 OpenList 站点配置，默认为 48 小时）',
-                'id' => 'site_oplist_server_token_hours',
-                'type' => 'text',
-                'default' => '48',
-            ],
-            [
-                'title' => '启用文件图标匹配',
-                'desc' => '在 OpenList 返回文件列表时为文件匹配图标',
-                'id' => 'site_oplist_fs_icon_bool',
-                'type' => 'switch',
-                'default' => true,
-            ],
-            [
-                'title' => '文件跳转设置',
-                'desc' => '设置从文件列表跳转到 OpenList 的方法
-                [br/]文件页面：直接跳转到 OpenList 的文件/文件夹详情页面
-                [br/]直接下载：下载文件（由 OpenList 完成 302 跳转）
-                [br/]代理下载：下载文件（由 OpenList 本机代理下载）
-                [br/]直链下载：循环请求尝试直接取出真实文件地址，会大幅增加加载时间
-                ',
-                'id' => 'site_oplist_fs_link_type',
-                'type' => 'radio',
-                'sub' => [
-                    'f' => '详情页面',
-                    'd' => '直接下载',
-                    'p' => '代理下载',
-                    'r' => '直链下载',
-                ],
-                'default' => 'd',
-            ],
-            [
-                'title' => '默认列表描述',
-                'desc' => '设置 OpenList 的文件列表底部默认的描述文本',
-                'id' => 'site_oplist_file_desc',
-                'type' => 'textarea',
-                'default' => '文件下载由 your.openlist.server 提供支持',
-            ],
-        ]);
-    }
     return $fields;
 }

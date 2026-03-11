@@ -22,7 +22,7 @@ function aya_theme_after_init()
     global $pagenow;
 
     if ('themes.php' == $pagenow && isset($_GET['activated'])) {
-        // options-general.php 改成你的主题设置页面网址
+        // options-general.php
         wp_redirect(admin_url('?page=aya-options-basic'));
         exit;
     }
@@ -237,6 +237,43 @@ function aya_theme_disable_comment_url($fields)
 
 /*
  * ------------------------------------------------------------------------------
+ * 文章点赞和元数据处理
+ * ------------------------------------------------------------------------------
+ */
+
+//添加钩子 点赞计数器
+add_action('the_post', 'aya_add_like_count_to_post_object');
+//添加钩子 添加meta数据预加载
+add_action('loop_start', 'aya_prefetch_post_like_count');
+
+//点赞计数器
+function aya_add_like_count_to_post_object($post)
+{
+    if (is_object($post) && property_exists($post, 'ID')) {
+
+        $the_likes = get_post_meta($post->ID, 'like_count', true);
+
+        $post->like_count = intval($the_likes);
+    }
+
+    return $post;
+}
+
+//添加 Post_meta 预加载
+function aya_prefetch_post_like_count($wp_query)
+{
+    //获取查询中所有文章
+    $post_ids = wp_list_pluck($wp_query->posts, 'ID');
+
+    if (!empty($post_ids)) {
+
+        update_meta_cache('post', $post_ids);
+    }
+}
+
+
+/*
+ * ------------------------------------------------------------------------------
  * 文章格式过滤器
  * ------------------------------------------------------------------------------
  */
@@ -293,27 +330,32 @@ function aya_content_filter_dom_document($content, $encode_utf8 = false)
     $dom->loadHTML('<?xml encoding="UTF-8">' . $content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
     //清除报错
     //libxml_clear_errors();
+
     //格式<img>标签
     if (aya_opt('site_content_img_filter_bool', 'automatic')) {
         $images = $dom->getElementsByTagName('img');
         foreach ($images as $img) {
-            //添加class
-            $existing_class = $img->getAttribute('class');
-            $img->setAttribute('class', trim($existing_class . ' lozad'));
+            if (!($img instanceof DOMElement)) {
+                continue;
+            }
             //添加属性
             $img->setAttribute('loading', 'lazy'); //eager
             //判断补充alt属性
             $existing_alt = $img->getAttribute('alt');
-            if (empty($$existing_alt)) {
+            if (empty($existing_alt)) {
                 $img->setAttribute('alt', get_the_title($post));
             }
         }
     }
+
     //格式化<a>标签
     if (aya_opt('site_content_link_filter_bool', 'automatic')) {
         $redirect_option = aya_opt('site_content_link_jump_page_type', 'automatic');
         $links = $dom->getElementsByTagName('a');
         foreach ($links as $link) {
+            if (!($link instanceof DOMElement)) {
+                continue;
+            }
             $href = $link->getAttribute('href');
 
             //如果是外部链接
@@ -338,6 +380,7 @@ function aya_content_filter_dom_document($content, $encode_utf8 = false)
             }
         }
     }
+
     //保存
     $this_content = $dom->saveHTML();
 
@@ -347,140 +390,91 @@ function aya_content_filter_dom_document($content, $encode_utf8 = false)
 //格式化<a>标签
 function aya_content_filter_link_tag($content)
 {
-    //遍历
-    $matches = preg_match_all('/<a[^>]*href=["\']([^"\']+)["\'][^>]*>/', $content, $urls);
-    //如果存在a标签
-    if (!empty($matches) && !empty($urls[1])) {
-        $redirect_option = aya_opt('site_content_link_jump_page_type', 'automatic');
-        foreach ($urls[1] as $url) {
-            // 如果是外部链接
-            if (cur_is_external_url($url)) {
-                // 外链提示页面
-                if ($redirect_option == 'link') {
-                    $url = add_query_arg('target', urlencode($url), home_url('/link/'));
-                    $content = str_replace("href=\"$url\"", "href=\"" . $url . "\" rel=\"nofollow\"", $content);
-                }
-                // 内跳页面
-                else if ($redirect_option == 'go') {
-                    $url = add_query_arg('url', base64_encode($url), home_url('/go/'));
-                    $content = str_replace("href=\"$url\"", "href=\"" . $url . "\" rel=\"nofollow\" target=\"_blank\"", $content);
-                }
-                // 只添加 nofollow
-                else {
-                    $content = str_replace("href=\"$url\"", "href=\"" . $url . "\" rel=\"nofollow\" target=\"_blank\"", $content);
+    $redirect_option = aya_opt('site_content_link_jump_page_type', 'automatic');
+
+    return preg_replace_callback('/<a\s+([^>]*?)href=["\']([^"\']+)["\']([^>]*?)>/i', function ($matches) use ($redirect_option) {
+        $full_tag = $matches[0];
+        $url = $matches[2];
+
+        // 如果是外部链接
+        if (cur_is_external_url($url)) {
+            // 处理跳转逻辑
+            $new_url = $url;
+            $need_target = false;
+
+            if ($redirect_option == 'link') {
+                $new_url = add_query_arg('target', urlencode($url), home_url('/link/'));
+            } elseif ($redirect_option == 'go') {
+                $new_url = add_query_arg('url', base64_encode($url), home_url('/go/'));
+                $need_target = true;
+            } else {
+                $need_target = true;
+            }
+
+            // 替换 href (仅替换匹配到的部分，避免误伤)
+            if ($new_url !== $url) {
+                $full_tag = str_replace($url, $new_url, $full_tag);
+            }
+
+            // 处理 rel="nofollow"
+            if (strpos($full_tag, 'rel=') !== false) {
+                $full_tag = preg_replace_callback('/rel=["\']([^"\']*)["\']/i', function ($m) {
+                    $rels = preg_split('/\s+/', $m[1], -1, PREG_SPLIT_NO_EMPTY);
+                    if (!in_array('nofollow', $rels)) {
+                        $rels[] = 'nofollow';
+                    }
+                    return 'rel="' . implode(' ', $rels) . '"';
+                }, $full_tag);
+            } else {
+                // 使用 preg_replace 确保插入位置正确且不破坏其他属性
+                $full_tag = preg_replace('/(<a\s+)/i', '$1rel="nofollow" ', $full_tag, 1);
+            }
+
+            // 处理 target="_blank"
+            if ($need_target) {
+                if (strpos($full_tag, 'target=') !== false) {
+                    $full_tag = preg_replace('/target=["\'][^"\']*["\']/i', 'target="_blank"', $full_tag);
+                } else {
+                    $full_tag = preg_replace('/(<a\s+)/i', '$1target="_blank" ', $full_tag, 1);
                 }
             }
         }
-    }
 
-    return $content;
+        return $full_tag;
+    }, $content);
 }
 
 //格式化<img>标签
 function aya_content_filter_img_tag($content)
 {
-    //遍历
-    $matches = preg_match_all('/<img [^>]+>/', $content, $images);
-    //如果存在img标签
-    if (!is_null($images)) {
-        global $post;
-
-        foreach ($images[0] as $i => $image) {
-            //检查class
-            if (!preg_match('/class=["\']?([^"\']*)["\']?/i', $image)) {
-                //添加
-                $new_image = preg_replace('/<img /', '<img class="lozad" ', $image);
-            } else {
-                //追加
-                $new_image = preg_replace('/class=["\']?([^"\']*)["\']?/i', 'class="lozad $1"', $image);
-            }
-            //检查alt
-            if (!preg_match('/alt=["\']?([^"\']*)["\']?/i', $image)) {
-                //如果没有alt属性，添加alt属性
-                $new_image = preg_replace('/<img /', '<img alt="' . get_the_title($post) . '" ', $image);
-            } else {
-                //如果alt属性为空，添加alt属性
-                $new_image = preg_replace('/alt=["\']?([^"\']*)["\']?/i', 'alt="' . get_the_title($post) . '" ', $image);
-            }
-
-            $content = str_replace($image, $new_image, $content);
-        }
+    if (empty($content)) {
+        return $content;
     }
 
-    return $content;
-}
+    global $post;
+    $post_title = get_the_title($post);
 
-//弃用：格式化<h>标签（用于生成文章目录）
-function aya_content_filter_h1_tag($content)
-{
-    //遍历
-    $matches = preg_match_all('/<h[123]>(.*?)<\/h[123]>/im', $content, $h1s);
-    //如果存在标题
-    if (!is_null($h1s)) {
+    return preg_replace_callback('/<img\s+([^>]+)>/i', function ($matches) use ($post_title) {
+        $full_tag = $matches[0];
 
-        foreach ($h1s[1] as $i => $title) {
-            //重写h1标签
-            $start = stripos($content, $h1s[0][$i]);
-            $end = strlen($h1s[0][$i]);
-            $level = substr($h1s[0][$i], 1, 2);
-
-            $content = substr_replace($content, '<' . $level . ' id="menu-' . $i + 1 . '">' . $title . '</' . $level . '>', $start, $end);
+        // 添加 loading="lazy"
+        if (strpos($full_tag, 'loading=') === false) {
+            $full_tag = preg_replace('/(<img\s+)/i', '$1loading="lazy" ', $full_tag, 1);
         }
-    }
 
-    return $content;
-}
-
-//弃用：格式化<table>标签
-function aya_content_filter_table_tag($content)
-{
-    //遍历
-    $matches = preg_match_all('/<table.*?>[\s\S]*<\/table>/', $content, $tables);
-    //如果存在table标签
-    if (!is_null($tables)) {
-
-        foreach ($tables[0] as $i => $value) {
-            //附加表格样式
-            $table_html = str_replace('<table', '<table class="bordered"', $tables[0][$i]);
-
-            $content = str_replace($tables[0][$i], $table_html, $content);
-        }
-    }
-
-    return $content;
-}
-
-//弃用：格式化<pre>标签
-function aya_content_filter_pre_tag($content)
-{
-    //遍历
-    $matches = preg_match_all('/<pre.*?>(.+?)<\/pre>/is', $content, $pres);
-    //如果存在pre标签
-    if (!is_null($pres)) {
-
-        foreach ($pres[1] as $match) {
-            $code_html = trim($match);
-            //检查pre标签class
-            $code_html = preg_replace('/<pre class="([^"]*)">/', '<pre class="line-numbers $1">', $code_html);
-
-            //如果没有code标签
-            if (!(substr($code_html, 0, strlen('<code')) === '<code')) {
-                $code_html = '<code class="language-plaintext">' . $code_html . '</code>';
+        // 处理 alt 属性
+        if (strpos($full_tag, 'alt=') === false) {
+            // 没有 alt 属性，添加
+            $full_tag = preg_replace('/(<img\s+)/i', '$1alt="' . esc_attr($post_title) . '" ', $full_tag, 1);
+        } else {
+            // 有 alt 属性，检查是否为空
+            if (preg_match('/alt=["\']\s*["\']/i', $full_tag)) {
+                $full_tag = preg_replace('/alt=["\']\s*["\']/i', 'alt="' . esc_attr($post_title) . '"', $full_tag);
             }
-            //如果有code标签
-            //UPDATE：不处理，前台直接JS处理
-            /*
-            if (substr($code_html, 0, strlen("<code>")) === "<code>") {
-                //转义HTML
-                $code_html = aya_html_clean($code_html);
-                $code_html = '<code>' . substr($code_html, strlen('<code>'));
-            }
-            */
-            $content = str_replace($match, $code_html, $content);
         }
-    }
 
-    return $content;
+        return $full_tag;
+    }, $content);
 }
 
 /*
@@ -560,13 +554,13 @@ function aya_save_post_formatting($post_id)
  * ------------------------------------------------------------------------------
  */
 
-if (aya_opt('site_post_tips_default_terms_bool', 'automatic')) {
-    add_action('admin_init', 'aya_tax_tips_add_default_terms');
-}
+// 在主题首次启用时添加默认提示分类
+add_action('aya_install', 'aya_tax_tips_add_default_terms');
 
-if (aya_opt('site_post_tips_terms_bool', 'automatic')) {
+if (aya_opt('site_post_add_tips_terms_bool', 'basic')) {
     //注册提示分类法
     AYP::action(
+        //'分类法' => array('name' => '分类法名', 'slug' => '别名', 'post_type' => array('此分类法适用的文章类型', ), 'tag_mode' => 设置为true则使用标签分类法模板 ),
         'Register_Tax_Type',
         [
             'status' => [
@@ -603,28 +597,28 @@ function aya_tax_tips_add_default_terms()
 {
     $taxonomy = 'tips';
 
-    $terms = array(
-        '更新中' => array(
+    $terms = [
+        '更新中' => [
             'description' => '这篇文章正在更新中，可能还会有新的内容添加。',
             'slug' => 'updating'
-        ),
-        '需要更新' => array(
+        ],
+        '需要更新' => [
             'description' => '这篇文章的信息已经失效，当前内容仅供参考。',
             'slug' => 'invalid'
-        ),
-        '已废弃' => array(
+        ],
+        '已废弃' => [
             'description' => '这篇文章的信息已经废弃，不再更新。',
             'slug' => 'abandoned'
-        ),
-        '危险操作' => array(
+        ],
+        '危险操作' => [
             'description' => '这篇教程包含修改系统核心文件等操作，请注意备份。',
             'slug' => 'dangerous'
-        ),
-        '来源不明' => array(
+        ],
+        '来源不明' => [
             'description' => '这篇文章的信息来源未经证明，捕风捉影罢了。',
             'slug' => 'rumor'
-        ),
-    );
+        ],
+    ];
 
     foreach ($terms as $term_name => $term_args) {
         //检查项目存在
@@ -632,6 +626,75 @@ function aya_tax_tips_add_default_terms()
             wp_insert_term($term_name, $taxonomy, $term_args);
         }
     }
+}
+
+//文章顶部中显示的小贴士信息
+function aya_get_post_tips($post_id = 0)
+{
+    $terms = get_the_terms($post_id, 'tips');
+
+    if ($terms && !is_wp_error($terms)) {
+        //显示全部
+        foreach ($terms as $term) {
+            //获取设置的颜色样式
+            $alert_by = get_term_meta($term->term_id, 'alert_level', true);
+
+            $tips[] = [
+                'alert' => esc_attr($alert_by),
+                'name' => esc_html($term->name),
+                'description' => esc_html($term->description),
+            ];
+        }
+    }
+
+    return $tips ?? [];
+}
+
+/*
+ * ------------------------------------------------------------------------------
+ * 自定义推文文章类型
+ * ------------------------------------------------------------------------------
+ */
+//注册文章类型
+add_action('after_setup_theme', 'aya_post_type_tweet_action');
+//MetaBox注册
+//add_action('add_meta_boxes', 'aya_post_type_tweet_add_meta_box');
+
+function aya_post_type_tweet_action()
+{
+    //注册文章类型
+    AYP::action(
+        //'文章类型' => array('name' => '文章类型名','slug' => '别名','icon' => '图标','in_homepage' => 允许显示在首页),
+        'Register_Post_Type',
+        [
+            'tweet' => [
+                'name' => __('推文', 'AIYA'),
+                'slug' => 'tweet',
+                'icon' => 'dashicons-format-quote',
+                'in_homepage' => false,
+            ],
+        ]
+    );
+}
+
+//使自定义文章类型可以操作置顶
+function aya_post_type_tweet_add_meta_box()
+{
+    add_meta_box('aya_tweet_product_sticky', __('置顶', 'AIYA'), 'aya_tweet_product_sticky', 'tweet', 'side', 'high');
+}
+
+function aya_tweet_product_sticky()
+{
+    printf(
+        '<p>
+            <label for="super-sticky" class="selectit">
+                <input id="super-sticky" name="sticky" type="checkbox" value="sticky" %s />
+                %s
+            </label>
+        </p>',
+        checked(is_sticky(), true, false),
+        esc_html__('置顶这篇文章', 'AIYA')
+    );
 }
 
 /*

@@ -22,20 +22,21 @@ jobs:
             - name: Generate changelog from commits
               id: changelog
               run: |
-                  # fetch all git history
-                  # git fetch --prune --unshallow 2>/dev/null || true
-                  # previous tag
+                  # fetch all git history with refname
                   ALL_TAGS=$(git tag --sort=-v:refname)
+                  # get previous tag
+                  CURRENT_TAG=${GITHUB_REF#refs/tags/}
                   PREVIOUS_TAG=$(echo "$ALL_TAGS" | grep -B1 "$CURRENT_TAG" | head -n1 | grep -v "$CURRENT_TAG" || echo "")
+                  echo "Current tag: $CURRENT_TAG"
                   echo "Previous tag: $PREVIOUS_TAG"
                   echo "Total commits: $(git rev-list --count HEAD)"
                   # if no previous tag, generate changelog from all commits
                   if [ -z "$PREVIOUS_TAG" ]; then
                       CHANGELOG=$(git log --pretty=format:"- %s" --no-merges)
-                      echo "Generating changelog from all commits"
+                      echo "Generating changelog from all commits (first release)"
                   else
-                      CHANGELOG=$(git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s" --no-merges)
-                      echo "Generating changelog from ${PREVIOUS_TAG}..HEAD"
+                      CHANGELOG=$(git log ${PREVIOUS_TAG}..${CURRENT_TAG} --pretty=format:"- %s" --no-merges)
+                      echo "Generating changelog from ${PREVIOUS_TAG} to ${CURRENT_TAG}"
                   fi
                   # GITHUB_OUTPUT
                   echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT

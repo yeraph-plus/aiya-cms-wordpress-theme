@@ -31,7 +31,7 @@ if (!defined('ABSPATH')) {
 define('AYA_PATH', get_template_directory());
 define('AYA_HOME', home_url());
 //缓存时间
-//define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); // or MINUTE_IN_SECONDS
+define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); // or MINUTE_IN_SECONDS
 //浏览量倍率作弊
 //define('AYA_MODIFY_VISITORS', 10);
 
@@ -57,35 +57,55 @@ function aya_require($name, $path = '', $special = false)
     } else {
         //打印一个报错
         if (defined('WP_DEBUG') && WP_DEBUG && !$special) {
-            print ("[WARNING] Require file not found: $req_file");
+            print("[WARNING] Require file not found: $req_file");
         }
     }
 }
 
 //独立页面路由参数
-$GLOBALS['aya_land_page'] = array(
+$GLOBALS['aya_land_page'] = [
     //'URL路径' => array('template' => '模板路径','title' => '页面标题','orginal' => true/false在模板路由中是否加载页头页脚)
     'go' => [
         'title' => '跳转页面',
         'template' => 'external-auto',
         'orginal' => false,
+        'callback' => function () {
+            aya_add_breadcrumb_item(__('跳转页面', 'AIYA'), '#');
+        }
     ],
     'link' => [
         'title' => '外部链接',
         'template' => 'external-link',
         'orginal' => true,
-    ],
-    'favlist' => [
-        'title' => '收藏列表',
-        'template' => 'fav-list',
-        'orginal' => true,
+        'callback' => function () {
+            aya_add_breadcrumb_item(__('外部链接提示', 'AIYA'), '#');
+        }
     ],
     'sponsor' => [
         'title' => '获取订阅',
         'template' => 'sponsor-plan',
         'orginal' => true,
+        'callback' => function () {
+            aya_add_breadcrumb_item(__('获取订阅', 'AIYA'), '#');
+        }
     ],
-);
+    'user-favlist' => [
+        'title' => '收藏列表',
+        'template' => 'user-favlist',
+        'orginal' => true,
+        'callback' => function () {
+            aya_add_breadcrumb_item(__('收藏列表', 'AIYA'), '#');
+        }
+    ],
+    'user-settings' => [
+        'title' => '用户设置',
+        'template' => 'user-settings',
+        'original' => true,
+        'callback' => function () {
+            aya_add_breadcrumb_item(__('用户设置', 'AIYA'), '#');
+        }
+    ],
+];
 
 //加载预置插件
 aya_require('functions', 'plugins', true);
@@ -95,7 +115,7 @@ if (!class_exists('AYF') || !class_exists('AYP')) {
 
     if (!is_admin()) {
         $error_title = __('AIYA-CMS 启动错误', 'AIYA');
-        $error_msg = __('AIYA-CMS 未找到主题框架依赖，请安装并激活 AIYA-Optimize 插件，或订阅 Pro 版本。', 'AIYA');
+        $error_msg = __('AIYA-CMS 未找到主题框架依赖，请安装并激活 AIYA-Optimize 插件。', 'AIYA');
 
         wp_die($error_msg, $error_title, array('response' => 500));
 
@@ -106,42 +126,64 @@ if (!class_exists('AYF') || !class_exists('AYP')) {
 }
 
 //主题方法
-aya_require('func-auto-loader');
 aya_require('func-public');
-aya_require('func-wp-emends');
 aya_require('func-wp-scripts');
+aya_require('func-wp-emends');
+
+//加载数据处理工具类
+aya_require('Plugin_RecordVisitors', 'core');
+aya_require('WP_Breadcrumb', 'core');
+aya_require('WP_Menu', 'core');
+aya_require('WP_Paged', 'core');
+aya_require('WP_Post', 'core');
+aya_require('WP_Query', 'core');
+aya_require('WP_Term', 'core');
+
+//加载SDK
+aya_require('BFI_Thumb', 'lib');
+aya_require('XDeode', 'lib');
+aya_require('Http_Request', 'lib');
+aya_require('Afdian_API', 'lib');
+aya_require('OpenList_API', 'lib');
+
+//加载 Composer 依赖
+aya_require('autoload', 'vendor');
+
 //模板方法
 aya_require('func-vite-helpers');
-aya_require('func-user');
-aya_require('func-notify');
-//aya_require('func-cache');
 aya_require('func-template');
+
 //接口方法
 aya_require('func-api-router');
+
+//功能
 aya_require('func-payment');
+aya_require('func-user');
+aya_require('func-openlist');
+aya_require('func-notify');
+
+//短代码
+aya_require('func-shotcodes');
+
 //设置页面
 aya_require('opt-basic', 'settings');
 aya_require('opt-land', 'settings');
 aya_require('opt-notify', 'settings');
 aya_require('opt-automatic', 'settings');
 aya_require('opt-access', 'settings');
+
 //小工具
-// aya_require('widget-text-html', 'widgets');
-// aya_require('widget-add-menu', 'widgets');
-// aya_require('widget-comments', 'widgets');
-// aya_require('widget-post-comments', 'widgets');
-// aya_require('widget-post-views', 'widgets');
-// aya_require('widget-post-custom', 'widgets');
-// aya_require('widget-post-newest', 'widgets');
-// aya_require('widget-post-random', 'widgets');
-// aya_require('widget-author', 'widgets');
-// aya_require('widget-search', 'widgets');
-// aya_require('widget-tag-cloud', 'widgets');
-// aya_require('widget-welcome-panel', 'widgets');
-//短代码工具
-aya_require('code-basic', 'shotcodes');
-aya_require('code-iframe', 'shotcodes');
-//aya_require('code-player', 'shotcodes');
+aya_require('widget-post-comments', 'widgets');
+aya_require('widget-post-likes', 'widgets');
+aya_require('widget-post-views', 'widgets');
+aya_require('widget-post-newest', 'widgets');
+aya_require('widget-post-random', 'widgets');
+aya_require('widget-search', 'widgets');
+aya_require('widget-add-menu', 'widgets');
+aya_require('widget-comments', 'widgets');
+aya_require('widget-tag-cloud', 'widgets');
+aya_require('widget-text-html', 'widgets');
+aya_require('widget-user-welcome', 'widgets');
 
 /*
  * ------------------------------------------------------------------------------
@@ -161,17 +203,19 @@ AYP::action('EnvCheck', array(
     //WP最低版本
     'wp_last' => '6.5',
 ));
+
 //插件检查
 AYP::action('PluginCheck', array(
-    //'经典编辑器' => 'classic-editor/classic-editor.php',
-    //'经典小工具' => 'classic-widgets/classic-widgets.php',
+    '经典编辑器' => 'classic-editor/classic-editor.php',
+    '经典小工具' => 'classic-widgets/classic-widgets.php',
 ));
+
 //此钩子用于执行add_theme_support()
 AYP::action('After_Setup_Theme', array(
     //将默认的帖子和评论RSS提要链接添加到<head>
     'automatic-feed-links' => '',
     //支持 BuddyPress 主题
-    'buddypress' => '',
+    //'buddypress' => '',
     //支持标签
     'title-tag' => '',
     //支持菜单
@@ -212,6 +256,7 @@ AYP::action('After_Setup_Theme', array(
         'default-attachment' => 'fixed'
     )
 ));
+
 //后台自定义
 AYP::action('Admin_Custom', array(
     //禁用前台顶部工具栏
@@ -225,52 +270,55 @@ AYP::action('Admin_Custom', array(
     //替换后台页脚信息
     'admin_footer_replace' => __('感谢使用 <b>AIYA-CMS</b> 主题，欢迎访问 <a href="https://www.yeraph.com" target="_blank">Yeraph Studio</a> 了解更多。', 'AIYA'),
 ));
+
 //注册小工具 Tips：请确保此时要注册的小工具的文件已被require
 AYP::action('Widget_Load', array(
     //'小工具Class名',
-    // 'AYA_Widget_Text_Html',
-    // 'AYA_Widget_Menu',
-    // 'AYA_Widget_Search',
-    // 'AYA_Widget_Tag_Cloud',
-    // 'AYA_Widget_Post_Comments',
-    // 'AYA_Widget_Post_Views',
-    // 'AYA_Widget_Post_Newest',
-    // 'AYA_Widget_Post_Random',
-    // 'AYA_Widget_Author_Box',
-    // 'AYA_Widget_Comments',
-    //'AYA_Widget_User_Welcome',
+    'AYA_Widget_Post_Newest',
+    'AYA_Widget_Post_Comments',
+    'AYA_Widget_Post_Views',
+    'AYA_Widget_Post_Likes',
+    'AYA_Widget_Post_Random',
+    'AYA_Widget_Text_Html',
+    'AYA_Widget_Search',
+    'AYA_Widget_Menu',
+    'AYA_Widget_Tag_Cloud',
+    'AYA_Widget_Comments',
+    'AYA_Widget_User_Welcome',
 ));
+
 //解除 WP 自带的小工具
 AYP::action('Widget_Unload', array(
     //'需要注销的小工具Class名',
-    'WP_Widget_Archives',        //年份文章归档
-    'WP_Widget_Calendar',        //日历
-    'WP_Widget_Categories',      //分类列表
-    'WP_Widget_Links',           //链接
-    'WP_Widget_Media_Audio',     //音乐
-    'WP_Widget_Media_Video',     //视频
-    'WP_Widget_Media_Gallery',   //相册
-    'WP_Widget_Custom_HTML',     //html
-    'WP_Widget_Media_Image',     //图片
-    'WP_Widget_Text',            //文本
-    'WP_Widget_Meta',            //默认工具链接
-    'WP_Widget_Pages',           //页面
+    'WP_Widget_Archives', //年份文章归档
+    'WP_Widget_Calendar', //日历
+    'WP_Widget_Categories', //分类列表
+    'WP_Widget_Links', //链接
+    'WP_Widget_Media_Audio', //音乐
+    'WP_Widget_Media_Video', //视频
+    'WP_Widget_Media_Gallery', //相册
+    'WP_Widget_Custom_HTML', //html
+    'WP_Widget_Media_Image', //图片
+    'WP_Widget_Text', //文本
+    'WP_Widget_Meta', //默认工具链接
+    'WP_Widget_Pages', //页面
     'WP_Widget_Recent_Comments', //评论
-    'WP_Widget_Recent_Posts',    //文章列表
-    'WP_Widget_RSS',             //RSS订阅
-    'WP_Widget_Search',          //搜索
-    'WP_Widget_Tag_Cloud',       //标签云
-    'WP_Nav_Menu_Widget',        //菜单
-    'WP_Widget_Block',           //区块
+    'WP_Widget_Recent_Posts', //文章列表
+    'WP_Widget_RSS', //RSS订阅
+    'WP_Widget_Search', //搜索
+    'WP_Widget_Tag_Cloud', //标签云
+    'WP_Nav_Menu_Widget', //菜单
+    'WP_Widget_Block', //区块
 ));
+
 //注册导航菜单
 AYP::action('Register_Menu', array(
     //'菜单ID' => '菜单名',
-    'primary-menu' => __('主要菜单', 'AIYA'),
-    'secondary-menu' => __('次要菜单', 'AIYA'),
-    'end-menu' => __('页脚菜单', 'AIYA'),
+    'header-menu' => __('主要菜单', 'AIYA'),
+    'footer-menu' => __('页脚菜单（单层级）', 'AIYA'),
     'widget-menu' => __('小工具菜单', 'AIYA'),
 ));
+
 //注册小工具栏位
 AYP::action('Register_Sidebar', array(
     //'边栏ID' => '边栏名',
@@ -279,5 +327,6 @@ AYP::action('Register_Sidebar', array(
     'single-widget' => __('正文页面', 'AIYA'),
     'author-widget' => __('用户页面', 'AIYA'),
 ));
+
 //启用小工具缓存插件
 AYP::action('Widget_Cache', true);

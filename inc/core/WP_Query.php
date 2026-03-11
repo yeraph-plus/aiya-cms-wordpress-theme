@@ -91,6 +91,7 @@ if (!class_exists('AYA_WP_Query_Object')) {
         {
             $query_args = wp_parse_args($args, [
                 'posts_per_page' => $limit,
+                'ignore_sticky_posts' => false,
                 'orderby' => $orderby,
                 'order' => ($asc_order ? 'ASC' : 'DESC'),
             ]);
@@ -221,6 +222,7 @@ if (!class_exists('AYA_WP_Query_Object')) {
                 'post__in' => (array) $post_ids,
                 'posts_per_page' => -1,
                 'orderby' => $orderby,
+                'ignore_sticky_posts' => true,
                 'post_type' => $post_types,
             ];
 
@@ -254,6 +256,7 @@ if (!class_exists('AYA_WP_Query_Object')) {
             $args = [
                 'post__not_in' => [$post_id], // 排除当前文章
                 'posts_per_page' => $limit,
+                'ignore_sticky_posts' => true,
                 'tax_query' => [
                     'relation' => 'OR',
                     [
