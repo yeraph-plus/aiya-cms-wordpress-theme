@@ -124,6 +124,13 @@ $api->register_route('register', [
         if ($password !== $password_confirm) {
             return $api->error_response('invalid_param', ['detail' => '两次输入的密码不一致']);
         }
+        //密码强度校验：至少8位，包含字母和数字
+        if (mb_strlen($password) < 8) {
+            return $api->error_response('invalid_param', ['detail' => __('密码长度不能少于8位', 'AIYA')]);
+        }
+        if (!preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password)) {
+            return $api->error_response('invalid_param', ['detail' => __('密码必须同时包含字母和数字', 'AIYA')]);
+        }
         //验证传入是否是邮箱
         if (!is_email($email)) {
             return $api->error_response('invalid_param', ['detail' => '邮箱格式不正确']);
@@ -426,14 +433,17 @@ $api->register_route('post_like', [
         $nonce = $request->get_header('X-WP-Nonce');
         //验证nonce
         if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            //对于点赞，可以放宽验证，或者严格验证。这里保持一致性。
-            //如果前端未登录用户也传nonce（wp_create_nonce('wp_rest')对未登录用户也有效），则没问题。
             return $api->error_response('permission_denied', ['detail' => __('验证失败', 'AIYA')]);
         }
 
-        $post_id = $request->get_param('post_id');
+        $post_id = absint($request->get_param('post_id'));
         if (empty($post_id)) {
             return $api->error_response('invalid_param', ['detail' => '缺少参数']);
+        }
+
+        //验证文章存在且已发布
+        if (get_post_status($post_id) !== 'publish') {
+            return $api->error_response('invalid_param', ['detail' => '文章不存在']);
         }
 
         //获取当前点赞数

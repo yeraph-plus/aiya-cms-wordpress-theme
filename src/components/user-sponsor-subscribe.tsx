@@ -69,7 +69,7 @@ export default function UserSponsorSubscribe({ plans }: UserSponsorSubscribeProp
                                 </CardTitle>
                                 <CardDescription>
                                     <span className="text-2xl font-bold text-primary">{plan.price}</span>
-                                    <p className="text-sm text-gray-500 mt-2">{plan.desc}</p>
+                                    <p className="text-sm text-muted-foreground mt-2">{plan.desc}</p>
                                 </CardDescription>
                             </CardHeader>
                             <CardFooter className="mt-auto ">

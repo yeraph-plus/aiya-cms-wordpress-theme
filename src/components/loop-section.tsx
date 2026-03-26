@@ -85,7 +85,7 @@ export default function LoopSection({ posts, loopTitle = "文章列表", classNa
     )
   }
 
-  const gridClass = "grid gap-2 md:gap-4 transition-all duration-300 ease-in-out grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5"
+  const gridClass = "grid gap-2 md:gap-4 transition-all duration-300 ease-in-out grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5"
 
   return (
     <div className={cn("mt-6 mb-4  space-y-6", className)}>

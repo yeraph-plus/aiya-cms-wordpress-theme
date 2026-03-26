@@ -69,7 +69,7 @@ function FullLayout({ posts, className }: { posts: CarouselPost[], className?: s
       <CarouselContent>
         {posts.map((post, index) => (
           <CarouselItem key={index}>
-            <div className="relative aspect-[21/9] w-full overflow-hidden rounded-lg">
+            <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full overflow-hidden rounded-lg">
               <a href={post.url} target={post.target} className="block w-full h-full">
                 <img src={post.thumbnail} alt={post.title} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-6 md:p-10">

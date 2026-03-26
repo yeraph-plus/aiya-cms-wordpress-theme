@@ -16,7 +16,7 @@ export default function LoopGridSkeleton() {
         </div>
       </div>
 
-      <div className="grid gap-2 md:gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
+      <div className="grid gap-2 md:gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
           <div key={i} className="flex flex-col rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden h-full">
             <div className="aspect-video w-full overflow-hidden bg-muted relative">

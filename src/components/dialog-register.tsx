@@ -135,7 +135,7 @@ export function RegisterDialog({ open, onOpenChange }: RegisterDialogProps) {
             />
           </Field>
           {error && (
-            <div className="text-sm text-red-500">
+            <div className="text-sm text-destructive">
               {error}
             </div>
           )}

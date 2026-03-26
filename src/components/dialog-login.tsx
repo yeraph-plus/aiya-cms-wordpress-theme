@@ -147,7 +147,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
           </div>
 
           {error && (
-            <div className="text-sm text-red-500">
+            <div className="text-sm text-destructive">
               {error}
             </div>
           )}

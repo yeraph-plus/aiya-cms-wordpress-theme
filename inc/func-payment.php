@@ -488,7 +488,12 @@ function aya_verify_code_by_code($code)
     global $wpdb;
     $table_name = $wpdb->prefix . 'aya_convert_codes';
 
-    // 查询兑换码
+    $current_user_id = get_current_user_id();
+    if (!$current_user_id) {
+        return ['status' => false, 'detail' => __('请先登录', 'AIYA')];
+    }
+
+    // 先查询兑换码获取时长信息
     $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE code = %s", $code));
 
     if (!$row) {
@@ -499,24 +504,30 @@ function aya_verify_code_by_code($code)
         return ['status' => false, 'detail' => __('兑换码已被使用', 'AIYA')];
     }
 
+    // 原子更新：防止并发竞态条件下同一激活码被重复兑换
+    $affected = $wpdb->query($wpdb->prepare(
+        "UPDATE $table_name SET status = 1, user_id = %d, used_to = %s WHERE code = %s AND status = 0 AND user_id IS NULL",
+        $current_user_id,
+        current_time('mysql'),
+        $code
+    ));
+
+    if ($affected === 0) {
+        return ['status' => false, 'detail' => __('兑换码已被使用', 'AIYA')];
+    }
+
     // 尝试激活权限
-    // 激活函数会自动检查用户登录状态
     $result = aya_sponsor_key_activation($code, $row->duration, 'code');
 
     if ($result) {
-        // 更新兑换码状态
-        $wpdb->update(
-            $table_name,
-            [
-                'user_id' => get_current_user_id(),
-                'status' => 1,
-                'used_to' => current_time('mysql')
-            ],
-            ['id' => $row->id]
-        );
-
         return ['status' => true, 'detail' => __('兑换成功，权限已激活', 'AIYA')];
     } else {
+        // 激活失败，回滚激活码状态
+        $wpdb->update(
+            $table_name,
+            ['user_id' => null, 'status' => 0, 'used_to' => null],
+            ['code' => $code]
+        );
         return ['status' => false, 'detail' => __('激活失败，可能是您已拥有该时段的权限或系统错误', 'AIYA')];
     }
 }

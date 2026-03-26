@@ -233,7 +233,7 @@ export default function ContentDetail({
 
         <h1 className={cn(
           "text-xl md:text-3xl lg:text-4xl font-bold leading-tight flex flex-wrap items-center gap-3",
-          isOverlay ? "text-white drop-shadow-lg" : "text-base-content"
+          isOverlay ? "text-white drop-shadow-lg" : "text-foreground"
         )}>
           {title}
           {status && status !== 'publish' && (
@@ -247,7 +247,7 @@ export default function ContentDetail({
           <div className={cn("flex flex-wrap items-center gap-4 text-sm", metaColor)}>
             {/* Author */}
             <a href={author.url} className="flex items-center gap-2 hover:opacity-80 transition-opacity" title={author.name}>
-              <Avatar className={cn("h-8 w-8", isOverlay ? "border-2 border-white/20" : "border border-base-300")}>
+              <Avatar className={cn("h-8 w-8", isOverlay ? "border-2 border-white/20" : "border border-border")}>
                 <AvatarImage src={author.avatar} alt={author.name} />
                 <AvatarFallback>{author.name.charAt(0)}</AvatarFallback>
               </Avatar>
@@ -382,7 +382,7 @@ export default function ContentDetail({
       )}
 
       {!hasThumbnail && (
-        <div className="mb-6 pb-6 border-b border-base-200">
+        <div className="mb-6 pb-6 border-b border-border">
           {renderHeaderContent(false)}
         </div>
       )}

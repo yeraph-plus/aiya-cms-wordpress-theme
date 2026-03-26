@@ -156,7 +156,7 @@ if (function_exists('aya_home_url_referer_check') && aya_home_url_referer_check(
             <p style="font-size: 0.8rem; margin-top: 0.25rem;"><?php _e('如果没有自动跳转，请点击下方按钮', 'AIYA'); ?></p>
         </div>
 
-        <a href="<?php echo $jump_url; ?>" class="btn">
+        <a href="<?php echo esc_url($jump_url); ?>" class="btn">
             <?php _e('立即前往', 'AIYA'); ?>
         </a>
 

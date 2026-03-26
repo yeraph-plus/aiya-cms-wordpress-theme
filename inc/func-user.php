@@ -491,9 +491,13 @@ function aya_sponsor_show_orders_user_profile($user)
     // Get the current page URL to handle form submissions
     $current_url = add_query_arg(array('user_id' => $user->ID), self_admin_url('user-edit.php'));
 
-    if (isset($_GET['fix_sponsor_data']) && $_GET['fix_sponsor_data'] == 1 && isset($_GET['user_id']) && $_GET['user_id'] == $user->ID) {
-        //恢复订阅
-        $review_cancel = (isset($_GET['review_cancel']) && $_GET['review_cancel'] == 1);
+    if (isset($_GET['fix_sponsor_data']) && $_GET['fix_sponsor_data'] === '1' && isset($_GET['user_id']) && intval($_GET['user_id']) === intval($user->ID)) {
+        //nonce 验证防止 CSRF
+        if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'aya_fix_sponsor_' . $user->ID)) {
+            echo '<div class="notice notice-error"><p>' . __('安全验证失败，请重试', 'AIYA') . '</p></div>';
+        } else {
+            //恢复订阅
+            $review_cancel = (isset($_GET['review_cancel']) && $_GET['review_cancel'] === '1');
 
         $fix_result = aya_sponsor_fix_user_data($user->ID, $review_cancel);
 
@@ -521,10 +525,10 @@ function aya_sponsor_show_orders_user_profile($user)
         <tr>
             <th><label><?php _e('重新验证订阅有效性', 'AIYA'); ?></label></th>
             <td>
-                <a href="<?php echo esc_url(add_query_arg(array('fix_sponsor_data' => 1), $current_url)); ?>" class="button">
+                <a href="<?php echo esc_url(wp_nonce_url(add_query_arg(array('fix_sponsor_data' => 1), $current_url), 'aya_fix_sponsor_' . $user->ID)); ?>" class="button">
                     <?php _e('重新计算到期日', 'AIYA'); ?>
                 </a>
-                <a href="<?php echo esc_url(add_query_arg(array('fix_sponsor_data' => 1, 'review_cancel' => 1), $current_url)); ?>" class="button" style="margin-left: 10px;">
+                <a href="<?php echo esc_url(wp_nonce_url(add_query_arg(array('fix_sponsor_data' => 1, 'review_cancel' => 1), $current_url), 'aya_fix_sponsor_' . $user->ID)); ?>" class="button" style="margin-left: 10px;">
                     <?php _e('恢复赞助者权限', 'AIYA'); ?>
                 </a>
             </td>
@@ -582,6 +586,9 @@ function aya_sponsor_save_orders_user_profile($user_id)
         return;
     }
 
+    //验证 nonce 防止 CSRF
+    check_admin_referer('update-user_' . $user_id);
+
     //禁用用户
     if (isset($_POST['aya_force_cancel_sponsor'])) {
         update_user_meta($user_id, 'aya_force_cancel_sponsor', '1');
@@ -592,14 +599,19 @@ function aya_sponsor_save_orders_user_profile($user_id)
     if (!empty($_POST['aya_admin_add_order_days'])) {
         $days = intval($_POST['aya_admin_add_order_days']);
 
+        if ($days < 1 || $days > 3650) {
+            return;
+        }
+
         //生成订单号
         $order_id = 'sys_' . time() . random_int(1000, 9999);
 
         $result = aya_sponsor_add_order($user_id, $order_id, $days, 'paid', 'admin');
-    }
-    //捕捉报错
-    if (is_wp_error($result)) {
-        return new WP_Error('admin_notices', $result->get_error_message());
+
+        //捕捉报错
+        if (is_wp_error($result)) {
+            return new WP_Error('admin_notices', $result->get_error_message());
+        }
     }
 }
 

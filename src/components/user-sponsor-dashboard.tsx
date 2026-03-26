@@ -37,18 +37,18 @@ export default function SponsorDashboard({ data }: { data: SponsorData }) {
 
     const getStatus = () => {
         if (force_cancel) {
-            return <span className="inline-flex items-center gap-2 text-red-600">
+            return <span className="inline-flex items-center gap-2 text-destructive">
                 <XCircle className="w-6 h-6" />
                 被强制取消
             </span>;
         }
         if (is_valid) {
-            return <span className="inline-flex items-center gap-2 text-green-600">
+            return <span className="inline-flex items-center gap-2 text-green-600 dark:text-green-400">
                 <CircleCheckBig className="w-6 h-6" />
                 生效中
             </span>;
         }
-        return <span className="inline-flex items-center gap-2 text-gray-500">
+        return <span className="inline-flex items-center gap-2 text-muted-foreground">
             <CirclePause className="w-6 h-6" />
             未激活
         </span>;

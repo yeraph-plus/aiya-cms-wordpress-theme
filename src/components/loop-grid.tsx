@@ -134,7 +134,7 @@ export default function LoopGrid({ posts, loopTitle = "文章列表", className,
   const gridClass = cn(
     "grid gap-2 md:gap-4 transition-all duration-300 ease-in-out",
     layout === 'grid'
-      ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5"
+      ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5"
       : "grid-cols-1"
   )
 

@@ -17,6 +17,7 @@ plugins
 
 # Editor directories and files
 .vscode/*
+.qoder/*
 .idea
 .DS_Store
 *.suo
