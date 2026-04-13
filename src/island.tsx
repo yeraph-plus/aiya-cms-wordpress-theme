@@ -1,5 +1,7 @@
 import React, { lazy, Suspense, type ComponentType, type ReactNode } from 'react';
+import { hydrateRoot, createRoot, type Root } from 'react-dom/client';
 import { Skeleton } from '@/components/ui/skeleton';
+import Providers from './contexts/providers';
 
 // 类型定义
 export interface IslandInfo {
@@ -8,6 +10,9 @@ export interface IslandInfo {
     instanceId: string;
     props: any;
 }
+
+// 全局 Root 注册表
+const activeRoots = new Map<HTMLElement, Root>();
 
 let autoIslandSeq = 0;
 
@@ -26,7 +31,7 @@ function ensureIslandInstanceId(el: HTMLElement, componentIsland: string) {
 type IslandModule = Record<string, unknown> & { default?: unknown };
 
 // 错误边界组件
-class IslandErrorBoundary extends React.Component<{ children: ReactNode; id: string }, { hasError: boolean }> {
+export class IslandErrorBoundary extends React.Component<{ children: ReactNode; id: string }, { hasError: boolean }> {
     constructor(props: any) {
         super(props);
         this.state = { hasError: false };
@@ -81,7 +86,7 @@ const skeletons = Object.fromEntries(
 );
 
 // 加载组件（带简单重试）
-function loadIslandComponent(name: string, retries = 2): ComponentType<any> | null {
+export function loadIslandComponent(name: string, retries = 2): ComponentType<any> | null {
     const loader = loaders[name];
     if (!loader) return null;
 
@@ -123,7 +128,7 @@ export const IslandComponent = React.memo(({ name, props = {} }: { name: string;
     );
 });
 
-// 扫描岛屿
+// 扫描岛屿（不再清空 innerHTML，由 mountIsland 决定）
 export function scanIslands(container: ParentNode = document): IslandInfo[] {
     const elements = container.querySelectorAll<HTMLElement>('[data-island]');
     return Array.from(elements).map((el) => {
@@ -141,8 +146,7 @@ export function scanIslands(container: ParentNode = document): IslandInfo[] {
             }
         }
 
-        // 清空原始 HTML 内容，避免重复渲染
-        el.innerHTML = '';
+        // 不再在这里清空 innerHTML，由 mountIsland 根据 data-hydrate 决定
 
         return {
             element: el,
@@ -152,6 +156,7 @@ export function scanIslands(container: ParentNode = document): IslandInfo[] {
         };
     });
 }
+
 // 辅助：比较两个岛屿列表是否相等（可选，用于性能优化）
 export function islandsEqual(a: IslandInfo[], b: IslandInfo[]): boolean {
     if (a.length !== b.length) return false;
@@ -162,6 +167,85 @@ export function islandsEqual(a: IslandInfo[], b: IslandInfo[]): boolean {
             item.componentIsland === other.componentIsland &&
             item.instanceId === other.instanceId &&
             JSON.stringify(item.props) === JSON.stringify(other.props)
+        );
+    });
+}
+
+// ============================================
+// Per-Island Root 架构
+// ============================================
+
+/**
+ * 挂载岛屿到独立 React Root
+ * 根据 data-hydrate 属性决定使用 hydrateRoot 或 createRoot
+ */
+export function mountIsland(el: HTMLElement, component: React.ReactElement): Root {
+    // 如果已有 root，先卸载
+    const existingRoot = activeRoots.get(el);
+    if (existingRoot) {
+        existingRoot.unmount();
+    }
+
+    const shouldHydrate = el.hasAttribute('data-hydrate');
+    let root: Root;
+
+    if (shouldHydrate) {
+        root = hydrateRoot(el, component, {
+            onRecoverableError: (error) => {
+                console.warn(`[Island Hydration] mismatch:`, error);
+            },
+        });
+        el.removeAttribute('data-hydrate');
+    } else {
+        // 非水合模式：清空现有内容
+        el.innerHTML = '';
+        root = createRoot(el);
+        root.render(component);
+    }
+
+    activeRoots.set(el, root);
+    return root;
+}
+
+/**
+ * 卸载指定岛屿
+ */
+export function unmountIsland(el: HTMLElement): void {
+    const root = activeRoots.get(el);
+    if (root) {
+        root.unmount();
+        activeRoots.delete(el);
+    }
+}
+
+/**
+ * 卸载容器内所有岛屿
+ */
+export function unmountIslandsIn(container: Element | null | undefined): void {
+    if (!container) return;
+    container.querySelectorAll<HTMLElement>('[data-island]').forEach(unmountIsland);
+}
+
+/**
+ * 扫描并挂载容器内所有岛屿
+ */
+export function hydrateAllIslands(container: ParentNode): void {
+    const islands = scanIslands(container);
+    islands.forEach(({ element, componentIsland, props }) => {
+        const Component = loadIslandComponent(componentIsland);
+        if (!Component) return;
+
+        const SkeletonComponent = skeletons[componentIsland] || DefaultSkeleton;
+
+        mountIsland(
+            element,
+            <Providers>
+                <IslandErrorBoundary id={componentIsland}>
+                    <Suspense fallback={<SkeletonComponent />}>
+                        <Component {...props} />
+                    </Suspense>
+                </IslandErrorBoundary>
+            </Providers>
         );
     });
 }

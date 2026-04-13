@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
 //服务器地址
 function aya_oplist_server_url()
 {
-    return trim(aya_opt('site_oplist_server_url', 'land'), '/');
+    return trim(aya_opt('site_oplist_server_url', 'oplist'), '/');
 }
 
 //Ping测试
@@ -33,8 +33,8 @@ function aya_oplist_request_token()
 
     $oplist_api = new OpenList_API($server, false);
 
-    $user = aya_opt('site_oplist_server_user', 'land');
-    $pswd = aya_opt('site_oplist_server_pswd', 'land');
+    $user = aya_opt('site_oplist_server_user', 'oplist');
+    $pswd = aya_opt('site_oplist_server_pswd', 'oplist');
 
     return $oplist_api->get_token($user, $pswd);
 }
@@ -51,7 +51,7 @@ function aya_oplist_transient_token()
 
     //请求新的令牌
     $get_token = aya_oplist_request_token();
-    $expire_hours = aya_opt('site_oplist_server_token_hours', 'land');
+    $expire_hours = aya_opt('site_oplist_server_token_hours', 'oplist');
     $expire_hours = intval($expire_hours);
 
     //不缓存时直接返回
@@ -220,7 +220,7 @@ function aya_oplist_rebuild_content($content, $raw_atts)
     $use_raw_url = false;
 
     //链接模式切换
-    switch (aya_opt('site_oplist_fs_link_type', 'land')) {
+    switch (aya_opt('site_oplist_fs_link_type', 'oplist')) {
         case 'd':
             $ext_path = '/d';
             break;
@@ -264,7 +264,7 @@ function aya_oplist_rebuild_content($content, $raw_atts)
     };
     */
     //匹配文件图标
-    if (aya_opt('site_oplist_fs_icon_bool', 'land')) {
+    if (aya_opt('site_oplist_fs_icon_bool', 'oplist')) {
         $func_format_type = function ($file_name = '', $file_is_dir = false) {
             if ($file_is_dir) {
                 return 'folder';
@@ -578,7 +578,7 @@ function aya_oplist_cli_shortcode_fs_methods($atts = array(), $content = null)
     );
 
     if ($content == '') {
-        $content = aya_opt('site_oplist_file_desc', 'land');
+        $content = aya_opt('site_oplist_file_desc', 'oplist');
     }
 
     $atts['content'] = $content;
@@ -601,7 +601,8 @@ $GLOBALS['aya_plyr_playlist'] = [];
 
 function aya_plyr_playlist_set_props($item)
 {
-    if (!is_array($item)) return;
+    if (!is_array($item))
+        return;
 
     $GLOBALS['aya_plyr_playlist'][] = $item;
 }
@@ -624,7 +625,8 @@ function aya_plyr_shortcodes_playlist_methods($atts = array(), $content = '')
         $atts,
     );
 
-    if (empty($atts['src'])) return '';
+    if (empty($atts['src']))
+        return '';
 
     $is_hls = (strpos($atts['src'], '.m3u8') !== false) || $atts['type'] === 'hls';
 

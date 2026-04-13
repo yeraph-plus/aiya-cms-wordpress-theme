@@ -13,11 +13,11 @@ $query_obj = new AYA_WP_Query_Object();
 aya_home_open();
 
 //获取轮播组件
-$carousel_section = aya_opt('site_carousel_section_type', 'basic');
+$carousel_section = aya_opt('site_carousel_section_type', 'land');
 
 if ($carousel_section !== 'off' && !$is_pre_paged) {
 
-    $carousel_items = aya_opt('site_carousel_section_item_mult', 'basic');
+    $carousel_items = aya_opt('site_carousel_section_item_mult', 'land');
 
     //循环设置数据查询文章
     $carousel_list = [];
@@ -77,7 +77,7 @@ if ($carousel_section !== 'off' && !$is_pre_paged) {
 }
 
 //获取独立文章查询
-$post_sections = aya_opt('site_post_home_section_mult', 'basic');
+$post_sections = aya_opt('site_post_home_section_mult', 'land');
 
 if (!empty($post_sections) && !$is_pre_paged) {
     //循环查询文章分类

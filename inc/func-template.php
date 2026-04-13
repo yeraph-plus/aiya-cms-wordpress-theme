@@ -246,6 +246,38 @@ function aya_get_comments_settings()
 
 /*
  * ------------------------------------------------------------------------------
+ * React Islands 服务端渲染函数
+ * ------------------------------------------------------------------------------
+ */
+
+/**
+ * 渲染 nav-breadcrumb 岛屿的服务端 HTML（用于 hydrateRoot 水合）
+ *
+ * @param array $props 面包屑数据 ['items' => [...]]
+ * @return string 渲染的 HTML
+ */
+function aya_island_render_nav_breadcrumb($props)
+{
+    $items = $props['items'] ?? [];
+    if (empty($items)) {
+        return '';
+    }
+
+    $count = count($items);
+
+    // Navigation SVG icon (lucide-react Navigation)
+    $nav_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>';
+
+    // ChevronRight SVG icon (lucide-react ChevronRight)
+    $chevron_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"></path></svg>';
+
+    ob_start();
+    ?><nav aria-label="breadcrumb" data-slot="breadcrumb" class="my-4"><ol data-slot="breadcrumb-list" class="text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm break-words sm:gap-2.5 flex-nowrap overflow-hidden"><li data-slot="breadcrumb-item" class="inline-flex items-center gap-1.5 shrink-0"><?php echo $nav_icon; ?></li><?php foreach ($items as $index => $item) : $is_last = ($index === $count - 1); ?><li data-slot="breadcrumb-separator" role="presentation" aria-hidden="true" class="[&amp;>svg]:size-3.5 shrink-0"><?php echo $chevron_icon; ?></li><li data-slot="breadcrumb-item" class="inline-flex items-center gap-1.5 whitespace-nowrap min-w-0"><?php if ($is_last) : ?><span data-slot="breadcrumb-page" role="link" aria-disabled="true" aria-current="page" class="text-foreground font-normal truncate max-w-[240px] sm:max-w-[400px] md:max-w-[400px] block"><?php echo esc_html($item['label']); ?></span><?php else : ?><a data-slot="breadcrumb-link" class="hover:text-foreground transition-colors truncate max-w-[160px] sm:max-w-[240px] md:max-w-[400px] block" href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['label']); ?></a><?php endif; ?></li><?php endforeach; ?></ol></nav><?php
+    return ob_get_clean();
+}
+
+/*
+ * ------------------------------------------------------------------------------
  * 模板组件
  * ------------------------------------------------------------------------------
  */

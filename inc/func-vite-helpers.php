@@ -275,7 +275,7 @@ function aya_json_strict_encode($value)
 }
 
 //构造 React 群岛节点输出
-function aya_react_island($slug = null, $props = [], $server_html = '')
+function aya_react_island($slug = null, $props = [], $server_html = '', $hydrate = false)
 {
     $slug = preg_replace('/[^a-zA-Z0-9_-]/', '', (string) $slug);
 
@@ -294,6 +294,9 @@ function aya_react_island($slug = null, $props = [], $server_html = '')
         $html_attrs .= ' data-props="' . aya_json_strict_encode($props) . '"';
     }
 
+    if ($hydrate && !empty($server_html)) {
+        $html_attrs .= ' data-hydrate="true"';
+    }
 
     echo '<div' . $html_attrs . '>' . $server_html . '</div>' . PHP_EOL;
 

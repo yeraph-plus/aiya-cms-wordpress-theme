@@ -46,7 +46,7 @@ $post_obj = new AYA_Post_In_While();
 
     <?php
     //获取声明文本
-    $statement_content = aya_opt('site_post_statement_text', 'basic');
+    $statement_content = aya_opt('site_post_statement_text', 'land');
     //获取上下篇文章
     $prev_post = $post_obj->prev_post();
     $next_post = $post_obj->next_post();

@@ -499,12 +499,13 @@ function aya_sponsor_show_orders_user_profile($user)
             //恢复订阅
             $review_cancel = (isset($_GET['review_cancel']) && $_GET['review_cancel'] === '1');
 
-        $fix_result = aya_sponsor_fix_user_data($user->ID, $review_cancel);
+            $fix_result = aya_sponsor_fix_user_data($user->ID, $review_cancel);
 
-        if ($fix_result === true) {
-            echo '<div class="updated"><p>' . __('用户订阅数据已修复', 'AIYA') . '</p></div>';
-        } elseif (is_string($fix_result)) {
-            echo '<div class="notice notice-warning"><p>' . esc_html($fix_result) . '</p></div>';
+            if ($fix_result === true) {
+                echo '<div class="updated"><p>' . __('用户订阅数据已修复', 'AIYA') . '</p></div>';
+            } elseif (is_string($fix_result)) {
+                echo '<div class="notice notice-warning"><p>' . esc_html($fix_result) . '</p></div>';
+            }
         }
     }
     //开始输出区块表单

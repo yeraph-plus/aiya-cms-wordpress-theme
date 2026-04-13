@@ -15,8 +15,34 @@ AYF::new_opt([
 
 function aya_opt_access_add_exists()
 {
-    $fields = [];
-    $fields = array_merge($fields, [
+    $fields = array(
+        [
+            'desc' => '社交登录设置',
+            'type' => 'title_1',
+        ],
+        [
+            'desc' => 'To be continued ...',
+            'type' => 'content',
+        ],
+        /*
+        [
+            'title' => 'OpenID 登录',
+            'desc' => '启用 OpenID 登录接入',
+            'id' => 'site_oauth_openid_bool',
+            'type' => 'switch',
+            'default' => false,
+        ],
+        [
+            'title' => 'Github 登录',
+            'desc' => '启用 Github 登录接入',
+            'id' => 'site_oauth_github_bool',
+            'type' => 'switch',
+            'default' => false,
+        ],
+        */
+    );
+    
+    $fields = array_merge($fields, array(
         [
             'desc' => '赞助者订阅设置',
             'type' => 'title_1',
@@ -121,7 +147,7 @@ function aya_opt_access_add_exists()
             'type' => 'switch',
             'default' => true,
         ],
-    ]);
+    ));
 
     //订阅支付模块
     if (function_exists('aya_epay_core_init')) {

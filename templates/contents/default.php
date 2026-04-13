@@ -12,7 +12,7 @@ $post_obj = new AYA_Post_In_While();
     //获取特色图片生成裁剪
     $thumbnail = aya_get_post_thumb($post_obj->thumbnail_url, '', 1200, 0);
     //获取过期状态
-    $post_outdated_days = aya_opt('site_post_outdate_days_text', 'basic');
+    $post_outdated_days = aya_opt('site_post_outdate_days_text', 'land');
     $post_is_outdated = $post_obj->the_post_is_outdated($post_outdated_days);
 
     aya_react_island(
@@ -34,7 +34,7 @@ $post_obj = new AYA_Post_In_While();
             'comments' => $post_obj->comments_text,
             'likes' => $post_obj->likes,
             'isFavorite' => aya_user_get_favorite_posts_check($post_obj->id),
-            'thumbnail' => ($thumbnail !== false) ? $thumbnail : '',
+            'thumbnail' => ($post_obj->thumbnail_url !== false) ? $thumbnail : '',
             'categories' => $post_obj->cat_list,
             'tags' => $post_obj->tag_list,
             'isOutdated' => $post_is_outdated,
@@ -61,7 +61,7 @@ $post_obj = new AYA_Post_In_While();
     }
 
     //获取声明文本
-    $statement_content = aya_opt('site_post_statement_text', 'basic');
+    $statement_content = aya_opt('site_post_statement_text', 'land');
     //获取上下篇文章
     $prev_post = $post_obj->prev_post();
     $next_post = $post_obj->next_post();

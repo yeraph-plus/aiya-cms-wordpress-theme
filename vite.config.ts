@@ -123,6 +123,15 @@ export default defineConfig({
       },
     },
   },
+  optimizeDeps: {
+    include: [
+      '@wordpress/dom-ready',
+      '@wordpress/i18n',
+      '@wordpress/url',
+      '@wordpress/hooks',
+      '@wordpress/html-entities',
+    ]
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
