@@ -43,7 +43,7 @@ class AYA_Widget_Post_Likes extends AYA_Widget
             //循环文章对象
             $post_obj = new AYA_Post_In_While($post);
 
-            $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->content, 300, 200);
+            $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->id, 150, 100);
 
             $posts_data[] = [
                 'id' => $post_obj->id,

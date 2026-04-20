@@ -13,7 +13,7 @@ if (is_admin()) {
         'title' => '隐藏文本段',
         'note' => '包含在此简码内的文本不会在前台显示，用于充当文章编辑时的注释，或隐藏一段文本',
         'template' => '[hide {{attributes}}]<br/> {{content}} <br/>[/hide]',
-        'field_build' => array(
+        'field_build' => [
             [
                 'id' => 'content',
                 'type' => 'textarea',
@@ -28,7 +28,7 @@ if (is_admin()) {
                 'desc' => '使当前段落作为 html 注释输出到前台页面，或者完全不输出',
                 'default' => false,
             ]
-        )
+        ]
     ));
 
     AYA_Shortcode::shortcode_register('email-link', array(
@@ -36,7 +36,7 @@ if (is_admin()) {
         'title' => 'E-mail 链接',
         'note' => '将电子邮件地址字符转换为 HTML 实体显示，避免被爬虫抓取',
         'template' => '[email {{attributes}}] {{content}} [/email]',
-        'field_build' => array(
+        'field_build' => [
             [
                 'id' => 'content',
                 'type' => 'text',
@@ -51,7 +51,7 @@ if (is_admin()) {
                 'desc' => '转换为 mailto 链接，或直接显示',
                 'default' => false,
             ]
-        )
+        ]
     ));
 
     AYA_Shortcode::shortcode_register('quick-li-content', array(
@@ -59,7 +59,7 @@ if (is_admin()) {
         'title' => '快捷列表（li）',
         'note' => '将文本按行转换为列表显示',
         'template' => '[list {{attributes}}]<br/> {{content}} <br/>[/list]',
-        'field_build' => array(
+        'field_build' => [
             [
                 'id' => 'content',
                 'type' => 'textarea',
@@ -74,7 +74,7 @@ if (is_admin()) {
                 'desc' => '启用此项将显示为编号列表，否则使用符号列表',
                 'default' => false,
             ]
-        )
+        ]
     ));
 
     AYA_Shortcode::shortcode_register('quick-col-content', array(
@@ -82,7 +82,7 @@ if (is_admin()) {
         'title' => '快捷列表（Column）',
         'note' => '将文本按行转换为描述列表显示',
         'template' => '[col_list {{attributes}}]<br/> {{content}} <br/>[/col_list]',
-        'field_build' => array(
+        'field_build' => [
             [
                 'id' => 'content',
                 'type' => 'textarea',
@@ -102,7 +102,7 @@ if (is_admin()) {
                 ],
                 'default' => '1',
             ],
-        )
+        ]
     ));
 
     AYA_Shortcode::shortcode_register('collapse-content', array(
@@ -110,7 +110,7 @@ if (is_admin()) {
         'title' => '折叠面板',
         'note' => '创建一个折叠面板，用于在文章中可以展开或收起的内容',
         'template' => '[collapse {{attributes}}] {{content}} [/collapse]',
-        'field_build' => array(
+        'field_build' => [
             [
                 'id' => 'title',
                 'type' => 'text',
@@ -125,7 +125,7 @@ if (is_admin()) {
                 'desc' => '折叠面板的内容',
                 'default' => '这里是折叠面板的内容。',
             ],
-        )
+        ]
     ));
 
     AYA_Shortcode::shortcode_register('clipboard-box', array(
@@ -133,7 +133,7 @@ if (is_admin()) {
         'title' => '一键复制',
         'note' => '创建一个提供复制功能的卡片，用于快捷复制文本或打开链接',
         'template' => '[clip_board {{attributes}}] {{content}} [/clip_board]',
-        'field_build' => array(
+        'field_build' => [
             [
                 'id' => 'content',
                 'type' => 'textarea',
@@ -141,7 +141,7 @@ if (is_admin()) {
                 'desc' => '需要被复制的文本或链接',
                 'default' => 'magnet:?xt=urn:btih:',
             ]
-        )
+        ]
     ));
 
     AYA_Shortcode::shortcode_register('sponsor-ship-content', array(
@@ -149,7 +149,7 @@ if (is_admin()) {
         'title' => '赞助者可见',
         'note' => '创建一个赞助后的内容块，用于在文章中显示仅限赞助商可见的内容',
         'template' => '[sponsor_ship {{attributes}}] {{content}} [/sponsor_ship]',
-        'field_build' => array(
+        'field_build' => [
             [
                 'id' => 'title',
                 'type' => 'text',
@@ -164,7 +164,7 @@ if (is_admin()) {
                 'desc' => '赞助者可见的内容',
                 'default' => '这是赞助者可见的内容。',
             ],
-        )
+        ]
     ));
 
     AYA_Shortcode::shortcode_register('logged-in-content', array(
@@ -172,7 +172,7 @@ if (is_admin()) {
         'title' => '登录后可见',
         'note' => '创建一个登录后可见的内容块，用于在文章中显示仅限登录用户可见的内容',
         'template' => '[logged_in {{attributes}}] {{content}} [/logged_in]',
-        'field_build' => array(
+        'field_build' => [
             [
                 'id' => 'title',
                 'type' => 'text',
@@ -187,7 +187,7 @@ if (is_admin()) {
                 'desc' => '登录后可见的内容',
                 'default' => '这是登录后可见的内容。',
             ],
-        )
+        ]
     ));
 
     AYA_Shortcode::shortcode_register('bili-iframe', array(
@@ -195,7 +195,7 @@ if (is_admin()) {
         'title' => '嵌入B站视频',
         'note' => '嵌入B站的H5播放器到页面',
         'template' => '[bili_iframe {{attributes}} /]',
-        'field_build' => array(
+        'field_build' => [
             [
                 'id' => 'bvid',
                 'type' => 'text',
@@ -210,7 +210,7 @@ if (is_admin()) {
                 'desc' => '切换使用B站标准的外链播放器或者移动端HTML5播放器',
                 'default' => true,
             ]
-        )
+        ]
     ));
 
     AYA_Shortcode::shortcode_register('afdian-iframe', array(
@@ -218,7 +218,7 @@ if (is_admin()) {
         'title' => '嵌入爱发电主页',
         'note' => '嵌入爱发电的主页或按钮到页面',
         'template' => '[afdian_iframe {{attributes}} /]',
-        'field_build' => array(
+        'field_build' => [
             [
                 'id' => 'slug',
                 'type' => 'text',
@@ -233,7 +233,7 @@ if (is_admin()) {
                 'desc' => '使当前段落作为 html 注释输出到前台页面，或者完全不输出',
                 'default' => false,
             ]
-        )
+        ]
     ));
 
     AYA_Shortcode::shortcode_register('github-iframe', array(
@@ -241,7 +241,7 @@ if (is_admin()) {
         'title' => '嵌入GitHub仓库',
         'note' => '嵌入GitHub仓库卡片到页面（填写“用户名/仓库名”）',
         'template' => '[github_card {{attributes}} /]',
-        'field_build' => array(
+        'field_build' => [
             [
                 'id' => 'repo',
                 'type' => 'text',
@@ -249,7 +249,7 @@ if (is_admin()) {
                 'desc' => '',
                 'default' => '',
             ],
-        )
+        ]
     ));
 }
 
@@ -440,9 +440,7 @@ function aya_shortcode_clipboard_in_content($atts = array(), $content = '')
 
     $html = '<div class="group relative my-4 rounded-lg border border-border bg-secondary/30">';
     $html .= '<div class="p-4 font-mono text-sm break-all text-foreground">' . esc_html($content_clean) . '</div>';
-    $html .= '<button class="absolute top-2 right-2 p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors z-10" data-clipboard-text="' . esc_attr($content_clean) . '" aria-label="' . __('复制', 'AIYA') . '">';
-    $html .= '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy-icon lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
-    $html .= '</button>';
+    $html .= '<div data-island="clipboard-button" data-props=\'{"text":"' . esc_attr($content_clean) . '","label":"' . esc_attr(__('复制', 'AIYA')) . '"}\'></div>';
     $html .= '</div>';
 
     return $html;
@@ -509,7 +507,7 @@ function aya_shortcode_logged_in_content($atts = array(), $content = '')
     $html .= '<div class="flex items-center gap-2 mb-2">';
     $html .= '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock-keyhole-icon lucide-lock-keyhole"><circle cx="12" cy="16" r="1"/><rect x="3" y="10" width="18" height="12" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>';
 
-    $html .= '<span class="text-xl font-bold">' . __('赞助内容', 'AIYA') . '</span>';
+    $html .= '<span class="text-xl font-bold">' . __('隐藏内容', 'AIYA') . '</span>';
     $html .= '</div>';
     $html .= '<span>' . __('仅限登录后查看，请先登录', 'AIYA') . '</span>';
     $html .= '</div>';

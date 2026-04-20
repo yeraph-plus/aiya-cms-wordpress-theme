@@ -34,8 +34,8 @@ $player_options = [
     </div>
 
     <?php
-    aya_react_island(
-        'content-end',
+    aya_render_hydrated_island(
+        'hy-content-end',
         ['endDivider' => true]
     );
     ?>

@@ -10,8 +10,8 @@ $post_obj = new AYA_Post_In_While();
 ?>
 <article>
     <?php
-    aya_react_island(
-        'content-detail',
+    echo aya_render_hydrate_template(
+        'hy-content-detail',
         [
             'postId' => $post_obj->id,
             'title' => $post_obj->title,
@@ -33,8 +33,7 @@ $post_obj = new AYA_Post_In_While();
                 $favorites = get_user_meta($user_id, 'aya_user_favorite_posts', true);
                 return is_array($favorites) && in_array($post_obj->id, $favorites);
             }),
-        ],
-        '<h1 class="text-3xl font-bold text-neutral-900">' . $post_obj->title . '</h1>'
+        ]
     );
     ?>
 
@@ -51,8 +50,8 @@ $post_obj = new AYA_Post_In_While();
     $prev_post = $post_obj->prev_post();
     $next_post = $post_obj->next_post();
 
-    aya_react_island(
-        'content-end',
+    aya_render_hydrated_island(
+        'hy-content-end',
         ['endDivider' => true]
     );
     ?>

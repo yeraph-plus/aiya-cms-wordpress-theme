@@ -57,7 +57,7 @@ function aya_require($name, $path = '', $special = false)
     } else {
         //打印一个报错
         if (defined('WP_DEBUG') && WP_DEBUG && !$special) {
-            print ("[WARNING] Require file not found: $req_file");
+            print("[WARNING] Require file not found: $req_file");
         }
     }
 }
@@ -134,7 +134,6 @@ aya_require('Afdian_API', 'lib');
 aya_require('OpenList_API', 'lib');
 
 //加载数据处理工具类
-aya_require('Plugin_RecordVisitors', 'core');
 aya_require('WP_Breadcrumb', 'core');
 aya_require('WP_Menu', 'core');
 aya_require('WP_Paged', 'core');
@@ -146,6 +145,7 @@ aya_require('WP_Term', 'core');
 aya_require('func-public');
 aya_require('func-wp-emends');
 aya_require('func-wp-scripts');
+aya_require('func-tweet-post');
 
 //模板方法
 aya_require('func-vite-helpers');
@@ -334,5 +334,8 @@ AYF::module('Register_Sidebar', [
     'author-widget' => __('用户页面', 'AIYA'),
 ]);
 
+//浏览量计数器
+AYF::module('Record_Visitors', true);
+
 //启用小工具缓存插件
-AYF::module('Widget_Cache', true);
+AYP::action('Widget_Cache', true);

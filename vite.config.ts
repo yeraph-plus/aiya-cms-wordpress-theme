@@ -100,7 +100,13 @@ export default defineConfig({
     //rollup入口
     //e.g: https://rollupjs.org/configuration-options/
     rollupOptions: {
-      input: resolve(__dirname, 'src/main.tsx'),
+      input: {
+        common: resolve(__dirname, 'src/entrypoints/common.ts'),
+        home: resolve(__dirname, 'src/entrypoints/home.ts'),
+        archive: resolve(__dirname, 'src/entrypoints/archive.ts'),
+        single: resolve(__dirname, 'src/entrypoints/single.ts'),
+        user: resolve(__dirname, 'src/entrypoints/user.ts'),
+      },
       output: {
         //定义输出文件名
         entryFileNames: 'assets/[name].[hash].js',

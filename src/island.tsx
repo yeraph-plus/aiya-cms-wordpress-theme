@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, type ComponentType, type ReactNode } from 'react';
-import { hydrateRoot, createRoot, type Root } from 'react-dom/client';
+import { createRoot, type Root } from 'react-dom/client';
 import { Skeleton } from '@/components/ui/skeleton';
-import Providers from './contexts/providers';
+import Providers from './runtime/providers';
 
 // 类型定义
 export interface IslandInfo {
@@ -128,7 +128,7 @@ export const IslandComponent = React.memo(({ name, props = {} }: { name: string;
     );
 });
 
-// 扫描岛屿（不再清空 innerHTML，由 mountIsland 决定）
+// 扫描岛屿
 export function scanIslands(container: ParentNode = document): IslandInfo[] {
     const elements = container.querySelectorAll<HTMLElement>('[data-island]');
     return Array.from(elements).map((el) => {
@@ -145,8 +145,6 @@ export function scanIslands(container: ParentNode = document): IslandInfo[] {
                 console.warn(`Failed to parse props for island ${componentIsland}:`, rawProps, e);
             }
         }
-
-        // 不再在这里清空 innerHTML，由 mountIsland 根据 data-hydrate 决定
 
         return {
             element: el,
@@ -177,7 +175,6 @@ export function islandsEqual(a: IslandInfo[], b: IslandInfo[]): boolean {
 
 /**
  * 挂载岛屿到独立 React Root
- * 根据 data-hydrate 属性决定使用 hydrateRoot 或 createRoot
  */
 export function mountIsland(el: HTMLElement, component: React.ReactElement): Root {
     // 如果已有 root，先卸载
@@ -186,22 +183,11 @@ export function mountIsland(el: HTMLElement, component: React.ReactElement): Roo
         existingRoot.unmount();
     }
 
-    const shouldHydrate = el.hasAttribute('data-hydrate');
-    let root: Root;
+    el.removeAttribute('data-hydrate');
+    el.innerHTML = '';
 
-    if (shouldHydrate) {
-        root = hydrateRoot(el, component, {
-            onRecoverableError: (error) => {
-                console.warn(`[Island Hydration] mismatch:`, error);
-            },
-        });
-        el.removeAttribute('data-hydrate');
-    } else {
-        // 非水合模式：清空现有内容
-        el.innerHTML = '';
-        root = createRoot(el);
-        root.render(component);
-    }
+    const root = createRoot(el);
+    root.render(component);
 
     activeRoots.set(el, root);
     return root;

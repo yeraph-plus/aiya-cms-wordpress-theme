@@ -10,8 +10,8 @@ $post_obj = new AYA_Post_In_While();
 ?>
 <article>
     <?php
-    aya_react_island(
-        'content-detail',
+    echo aya_render_hydrate_template(
+        'hy-content-detail',
         [
             'postId' => $post_obj->id,
             'title' => $post_obj->title,
@@ -27,8 +27,7 @@ $post_obj = new AYA_Post_In_While();
             'views' => $post_obj->views,
             'comments' => $post_obj->comments_text,
             'disallowToggle' => true,
-        ],
-        '<h1 class="text-3xl font-bold text-neutral-900">' . $post_obj->title . '</h1>'
+        ]
     );
     ?>
 
@@ -39,8 +38,8 @@ $post_obj = new AYA_Post_In_While();
     <!-- Content End -->
 
     <?php
-    aya_react_island(
-        'content-end',
+    aya_render_hydrated_island(
+        'hy-content-end',
         ['endDivider' => true]
     );
     ?>

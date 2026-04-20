@@ -572,7 +572,7 @@ function aya_clear_text($text, $type = true)
     //清理预定义字符
     $text = trim($text);
     //清理图片
-    $text = preg_replace('/<a(.*?)href=("|\')([^>]*).(bmp|gif|jpeg|jpg|png|swf|webp)("|\')(.*?)>(.*?)<\/a>/i', '', $text);
+    $text = preg_replace('/<a(.*?)href=("|\')([^>]*).(bmp|gif|jpeg|jpg|png|swf|webp|avif)("|\')(.*?)>(.*?)<\/a>/i', '', $text);
     $text = preg_replace('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', '', $text);
     //清理html
     if ($type == true) {

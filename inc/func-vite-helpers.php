@@ -19,14 +19,14 @@ if (!defined('ABSPATH')) {
  */
 
 define('VITE_HOST', 'http://localhost:5173');
-define('VITE_ENTRY_POINT', 'src/main.tsx');
+define('VITE_ENTRY_POINT', 'src/entrypoints/common.ts');
 define('VITE_PUBLIC_PATH', './build');
 
 //检查Vite启动状态
 function aya_vite_reference()
 {
     //创建curl请求对象
-    $handle = curl_init(VITE_HOST . '/' . VITE_ENTRY_POINT);
+    $handle = curl_init(VITE_HOST . '/@vite/client');
 
     curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($handle, CURLOPT_NOBODY, true);
@@ -79,44 +79,90 @@ function aya_vite_get_manifest()
 }
 
 //解析静态资源位置
-function aya_vite_main_script_url()
+function aya_vite_asset_url($file)
 {
-    $manifest = aya_vite_get_manifest();
-
-    if (isset($manifest[VITE_ENTRY_POINT])) {
-        return get_template_directory_uri() . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $manifest[VITE_ENTRY_POINT]['file'];
-    }
-    return null;
+    return get_template_directory_uri() . ltrim(VITE_PUBLIC_PATH, '.') . '/' . ltrim($file, '/');
 }
 
-function aya_vite_main_css_urls()
+function aya_vite_active_entries()
 {
-    $urls = [];
-    $manifest = aya_vite_get_manifest();
+    $entries = [VITE_ENTRY_POINT];
+    $land_page = function_exists('aya_is_land_page') ? aya_is_land_page() : false;
 
-    if (!empty($manifest[VITE_ENTRY_POINT]['css'])) {
-        foreach ($manifest[VITE_ENTRY_POINT]['css'] as $css_file) {
-            $urls[] = get_template_directory_uri() . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $css_file;
+    if ($land_page !== false) {
+        if (in_array($land_page, ['sponsor', 'user-favlist', 'user-settings'], true)) {
+            $entries[] = 'src/entrypoints/user.ts';
         }
+        return array_values(array_unique($entries));
     }
 
-    return $urls;
+    $route = function_exists('aya_is_where') ? aya_is_where() : 'none';
+    switch ($route) {
+        case 'home':
+        case 'home_pre':
+            $entries[] = 'src/entrypoints/home.ts';
+            break;
+        case 'search':
+        case 'archive':
+        case 'custom_archive':
+        case 'category':
+        case 'tag':
+        case 'date':
+        case 'tax':
+        case 'author':
+            $entries[] = 'src/entrypoints/archive.ts';
+            break;
+        case 'single':
+        case 'page':
+        case 'singular':
+        case 'attachment':
+            $entries[] = 'src/entrypoints/single.ts';
+            break;
+    }
+
+    return array_values(array_unique($entries));
 }
 
-function aya_vite_imports_script_urls()
+function aya_vite_collect_asset_urls($entries)
 {
-    $urls = [];
     $manifest = aya_vite_get_manifest();
+    $assets = ['scripts' => [], 'imports' => [], 'css' => []];
+    $visited = [];
 
-    if (!empty($manifest[VITE_ENTRY_POINT]['imports'])) {
-        foreach ($manifest[VITE_ENTRY_POINT]['imports'] as $import) {
-            if (isset($manifest[$import]['file'])) {
-                $urls[] = get_template_directory_uri() . ltrim(VITE_PUBLIC_PATH, '.') . '/' . $manifest[$import]['file'];
+    $collect = function ($chunk, $is_entry = false) use (&$collect, &$manifest, &$assets, &$visited) {
+        if (empty($chunk) || isset($visited[$chunk]) || empty($manifest[$chunk])) {
+            return;
+        }
+
+        $visited[$chunk] = true;
+        $item = $manifest[$chunk];
+
+        if (!empty($item['file'])) {
+            if ($is_entry) {
+                $assets['scripts'][] = aya_vite_asset_url($item['file']);
+            } elseif (($item['name'] ?? '') === 'vendor') {
+                $assets['imports'][] = aya_vite_asset_url($item['file']);
             }
         }
+
+        foreach (($item['css'] ?? []) as $css) {
+            $assets['css'][] = aya_vite_asset_url($css);
+        }
+
+        foreach (($item['imports'] ?? []) as $import) {
+            $collect($import);
+        }
+    };
+
+    foreach ($entries as $entry) {
+        $collect($entry, true);
     }
 
-    return $urls;
+    foreach ($assets as $key => $list) {
+        $assets[$key] = array_values(array_unique($list));
+    }
+
+    return $assets;
 }
 
 /*
@@ -126,50 +172,40 @@ function aya_vite_imports_script_urls()
  */
 
 add_action('wp_head', 'aya_dist_scripts_loader');
-//add_action('wp_footer', 'aya_debug_vite_assets');
+add_action('wp_footer', 'aya_debug_vite_assets');
 
 //模板静态资源载入函数
 function aya_dist_scripts_loader()
 {
-    //如果是开发模式，载入Vite构造文件
-    if (aya_is_debug()) {
-        if (aya_vite_reference()) {
-            //返回client，用于支持HMR
-            echo '<script type="module" src="' . VITE_HOST . '/@vite/client"></script>' . PHP_EOL;
-            // 注入 React preamble
-            echo '<script type="module">' . PHP_EOL;
-            echo 'import RefreshRuntime from "' . VITE_HOST . '/@react-refresh";' . PHP_EOL;
-            echo 'RefreshRuntime.injectIntoGlobalHook(window);' . PHP_EOL;
-            echo 'window.$RefreshReg$ = () => {};' . PHP_EOL;
-            echo 'window.$RefreshSig$ = () => (type) => type;' . PHP_EOL;
-            echo 'window.__vite_plugin_react_preamble_installed__ = true;' . PHP_EOL;
-            echo '</script>' . PHP_EOL;
-            //返回入口文件
-            echo '<script type="module" src="' . VITE_HOST . '/' . ltrim(VITE_ENTRY_POINT, '/') . '"></script>' . PHP_EOL;
+    $entries = aya_vite_active_entries();
 
-            return;
+    if (aya_is_debug() && aya_vite_reference()) {
+        echo '<script type="module" src="' . VITE_HOST . '/@vite/client"></script>' . PHP_EOL;
+        echo '<script type="module">' . PHP_EOL;
+        echo 'import RefreshRuntime from "' . VITE_HOST . '/@react-refresh";' . PHP_EOL;
+        echo 'RefreshRuntime.injectIntoGlobalHook(window);' . PHP_EOL;
+        echo 'window.$RefreshReg$ = () => {};' . PHP_EOL;
+        echo 'window.$RefreshSig$ = () => (type) => type;' . PHP_EOL;
+        echo 'window.__vite_plugin_react_preamble_installed__ = true;' . PHP_EOL;
+        echo '</script>' . PHP_EOL;
+        foreach ($entries as $entry) {
+            echo '<script type="module" src="' . VITE_HOST . '/' . ltrim($entry, '/') . '"></script>' . PHP_EOL;
         }
+        return;
     }
 
-    //从生产模式配置
     $res = '';
-
-    $res .= '<script type="module" data-cfasync="false" src="' . aya_vite_main_script_url() . '" crossorigin="anonymous"></script>' . PHP_EOL;
-
-    $preload_urls = aya_vite_imports_script_urls();
-    $css_urls = aya_vite_main_css_urls();
-
-    foreach ($preload_urls as $url) {
+    $assets = aya_vite_collect_asset_urls($entries);
+    foreach ($assets['scripts'] as $url) {
+        $res .= '<script type="module" data-cfasync="false" src="' . $url . '" crossorigin="anonymous"></script>' . PHP_EOL;
+    }
+    foreach ($assets['imports'] as $url) {
         $res .= '<link rel="modulepreload" as="script" href="' . $url . '" crossorigin="anonymous">' . PHP_EOL;
     }
-
-    foreach ($css_urls as $url) {
+    foreach ($assets['css'] as $url) {
         $res .= '<link rel="stylesheet" href="' . $url . '">' . PHP_EOL;
     }
-
     echo $res;
-
-    return;
 }
 
 //在页面末尾添加log
@@ -275,7 +311,7 @@ function aya_json_strict_encode($value)
 }
 
 //构造 React 群岛节点输出
-function aya_react_island($slug = null, $props = [], $server_html = '', $hydrate = false)
+function aya_react_island($slug = null, $props = [], $server_html = '')
 {
     $slug = preg_replace('/[^a-zA-Z0-9_-]/', '', (string) $slug);
 
@@ -294,10 +330,6 @@ function aya_react_island($slug = null, $props = [], $server_html = '', $hydrate
         $html_attrs .= ' data-props="' . aya_json_strict_encode($props) . '"';
     }
 
-    if ($hydrate && !empty($server_html)) {
-        $html_attrs .= ' data-hydrate="true"';
-    }
-
     echo '<div' . $html_attrs . '>' . $server_html . '</div>' . PHP_EOL;
 
     return;
@@ -309,7 +341,7 @@ function aya_react_island($slug = null, $props = [], $server_html = '', $hydrate
  * ------------------------------------------------------------------------------
  */
 
-add_action('init', 'aya_handle_pjax_request');
+// PJAX 已在 MPA 迁移中停用。
 
 //判断PJAX请求头
 function aya_is_pjax_request()
@@ -322,9 +354,5 @@ function aya_is_pjax_request()
 //请求处理逻辑
 function aya_handle_pjax_request()
 {
-    if (!aya_is_pjax_request()) {
-        return;
-    }
-
-    //TODO 缓冲逻辑异步捕获DOM截取需要返回的部分
+    return;
 }

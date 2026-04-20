@@ -10,25 +10,25 @@ if (!defined('ABSPATH')) {
  * ------------------------------------------------------------------------------
  */
 
-//页面头部插入点
+// 页面头部插入点
 function aya_home_open()
 {
     do_action('aya_home_open');
 }
 
-//页面尾部插入点
+// 页面尾部插入点
 function aya_home_end()
 {
     do_action('aya_home_end');
 }
 
-//获取模板路径
+// 获取模板路径
 function aya_template_path()
 {
     return get_template_directory() . '/templates/';
 }
 
-//加载组件模板
+// 加载组件模板
 function aya_template_load($name = null)
 {
     $name = (string) $name;
@@ -38,7 +38,7 @@ function aya_template_load($name = null)
     locate_template($templates, true, false);
 }
 
-//加载WP方式的组件模板
+// 加载WP方式的组件模板
 function aya_template_part($slug = null, $name = null)
 {
     $slug = (string) $slug;
@@ -58,6 +58,37 @@ function aya_template_part($slug = null, $name = null)
     locate_template($templates, true, false);
 }
 
+// 使用片段模式加载模板
+function aya_template_part_path($name = null)
+{
+    $name = (string) $name;
+
+    if ($name === '') {
+        return false;
+    }
+
+    return aya_template_path() . 'fragments/' . $name . '.php';
+}
+
+// 使用 include 加载并传入数据
+function aya_template_part_load($name = null, $data = [])
+{
+    $template_path = aya_template_part_path($name);
+
+    if ($template_path === false || !is_file($template_path)) {
+        return;
+    }
+
+    extract($data);
+
+    ob_start();
+
+    include $template_path;
+
+    echo trim((string) ob_get_clean());
+
+    return;
+}
 
 /*
  * ------------------------------------------------------------------------------
@@ -246,62 +277,96 @@ function aya_get_comments_settings()
 
 /*
  * ------------------------------------------------------------------------------
- * React Islands 服务端渲染函数
- * ------------------------------------------------------------------------------
- */
-
-/**
- * 渲染 nav-breadcrumb 岛屿的服务端 HTML（用于 hydrateRoot 水合）
- *
- * @param array $props 面包屑数据 ['items' => [...]]
- * @return string 渲染的 HTML
- */
-function aya_island_render_nav_breadcrumb($props)
-{
-    $items = $props['items'] ?? [];
-    if (empty($items)) {
-        return '';
-    }
-
-    $count = count($items);
-
-    // Navigation SVG icon (lucide-react Navigation)
-    $nav_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>';
-
-    // ChevronRight SVG icon (lucide-react ChevronRight)
-    $chevron_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"></path></svg>';
-
-    ob_start();
-    ?><nav aria-label="breadcrumb" data-slot="breadcrumb" class="my-4"><ol data-slot="breadcrumb-list" class="text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm break-words sm:gap-2.5 flex-nowrap overflow-hidden"><li data-slot="breadcrumb-item" class="inline-flex items-center gap-1.5 shrink-0"><?php echo $nav_icon; ?></li><?php foreach ($items as $index => $item) : $is_last = ($index === $count - 1); ?><li data-slot="breadcrumb-separator" role="presentation" aria-hidden="true" class="[&amp;>svg]:size-3.5 shrink-0"><?php echo $chevron_icon; ?></li><li data-slot="breadcrumb-item" class="inline-flex items-center gap-1.5 whitespace-nowrap min-w-0"><?php if ($is_last) : ?><span data-slot="breadcrumb-page" role="link" aria-disabled="true" aria-current="page" class="text-foreground font-normal truncate max-w-[240px] sm:max-w-[400px] md:max-w-[400px] block"><?php echo esc_html($item['label']); ?></span><?php else : ?><a data-slot="breadcrumb-link" class="hover:text-foreground transition-colors truncate max-w-[160px] sm:max-w-[240px] md:max-w-[400px] block" href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['label']); ?></a><?php endif; ?></li><?php endforeach; ?></ol></nav><?php
-    return ob_get_clean();
-}
-
-/*
- * ------------------------------------------------------------------------------
  * 模板组件
  * ------------------------------------------------------------------------------
  */
 
-//文章缩略图处理
-function aya_get_post_thumb($thumb_url = false, $post_content = '', $size_w = 400, $size_h = 300)
+//用于隐藏数字ID的加密方法
+function aya_token_encode($token, $length = 15)
 {
-    // 如果已传入 URL 直接用它
-    if ($thumb_url == false) {
-        // 否则从正文提取首张图片
-        $thumb_url = aya_match_post_first_image($post_content, false);
+    $obj = new XDE_code($length);
+
+    return $obj->encode($token);
+}
+
+//用于隐藏数字ID的解密方法
+function aya_token_decode($token, $length = 15)
+{
+    $obj = new XDE_code($length);
+
+    return $obj->decode($token);
+}
+
+if (!function_exists('aya_get_post_thumb')) {
+
+    /*
+    * ------------------------------------------------------------------------------
+    *  BFI_Thumb.php 缩略图组件及相关函数
+    * ------------------------------------------------------------------------------
+    * 
+    * Demo1
+    * $size = array( 400, 300, 'opacity' => 50, 'grayscale' => true, 'bfi_thumb' => true );
+    * wp_get_attachment_image_src( $attachment_id, $size )
+    * 
+    * Else
+    * the_post_thumbnail( array( 1024, 400, 'bfi_thumb' => true, 'grayscale' => true ) );
+    * 
+    * Demo2
+    * $params = array( 'width' => 400, 'height' => 300, 'opacity' => 50, 'grayscale' => true, 'colorize' => '#ff0000' );
+    * bfi_thumb( "URL-to-image.jpg", $params );
+    * 
+    */
+
+    //BFI_Thumb调用函数
+    function get_bfi_thumb($url, $width = 0, $height = 0, $crop_y = 0, $crop_x = 0, $crop_only = false)
+    {
+        $url = esc_url($url);
+        //判断是否是本地图片
+        if (strpos($url, AYA_HOME) === false) {
+            return $url;
+        }
+
+        //图片质量设置
+        $thumb_quality = 96;
+
+        //判断参数
+        if ($height == 'full') {
+            //仅缩放
+            $params = array(
+                'width' => $width,
+                'quality' => $thumb_quality
+            );
+        } else {
+            //生成缩略图
+            $params = array(
+                'width' => $width, //int pixels
+                'height' => $height, //int pixels
+                'crop' => true, //bool
+                'crop_only' => $crop_only, //bool
+                'crop_x' => $crop_x ? $crop_x : 0, //bool string
+                'crop_y' => $crop_y ? $crop_y : 0, //bool string
+                'quality' => $thumb_quality //int 1-100
+            );
+        }
+
+        return bfi_thumb($url, $params);
     }
 
-    // 无图片时使用主题默认
-    if ($thumb_url === false) {
-        $thumb_url = aya_opt('site_default_thumb_upload', 'basic');
-    }
+    //文章缩略图处理（备用方法）
+    function aya_get_post_thumb($image_url = false, $post_id = '', $size_w = 400, $size_h = 300)
+    {
+        // 如果已传入 URL 直接用它
+        if ($image_url == false) {
+            // 否则从正文提取首张图片
+            $post_content = get_the_content($post_id);
+            $image_url = aya_match_post_first_image($post_content, false);
+        }
 
-    //检测主题图像处理依赖是否被加载
-    if (function_exists('aya_image_trans_init')) {
-        return aya_image_trans_post_thumb($thumb_url, $size_w, $size_h);
-    }
-    //使用BFI处理缩略图
-    else {
-        return get_bfi_thumb($thumb_url, $size_w, $size_h);
+        // 无图片时使用主题默认
+        if ($image_url === false) {
+            $image_url = aya_opt('site_default_thumb_upload', 'basic');
+        }
+
+        return get_bfi_thumb($image_url, $size_w, $size_h);
     }
 }

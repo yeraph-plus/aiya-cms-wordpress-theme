@@ -6,14 +6,10 @@ if (!defined('ABSPATH')) {
 
 //没有文章
 if (!have_posts()) {
-    aya_react_island(
-        'loop-grid',
-        ['posts' => []]
-    );
+    aya_template_part_load('loop-grid', ['posts' => []]);
 } else {
 
     //执行主循环
-    $loop_html = '';
     $loop_porps = [];
 
     while (have_posts()) {
@@ -22,7 +18,7 @@ if (!have_posts()) {
         //提取文章对象
         $post_obj = new AYA_Post_In_While();
 
-        $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->content, 300, 200);
+        $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->id, 300, 200);
 
         //添加到数组
         $loop_porps[] = [
@@ -44,15 +40,14 @@ if (!have_posts()) {
                 'avatar' => (string) $post_obj->author_avatar_x32,
             ],
         ];
-
-        $loop_html .= '<a href="' . esc_url($post_obj->url) . '" class="block h-auto w-full" title="' . esc_attr($post_obj->title) . '" rel="bookmark">' . esc_html($post_obj->attr_title) . '</a>';
     }
 
-    aya_react_island(
-        'loop-grid',
-        ['posts' => $loop_porps, 'loopTitle' => single_term_title('', false), 'showSeparator' => false, 'pageType' => 'archive'],
-        $loop_html,
-    );
+    aya_template_part_load('loop-grid', [
+        'posts' => $loop_porps,
+        'loop_title' => single_term_title('', false),
+        'show_separator' => false,
+        'page_type' => 'archive',
+    ]);
 
     //加载分页
     $paged = aya_get_pagination();

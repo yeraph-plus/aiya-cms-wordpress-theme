@@ -40,7 +40,7 @@ if ($carousel_section !== 'off' && !$is_pre_paged) {
                     $c_item['url'] = $post_obj->url;
 
                     if (empty($c_item['thumbnail'])) {
-                        $c_item['thumbnail'] = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->content, 1200, 640);
+                        $c_item['thumbnail'] = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->id, 1200, 640);
                     }
                     if (empty($c_item['title'])) {
                         $c_item['title'] = $post_obj->attr_title;
@@ -90,7 +90,7 @@ if (!empty($post_sections) && !$is_pre_paged) {
         foreach ($section_posts as $section_post) {
             $section_post_obj = new AYA_Post_In_While($section_post);
 
-            $section_post_thumb = aya_get_post_thumb($section_post_obj->thumbnail_url, $section_post_obj->content, 300, 200);
+            $section_post_thumb = aya_get_post_thumb($section_post_obj->thumbnail_url, $section_post_obj->id, 300, 200);
 
             $section_posts_data[] = [
                 'id' => $section_post_obj->id,
@@ -113,22 +113,18 @@ if (!empty($post_sections) && !$is_pre_paged) {
             ];
         }
 
-        aya_react_island(
-            'loop-section',
-            ['posts' => $section_posts_data, 'loopTitle' => $section['title']]
-        );
+        aya_template_part_load('loop-section', [
+            'posts' => $section_posts_data,
+            'loop_title' => $section['title'],
+        ]);
     }
 }
 
 if (!have_posts()) {
     //没有文章
-    aya_react_island(
-        'loop-grid',
-        ['posts' => []]
-    );
+    aya_template_part_load('loop-grid', ['posts' => []]);
 } else {
     //执行主循环
-    $loop_html = '';
     $loop_porps = [];
 
     while (have_posts()) {
@@ -137,7 +133,7 @@ if (!have_posts()) {
         //提取文章对象
         $post_obj = new AYA_Post_In_While();
 
-        $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->content, 300, 200);
+        $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->id, 300, 200);
 
         //添加到数组
         $loop_porps[] = [
@@ -159,17 +155,18 @@ if (!have_posts()) {
                 'avatar' => (string) $post_obj->author_avatar_x32,
             ],
         ];
-
-        $loop_html .= '<a href="' . esc_url($post_obj->url) . '" class="block h-auto w-full" title="' . esc_attr($post_obj->title) . '" rel="bookmark">' . esc_html($post_obj->attr_title) . '</a>';
     }
 
-    aya_react_island(
-        'loop-grid',
-        ['posts' => $loop_porps, 'loopTitle' => '首页', 'showSeparator' => true, 'pageType' => 'index'],
-        $loop_html,
-    );
+    aya_template_part_load('loop-grid', [
+        'posts' => $loop_porps,
+        'loop_title' => '首页',
+        'show_separator' => true,
+        'page_type' => 'index',
+    ]);
 
     //加载分页
+    aya_template_part_load('pagination', ['paged' => aya_get_pagination()]);
+
     $paged = aya_get_pagination();
 
     if (!empty($paged['links'])) {

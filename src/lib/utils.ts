@@ -23,7 +23,6 @@ export function useIsMobile() {
 
   return !!isMobile
 }
-
 interface AppConfig {
   apiUrl: string;
   apiNonce: string;
@@ -31,7 +30,7 @@ interface AppConfig {
   [key: string]: any;
 }
 
-// 从全局获取配置
+// 从HTML获取配置
 export function getConfig(): Partial<AppConfig> {
   const v = (globalThis as any).AIYACMS_CONFIG;
   if (v && typeof v === 'object') {

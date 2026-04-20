@@ -10,29 +10,30 @@ import {
 } from "@/components/ui/card";
 import { Cookie } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useUiPreferencesStore } from "@/stores/ui-preferences";
 
 export default function CookieConsent({ policyUrl }: { policyUrl?: string }) {
   const [isVisible, setIsVisible] = useState(false);
+  const cookieConsentDecision = useUiPreferencesStore((state) => state.cookieConsentDecision);
+  const setCookieConsentDecision = useUiPreferencesStore((state) => state.setCookieConsentDecision);
 
   useEffect(() => {
-    const consent = localStorage.getItem("cookie-consent");
-    if (!consent) {
+    if (cookieConsentDecision === null) {
       // Small delay for better UX
       const timer = setTimeout(() => setIsVisible(true), 1000);
       return () => clearTimeout(timer);
     }
-  }, []);
+
+    setIsVisible(false);
+  }, [cookieConsentDecision]);
 
   const handleAccept = () => {
-    localStorage.setItem("cookie-consent", "true");
+    setCookieConsentDecision("accepted");
     setIsVisible(false);
   };
 
   const handleDecline = () => {
-    // Even if declined, we might want to hide it.
-    // In a real scenario, this would disable non-essential cookies.
-    // For now, we just hide it and maybe set a 'false' value.
-    localStorage.setItem("cookie-consent", "false");
+    setCookieConsentDecision("declined");
     setIsVisible(false);
   };
 
