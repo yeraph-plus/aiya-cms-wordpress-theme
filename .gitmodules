@@ -1,0 +1,5 @@
+[submodule "aiya-cms-framework"]
+	branch = main
+	ignore = dirty
+	path = plugins
+	url = https://github.com/yeraph-plus/aiya-cms-theme-framework.git
