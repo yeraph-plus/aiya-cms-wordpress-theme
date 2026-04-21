@@ -54,6 +54,7 @@ export interface UserLoginData {
   data?: UserData
   menus?: MenuItem[]
   enable_register?: boolean
+  compact?: boolean
 }
 
 // Icon mapping based on PHP return values
@@ -80,28 +81,28 @@ export default function NavUser(props: UserLoginData) {
   const [showRegister, setShowRegister] = React.useState(false)
   const [showLogout, setShowLogout] = React.useState(false)
 
-  const { data, menus, enable_register } = props
+  const { data, menus, enable_register, compact = false } = props
 
   // Not logged in state
   if (!data) {
-    // If mounted but no data, showing login links
-    // We use a simple layout that fits the header
     return (
       <>
         <div className="flex items-center gap-2">
           <Button
-            variant="default"
+            variant={compact ? "ghost" : "default"}
+            size={compact ? "icon" : "default"}
             onClick={() => setShowLogin(true)}
-            className="h-8 px-3 "
+            className={cn(compact ? "h-9 w-9 rounded-full" : "h-8 px-3")}
+            aria-label="登录"
           >
-            <LogIn className="w-4 h-4 mr-2" />
-            登录
+            <LogIn className={cn("w-4 h-4", compact ? "" : "mr-2")} />
+            {compact ? <span className="sr-only">登录</span> : "登录"}
           </Button>
-          {enable_register && (
+          {!compact && enable_register && (
             <Button
               variant="outline"
               onClick={() => setShowRegister(true)}
-              className="h-8 px-3 "
+              className="h-8 px-3"
             >
               <UserPlus className="w-4 h-4 mr-2" />
               注册
@@ -134,17 +135,20 @@ export default function NavUser(props: UserLoginData) {
             size="lg"
             className={cn(
               "data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground",
-              "h-9 w-9 md:w-auto px-0 md:px-3 flex items-center gap-2 justify-center md:justify-start"
+              compact
+                ? "h-9 w-9 px-0 flex items-center justify-center rounded-full"
+                : "h-9 w-9 md:w-auto px-0 md:px-3 flex items-center gap-2 justify-center md:justify-start"
             )}
+            aria-label="用户菜单"
           >
-            <Avatar className="h-7 w-7 md:h-8 md:w-8">
+            <Avatar className={cn(compact ? "h-8 w-8" : "h-7 w-7 md:h-8 md:w-8")}>
               <AvatarImage src={data.avatar} alt={data.name} />
               <AvatarFallback className="rounded-lg">CN</AvatarFallback>
             </Avatar>
-            <div className="hidden md:grid flex-1 text-left leading-tight max-w-[120px]">
+            <div className={cn("flex-1 text-left leading-tight max-w-[120px]", compact ? "hidden" : "hidden md:grid")}>
               {data.name}
             </div>
-            <ChevronDown className="hidden md:block ml-auto size-4 text-muted-foreground" />
+            <ChevronDown className={cn("ml-auto size-4 text-muted-foreground", compact ? "hidden" : "hidden md:block")} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent

@@ -27,13 +27,15 @@ if (!defined('ABSPATH')) {
  *
  */
 
-//目录定位
+// 目录定位
 define('AYA_PATH', get_template_directory());
 define('AYA_HOME', home_url());
-//缓存时间
+// 缓存时间
 define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); // or MINUTE_IN_SECONDS
-//浏览量倍率作弊
+// 浏览量倍率作弊
 //define('AYA_MODIFY_VISITORS', 10);
+// 密码重置Token过期时间
+define('AYA_PASSWORD_RESET_TOKEN_TTL', 30 * MINUTE_IN_SECONDS);
 
 /*
  * ------------------------------------------------------------------------------
@@ -103,6 +105,14 @@ $GLOBALS['aya_land_page'] = [
         'original' => true,
         'callback' => function () {
             aya_add_breadcrumb_item(__('用户设置', 'AIYA'), '#');
+        }
+    ],
+    'reset-password' => [
+        'title' => '重置密码',
+        'template' => 'reset-password',
+        'orginal' => true,
+        'callback' => function () {
+            aya_add_breadcrumb_item(__('重置密码', 'AIYA'), '#');
         }
     ],
 ];

@@ -7,9 +7,12 @@ import {
   CalendarDays,
   CalendarClock,
   CheckCircle,
+  Copy,
   ChevronRight,
   CircleDashed,
   Clock3,
+  LayoutGrid,
+  LayoutList,
   Eye,
   EyeOff,
   FileEdit,
@@ -17,6 +20,7 @@ import {
   Heart,
   Hourglass,
   Inbox,
+  ContactRound,
   Layers2,
   Link,
   Lock,
@@ -25,13 +29,12 @@ import {
   Pin,
   Sparkles,
   Tag,
+  Search,
+  House,
+  LockKeyhole,
   Trash2,
   type LucideIcon,
 } from "lucide-react";
-
-const SLOT_SELECTOR = "span.icon-slot[data-icon]";
-const DEFAULT_ICON_CLASS = "h-4 w-4";
-const PROCESSED_ATTR = "data-icon-hydrated";
 
 const iconMap: Record<string, LucideIcon> = {
   navigation: Navigation,
@@ -43,10 +46,17 @@ const iconMap: Record<string, LucideIcon> = {
   calendar: CalendarDays,
   "calendar-clock": CalendarClock,
   "check-circle": CheckCircle,
+  copy: Copy,
+  "layout-grid": LayoutGrid,
+  "layout-list": LayoutList,
   "circle-dashed": CircleDashed,
   folder: Folder,
   tag: Tag,
   alert: AlertTriangle,
+  search: Search,
+  house: House,
+  "lock-keyhole": LockKeyhole,
+  "contact-round": ContactRound,
   "arrow-left": ArrowLeft,
   "arrow-right": ArrowRight,
   "eye-off": EyeOff,
@@ -61,13 +71,37 @@ const iconMap: Record<string, LucideIcon> = {
   "trash-2": Trash2,
 };
 
+const SLOT_SELECTOR = "span.icon-slot[data-icon]";
+const DEFAULT_ICON_CLASS = "h-4 w-4";
+const PROCESSED_ATTR = "data-icon-hydrated";
+const ICON_SIZE_CLASS_MAP: Record<string, string> = {
+  "3": "h-3 w-3",
+  "3.5": "h-3.5 w-3.5",
+  "4": "h-4 w-4",
+  "4.5": "h-4.5 w-4.5",
+  "5": "h-5 w-5",
+  "6": "h-6 w-6",
+  "7": "h-7 w-7",
+  "8": "h-8 w-8",
+};
+
 let iconSlotObserver: MutationObserver | null = null;
+
+function getBlankIconMarkup(iconClassName: string): string {
+  return renderToStaticMarkup(
+    createElement("span", {
+      className: `inline-block ${iconClassName}`,
+      "aria-hidden": true,
+    })
+  );
+}
 
 function getSlotIconMarkup(iconName: string, iconClassName: string): string {
   const Icon = iconMap[iconName];
 
   if (!Icon) {
-    return "";
+    console.warn(`[Runtime] IconSlots.tsx Unknown icon "${iconName}", fallback to blank placeholder.`);
+    return getBlankIconMarkup(iconClassName);
   }
 
   return renderToStaticMarkup(
@@ -77,6 +111,20 @@ function getSlotIconMarkup(iconName: string, iconClassName: string): string {
       focusable: false,
     })
   );
+}
+
+function resolveIconClassName(slot: HTMLElement): string {
+  const size = slot.dataset.iconSize?.trim();
+  if (size) {
+    const mappedClass = ICON_SIZE_CLASS_MAP[size];
+    if (mappedClass) {
+      return mappedClass;
+    }
+
+    console.warn(`[Runtime] IconSlots.tsx Unknown icon size "${size}", fallback to default size.`);
+  }
+
+  return DEFAULT_ICON_CLASS;
 }
 
 function hydrateIconSlot(slot: HTMLElement): void {
@@ -90,12 +138,7 @@ function hydrateIconSlot(slot: HTMLElement): void {
     return;
   }
 
-  const iconMarkup = getSlotIconMarkup(iconName, slot.dataset.iconClass || DEFAULT_ICON_CLASS);
-
-  if (iconMarkup === "") {
-    console.warn(`[Icon Slots] Unknown icon "${iconName}"`, slot);
-    return;
-  }
+  const iconMarkup = getSlotIconMarkup(iconName, resolveIconClassName(slot));
 
   slot.setAttribute(PROCESSED_ATTR, "true");
   slot.setAttribute("aria-hidden", "true");

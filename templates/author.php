@@ -18,7 +18,7 @@ $author_props = [
 
 // 渲染用户详情组件
 aya_react_island(
-    'loop-author',
+    'content-author',
     $author_props,
     '<div class="mb-8 p-6 bg-gray-50 rounded-lg flex items-center gap-6">
         <img src="' . esc_url($author_props['avatar']) . '" alt="' . esc_attr($author_props['name']) . '" class="w-24 h-24 rounded-full">
@@ -31,9 +31,12 @@ aya_react_island(
 
 //没有文章
 if (!have_posts()) {
-    aya_template_part_load('loop-grid', ['posts' => []]);
+    //没有文章
+    aya_react_island('ui-empty', [
+        'title' => __('暂无内容', 'AIYA'),
+        'description' => __('当前作者没有发布任何文章', 'AIYA'),
+    ]);
 } else {
-
     //执行主循环
     $loop_porps = [];
 
@@ -42,7 +45,6 @@ if (!have_posts()) {
 
         //提取文章对象
         $post_obj = new AYA_Post_In_While();
-
         $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->id, 300, 200);
 
         //添加到数组
@@ -67,19 +69,13 @@ if (!have_posts()) {
         ];
     }
 
-    $author = get_queried_object()->display_name;
-
     aya_template_part_load('loop-grid', [
         'posts' => $loop_porps,
-        'loop_title' => __('用户：「') . $author . __('」'),
-        'show_separator' => true,
-        'page_type' => 'author',
+        'label_icon' => 'contact-round',
+        'label_title' => __('用户：「', 'AIYA') . get_queried_object()->display_name . __('」', 'AIYA'),
+        'is_main_loop' => true,
     ]);
 
     //加载分页
-    $paged = aya_get_pagination();
-
-    if (!empty($paged['links'])) {
-        aya_react_island('loop-pagination', $paged, aya_get_pagination_html($paged));
-    }
+    aya_template_part_load('pagination', ['paged' => aya_get_pagination()]);
 }

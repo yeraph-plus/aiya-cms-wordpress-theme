@@ -10,8 +10,8 @@ if (!defined('ABSPATH')) {
                 // 获取广告位
                 $post_ads = aya_opt('site_ad_home_after_mult', 'land');
 
-                if (!empty($post_ads) && is_array($post_ads)) {
-                    aya_react_island('content-ad-space', ['ads' => array_values($post_ads), 'col' => 2]);
+                if (!aya_is_sponsor() && !empty($post_ads) && is_array($post_ads)) {
+                    aya_react_island('content-ad-space', ['ads' => array_values($post_ads)]);
                 }
                 ?>
                 </main>
@@ -34,7 +34,7 @@ if (!defined('ABSPATH')) {
     <?php wp_footer(); ?>
     <footer class="bg-neutral-900/95 backdrop-blur supports-[backdrop-filter]:bg-neutral/60 text-neutral-400 py-12 transition-all duration-300 ease-in-out">
         <div class="container mx-auto px-4 flex flex-col md:flex-row items-center md:justify-between gap-6">
-            <div class="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2">
+            <div class="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2 text-sm">
                 <?php
                 // 获取页脚菜单
                 $menu_items = aya_get_menu('footer-menu');
@@ -45,18 +45,19 @@ if (!defined('ABSPATH')) {
                     foreach ($menu_items as $item) {
                         if ($count >= 7) break;
 
-                        aya_echo('<a href="' . esc_url($item['url']) . '" class="hover:text-white transition-colors duration-200" title="' . esc_attr($item['label']) . '" target="' . esc_attr($item['target']) . '" >' . esc_html($item['label']) . '</a>');
+                        echo '<a href="' . esc_url($item['url']) . '" class="hover:text-white transition-colors duration-200" title="' . esc_attr($item['label']) . '" target="' . esc_attr($item['target']) . '" >' . esc_html($item['label']) . '</a>';
 
                         $count++;
                     }
                 }
                 ?>
             </div>
-            <div class="text-sm flex justify-center md:justify-end">
+            <div class="flex justify-center md:justify-end text-sm">
                 <div class="flex flex-col items-center md:items-end gap-2">
                     <div class="flex flex-wrap items-center justify-center md:justify-end gap-x-4 gap-y-2">
                         <?php if (aya_opt('site_icp_beian_text', 'basic') !== ''): ?>
                             <!-- ICP -->
+                             
                             <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-200">
                                 <?php aya_echo(aya_opt('site_icp_beian_text', 'basic')); ?>
                             </a>

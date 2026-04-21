@@ -1,3 +1,14 @@
+/* 导入ViewerJS样式 */
+@import "viewerjs/dist/viewer.css";
+
+/* 导入PrismJS样式 */
+@import "prismjs/plugins/toolbar/prism-toolbar.css";
+@import "prismjs/plugins/line-numbers/prism-line-numbers.css";
+/* @import "prismjs/themes/prism.css"; */
+/* @import "prismjs/themes/prism-twilight.css"; */
+/* @import "prismjs/themes/prism-tomorrow.css"; */
+@import "prismjs/themes/prism-okaidia.css";
+
 /* Content */
 #article-content {
     @apply prose prose-base max-w-none dark:prose-invert;
@@ -80,6 +91,11 @@
         @apply rounded px-1 py-0.5 text-sm font-mono bg-muted text-destructive;
     }
 
+    code::before,
+    code::after {
+        content: none;
+    }
+
     pre {
         @apply mb-4 overflow-x-auto rounded-lg p-4 text-sm bg-[#272822];
         direction: ltr;
@@ -87,6 +103,11 @@
 
     pre code {
         @apply bg-transparent p-0;
+    }
+
+    pre code::before,
+    pre code::after {
+        content: none;
     }
 
     .iframe-container {
@@ -210,15 +231,15 @@
 
     /* Collapse Component */
     details.art-collapse {
-        @apply my-4 border-2 border-secondary/50 p-4 transition-all rounded-lg;
+        @apply my-4 border-b border-border transition-colors;
     }
 
-    details.art-collapse[open] {
-        @apply border-2 border-primary;
+    details.art-collapse[open] .art-collapse-content {
+        @apply pb-4 pt-0;
     }
 
     details.art-collapse summary.art-collapse-title {
-        @apply flex items-center justify-between font-bold cursor-pointer list-none select-none text-foreground hover:text-primary transition-colors py-1;
+        @apply flex items-start justify-between gap-4 py-4 text-left text-base leading-7 font-medium cursor-pointer list-none select-none text-foreground transition-colors hover:underline;
     }
 
     details.art-collapse summary.art-collapse-title::-webkit-details-marker {
@@ -226,14 +247,22 @@
     }
 
     details.art-collapse .art-collapse-icon {
-        @apply w-4 h-4 opacity-50 transition-transform duration-200;
+        @apply shrink-0 text-muted-foreground transition-transform duration-200 translate-y-0.5;
     }
 
     details.art-collapse[open] .art-collapse-icon {
-        @apply rotate-180 opacity-100 text-primary;
+        @apply rotate-90 text-primary;
     }
 
     details.art-collapse .art-collapse-content {
-        @apply pt-2 text-muted-foreground;
+        @apply text-base leading-7 text-foreground;
+    }
+
+    details.art-collapse .art-collapse-content>*:first-child {
+        @apply mt-0;
+    }
+
+    details.art-collapse .art-collapse-content>*:last-child {
+        @apply mb-0;
     }
 }

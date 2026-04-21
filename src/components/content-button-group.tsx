@@ -1,45 +1,31 @@
-import { useState, type MouseEvent } from "react";
-import { Heart, MessageSquare, ThumbsUp } from "lucide-react";
+import { useState } from "react";
+import { Heart, Bookmark } from "lucide-react";
 import { toast } from "sonner";
 import { cn, getConfig } from "@/lib/utils";
+import { Spinner } from "@/components/ui/spinner";
 
 type ContentButtonGroupProps = {
   post_id: number;
-  comments?: string;
   likes?: string | number;
   is_favorite?: boolean;
-  disallow_toggle?: boolean;
-  variant?: "overlay" | "default";
 };
 
-function getButtonClass(
-  variant: ContentButtonGroupProps["variant"],
-  active = false
-) {
-  if (variant === "overlay") {
-    return cn(
-      "inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm border-none backdrop-blur-sm transition-colors",
-      active
-        ? "bg-white/90 text-primary hover:bg-white"
-        : "bg-white/20 hover:bg-white/30 text-white"
-    );
-  }
+function getButtonClass(active = false, tone: "favorite" | "like" = "like") {
+  const activeClass =
+    tone === "favorite"
+      ? "border-amber-500 bg-amber-500 text-white hover:bg-amber-600"
+      : "border-rose-600 bg-rose-600 text-white hover:bg-rose-700";
 
   return cn(
     "inline-flex items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors",
-    active
-      ? "border-primary bg-primary text-primary-foreground hover:bg-primary/90"
-      : "bg-background hover:bg-muted/80"
+    active ? activeClass : "border-border bg-background hover:bg-muted/80"
   );
 }
 
 export default function ContentButtonGroup({
   post_id,
-  comments,
   likes,
   is_favorite = false,
-  disallow_toggle = false,
-  variant = "default",
 }: ContentButtonGroupProps) {
   const [likeCount, setLikeCount] = useState<string | number>(likes ?? "");
   const [isFavorited, setIsFavorited] = useState(is_favorite);
@@ -48,7 +34,7 @@ export default function ContentButtonGroup({
   const [hasLiked, setHasLiked] = useState(false);
 
   const handleLike = async () => {
-    if (isLikeLoading || hasLiked || disallow_toggle) {
+    if (isLikeLoading || hasLiked) {
       return;
     }
 
@@ -79,7 +65,7 @@ export default function ContentButtonGroup({
   };
 
   const handleFavorite = async () => {
-    if (isFavoriteLoading || disallow_toggle) {
+    if (isFavoriteLoading) {
       return;
     }
 
@@ -114,15 +100,6 @@ export default function ContentButtonGroup({
     }
   };
 
-  const scrollToComments = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    const commentsSection = document.getElementById("comments");
-
-    if (commentsSection) {
-      commentsSection.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
-
   const favoriteLabel = isFavoriteLoading
     ? isFavorited
       ? "取消中"
@@ -133,45 +110,39 @@ export default function ContentButtonGroup({
   const likeLabel = isLikeLoading ? "处理中" : hasLiked ? "已赞" : "点赞";
   const hasLikeCount =
     likeCount !== "" && likeCount !== null && likeCount !== undefined;
+  const favoriteActive = isFavorited || isFavoriteLoading;
+  const likeActive = hasLiked || isLikeLoading;
 
   return (
     <div className="flex items-center gap-3">
-      {!disallow_toggle ? (
-        <button
-          type="button"
-          onClick={handleFavorite}
-          disabled={isFavoriteLoading}
-          className={getButtonClass(variant, isFavorited)}
-        >
-          <Heart className="h-4 w-4" />
-          <span>{favoriteLabel}</span>
-        </button>
-      ) : null}
+      <button
+        type="button"
+        onClick={handleFavorite}
+        disabled={isFavoriteLoading}
+        className={getButtonClass(favoriteActive, "favorite")}
+      >
+        {isFavoriteLoading ? (
+          <Spinner className="h-4 w-4" />
+        ) : (
+          <Bookmark className={cn("h-4 w-4 text-amber-500", favoriteActive && "fill-current text-white")} />
+        )}
+        <span>{favoriteLabel}</span>
+      </button>
 
-      {!disallow_toggle ? (
-        <button
-          type="button"
-          onClick={handleLike}
-          disabled={isLikeLoading || hasLiked}
-          className={getButtonClass(variant, false)}
-        >
-          <ThumbsUp className="h-4 w-4" />
-          <span>{likeLabel}</span>
-          {hasLikeCount ? <span>{String(likeCount)}</span> : null}
-        </button>
-      ) : null}
-
-      {comments ? (
-        <button
-          type="button"
-          onClick={scrollToComments}
-          className={getButtonClass(variant, false)}
-        >
-          <MessageSquare className="h-4 w-4" />
-          <span>评论</span>
-          <span>{comments}</span>
-        </button>
-      ) : null}
+      <button
+        type="button"
+        onClick={handleLike}
+        disabled={isLikeLoading || hasLiked}
+        className={getButtonClass(likeActive, "like")}
+      >
+        {isLikeLoading ? (
+          <Spinner className="h-4 w-4" />
+        ) : (
+          <Heart className={cn("h-4 w-4 text-rose-500", likeActive && "fill-current text-white")} />
+        )}
+        <span>{likeLabel}</span>
+        {hasLikeCount ? <span>{String(likeCount)}</span> : null}
+      </button>
     </div>
   );
 }

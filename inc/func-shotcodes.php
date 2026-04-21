@@ -128,6 +128,43 @@ if (is_admin()) {
         ]
     ));
 
+    AYA_Shortcode::shortcode_register('alert-content', array(
+        'id' => 'sc-alert-content',
+        'title' => '警告卡片',
+        'note' => '创建一个警告提示',
+        'template' => '[alert {{attributes}}] {{content}} [/alert]',
+        'field_build' => [
+            [
+                'id' => 'name',
+                'type' => 'text',
+                'label' => '标题',
+                'desc' => '警告提示的标题',
+                'default' => '点击展开内容',
+            ],
+            [
+                'id' => 'type',
+                'type'  => 'select',
+                'label' => '级别',
+                'desc'  => '警告提示的级别',
+                'sub' => array(
+                    'default' => '默认',
+                    'warning' => '警告',
+                    'info' => '信息',
+                    'success' => '成功',
+                    'error' => '错误',
+                ),
+                'default' => 'default',
+            ],
+            [
+                'id' => 'content',
+                'type' => 'textarea',
+                'label' => '内容',
+                'desc' => '警告提示的内容',
+                'default' => '这里是警告提示的内容。',
+            ],
+        ]
+    ));
+
     AYA_Shortcode::shortcode_register('clipboard-box', array(
         'id' => 'sc-clipboard-box',
         'title' => '一键复制',
@@ -265,6 +302,7 @@ add_shortcode('email', 'aya_shortcode_email_content');
 add_shortcode('list', 'aya_shortcode_li_list_content');
 add_shortcode('col_list', 'aya_shortcode_column_list_content');
 add_shortcode('collapse', 'aya_shortcode_collapse_content');
+add_shortcode('alert', 'aya_shortcode_alert_content');
 add_shortcode('clip_board', 'aya_shortcode_clipboard_in_content');
 add_shortcode('sponsor_ship', 'aya_shortcode_sponsor_ship_content');
 add_shortcode('logged_in', 'aya_shortcode_logged_in_content');
@@ -410,7 +448,7 @@ function aya_shortcode_collapse_content($atts = array(), $content = '')
 {
     $atts = shortcode_atts(
         array(
-            'title' => ''
+            'title' => '查看折叠的内容'
         ),
         $atts,
     );
@@ -419,10 +457,30 @@ function aya_shortcode_collapse_content($atts = array(), $content = '')
     $html .= '<details class="art-collapse group">';
     $html .= '<summary class="art-collapse-title">';
     $html .= '<span>' . esc_html($atts['title']) . '</span>';
-    $html .= '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="art-collapse-icon"><path d="m6 9 6 6 6-6"/></svg>';
+    $html .= '<span class="art-collapse-icon icon-slot" data-icon="chevron-right" data-icon-size="4"></span>';
     $html .= '</summary>';
     $html .= '<div class="art-collapse-content">' . do_shortcode($content) . '</div>';
     $html .= '</details>';
+
+    return $html;
+}
+
+//AIYA-CMS 短代码组件：提示框
+function aya_shortcode_alert_content($atts = array(), $content = '')
+{
+    $atts = shortcode_atts(
+        array(
+            'type' => 'info',
+            'name' => '',
+        ),
+        $atts,
+    );
+
+    $html = '';
+    $html .= '<div class="my-4" data-alert-slot data-alert-level="' . esc_attr($atts['type']) . '" data-alert-title="' . esc_attr($atts['name']) . '" data-alert-description="' . esc_attr($content) . '">';
+    $html .= '<div class="font-medium tracking-tight">' . esc_html($atts['name']) . '</div>';
+    $html .= '<div class="text-sm text-muted-foreground mt-1">' . esc_attr($content) . '</div>';
+    $html .= '</div>';
 
     return $html;
 }
@@ -438,10 +496,11 @@ function aya_shortcode_clipboard_in_content($atts = array(), $content = '')
     $content = do_shortcode($content);
     $content_clean = trim(strip_tags($content));
 
-    $html = '<div class="group relative my-4 rounded-lg border border-border bg-secondary/30">';
-    $html .= '<div class="p-4 font-mono text-sm break-all text-foreground">' . esc_html($content_clean) . '</div>';
-    $html .= '<div data-island="clipboard-button" data-props=\'{"text":"' . esc_attr($content_clean) . '","label":"' . esc_attr(__('复制', 'AIYA')) . '"}\'></div>';
-    $html .= '</div>';
+    if ($content_clean === '') {
+        return '';
+    }
+
+    $html = '<span data-clipboard-slot>' . esc_attr($content_clean) . '</span>';
 
     return $html;
 }
@@ -466,9 +525,10 @@ function aya_shortcode_sponsor_ship_content($atts = array(), $content = '')
         return $html;
     }
 
+
     $html .= '<div class="relative overflow-hidden rounded-lg border border-pink-500 bg-gradient-to-br from-pink-500/5 via-transparent to-pink-500/5 px-4 py-8 my-4 shadow-sm ring-1 ring-pink-500/10 backdrop-blur-sm text-pink-600">';
     $html .= '<div class="flex items-center gap-2 mb-2">';
-    $html .= '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock-keyhole-icon lucide-lock-keyhole"><circle cx="12" cy="16" r="1"/><rect x="3" y="10" width="18" height="12" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>';
+    $html .= '<span class="icon-slot shrink-0 text-pink-600" data-icon="lock-keyhole" data-icon-size="6"></span>';
 
     $html .= '<span class="text-xl font-bold">' . __('赞助内容', 'AIYA') . '</span>';
     $html .= '</div>';
@@ -505,7 +565,7 @@ function aya_shortcode_logged_in_content($atts = array(), $content = '')
 
     $html .= '<div class="relative overflow-hidden rounded-lg border border-primary bg-gradient-to-br from-primary/5 via-transparent to-primary/5 px-4 py-8 my-4 shadow-sm ring-1 ring-primary/10 backdrop-blur-sm text-primary/95">';
     $html .= '<div class="flex items-center gap-2 mb-2">';
-    $html .= '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock-keyhole-icon lucide-lock-keyhole"><circle cx="12" cy="16" r="1"/><rect x="3" y="10" width="18" height="12" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>';
+    $html .= '<span class="icon-slot shrink-0 text-primary/95" data-icon="lock-keyhole" data-icon-size="6"></span>';
 
     $html .= '<span class="text-xl font-bold">' . __('隐藏内容', 'AIYA') . '</span>';
     $html .= '</div>';

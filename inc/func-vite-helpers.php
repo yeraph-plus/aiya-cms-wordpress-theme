@@ -172,7 +172,7 @@ function aya_vite_collect_asset_urls($entries)
  */
 
 add_action('wp_head', 'aya_dist_scripts_loader');
-add_action('wp_footer', 'aya_debug_vite_assets');
+// add_action('wp_footer', 'aya_debug_vite_assets');
 
 //模板静态资源载入函数
 function aya_dist_scripts_loader()
@@ -332,27 +332,5 @@ function aya_react_island($slug = null, $props = [], $server_html = '')
 
     echo '<div' . $html_attrs . '>' . $server_html . '</div>' . PHP_EOL;
 
-    return;
-}
-
-/*
- * ------------------------------------------------------------------------------
- * PJAX 请求模式
- * ------------------------------------------------------------------------------
- */
-
-// PJAX 已在 MPA 迁移中停用。
-
-//判断PJAX请求头
-function aya_is_pjax_request()
-{
-    return !empty($_SERVER['HTTP_X_PJAX']) ||
-        (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
-            $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest');
-}
-
-//请求处理逻辑
-function aya_handle_pjax_request()
-{
     return;
 }

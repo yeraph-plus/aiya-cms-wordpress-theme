@@ -49,9 +49,5 @@ if (!have_posts()) {
     );
 
     //加载分页
-    $paged = aya_get_pagination();
-
-    if (!empty($paged['links'])) {
-        aya_react_island('loop-pagination', $paged, aya_get_pagination_html($paged));
-    }
+    aya_template_part_load('pagination', ['paged' => aya_get_pagination()]);
 }

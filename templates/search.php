@@ -6,7 +6,11 @@ if (!defined('ABSPATH')) {
 
 //没有文章
 if (!have_posts()) {
-    aya_template_part_load('loop-grid', ['posts' => []]);
+    //没有文章
+    aya_react_island('ui-empty', [
+        'title' => __('暂无内容', 'AIYA'),
+        'description' => __('搜索结果下没有文章', 'AIYA'),
+    ]);
 } else {
 
     //执行主循环
@@ -44,15 +48,11 @@ if (!have_posts()) {
 
     aya_template_part_load('loop-grid', [
         'posts' => $loop_porps,
-        'loop_title' => sprintf(__('搜索"%s"的结果'), get_search_query()),
-        'show_separator' => false,
-        'page_type' => 'search',
+        'label_icon' => 'search',
+        'label_title' => sprintf(__('搜索"%s"的结果'), get_search_query()),
+        'is_main_loop' => true,
     ]);
 
     //加载分页
-    $paged = aya_get_pagination();
-
-    if (!empty($paged['links'])) {
-        aya_react_island('loop-pagination', $paged, aya_get_pagination_html($paged));
-    }
+    aya_template_part_load('pagination', ['paged' => aya_get_pagination()]);
 }

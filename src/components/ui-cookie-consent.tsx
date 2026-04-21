@@ -10,12 +10,12 @@ import {
 } from "@/components/ui/card";
 import { Cookie } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useUiPreferencesStore } from "@/stores/ui-preferences";
+import { usePreferencesStore } from "@/stores/ui-preferences";
 
 export default function CookieConsent({ policyUrl }: { policyUrl?: string }) {
   const [isVisible, setIsVisible] = useState(false);
-  const cookieConsentDecision = useUiPreferencesStore((state) => state.cookieConsentDecision);
-  const setCookieConsentDecision = useUiPreferencesStore((state) => state.setCookieConsentDecision);
+  const cookieConsentDecision = usePreferencesStore((state) => state.cookieConsentDecision);
+  const setCookieConsentDecision = usePreferencesStore((state) => state.setCookieConsentDecision);
 
   useEffect(() => {
     if (cookieConsentDecision === null) {

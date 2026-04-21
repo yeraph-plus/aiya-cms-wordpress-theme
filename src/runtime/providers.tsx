@@ -4,9 +4,6 @@ import { Toaster } from "@/components/ui/sonner";
 import {
     Component,
     StrictMode,
-    useEffect,
-    useRef,
-    useState,
     type ErrorInfo,
     type ReactNode,
 } from "react";
@@ -17,45 +14,8 @@ type ProvidersProps = {
     children: ReactNode;
     tooltipDelayDuration?: number;
     boundaryId?: string;
+    withToaster?: boolean;
 };
-
-const toasterSubscribers = new Set<() => void>();
-let toasterOwner: symbol | null = null;
-
-function notifyToasterSubscribers() {
-    toasterSubscribers.forEach((listener) => {
-        listener();
-    });
-}
-
-function useSingletonToasterOwner() {
-    const ownerRef = useRef<symbol>(Symbol('providers-toaster-owner'));
-    const [isOwner, setIsOwner] = useState(false);
-
-    useEffect(() => {
-        const syncOwner = () => {
-            if (toasterOwner === null) {
-                toasterOwner = ownerRef.current;
-            }
-
-            setIsOwner(toasterOwner === ownerRef.current);
-        };
-
-        toasterSubscribers.add(syncOwner);
-        syncOwner();
-
-        return () => {
-            toasterSubscribers.delete(syncOwner);
-
-            if (toasterOwner === ownerRef.current) {
-                toasterOwner = null;
-                notifyToasterSubscribers();
-            }
-        };
-    }, []);
-
-    return isOwner;
-}
 
 class IslandErrorBoundary extends Component<{ children: ReactNode; id: string }, { hasError: boolean }> {
     constructor(props: { children: ReactNode; id: string }) {
@@ -80,9 +40,13 @@ class IslandErrorBoundary extends Component<{ children: ReactNode; id: string },
     }
 }
 
-export default function Providers({ children, tooltipDelayDuration = 0, boundaryId = 'unknown' }: ProvidersProps) {
+export default function Providers({
+    children,
+    tooltipDelayDuration = 0,
+    boundaryId = 'unknown',
+    withToaster = false,
+}: ProvidersProps) {
     const theme = getConfig().defaultColorTheme; // 从HTML读取设置
-    const isToasterOwner = useSingletonToasterOwner();
 
     return (
         <StrictMode>
@@ -92,7 +56,19 @@ export default function Providers({ children, tooltipDelayDuration = 0, boundary
                         {children}
                     </IslandErrorBoundary>
                 </TooltipProvider>
-                {isToasterOwner ? <Toaster /> : null}
+                {withToaster ? <Toaster /> : null}
+            </ThemeProvider>
+        </StrictMode>
+    );
+}
+
+export function GlobalToasterProviders() {
+    const theme = getConfig().defaultColorTheme; // 从HTML读取设置
+
+    return (
+        <StrictMode>
+            <ThemeProvider attribute="class" defaultTheme={theme || 'system'} enableSystem>
+                <Toaster />
             </ThemeProvider>
         </StrictMode>
     );

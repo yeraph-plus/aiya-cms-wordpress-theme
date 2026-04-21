@@ -6,9 +6,12 @@ if (!defined('ABSPATH')) {
 
 //没有文章
 if (!have_posts()) {
-    aya_template_part_load('loop-grid', ['posts' => []]);
+    //没有文章
+    aya_react_island('ui-empty', [
+        'title' => __('暂无内容', 'AIYA'),
+        'description' => __('当前没有任何文章被分类到此归档', 'AIYA'),
+    ]);
 } else {
-
     //执行主循环
     $loop_porps = [];
 
@@ -17,7 +20,6 @@ if (!have_posts()) {
 
         //提取文章对象
         $post_obj = new AYA_Post_In_While();
-
         $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->id, 300, 200);
 
         //添加到数组
@@ -44,15 +46,11 @@ if (!have_posts()) {
 
     aya_template_part_load('loop-grid', [
         'posts' => $loop_porps,
-        'loop_title' => single_term_title('', false),
-        'show_separator' => false,
-        'page_type' => 'archive',
+        'label_icon' => 'inbox',
+        'label_title' => single_term_title('', false),
+        'is_main_loop' => true,
     ]);
 
     //加载分页
-    $paged = aya_get_pagination();
-
-    if (!empty($paged['links'])) {
-        aya_react_island('loop-pagination', $paged, aya_get_pagination_html($paged));
-    }
+    aya_template_part_load('pagination', ['paged' => aya_get_pagination()]);
 }

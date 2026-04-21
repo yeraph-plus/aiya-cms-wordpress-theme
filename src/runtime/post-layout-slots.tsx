@@ -1,10 +1,11 @@
 import {
   type LoopGridLayout,
-  useUiPreferencesStore,
+  usePreferencesStore,
 } from "@/stores/ui-preferences";
 
-const ROOT_SELECTOR = "[data-post-grid-root]";
-const CONTROL_SELECTOR = "[data-post-grid-controls]";
+const MAIN_GRID_ID = "main-post-loop";
+const ROOT_SELECTOR = `[data-post-grid-root]#${MAIN_GRID_ID}`;
+const CONTROL_SELECTOR = `[data-post-grid-controls][data-target-id="${MAIN_GRID_ID}"]`;
 const ACTIVE_BUTTON_CLASS = "bg-secondary text-foreground";
 const INACTIVE_BUTTON_CLASS = "text-muted-foreground hover:bg-accent";
 
@@ -74,9 +75,13 @@ function applyLayoutToGrid(root: HTMLElement, layout: LoopGridLayout): void {
 
   root.querySelectorAll<HTMLElement>("[data-post-grid-media]").forEach((media) => {
     media.classList.remove(
-      "aspect-video",
       "w-full",
+      "h-40",
+      "md:h-44",
+      "xl:h-48",
+      "rounded-t-lg",
       "rounded-t-xl",
+      "rounded-none",
       "w-1/3",
       "min-w-[200px]",
       "max-w-[300px]",
@@ -85,9 +90,9 @@ function applyLayoutToGrid(root: HTMLElement, layout: LoopGridLayout): void {
     );
 
     if (layout === "grid") {
-      media.classList.add("aspect-video", "w-full", "rounded-t-xl");
+      media.classList.add("w-full", "h-40", "md:h-44", "xl:h-48", "rounded-t-lg");
     } else {
-      media.classList.add("w-1/3", "min-w-[200px]", "max-w-[300px]", "h-full", "shrink-0");
+      media.classList.add("w-1/3", "min-w-[200px]", "max-w-[300px]", "h-full", "shrink-0", "rounded-none");
     }
   });
 
@@ -121,47 +126,59 @@ function applyLayoutToGrid(root: HTMLElement, layout: LoopGridLayout): void {
 }
 
 function updateControlState(layout: LoopGridLayout, root: ParentNode): void {
-  root.querySelectorAll<HTMLElement>(CONTROL_SELECTOR).forEach((controls) => {
-    controls
-      .querySelectorAll<HTMLButtonElement>("[data-post-grid-toggle]")
-      .forEach((button) => {
-        setButtonState(button, button.dataset.postGridToggle === layout);
-      });
-  });
+  const controls = root.querySelector<HTMLElement>(CONTROL_SELECTOR);
+
+  if (!controls) {
+    return;
+  }
+
+  controls
+    .querySelectorAll<HTMLButtonElement>("[data-post-grid-toggle]")
+    .forEach((button) => {
+      setButtonState(button, button.dataset.postGridToggle === layout);
+    });
 }
 
 function applyLayout(layout: LoopGridLayout, root: ParentNode): void {
-  root.querySelectorAll<HTMLElement>(ROOT_SELECTOR).forEach((gridRoot) => {
-    applyLayoutToGrid(gridRoot, layout);
-  });
+  const mainGrid = root.querySelector<HTMLElement>(ROOT_SELECTOR);
+
+  if (!mainGrid) {
+    return;
+  }
+
+  applyLayoutToGrid(mainGrid, layout);
 
   updateControlState(layout, root);
 }
 
 export function bootPostGridLayout(root: ParentNode = document): void {
-  const controls = root.querySelectorAll<HTMLElement>(CONTROL_SELECTOR);
+  const mainGrid = root.querySelector<HTMLElement>(ROOT_SELECTOR);
 
-  if (controls.length === 0) {
+  if (!mainGrid) {
     return;
   }
 
-  const currentLayout = useUiPreferencesStore.getState().loopGridLayout;
-  applyLayout(currentLayout, root);
+  const controls = root.querySelector<HTMLElement>(CONTROL_SELECTOR);
+  const currentLayout = usePreferencesStore.getState().loopGridLayout;
+  applyLayoutToGrid(mainGrid, currentLayout);
+  updateControlState(currentLayout, root);
 
-  controls.forEach((control) => {
-    control
-      .querySelectorAll<HTMLButtonElement>("[data-post-grid-toggle]")
-      .forEach((button) => {
-        button.addEventListener("click", () => {
-          const nextLayout = button.dataset.postGridToggle as LoopGridLayout;
+  if (!controls) {
+    return;
+  }
 
-          if (nextLayout !== "grid" && nextLayout !== "list") {
-            return;
-          }
+  controls
+    .querySelectorAll<HTMLButtonElement>("[data-post-grid-toggle]")
+    .forEach((button) => {
+      button.addEventListener("click", () => {
+        const nextLayout = button.dataset.postGridToggle as LoopGridLayout;
 
-          useUiPreferencesStore.getState().setLoopGridLayout(nextLayout);
-          applyLayout(nextLayout, root);
-        });
+        if (nextLayout !== "grid" && nextLayout !== "list") {
+          return;
+        }
+
+        usePreferencesStore.getState().setLoopGridLayout(nextLayout);
+        applyLayout(nextLayout, root);
       });
-  });
+    });
 }

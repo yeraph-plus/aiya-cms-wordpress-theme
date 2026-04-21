@@ -11,7 +11,7 @@ interface UiPreferencesState {
     setCookieConsentDecision: (decision: Exclude<CookieConsentDecision, null>) => void;
 }
 
-export const useUiPreferencesStore = create<UiPreferencesState>()(
+export const usePreferencesStore = create<UiPreferencesState>()(
     persist(
         (set) => ({
             loopGridLayout: 'grid',
@@ -20,7 +20,7 @@ export const useUiPreferencesStore = create<UiPreferencesState>()(
             setCookieConsentDecision: (decision) => set({ cookieConsentDecision: decision }),
         }),
         {
-            name: 'aiya-ui-preferences',
+            name: 'ui-preferences',
             storage: createJSONStorage(() => localStorage),
             partialize: (state) => ({
                 loopGridLayout: state.loopGridLayout,

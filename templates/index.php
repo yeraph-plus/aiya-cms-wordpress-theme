@@ -70,7 +70,7 @@ if ($carousel_section !== 'off' && !$is_pre_paged) {
 
     if (!empty($carousel_list)) {
         aya_react_island(
-            'loop-carousel',
+            'content-carousel',
             ['posts' => $carousel_list, 'layout' => $carousel_section]
         );
     }
@@ -113,16 +113,21 @@ if (!empty($post_sections) && !$is_pre_paged) {
             ];
         }
 
-        aya_template_part_load('loop-section', [
+        aya_template_part_load('loop-grid', [
             'posts' => $section_posts_data,
-            'loop_title' => $section['title'],
+            'label_icon' => 'inbox',
+            'label_title' => $section['title'],
+            'is_main_loop' => false,
         ]);
     }
 }
 
 if (!have_posts()) {
     //没有文章
-    aya_template_part_load('loop-grid', ['posts' => []]);
+    aya_react_island('ui-empty', [
+        'title' => __('暂无内容', 'AIYA'),
+        'description' => __('暂无文章', 'AIYA'),
+    ]);
 } else {
     //执行主循环
     $loop_porps = [];
@@ -159,19 +164,13 @@ if (!have_posts()) {
 
     aya_template_part_load('loop-grid', [
         'posts' => $loop_porps,
-        'loop_title' => '首页',
-        'show_separator' => true,
-        'page_type' => 'index',
+        'label_icon' => 'house',
+        'label_title' => '首页',
+        'is_main_loop' => true,
     ]);
 
     //加载分页
     aya_template_part_load('pagination', ['paged' => aya_get_pagination()]);
-
-    $paged = aya_get_pagination();
-
-    if (!empty($paged['links'])) {
-        aya_react_island('loop-pagination', $paged, aya_get_pagination_html($paged));
-    }
 }
 
 //首页动作钩子

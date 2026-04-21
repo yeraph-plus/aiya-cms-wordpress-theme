@@ -11,29 +11,33 @@ if (!defined('ABSPATH')) {
  */
 
 //转为输出
-function aya_echo($data, $special = false)
+function aya_echo($data, $special = 'attr')
 {
-    //htmlspecialchars
-    if ($special) {
-        $data = strip_tags($data);
-        $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+    // 直接配置 WP 的清理方法
+    switch ($special) {
+        case 'html':
+            echo esc_html($data);
+            break;
+        case 'url':
+            echo esc_url($data);
+            break;
+        case 'js':
+            echo esc_js($data);
+            break;
+        case '':
+        case 'attr':
+        default:
+            echo esc_attr($data);
+            break;
     }
-
-    echo ($data);
-
-    return;
 }
 
 //打印输出
 function aya_print($data, $return = false)
 {
     print_r('<pre>');
-
     print_r($data, $return);
-
     print_r('</pre>');
-
-    return;
 }
 
 //JSON输出
@@ -52,8 +56,6 @@ function aya_json_print($data)
     }
 
     print_r('<pre>' . $json . '</pre>');
-
-    return;
 }
 
 //获取主题版本

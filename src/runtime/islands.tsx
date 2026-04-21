@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, type ComponentType } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { Skeleton } from '@/components/ui/skeleton';
-import Providers from './providers';
+import Providers, { GlobalToasterProviders } from './providers';
+import { getIslandSkeleton } from './island-skeletons';
 
 // 类型定义
 export interface IslandInfo {
@@ -13,6 +13,8 @@ export interface IslandInfo {
 
 // 全局 Root 注册表
 const activeRoots = new Map<HTMLElement, Root>();
+let globalToasterRoot: Root | null = null;
+const GLOBAL_TOASTER_HOST_ID = 'cms-global-toaster-root';
 
 let autoIslandSeq = 0;
 
@@ -30,13 +32,20 @@ function ensureIslandInstanceId(el: HTMLElement, componentIsland: string) {
 
 type IslandModule = Record<string, unknown> & { default?: unknown };
 
-// 默认骨架屏
-function DefaultSkeleton() {
-    return (
-        <div className="space-y-2 p-4">
-            <Skeleton className="h-4 w-[250px]" />
-        </div>
-    );
+function ensureGlobalToasterMounted(): void {
+    if (globalToasterRoot || typeof document === 'undefined' || !document.body) {
+        return;
+    }
+
+    let host = document.getElementById(GLOBAL_TOASTER_HOST_ID);
+    if (!host) {
+        host = document.createElement('div');
+        host.id = GLOBAL_TOASTER_HOST_ID;
+        document.body.appendChild(host);
+    }
+
+    globalToasterRoot = createRoot(host);
+    globalToasterRoot.render(<GlobalToasterProviders />);
 }
 
 // 构建组件名到动态导入函数的映射
@@ -51,17 +60,6 @@ const loaders = Object.fromEntries(
         return [id, loader];
     })
     .filter(([id]) => id !== null) as [string, () => Promise<IslandModule>][]
-);
-
-// 构建骨架屏映射 (eager loading)
-const skeletonModules = import.meta.glob<{ default: ComponentType<any> }>('../components/**/*.skeleton.{tsx,ts,jsx,js}', { eager: true });
-const skeletons = Object.fromEntries(
-    Object.entries(skeletonModules).map(([path, mod]) => {
-        const filename = path.split('/').pop() ?? '';
-        // 移除 .skeleton.ext 后缀获取组件ID
-        const id = filename.replace(/\.skeleton\.[^.]+$/, '');
-        return [id, mod.default];
-    })
 );
 
 // 加载组件（带简单重试）
@@ -92,7 +90,7 @@ export function loadIslandComponent(name: string, retries = 2): ComponentType<an
 // 岛屿组件
 export const IslandComponent = React.memo(({ name, props = {} }: { name: string; props?: any }) => {
     const Component = loadIslandComponent(name);
-    const SkeletonComponent = skeletons[name] || DefaultSkeleton;
+    const SkeletonComponent = getIslandSkeleton(name);
 
     if (!Component) {
         return <div data-island-error={`组件 ${name} 未找到`} />;
@@ -195,12 +193,14 @@ export function unmountIslandsIn(container: Element | null | undefined): void {
  * 扫描并挂载容器内所有岛屿
  */
 export function hydrateAllIslands(container: ParentNode): void {
+    ensureGlobalToasterMounted();
+
     const islands = scanIslands(container);
     islands.forEach(({ element, componentIsland, props }) => {
         const Component = loadIslandComponent(componentIsland);
         if (!Component) return;
 
-        const SkeletonComponent = skeletons[componentIsland] || DefaultSkeleton;
+        const SkeletonComponent = getIslandSkeleton(componentIsland);
 
         mountIsland(
             element,

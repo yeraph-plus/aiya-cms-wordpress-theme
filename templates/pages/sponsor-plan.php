@@ -39,6 +39,6 @@ $code_from = aya_payment_sponsor_activation_code();
 ?>
     <div id="article-content" class=" prose prose-base lg:prose-lg max-w-none">
         <h2><?php aya_echo($page_title); ?></h2>
-        <?php aya_echo($page_content); ?>
+        <?php echo $page_content; ?>
     </div>
 <?php endif; ?>

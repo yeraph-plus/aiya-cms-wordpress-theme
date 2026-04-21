@@ -5,21 +5,8 @@
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";
 
-@source "../**/*.{html,js,ts,tsx,vue,jsx}";
+@source "../**/*.{html,js,ts,tsx,jsx,vue}";
 @source "../../**/*.{html,php}";
-
-@import "./article.css";
-
-/* 导入ViewerJS样式 */
-@import "viewerjs/dist/viewer.css";
-
-/* 导入PrismJS样式 */
-@import "prismjs/plugins/toolbar/prism-toolbar.css";
-@import "prismjs/plugins/line-numbers/prism-line-numbers.css";
-/* @import "prismjs/themes/prism.css"; */
-/* @import "prismjs/themes/prism-twilight.css"; */
-/* @import "prismjs/themes/prism-tomorrow.css"; */
-@import "prismjs/themes/prism-okaidia.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -211,3 +198,5 @@
     display: none;
   }
 }
+
+@import "./article.css";

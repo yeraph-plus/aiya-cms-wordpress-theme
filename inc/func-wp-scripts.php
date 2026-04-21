@@ -12,6 +12,7 @@ if (!defined('ABSPATH')) {
 
 add_action('admin_enqueue_scripts', 'aya_theme_enqueue_admin_scripts');
 add_action('login_enqueue_scripts', 'aya_theme_enqueue_login_scripts');
+add_action('wp_enqueue_scripts', 'aya_theme_localize_default_config', 1);
 
 //向前端传递配置参数
 function aya_theme_localize_default_config()

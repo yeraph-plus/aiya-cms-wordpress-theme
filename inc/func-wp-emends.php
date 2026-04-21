@@ -364,6 +364,8 @@ function aya_content_filter_dom_document($content, $encode_utf8 = false)
                 $rel = $link->getAttribute('rel');
                 $rel = preg_replace('/\bnofollow\b/', '', $rel);
                 $link->setAttribute('rel', trim($rel . ' nofollow'));
+                //任何外链都强制新标签页打开
+                $link->setAttribute('target', '_blank');
                 //外链转内链
                 if ($redirect_option == 'link') {
                     //外链提示页面
@@ -371,11 +373,6 @@ function aya_content_filter_dom_document($content, $encode_utf8 = false)
                 } else if ($redirect_option == 'go') {
                     //内跳页面
                     $link->setAttribute('href', add_query_arg('url', base64_encode($href), home_url('/go/')));
-                    //添加target
-                    $link->setAttribute('target', '_blank');
-                } else {
-                    //只添加target
-                    $link->setAttribute('target', '_blank');
                 }
             }
         }
@@ -398,22 +395,11 @@ function aya_content_filter_link_tag($content)
 
         // 如果是外部链接
         if (cur_is_external_url($url)) {
-            // 处理跳转逻辑
-            $new_url = $url;
-            $need_target = false;
-
-            if ($redirect_option == 'link') {
-                $new_url = add_query_arg('target', urlencode($url), home_url('/link/'));
-            } elseif ($redirect_option == 'go') {
-                $new_url = add_query_arg('url', base64_encode($url), home_url('/go/'));
-                $need_target = true;
+            // 处理 target="_blank"
+            if (strpos($full_tag, 'target=') !== false) {
+                $full_tag = preg_replace('/target=["\'][^"\']*["\']/i', 'target="_blank"', $full_tag);
             } else {
-                $need_target = true;
-            }
-
-            // 替换 href (仅替换匹配到的部分，避免误伤)
-            if ($new_url !== $url) {
-                $full_tag = str_replace($url, $new_url, $full_tag);
+                $full_tag = preg_replace('/(<a\s+)/i', '$1target="_blank" ', $full_tag, 1);
             }
 
             // 处理 rel="nofollow"
@@ -430,13 +416,18 @@ function aya_content_filter_link_tag($content)
                 $full_tag = preg_replace('/(<a\s+)/i', '$1rel="nofollow" ', $full_tag, 1);
             }
 
-            // 处理 target="_blank"
-            if ($need_target) {
-                if (strpos($full_tag, 'target=') !== false) {
-                    $full_tag = preg_replace('/target=["\'][^"\']*["\']/i', 'target="_blank"', $full_tag);
-                } else {
-                    $full_tag = preg_replace('/(<a\s+)/i', '$1target="_blank" ', $full_tag, 1);
-                }
+            // 处理跳转逻辑
+            $new_url = $url;
+
+            if ($redirect_option == 'link') {
+                $new_url = add_query_arg('target', urlencode($url), home_url('/link/'));
+            } elseif ($redirect_option == 'go') {
+                $new_url = add_query_arg('url', base64_encode($url), home_url('/go/'));
+            }
+
+            // 替换 href (仅替换匹配到的部分，避免误伤)
+            if ($new_url !== $url) {
+                $full_tag = str_replace($url, $new_url, $full_tag);
             }
         }
 
@@ -485,6 +476,24 @@ function aya_content_filter_img_tag($content)
 
 // 在主题首次启用时添加默认提示分类
 add_action('aya_install', 'aya_tax_tips_add_default_terms');
+
+// 注册文章操作的 MetaBox
+AYF::new_box([
+    'title' => '重新发布',
+    'id' => 'reset_post_datetime_box',
+    'context' => 'normal',
+    'priority' => 'low',
+    'add_box_in' => ['post'],
+    'fields' => [
+        [
+            'title' => '重新发布',
+            'desc' => '刷新文章发布日期到当前时间',
+            'id' => 'reset_post_datetime',
+            'type' => 'switch',
+            'default' => false,
+        ],
+    ],
+]);
 
 if (aya_opt('site_post_add_tips_terms_bool', 'land')) {
     //注册提示分类法
@@ -560,6 +569,33 @@ function aya_tax_tips_add_default_terms()
 //文章顶部中显示的小贴士信息
 function aya_get_post_tips($post_id = 0)
 {
+    $tips = [];
+    $post = get_post($post_id);
+
+    if (!$post) {
+        return [];
+    }
+
+    // 直接在此处根据设置创建文章过期提示，避免模板重复计算。
+    $post_outdated_days = intval(aya_opt('site_post_outdate_days_text', 'land'));
+    if ($post_outdated_days > 0) {
+        $publish_time = get_post_time('U', false, $post, true);
+        $modified_time = get_post_modified_time('U', false, $post, true);
+        $last_time = ($modified_time > $publish_time) ? $modified_time : $publish_time;
+
+        if (time() > $last_time + (DAY_IN_SECONDS * $post_outdated_days)) {
+            $tips[] = [
+                'alert' => 'default',
+                'name' => '时效性提示',
+                'description' => sprintf(
+                    '这篇文章发布于 %s 前，部分信息可能已过时，请留意。',
+                    human_time_diff($publish_time, time())
+                ),
+            ];
+        }
+    }
+
+    //检查条目分类法
     $terms = get_the_terms($post_id, 'tips');
 
     if ($terms && !is_wp_error($terms)) {

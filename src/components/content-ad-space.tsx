@@ -10,26 +10,25 @@ interface AdItem {
 interface ContentAdSpaceProps {
   ads: AdItem[];
   className?: string;
-  col?: number;
 }
 
-export default function ContentAdSpace({ ads, className, col = 2 }: ContentAdSpaceProps) {
+export default function ContentAdSpace({ ads, className }: ContentAdSpaceProps) {
   if (!ads || !Array.isArray(ads) || ads.length === 0) return null;
-
-  let column ={
-    1: '',
-    2: 'md:grid-cols-2',
-  };
+  const isSingleAd = ads.length === 1;
+  const gridColsClass = ads.length > 1 ? "md:grid-cols-2" : "";
 
   return (
-    <div className={cn(`container mx-auto my-4 grid grid-cols-1 ${column[col as keyof typeof column]} gap-2`, className)}>
+    <div className={cn(`container mx-auto my-4 grid grid-cols-1 ${gridColsClass} gap-2`, className)}>
       {ads.map((ad, index) => (
         <a
           key={index}
           href={ad.url}
           target="_blank"
           rel="nofollow noopener noreferrer"
-          className="block relative group overflow-hidden rounded-lg border border-border bg-muted/30 transition-all hover:border-primary/50 hover:shadow-sm no-underline"
+          className={cn(
+            "block relative group overflow-hidden rounded-lg border border-border bg-muted/30 transition-all hover:border-primary/50 hover:shadow-sm no-underline",
+            isSingleAd && "w-full md:max-w-2xl md:mx-auto"
+          )}
           title={`外部链接 “${ad.title}”`}
         >
           <div className="w-full h-auto overflow-hidden">

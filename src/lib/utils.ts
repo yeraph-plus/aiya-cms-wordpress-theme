@@ -26,6 +26,7 @@ export function useIsMobile() {
 interface AppConfig {
   apiUrl: string;
   apiNonce: string;
+  homeUrl: string;
   defaultColorTheme: string;
   [key: string]: any;
 }

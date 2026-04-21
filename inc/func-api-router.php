@@ -99,6 +99,51 @@ function generate_unique_username($prefix = 'user')
     return $prefix . '_' . $time_hex . $random_hex;
 }
 
+// 存储密码重置Token
+function aya_store_password_reset_payload($user_login, $key)
+{
+    $token = wp_generate_password(48, false, false);
+    $token_key = 'aya_pwd_reset_' . hash_hmac('sha256', $token, wp_salt('nonce'));
+    $payload = [
+        'login' => (string) $user_login,
+        'key' => (string) $key,
+        'expires_at' => time() + AYA_PASSWORD_RESET_TOKEN_TTL,
+    ];
+
+    // token 定时器，默认 30 分钟，支持通过常量覆盖
+    set_transient($token_key, $payload, AYA_PASSWORD_RESET_TOKEN_TTL);
+
+    return $token;
+}
+
+// 生成密码重置Token
+function aya_get_password_reset_payload($token)
+{
+    $token = sanitize_text_field((string) $token);
+    if (empty($token)) {
+        return null;
+    }
+
+    $token_key = 'user_pwd_reset_' . hash_hmac('sha256', $token, wp_salt('nonce'));
+    $payload = get_transient($token_key);
+
+    if (!is_array($payload) || empty($payload['login']) || empty($payload['key'])) {
+        return null;
+    }
+
+    $expires_at = isset($payload['expires_at']) ? absint($payload['expires_at']) : 0;
+    if ($expires_at > 0 && $expires_at < time()) {
+        delete_transient($token_key);
+        return null;
+    }
+
+    return [
+        'token_key' => $token_key,
+        'login' => sanitize_user(wp_unslash((string) $payload['login']), true),
+        'key' => sanitize_text_field((string) $payload['key']),
+    ];
+}
+
 //注册
 $api->register_route('register', [
     'methods' => 'POST',
@@ -221,7 +266,7 @@ $api->register_route('forgot_password', [
         //检查邮箱是否存在
         $user = get_user_by('email', $email);
         if (!$user) {
-            return $api->error_response('invalid_param', ['detail' => __('该邮箱未注册', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('如果邮箱存在将发送邮件', 'AIYA')]);
         }
 
         //生成重置密码链接
@@ -230,10 +275,9 @@ $api->register_route('forgot_password', [
             return $api->error_response('server_error', ['detail' => __('无法生成密码重置链接，请稍后再试', 'AIYA')]);
         }
 
-        // TODO 使用前端页面处理密码重置
-
         //发送重置密码邮件
-        $reset_link = network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode($user->user_login), 'login');
+        $reset_token = aya_store_password_reset_payload($user->user_login, $key);
+        $reset_link = add_query_arg(['token' => $reset_token,], home_url('/reset-password/'));
 
         //邮件标题
         $subject = sprintf(__('[%s] 密码重置', 'AIYA'), wp_specialchars_decode(get_option('blogname')));
@@ -244,6 +288,7 @@ $api->register_route('forgot_password', [
         $message .= sprintf(__('用户名: %s', 'AIYA'), $user->user_login) . "\r\n\r\n";
         $message .= __('如果这不是您本人的操作，请忽略此邮件。', 'AIYA') . "\r\n\r\n";
         $message .= __('要重置密码，请访问以下链接:', 'AIYA') . "\r\n\r\n";
+        $message .= __('此链接仅在30分钟内有效。', 'AIYA') . "\r\n\r\n";
         $message .= $reset_link . "\r\n";
 
         //发送邮件
@@ -263,6 +308,101 @@ $api->register_route('forgot_password', [
             'required' => true,
             'type' => 'string',
             'description' => '用户注册邮箱'
+        ]
+    ]
+]);
+
+//校验密码重置链接
+$api->register_route('validate_password_reset', [
+    'methods' => 'POST',
+    'callback' => function (WP_REST_Request $request) use ($api) {
+        $token = sanitize_text_field((string) $request->get_param('token'));
+        $payload = aya_get_password_reset_payload($token);
+
+        if (!$payload) {
+            return $api->error_response('invalid_param', ['detail' => __('重置链接缺少必要参数', 'AIYA')]);
+        }
+
+        $user = check_password_reset_key($payload['key'], $payload['login']);
+        if (is_wp_error($user)) {
+            delete_transient($payload['token_key']);
+            return $api->error_response('invalid_key', ['detail' => __('重置链接无效或已过期，请重新申请找回密码', 'AIYA')]);
+        }
+
+        return $api->response([
+            'message' => __('重置链接有效，请输入新密码', 'AIYA'),
+            'login' => $user->user_login,
+        ]);
+    },
+    'permission_callback' => '__return_true',
+    'args' => [
+        'token' => [
+            'required' => true,
+            'type' => 'string',
+            'description' => '密码重置令牌'
+        ]
+    ]
+]);
+
+//通过重置链接设置新密码
+$api->register_route('reset_password', [
+    'methods' => 'POST',
+    'callback' => function (WP_REST_Request $request) use ($api) {
+        $token = sanitize_text_field((string) $request->get_param('token'));
+        $payload = aya_get_password_reset_payload($token);
+        $password = (string) $request->get_param('password');
+        $password_confirm = (string) $request->get_param('password_confirm');
+
+        if (!$payload) {
+            return $api->error_response('invalid_param', ['detail' => __('重置链接缺少必要参数', 'AIYA')]);
+        }
+
+        if (empty($password) || empty($password_confirm)) {
+            return $api->error_response('invalid_param', ['detail' => __('请输入新密码并确认', 'AIYA')]);
+        }
+
+        if ($password !== $password_confirm) {
+            return $api->error_response('invalid_param', ['detail' => __('两次输入的密码不一致', 'AIYA')]);
+        }
+
+        if (mb_strlen($password) < 8) {
+            return $api->error_response('invalid_param', ['detail' => __('密码长度不能少于8位', 'AIYA')]);
+        }
+        if (!preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password)) {
+            return $api->error_response('invalid_param', ['detail' => __('密码必须同时包含字母和数字', 'AIYA')]);
+        }
+
+        $user = check_password_reset_key($payload['key'], $payload['login']);
+        if (is_wp_error($user)) {
+            delete_transient($payload['token_key']);
+            return $api->error_response('invalid_key', ['detail' => __('重置链接无效或已过期，请重新申请找回密码', 'AIYA')]);
+        }
+
+        reset_password($user, $password);
+        delete_transient($payload['token_key']);
+
+        return $api->response([
+            'status' => 'done',
+            'message' => __('密码已重置，请使用新密码登录', 'AIYA'),
+            'redirect' => home_url('/'),
+        ]);
+    },
+    'permission_callback' => '__return_true',
+    'args' => [
+        'token' => [
+            'required' => true,
+            'type' => 'string',
+            'description' => '密码重置令牌'
+        ],
+        'password' => [
+            'required' => true,
+            'type' => 'string',
+            'description' => '新密码'
+        ],
+        'password_confirm' => [
+            'required' => true,
+            'type' => 'string',
+            'description' => '确认新密码'
         ]
     ]
 ]);
@@ -385,7 +525,13 @@ $api->register_route('update_password', [
         // Handle password update
         if (!empty($params['pass']) && !empty($params['pass_again'])) {
             if ($params['pass'] === $params['pass_again']) {
-                $userdata['user_pass'] = $params['pass'];
+                if (mb_strlen($params['pass']) < 8) {
+                    $errors[] = __('密码长度不能少于8位', 'AIYA');
+                } else if (!preg_match('/[A-Za-z]/', $params['pass']) || !preg_match('/[0-9]/', $params['pass'])) {
+                    $errors[] = __('密码必须同时包含字母和数字', 'AIYA');
+                } else {
+                    $userdata['user_pass'] = $params['pass'];
+                }
             } else {
                 $errors[] = __('两次输入的密码不一致', 'AIYA');
             }
