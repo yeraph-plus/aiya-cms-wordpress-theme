@@ -13,11 +13,9 @@ build
 dist
 dist-ssr
 *.local
-plugins
 
 # Editor directories and files
 .vscode/*
-.qoder/*
 .trae/*
 .idea
 .DS_Store
@@ -27,7 +25,7 @@ plugins
 *.sln
 *.sw?
 
-
+# Package lock files
 pnpm-lock.yaml
 yarn.lock
 package-lock.json
