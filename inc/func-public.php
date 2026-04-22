@@ -6,33 +6,11 @@ if (!defined('ABSPATH')) {
 
 /*
  * ------------------------------------------------------------------------------
- * 基本方法
+ * 一些备用的输出方法
  * ------------------------------------------------------------------------------
  */
 
-//转为输出
-function aya_echo($data, $special = 'attr')
-{
-    // 直接配置 WP 的清理方法
-    switch ($special) {
-        case 'html':
-            echo esc_html($data);
-            break;
-        case 'url':
-            echo esc_url($data);
-            break;
-        case 'js':
-            echo esc_js($data);
-            break;
-        case '':
-        case 'attr':
-        default:
-            echo esc_attr($data);
-            break;
-    }
-}
-
-//打印输出
+// 打印
 function aya_print($data, $return = false)
 {
     print_r('<pre>');
@@ -40,7 +18,7 @@ function aya_print($data, $return = false)
     print_r('</pre>');
 }
 
-//JSON输出
+// 打印 JSON 
 function aya_json_print($data)
 {
     //保持换行
@@ -56,30 +34,6 @@ function aya_json_print($data)
     }
 
     print_r('<pre>' . $json . '</pre>');
-}
-
-//获取主题版本
-function aya_theme_version()
-{
-    return wp_get_theme()->get('Version');
-}
-
-//判断开发模式
-function aya_is_debug()
-{
-    return (defined('WP_DEBUG') && WP_DEBUG === true);
-}
-
-//获取设置项
-function aya_opt($opt_name, $opt_slug, $opt_bool = false)
-{
-    return ($opt_bool) ? AYF::get_checked($opt_name, $opt_slug) : AYF::get_opt($opt_name, $opt_slug);
-}
-
-//获取文章meta的设置项
-function aya_post_opt($opt_name, $opt_box_id, $post_id = 0)
-{
-    return AYF::get_post_meta($opt_name, $opt_box_id, $post_id);
 }
 
 //URL参数时间窗口签名

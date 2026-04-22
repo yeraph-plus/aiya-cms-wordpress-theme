@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 import * as React from "react"
 import { Card, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -39,7 +41,7 @@ export default function UserSponsorSubscribe({ plans }: UserSponsorSubscribeProp
         <>
             <div className="flex items-center gap-2 pl-2 my-4">
                 <Receipt className="w-6 h-6 text-primary" />
-                <h2 className="text-xl font-bold tracking-tight">赞助计划</h2>
+                <h2 className="text-xl font-bold tracking-tight">{__('用户赞助计划', 'aiya-cms')}</h2>
             </div>
 
             {!hasPlans ? (
@@ -48,9 +50,9 @@ export default function UserSponsorSubscribe({ plans }: UserSponsorSubscribeProp
                         <PackageOpen className="text-muted-foreground size-10" />
                     </EmptyMedia>
                     <EmptyHeader>
-                        <EmptyTitle>暂无赞助计划</EmptyTitle>
+                        <EmptyTitle>{__('暂无用户赞助计划', 'aiya-cms')}</EmptyTitle>
                         <EmptyDescription>
-                            当前没有可用的赞助订阅方案，请稍后再来看看吧。
+                            {__('当前没有可用的赞助订阅方案，请稍后再来看看吧。', 'aiya-cms')}
                         </EmptyDescription>
                     </EmptyHeader>
                 </Empty>
@@ -73,9 +75,9 @@ export default function UserSponsorSubscribe({ plans }: UserSponsorSubscribeProp
                                 </CardDescription>
                             </CardHeader>
                             <CardFooter className="mt-auto ">
-                                <Button className="w-full" variant="outline" style={{ color: plan.color, borderColor: plan.color }} title="跳转到第三方支付接口">
+                                <Button className="w-full" variant="outline" style={{ color: plan.color, borderColor: plan.color }} title={__('跳转到第三方支付接口', 'aiya-cms')}>
                                     <ExternalLink className="mr-2 h-4 w-4" />
-                                    {plan.href_title || "跳转"}
+                                    {plan.href_title || __('跳转', 'aiya-cms')}
                                 </Button>
                             </CardFooter>
                         </Card>
@@ -88,14 +90,15 @@ export default function UserSponsorSubscribe({ plans }: UserSponsorSubscribeProp
                     <DialogHeader>
                         <DialogTitle className="flex items-center">
                             <SendToBack className="w-5 h-5 mr-2" />
-                            正在处理</DialogTitle>
+                            {__('正在处理', 'aiya-cms')}
+                        </DialogTitle>
                         <DialogDescription className="pt-4 text-base">
-                            {selectedPlan?.triggered_msg || "请在新打开的页面中完成操作..."}
+                            {selectedPlan?.triggered_msg || __('请在新打开的页面中完成操作...', 'aiya-cms')}
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <Button variant="secondary" onClick={() => setOpen(false)}>关闭</Button>
-                        <Button onClick={() => window.location.reload()}>刷新页面</Button>
+                        <Button variant="secondary" onClick={() => setOpen(false)}>{__('关闭', 'aiya-cms')}</Button>
+                        <Button onClick={() => window.location.reload()}>{__('刷新页面', 'aiya-cms')}</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

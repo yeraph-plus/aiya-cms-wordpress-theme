@@ -1,0 +1,2219 @@
+# Copyright (C) 2026 Yeraph
+# This file is distributed under the GNU General Public License v3.0.
+msgid ""
+msgstr ""
+"Project-Id-Version: AIYA-CMS 3.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/aiya-cms-wordpress-theme\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-04-23T04:14:48+08:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: aiya-cms\n"
+
+#. Theme Name of the theme
+#: style.css:2
+#: inc/settings/opt-basic.php:22
+msgid "AIYA-CMS"
+msgstr ""
+
+#. Theme URI of the theme
+#. Author URI of the theme
+#: style.css:3
+#: style.css:9
+msgid "https://www.yeraph.com/"
+msgstr ""
+
+#. Description of the theme
+#: style.css:4
+msgid "一款全旧的 WordPress CMS主题"
+msgstr ""
+
+#. Author of the theme
+#: style.css:8
+msgid "Yeraph"
+msgstr ""
+
+#: functions.php:78
+msgid "跳转页面"
+msgstr ""
+
+#: functions.php:86
+msgid "外部链接提示"
+msgstr ""
+
+#: functions.php:94
+#: inc/func-shotcodes.php:540
+#: inc/func-user.php:703
+msgid "获取订阅"
+msgstr ""
+
+#: functions.php:102
+msgid "收藏列表"
+msgstr ""
+
+#: functions.php:110
+msgid "用户设置"
+msgstr ""
+
+#: functions.php:118
+msgid "重置密码"
+msgstr ""
+
+#: functions.php:130
+#: inc/func-vite-helpers.php:69
+msgid "AIYA-CMS 启动错误"
+msgstr ""
+
+#: functions.php:131
+msgid "AIYA-CMS 未找到主题框架依赖，请安装并激活 AIYA-Optimize 插件。"
+msgstr ""
+
+#: functions.php:337
+msgid "感谢使用 <b>AIYA-CMS</b> 主题，欢迎访问 <a href=\"https://www.yeraph.com\" target=\"_blank\">Yeraph Studio</a> 了解更多。"
+msgstr ""
+
+#: functions.php:383
+msgid "主要菜单"
+msgstr ""
+
+#: functions.php:384
+msgid "页脚菜单（单层级）"
+msgstr ""
+
+#: functions.php:385
+msgid "小工具菜单"
+msgstr ""
+
+#: functions.php:391
+#: inc/core/WP_Breadcrumb.php:29
+#: templates/index.php:168
+msgid "首页"
+msgstr ""
+
+#: functions.php:392
+msgid "归档页面"
+msgstr ""
+
+#: functions.php:393
+msgid "正文页面"
+msgstr ""
+
+#: functions.php:394
+msgid "用户页面"
+msgstr ""
+
+#: inc/core/WP_Breadcrumb.php:57
+msgid "标签"
+msgstr ""
+
+#: inc/core/WP_Breadcrumb.php:67
+#: inc/func-user.php:68
+msgid "作者"
+msgstr ""
+
+#: inc/core/WP_Breadcrumb.php:128
+msgid "媒体库"
+msgstr ""
+
+#: inc/core/WP_Breadcrumb.php:222
+#, php-format
+msgid "搜索: %s"
+msgstr ""
+
+#: inc/core/WP_Breadcrumb.php:233
+msgid "404 NOT FOUND"
+msgstr ""
+
+#: inc/core/WP_Breadcrumb.php:272
+#: inc/core/WP_Breadcrumb.php:277
+#: inc/core/WP_Breadcrumb.php:286
+#, php-format
+msgid "%s年"
+msgstr ""
+
+#: inc/core/WP_Breadcrumb.php:281
+#: inc/core/WP_Breadcrumb.php:290
+#, php-format
+msgid "%s月"
+msgstr ""
+
+#: inc/core/WP_Breadcrumb.php:294
+#, php-format
+msgid "%s日"
+msgstr ""
+
+#: inc/core/WP_Breadcrumb.php:305
+#, php-format
+msgid "第 %s 页"
+msgstr ""
+
+#: inc/core/WP_Paged.php:91
+msgid "&laquo; Previous"
+msgstr ""
+
+#: inc/core/WP_Paged.php:92
+msgid "Next &raquo;"
+msgstr ""
+
+#: inc/core/WP_Paged.php:95
+#, php-format
+msgid "Page %1$s of %2$s"
+msgstr ""
+
+#: inc/core/WP_Paged.php:304
+#: templates/fragments/pagination.php:31
+#: templates/fragments/pagination.php:33
+msgid "上一页"
+msgstr ""
+
+#: inc/core/WP_Paged.php:305
+#: templates/fragments/pagination.php:36
+#: templates/fragments/pagination.php:38
+msgid "下一页"
+msgstr ""
+
+#: inc/core/WP_Post.php:122
+msgid "无标题"
+msgstr ""
+
+#: inc/core/WP_Post.php:148
+msgid "待审"
+msgstr ""
+
+#: inc/core/WP_Post.php:151
+msgid "定时发布"
+msgstr ""
+
+#: inc/core/WP_Post.php:154
+msgid "私密"
+msgstr ""
+
+#: inc/core/WP_Post.php:157
+msgid "草稿"
+msgstr ""
+
+#: inc/core/WP_Post.php:160
+msgid "自动草稿"
+msgstr ""
+
+#: inc/core/WP_Post.php:163
+msgid "修订版本"
+msgstr ""
+
+#: inc/core/WP_Post.php:166
+msgid "已删除"
+msgstr ""
+
+#: inc/core/WP_Post.php:175
+#: inc/func-tweet-post.php:55
+msgid "置顶"
+msgstr ""
+
+#: inc/core/WP_Post.php:179
+msgid "密码保护"
+msgstr ""
+
+#: inc/core/WP_Post.php:184
+msgid "最新"
+msgstr ""
+
+#: inc/core/WP_Post.php:227
+msgid "这篇文章受密码保护，输入密码才能阅读。"
+msgstr ""
+
+#: inc/core/WP_Post.php:247
+msgid "这篇文章没有摘要内容。"
+msgstr ""
+
+#: inc/core/WP_Post.php:264
+msgid "评论已关闭"
+msgstr ""
+
+#: inc/core/WP_Post.php:268
+msgid "条评论"
+msgstr ""
+
+#: inc/core/WP_Post.php:270
+msgid "无人评论"
+msgstr ""
+
+#: inc/core/WP_Post.php:280
+msgid "前"
+msgstr ""
+
+#: inc/core/WP_Term.php:91
+msgid "无名称"
+msgstr ""
+
+#: inc/func-api-router.php:24
+msgid "安全退出失败"
+msgstr ""
+
+#: inc/func-api-router.php:29
+msgid "已退出登录"
+msgstr ""
+
+#: inc/func-api-router.php:45
+#: inc/func-api-router.php:155
+#: inc/func-api-router.php:246
+#: inc/func-api-router.php:673
+msgid "客户端已失效，请刷新页面后重试"
+msgstr ""
+
+#: inc/func-api-router.php:66
+msgid "登录邮箱或密码错误"
+msgstr ""
+
+#: inc/func-api-router.php:70
+msgid "欢迎回来，"
+msgstr ""
+
+#: inc/func-api-router.php:166
+msgid "用户名、邮箱或密码不能为空"
+msgstr ""
+
+#: inc/func-api-router.php:170
+#: inc/func-api-router.php:359
+#: inc/func-api-router.php:538
+msgid "两次输入的密码不一致"
+msgstr ""
+
+#: inc/func-api-router.php:174
+#: inc/func-api-router.php:363
+#: inc/func-api-router.php:531
+msgid "密码长度不能少于8位"
+msgstr ""
+
+#: inc/func-api-router.php:177
+#: inc/func-api-router.php:366
+#: inc/func-api-router.php:533
+msgid "密码必须同时包含字母和数字"
+msgstr ""
+
+#: inc/func-api-router.php:181
+#: inc/func-api-router.php:259
+#: inc/func-api-router.php:444
+msgid "邮箱格式不正确"
+msgstr ""
+
+#: inc/func-api-router.php:184
+msgid "此邮箱已被注册"
+msgstr ""
+
+#: inc/func-api-router.php:199
+msgid "无法创建用户，请重试"
+msgstr ""
+
+#: inc/func-api-router.php:213
+msgid "欢迎你，"
+msgstr ""
+
+#: inc/func-api-router.php:254
+msgid "请提供注册邮箱"
+msgstr ""
+
+#: inc/func-api-router.php:265
+msgid "如果邮箱存在将发送邮件"
+msgstr ""
+
+#: inc/func-api-router.php:271
+msgid "无法生成密码重置链接，请稍后再试"
+msgstr ""
+
+#: inc/func-api-router.php:279
+#, php-format
+msgid "[%s] 密码重置"
+msgstr ""
+
+#: inc/func-api-router.php:282
+msgid "有人请求重置以下账号的密码："
+msgstr ""
+
+#: inc/func-api-router.php:284
+#, php-format
+msgid "用户名: %s"
+msgstr ""
+
+#: inc/func-api-router.php:285
+msgid "如果这不是您本人的操作，请忽略此邮件。"
+msgstr ""
+
+#: inc/func-api-router.php:286
+msgid "要重置密码，请访问以下链接:"
+msgstr ""
+
+#: inc/func-api-router.php:287
+msgid "此链接仅在30分钟内有效。"
+msgstr ""
+
+#: inc/func-api-router.php:294
+msgid "发送重置密码邮件失败，请稍后再试"
+msgstr ""
+
+#: inc/func-api-router.php:297
+msgid "密码重置链接已发送到您的邮箱，请查收"
+msgstr ""
+
+#: inc/func-api-router.php:318
+#: inc/func-api-router.php:351
+msgid "重置链接缺少必要参数"
+msgstr ""
+
+#: inc/func-api-router.php:324
+#: inc/func-api-router.php:372
+msgid "重置链接无效或已过期，请重新申请找回密码"
+msgstr ""
+
+#: inc/func-api-router.php:328
+msgid "重置链接有效，请输入新密码"
+msgstr ""
+
+#: inc/func-api-router.php:355
+msgid "请输入新密码并确认"
+msgstr ""
+
+#: inc/func-api-router.php:380
+msgid "密码已重置，请使用新密码登录"
+msgstr ""
+
+#: inc/func-api-router.php:407
+#: inc/func-api-router.php:518
+#: inc/func-api-router.php:582
+#: inc/func-api-router.php:621
+msgid "验证失败"
+msgstr ""
+
+#: inc/func-api-router.php:437
+msgid "不支持的语言设置"
+msgstr ""
+
+#: inc/func-api-router.php:449
+msgid "该邮箱已被使用"
+msgstr ""
+
+#: inc/func-api-router.php:473
+msgid "资料已更新"
+msgstr ""
+
+#: inc/func-api-router.php:541
+msgid "请输入新密码"
+msgstr ""
+
+#: inc/func-api-router.php:556
+msgid "密码已更新，请重新登录"
+msgstr ""
+
+#: inc/func-api-router.php:684
+msgid "未定义的接口"
+msgstr ""
+
+#: inc/func-api-router.php:695
+msgid "系统错误"
+msgstr ""
+
+#: inc/func-api-router.php:701
+msgid "订单激活成功"
+msgstr ""
+
+#: inc/func-api-router.php:732
+msgid "安全验证失败，请刷新页面后重试"
+msgstr ""
+
+#: inc/func-api-router.php:740
+msgid "非法访问"
+msgstr ""
+
+#: inc/func-api-router.php:746
+msgid "文章不存在"
+msgstr ""
+
+#: inc/func-api-router.php:753
+msgid "文件访问未获授权"
+msgstr ""
+
+#: inc/func-api-router.php:760
+msgid "未获授权"
+msgstr ""
+
+#: inc/func-api-router.php:806
+msgid "未定义的请求类型"
+msgstr ""
+
+#: inc/func-api-router.php:814
+msgid "未知错误"
+msgstr ""
+
+#: inc/func-api-router.php:817
+msgid "本地服务器发送请求失败"
+msgstr ""
+
+#: inc/func-api-router.php:819
+msgid "参数错误"
+msgstr ""
+
+#: inc/func-api-router.php:821
+msgid "令牌失效"
+msgstr ""
+
+#: inc/func-api-router.php:823
+msgid "文件访问被拒绝"
+msgstr ""
+
+#: inc/func-api-router.php:825
+msgid "文件/目录位置不存在，或搜索功能未就绪"
+msgstr ""
+
+#: inc/func-api-router.php:827
+msgid "请先完成后台设置"
+msgstr ""
+
+#: inc/func-api-router.php:829
+msgid "访问错误"
+msgstr ""
+
+#: inc/func-payment.php:307
+msgid "支持创作，用爱发电"
+msgstr ""
+
+#: inc/func-payment.php:308
+msgid "查看爱发电创作者主页"
+msgstr ""
+
+#: inc/func-payment.php:311
+#: inc/settings/opt-access.php:78
+msgid "爱发电主页"
+msgstr ""
+
+#: inc/func-payment.php:312
+msgid "在当前页面输入爱发电平台订单号激活本站订阅即可查看专属内容"
+msgstr ""
+
+#: inc/func-payment.php:329
+#, php-format
+msgid "来自 「%s」 用户 %s 发送的赞助订单~"
+msgstr ""
+
+#: inc/func-payment.php:341
+msgid "自选金额赞助"
+msgstr ""
+
+#: inc/func-payment.php:342
+msgid "在爱发电支持我"
+msgstr ""
+
+#: inc/func-payment.php:343
+msgid "自选金额"
+msgstr ""
+
+#: inc/func-payment.php:345
+#: inc/func-payment.php:366
+msgid "爱发电订阅"
+msgstr ""
+
+#: inc/func-payment.php:346
+msgid "已经支持，稍后并刷新页面即可查看赞助记录"
+msgstr ""
+
+#: inc/func-payment.php:362
+msgid "赞助方案订阅"
+msgstr ""
+
+#: inc/func-payment.php:363
+msgid "订阅我的赞助方案"
+msgstr ""
+
+#: inc/func-payment.php:367
+msgid "已经支持，稍后并刷新页面即可查看专属内容"
+msgstr ""
+
+#: inc/func-payment.php:384
+msgid "爱发电接口不可用，请联系管理员"
+msgstr ""
+
+#: inc/func-payment.php:392
+msgid "此订单已被激活过了，请查看订单记录"
+msgstr ""
+
+#: inc/func-payment.php:403
+msgid "没有查询到订单，请确认订单号是否正确，或于爱发电平台私信作者询问"
+msgstr ""
+
+#: inc/func-payment.php:417
+msgid "订单号："
+msgstr ""
+
+#: inc/func-payment.php:418
+msgid "赞助方案："
+msgstr ""
+
+#: inc/func-payment.php:419
+msgid "赞助周期："
+msgstr ""
+
+#: inc/func-payment.php:419
+msgid "个月"
+msgstr ""
+
+#: inc/func-payment.php:420
+msgid "金额："
+msgstr ""
+
+#: inc/func-payment.php:420
+msgid "（折后"
+msgstr ""
+
+#: inc/func-payment.php:420
+msgid "）"
+msgstr ""
+
+#: inc/func-payment.php:421
+msgid "留言："
+msgstr ""
+
+#: inc/func-payment.php:421
+msgid "无留言"
+msgstr ""
+
+#: inc/func-payment.php:421
+#: inc/func-payment.php:422
+msgid "无"
+msgstr ""
+
+#: inc/func-payment.php:422
+msgid "兑换码："
+msgstr ""
+
+#: inc/func-payment.php:424
+msgid "刷新页面即可查看激活记录"
+msgstr ""
+
+#: inc/func-payment.php:424
+msgid "当前无法创建激活，稍后重试"
+msgstr ""
+
+#: inc/func-payment.php:493
+msgid "请先登录"
+msgstr ""
+
+#: inc/func-payment.php:500
+msgid "无效的兑换码"
+msgstr ""
+
+#: inc/func-payment.php:504
+#: inc/func-payment.php:516
+msgid "兑换码已被使用"
+msgstr ""
+
+#: inc/func-payment.php:523
+msgid "兑换成功，权限已激活"
+msgstr ""
+
+#: inc/func-payment.php:531
+msgid "激活失败，可能是您已拥有该时段的权限或系统错误"
+msgstr ""
+
+#: inc/func-payment.php:540
+#: inc/func-payment.php:541
+msgid "兑换码管理"
+msgstr ""
+
+#: inc/func-payment.php:560
+msgid "所有兑换码已删除"
+msgstr ""
+
+#: inc/func-payment.php:581
+#, php-format
+msgid "成功生成 %d 个兑换码"
+msgstr ""
+
+#: inc/func-payment.php:583
+msgid "请输入有效的数量和天数"
+msgstr ""
+
+#: inc/func-payment.php:605
+msgid "激活码管理"
+msgstr ""
+
+#: inc/func-payment.php:609
+msgid "批量生成兑换码"
+msgstr ""
+
+#: inc/func-payment.php:614
+msgid "生成数量"
+msgstr ""
+
+#: inc/func-payment.php:618
+msgid "有效期天数"
+msgstr ""
+
+#: inc/func-payment.php:622
+msgid "前缀 (可选)"
+msgstr ""
+
+#: inc/func-payment.php:627
+msgid "生成兑换码"
+msgstr ""
+
+#: inc/func-payment.php:631
+msgid "确定要删除所有兑换码吗？此操作不可恢复！"
+msgstr ""
+
+#: inc/func-payment.php:633
+msgid "删除所有已创建的激活码"
+msgstr ""
+
+#: inc/func-payment.php:638
+msgid "兑换码列表"
+msgstr ""
+
+#: inc/func-payment.php:644
+msgid "兑换码"
+msgstr ""
+
+#: inc/func-payment.php:645
+#: inc/func-user.php:557
+msgid "天数"
+msgstr ""
+
+#: inc/func-payment.php:646
+#: inc/func-user.php:559
+msgid "状态"
+msgstr ""
+
+#: inc/func-payment.php:647
+msgid "使用者ID"
+msgstr ""
+
+#: inc/func-payment.php:648
+msgid "使用时间"
+msgstr ""
+
+#: inc/func-payment.php:649
+msgid "创建时间"
+msgstr ""
+
+#: inc/func-payment.php:661
+msgid "已使用"
+msgstr ""
+
+#: inc/func-payment.php:663
+msgid "未使用"
+msgstr ""
+
+#: inc/func-payment.php:681
+msgid "暂无数据"
+msgstr ""
+
+#: inc/func-payment.php:691
+#, php-format
+msgid "%s 个项目"
+msgstr ""
+
+#: inc/func-shotcodes.php:13
+msgid "隐藏文本段"
+msgstr ""
+
+#: inc/func-shotcodes.php:14
+msgid "包含在此简码内的文本不会在前台显示，用于充当文章编辑时的注释，或隐藏一段文本"
+msgstr ""
+
+#: inc/func-shotcodes.php:20
+#: inc/func-shotcodes.php:66
+#: inc/func-shotcodes.php:89
+#: inc/func-shotcodes.php:124
+#: inc/func-shotcodes.php:161
+#: inc/func-shotcodes.php:177
+#: inc/func-shotcodes.php:200
+#: inc/func-shotcodes.php:223
+#: inc/widgets/widget-text-html.php:18
+msgid "内容"
+msgstr ""
+
+#: inc/func-shotcodes.php:21
+msgid "在这里输入要隐藏的文本"
+msgstr ""
+
+#: inc/func-shotcodes.php:27
+msgid "作为注释输出"
+msgstr ""
+
+#: inc/func-shotcodes.php:28
+msgid "使当前段落作为 html 注释输出到前台页面，或者完全不输出"
+msgstr ""
+
+#: inc/func-shotcodes.php:36
+msgid "E-mail 链接"
+msgstr ""
+
+#: inc/func-shotcodes.php:37
+msgid "将电子邮件地址字符转换为 HTML 实体显示，避免被爬虫抓取"
+msgstr ""
+
+#: inc/func-shotcodes.php:43
+msgid "邮件地址"
+msgstr ""
+
+#: inc/func-shotcodes.php:44
+msgid "例如： admin@example.com"
+msgstr ""
+
+#: inc/func-shotcodes.php:50
+msgid "使用 mailto 链接"
+msgstr ""
+
+#: inc/func-shotcodes.php:51
+msgid "转换为 mailto 链接，或直接显示"
+msgstr ""
+
+#: inc/func-shotcodes.php:59
+msgid "快捷列表（li）"
+msgstr ""
+
+#: inc/func-shotcodes.php:60
+msgid "将文本按行转换为列表显示"
+msgstr ""
+
+#: inc/func-shotcodes.php:67
+msgid "按每行顺序格式化结构为：<li>第1行</li>/<li>第2行</li>"
+msgstr ""
+
+#: inc/func-shotcodes.php:73
+msgid "编号列表"
+msgstr ""
+
+#: inc/func-shotcodes.php:74
+msgid "启用此项将显示为编号列表，否则使用符号列表"
+msgstr ""
+
+#: inc/func-shotcodes.php:82
+msgid "快捷列表（Column）"
+msgstr ""
+
+#: inc/func-shotcodes.php:83
+msgid "将文本按行转换为描述列表显示"
+msgstr ""
+
+#: inc/func-shotcodes.php:90
+msgid "按每行顺序格式化结构为：<dt>第1行</dt>/<dd>第2行</dd>"
+msgstr ""
+
+#: inc/func-shotcodes.php:96
+msgid "列表比例"
+msgstr ""
+
+#: inc/func-shotcodes.php:97
+msgid "选择描述列表的宽度比例"
+msgstr ""
+
+#: inc/func-shotcodes.php:99
+msgid "1/4列表"
+msgstr ""
+
+#: inc/func-shotcodes.php:100
+msgid "1/2列表"
+msgstr ""
+
+#: inc/func-shotcodes.php:101
+msgid "3/4列表"
+msgstr ""
+
+#: inc/func-shotcodes.php:110
+msgid "折叠面板"
+msgstr ""
+
+#: inc/func-shotcodes.php:111
+msgid "创建一个折叠面板，用于在文章中可以展开或收起的内容"
+msgstr ""
+
+#: inc/func-shotcodes.php:117
+#: inc/func-shotcodes.php:140
+#: inc/func-shotcodes.php:193
+#: inc/func-shotcodes.php:216
+#: inc/settings/opt-land.php:95
+#: inc/settings/opt-land.php:116
+#: inc/settings/opt-land.php:175
+#: inc/settings/opt-land.php:201
+#: inc/settings/opt-land.php:230
+#: inc/settings/opt-land.php:259
+#: inc/settings/opt-land.php:281
+#: inc/widgets/widget-add-menu.php:18
+#: inc/widgets/widget-comments.php:18
+#: inc/widgets/widget-post-comments.php:18
+#: inc/widgets/widget-post-likes.php:18
+#: inc/widgets/widget-post-newest.php:18
+#: inc/widgets/widget-post-random.php:18
+#: inc/widgets/widget-post-views.php:18
+#: inc/widgets/widget-tag-cloud.php:18
+msgid "标题"
+msgstr ""
+
+#: inc/func-shotcodes.php:118
+msgid "折叠面板的标题"
+msgstr ""
+
+#: inc/func-shotcodes.php:119
+#: inc/func-shotcodes.php:142
+msgid "点击展开内容"
+msgstr ""
+
+#: inc/func-shotcodes.php:125
+msgid "折叠面板的内容"
+msgstr ""
+
+#: inc/func-shotcodes.php:133
+msgid "警告卡片"
+msgstr ""
+
+#: inc/func-shotcodes.php:134
+msgid "创建一个警告提示"
+msgstr ""
+
+#: inc/func-shotcodes.php:141
+msgid "警告提示的标题"
+msgstr ""
+
+#: inc/func-shotcodes.php:147
+msgid "级别"
+msgstr ""
+
+#: inc/func-shotcodes.php:148
+msgid "警告提示的级别"
+msgstr ""
+
+#: inc/func-shotcodes.php:150
+#: inc/func-wp-emends.php:503
+msgid "默认"
+msgstr ""
+
+#: inc/func-shotcodes.php:151
+#: inc/settings/opt-notify.php:47
+msgid "警告"
+msgstr ""
+
+#: inc/func-shotcodes.php:152
+#: inc/settings/opt-notify.php:44
+msgid "信息"
+msgstr ""
+
+#: inc/func-shotcodes.php:153
+#: inc/settings/opt-notify.php:46
+msgid "成功"
+msgstr ""
+
+#: inc/func-shotcodes.php:154
+#: inc/settings/opt-notify.php:48
+msgid "错误"
+msgstr ""
+
+#: inc/func-shotcodes.php:162
+msgid "警告提示的内容"
+msgstr ""
+
+#: inc/func-shotcodes.php:170
+msgid "一键复制"
+msgstr ""
+
+#: inc/func-shotcodes.php:171
+msgid "创建一个提供复制功能的卡片，用于快捷复制文本或打开链接"
+msgstr ""
+
+#: inc/func-shotcodes.php:178
+msgid "需要被复制的文本或链接"
+msgstr ""
+
+#: inc/func-shotcodes.php:186
+msgid "赞助者可见"
+msgstr ""
+
+#: inc/func-shotcodes.php:187
+msgid "创建一个赞助后的内容块，用于在文章中显示仅限赞助商可见的内容"
+msgstr ""
+
+#: inc/func-shotcodes.php:194
+#: inc/func-shotcodes.php:217
+msgid "内容块的标题"
+msgstr ""
+
+#: inc/func-shotcodes.php:195
+msgid "支援者限定"
+msgstr ""
+
+#: inc/func-shotcodes.php:201
+msgid "赞助者可见的内容"
+msgstr ""
+
+#: inc/func-shotcodes.php:209
+msgid "登录后可见"
+msgstr ""
+
+#: inc/func-shotcodes.php:210
+msgid "创建一个登录后可见的内容块，用于在文章中显示仅限登录用户可见的内容"
+msgstr ""
+
+#: inc/func-shotcodes.php:218
+msgid "登录后下载"
+msgstr ""
+
+#: inc/func-shotcodes.php:224
+msgid "登录后可见的内容"
+msgstr ""
+
+#: inc/func-shotcodes.php:232
+msgid "嵌入B站视频"
+msgstr ""
+
+#: inc/func-shotcodes.php:233
+msgid "嵌入B站的H5播放器到页面"
+msgstr ""
+
+#: inc/func-shotcodes.php:239
+msgid "BV号"
+msgstr ""
+
+#: inc/func-shotcodes.php:240
+msgid "BV号，例如BV1UT42167xb"
+msgstr ""
+
+#: inc/func-shotcodes.php:246
+msgid "使用 HTML5 播放器"
+msgstr ""
+
+#: inc/func-shotcodes.php:247
+msgid "切换使用B站标准的外链播放器或者移动端HTML5播放器"
+msgstr ""
+
+#: inc/func-shotcodes.php:255
+msgid "嵌入爱发电主页"
+msgstr ""
+
+#: inc/func-shotcodes.php:256
+msgid "嵌入爱发电的主页或按钮到页面"
+msgstr ""
+
+#: inc/func-shotcodes.php:262
+msgid "后缀"
+msgstr ""
+
+#: inc/func-shotcodes.php:269
+msgid "使用按钮链接"
+msgstr ""
+
+#: inc/func-shotcodes.php:278
+msgid "嵌入GitHub仓库"
+msgstr ""
+
+#: inc/func-shotcodes.php:279
+msgid "嵌入GitHub仓库卡片到页面（填写“用户名/仓库名”）"
+msgstr ""
+
+#: inc/func-shotcodes.php:533
+msgid "赞助内容"
+msgstr ""
+
+#: inc/func-shotcodes.php:538
+msgid "此内容仅限订阅用户可见，请登录后查看"
+msgstr ""
+
+#: inc/func-shotcodes.php:540
+msgid "仅限订阅用户可见："
+msgstr ""
+
+#: inc/func-shotcodes.php:570
+msgid "隐藏内容"
+msgstr ""
+
+#: inc/func-shotcodes.php:572
+msgid "仅限登录后查看，请先登录"
+msgstr ""
+
+#: inc/func-tweet-post.php:31
+#: templates/archive-tweet.php:81
+msgid "推文"
+msgstr ""
+
+#: inc/func-tweet-post.php:43
+msgid "推文标签"
+msgstr ""
+
+#: inc/func-tweet-post.php:68
+msgid "置顶这篇文章"
+msgstr ""
+
+#: inc/func-user.php:57
+msgid "收藏夹"
+msgstr ""
+
+#: inc/func-user.php:60
+msgid "暂无收藏文章"
+msgstr ""
+
+#: inc/func-user.php:62
+#, php-format
+msgid "共有 <strong>%d</strong> 篇收藏文章"
+msgstr ""
+
+#: inc/func-user.php:67
+msgid "文章标题"
+msgstr ""
+
+#: inc/func-user.php:69
+msgid "发布日期"
+msgstr ""
+
+#: inc/func-user.php:413
+msgid "赞助权限计数器"
+msgstr ""
+
+#: inc/func-user.php:492
+msgid "安全验证失败，请重试"
+msgstr ""
+
+#: inc/func-user.php:500
+msgid "用户订阅数据已修复"
+msgstr ""
+
+#: inc/func-user.php:508
+msgid "赞助者管理"
+msgstr ""
+
+#: inc/func-user.php:510
+msgid "当前订阅状态："
+msgstr ""
+
+#: inc/func-user.php:512
+msgid "已被管理员强制取消"
+msgstr ""
+
+#: inc/func-user.php:514
+msgid "有效"
+msgstr ""
+
+#: inc/func-user.php:515
+#, php-format
+msgid "剩余 <strong>%d</strong> 天"
+msgstr ""
+
+#: inc/func-user.php:517
+msgid "无效"
+msgstr ""
+
+#: inc/func-user.php:522
+msgid "重新验证订阅有效性"
+msgstr ""
+
+#: inc/func-user.php:525
+msgid "重新计算到期日"
+msgstr ""
+
+#: inc/func-user.php:528
+msgid "恢复赞助者权限"
+msgstr ""
+
+#: inc/func-user.php:533
+msgid "取消此用户赞助者权限"
+msgstr ""
+
+#: inc/func-user.php:536
+msgid "勾选后，该用户即使有赞助订单生效也视为非赞助者。"
+msgstr ""
+
+#: inc/func-user.php:540
+msgid "手动添加赞助订单"
+msgstr ""
+
+#: inc/func-user.php:543
+msgid "输入要添加的赞助天数（必填）"
+msgstr ""
+
+#: inc/func-user.php:547
+msgid "赞助订单记录"
+msgstr ""
+
+#: inc/func-user.php:549
+#, php-format
+msgid "累计已赞助 <strong>%d</strong> 天"
+msgstr ""
+
+#: inc/func-user.php:555
+msgid "订单号"
+msgstr ""
+
+#: inc/func-user.php:556
+msgid "开始时间"
+msgstr ""
+
+#: inc/func-user.php:558
+msgid "来源"
+msgstr ""
+
+#: inc/func-user.php:675
+msgid "管理后台"
+msgstr ""
+
+#: inc/func-user.php:688
+msgid "编辑当前文章"
+msgstr ""
+
+#: inc/func-user.php:696
+msgid "个人主页"
+msgstr ""
+
+#: inc/func-user.php:710
+msgid "我的收藏"
+msgstr ""
+
+#: inc/func-user.php:716
+msgid "个人资料"
+msgstr ""
+
+#: inc/func-vite-helpers.php:70
+msgid "没有找到生产环境文件，请检查 Vite 配置是否正确。"
+msgstr ""
+
+#: inc/func-wp-emends.php:155
+msgid "独立页面"
+msgstr ""
+
+#: inc/func-wp-emends.php:487
+msgid "小贴士"
+msgstr ""
+
+#: inc/func-wp-emends.php:498
+msgid "提示框颜色"
+msgstr ""
+
+#: inc/func-wp-emends.php:499
+msgid "选择提示框样式，提示用户重要的消息"
+msgstr ""
+
+#: inc/func-wp-emends.php:504
+msgid "信息蓝"
+msgstr ""
+
+#: inc/func-wp-emends.php:505
+msgid "成功绿"
+msgstr ""
+
+#: inc/func-wp-emends.php:506
+msgid "警告黄"
+msgstr ""
+
+#: inc/func-wp-emends.php:507
+msgid "危险红"
+msgstr ""
+
+#: inc/func-wp-emends.php:521
+msgid "更新中"
+msgstr ""
+
+#: inc/func-wp-emends.php:522
+msgid "这篇文章正在更新中，可能还会有新的内容添加。"
+msgstr ""
+
+#: inc/func-wp-emends.php:525
+msgid "需要更新"
+msgstr ""
+
+#: inc/func-wp-emends.php:526
+msgid "这篇文章的信息已经失效，当前内容仅供参考。"
+msgstr ""
+
+#: inc/func-wp-emends.php:529
+msgid "已废弃"
+msgstr ""
+
+#: inc/func-wp-emends.php:530
+msgid "这篇文章的信息已经废弃，不再更新。"
+msgstr ""
+
+#: inc/func-wp-emends.php:533
+msgid "危险操作"
+msgstr ""
+
+#: inc/func-wp-emends.php:534
+msgid "这篇教程包含修改系统核心文件等操作，请注意备份。"
+msgstr ""
+
+#: inc/func-wp-emends.php:537
+msgid "来源不明"
+msgstr ""
+
+#: inc/func-wp-emends.php:538
+msgid "这篇文章的信息来源未经证明，捕风捉影罢了。"
+msgstr ""
+
+#: inc/func-wp-emends.php:571
+msgid "时效性提示"
+msgstr ""
+
+#: inc/func-wp-emends.php:573
+#, php-format
+msgid "这篇文章发布于 %s 前，部分信息可能已过时，请留意。"
+msgstr ""
+
+#: inc/settings/opt-access.php:9
+msgid "订阅接入"
+msgstr ""
+
+#: inc/settings/opt-access.php:12
+msgid "AIYA-CMS 主题，第三方平台接口设置"
+msgstr ""
+
+#: inc/settings/opt-access.php:20
+msgid "社交登录设置"
+msgstr ""
+
+#: inc/settings/opt-access.php:47
+msgid "赞助者订阅设置"
+msgstr ""
+
+#: inc/settings/opt-access.php:51
+msgid "启用赞助者权限模块"
+msgstr ""
+
+#: inc/settings/opt-access.php:52
+msgid "启用赞助者权限和相关功能，允许用户购买查看专属内容"
+msgstr ""
+
+#: inc/settings/opt-access.php:58
+msgid "订阅说明页面"
+msgstr ""
+
+#: inc/settings/opt-access.php:59
+msgid "指定一个页面，展示于赞助者组件模块下方"
+msgstr ""
+
+#: inc/settings/opt-access.php:66
+msgid "爱发电接口设置"
+msgstr ""
+
+#: inc/settings/opt-access.php:70
+msgid "此接口用于完成爱发电平台订阅与站内赞助者系统联动，请根据 [url=https://afdian.com/dashboard/dev]爱发电开发者[/url] 页面完成设置（账号需要为爱发电认证用户）。"
+msgstr ""
+
+#: inc/settings/opt-access.php:74
+msgid "自动回调或用户手动激活爱发电订单时，系统仅会验证用户在爱发电平台来源的赞助订单有效性[b]（即任意赞助金额均会为用户激活相同的权限）[/b]。如果要求用户赞助最小金额，请在爱发电的主页设置中隐藏“自选金额赞助”。"
+msgstr ""
+
+#: inc/settings/opt-access.php:79
+msgid "你的爱发电主页名，[b]仅需填写网址SLUG部分[/b]，即 [code]https://afdian.net/a/{SLUG}[/code]"
+msgstr ""
+
+#: inc/settings/opt-access.php:85
+msgid "开发者用户 ID"
+msgstr ""
+
+#: inc/settings/opt-access.php:86
+msgid "你的爱发电账号的 [code]user_id[/code]，可在开发者页面查询"
+msgstr ""
+
+#: inc/settings/opt-access.php:92
+msgid "开发者专属 Token"
+msgstr ""
+
+#: inc/settings/opt-access.php:93
+msgid "由爱发电提供给你的 Token ，可在开发者页面查询，[b]切勿泄露，意外损失时请及时重置[/b]"
+msgstr ""
+
+#: inc/settings/opt-access.php:99
+msgid "使用自动回调时，请在爱发电开发者页面中设置此站点的回调地址：[code]"
+msgstr ""
+
+#: inc/settings/opt-access.php:103
+msgid "使用爱发电激活订阅"
+msgstr ""
+
+#: inc/settings/opt-access.php:104
+msgid "当用户通过爱发电平台支付后获得网站内的赞助者权限"
+msgstr ""
+
+#: inc/settings/opt-access.php:110
+msgid "自动回调方式"
+msgstr ""
+
+#: inc/settings/opt-access.php:111
+msgid "设置支持自动回调激活的方案，显示于主题的 “获取订阅”页面"
+msgstr ""
+
+#: inc/settings/opt-access.php:115
+msgid "不使用"
+msgstr ""
+
+#: inc/settings/opt-access.php:116
+msgid "自选金额方案"
+msgstr ""
+
+#: inc/settings/opt-access.php:117
+msgid "使用预设方案"
+msgstr ""
+
+#: inc/settings/opt-access.php:122
+msgid "预设方案链接"
+msgstr ""
+
+#: inc/settings/opt-access.php:123
+msgid "需要填写你的爱发电主页->赞助方案详情（支付页面）的 URL 地址 [br/]*链接需要包含有效的 [code]plan_id[/code] 参数，否则无法正确回调 [br/]e.g. [code]https://afdian.net/order/create? plan_id=xxxxxxxxxxxxxxxxxxxxxxxx[/code]"
+msgstr ""
+
+#: inc/settings/opt-access.php:129
+msgid "保存爱发电回调日志"
+msgstr ""
+
+#: inc/settings/opt-access.php:130
+msgid "启用后，保存爱发电平台 WebHook 发回的信息到 LOG ，用于回查激活记录，日志文件保存位置 [code]./wp-content/webhook_logs[/code] "
+msgstr ""
+
+#: inc/settings/opt-access.php:136
+msgid "激活码接口设置"
+msgstr ""
+
+#: inc/settings/opt-access.php:140
+msgid "此接口为通用发卡兑换接口，启用后，会在后台添加独立的激活码管理页面"
+msgstr ""
+
+#: inc/settings/opt-access.php:144
+msgid "使用激活码兑换订阅"
+msgstr ""
+
+#: inc/settings/opt-access.php:145
+msgid "会在订阅权限组件中显示“激活码”的兑换选项"
+msgstr ""
+
+#: inc/settings/opt-access.php:156
+msgid "易支付接口设置"
+msgstr ""
+
+#: inc/settings/opt-access.php:160
+msgid "此接口为易支付（彩虹版）兼容接口，由于各支付平台提供的接口存在差异，上线业务前请测试"
+msgstr ""
+
+#: inc/settings/opt-access.php:164
+msgid "易支付接口仅能够自动回调，掉单时需要在你的服务商后台手动补单。请在订阅说明中保留用户可以联系到的客服方式，及时补单防止被平台认定为欺诈商户。"
+msgstr ""
+
+#: inc/settings/opt-access.php:180
+msgid "接口地址"
+msgstr ""
+
+#: inc/settings/opt-access.php:181
+msgid "易支付接口地址，仅支持 https:// "
+msgstr ""
+
+#: inc/settings/opt-access.php:187
+msgid "商户ID"
+msgstr ""
+
+#: inc/settings/opt-access.php:188
+msgid "易支付商户 ID ，由服务商提供"
+msgstr ""
+
+#: inc/settings/opt-access.php:194
+msgid "商户密钥"
+msgstr ""
+
+#: inc/settings/opt-access.php:195
+msgid "易支付商户密钥（key），由服务商提供"
+msgstr ""
+
+#: inc/settings/opt-access.php:201
+msgid "使用易支付激活订阅"
+msgstr ""
+
+#: inc/settings/opt-access.php:202
+msgid "用户可以通过易支付平台支付后获得网站内的赞助者权限"
+msgstr ""
+
+#: inc/settings/opt-access.php:208
+msgid "赞助者权限商品设置"
+msgstr ""
+
+#: inc/settings/opt-access.php:209
+msgid "配置用于购买赞助者权限的商品"
+msgstr ""
+
+#: inc/settings/opt-access.php:214
+msgid "订阅名称"
+msgstr ""
+
+#: inc/settings/opt-access.php:217
+msgid "月度订阅"
+msgstr ""
+
+#: inc/settings/opt-access.php:220
+msgid "商品价格（￥）"
+msgstr ""
+
+#: inc/settings/opt-access.php:226
+msgid "激活周期（天）"
+msgstr ""
+
+#: inc/settings/opt-access.php:234
+msgid "支付方式"
+msgstr ""
+
+#: inc/settings/opt-access.php:235
+msgid "选择需要使用的支付方式，可用性请询问你的服务商"
+msgstr ""
+
+#: inc/settings/opt-access.php:239
+msgid "支付宝"
+msgstr ""
+
+#: inc/settings/opt-access.php:240
+msgid "微信"
+msgstr ""
+
+#: inc/settings/opt-access.php:248
+msgid "保存易支付回调日志"
+msgstr ""
+
+#: inc/settings/opt-access.php:249
+msgid "启用后，保存易支付接口 WebHook 发回的订阅信息到 LOG ，用于回查激活记录，日志文件保存位置 [code]./wp-content/webhook_logs[/code] "
+msgstr ""
+
+#: inc/settings/opt-basic.php:23
+msgid "基本设置"
+msgstr ""
+
+#: inc/settings/opt-basic.php:36
+#: inc/settings/opt-basic.php:51
+msgid "上传"
+msgstr ""
+
+#: inc/settings/opt-basic.php:60
+msgid "系统自动"
+msgstr ""
+
+#: inc/settings/opt-basic.php:61
+msgid "暗色"
+msgstr ""
+
+#: inc/settings/opt-basic.php:62
+msgid "亮色"
+msgstr ""
+
+#: inc/settings/opt-basic.php:67
+msgid "合规类功能设置"
+msgstr ""
+
+#: inc/settings/opt-basic.php:71
+msgid "用户 Cookie 授权弹窗"
+msgstr ""
+
+#: inc/settings/opt-basic.php:72
+msgid "用户首次访问网站时，会弹窗提示用户确认 Cookie 权限"
+msgstr ""
+
+#: inc/settings/opt-basic.php:78
+msgid "全局禁用评论"
+msgstr ""
+
+#: inc/settings/opt-basic.php:79
+msgid "全局禁用所有文章的评论功能"
+msgstr ""
+
+#: inc/settings/opt-basic.php:85
+msgid "ICP备案"
+msgstr ""
+
+#: inc/settings/opt-basic.php:86
+msgid "根据《互联网信息服务管理办法》要求的网站 ICP 备案信息"
+msgstr ""
+
+#: inc/settings/opt-basic.php:92
+msgid "公安备案"
+msgstr ""
+
+#: inc/settings/opt-basic.php:93
+msgid "根据《计算机信息网络国际联网安全保护管理办法》要求的网站公网安备信息"
+msgstr ""
+
+#: inc/settings/opt-basic.php:99
+msgid "公安备案记录代码"
+msgstr ""
+
+#: inc/settings/opt-basic.php:100
+msgid "由于地域备案号展示要求不同，手动填写您的公安备案号纯数字部分"
+msgstr ""
+
+#: inc/settings/opt-land.php:9
+#: inc/settings/opt-land.php:10
+msgid "页面组件"
+msgstr ""
+
+#: inc/settings/opt-land.php:13
+#: inc/settings/opt-oplist.php:12
+msgid "AIYA-CMS 主题，页面组件设置"
+msgstr ""
+
+#: inc/settings/opt-land.php:16
+msgid "正文过滤器"
+msgstr ""
+
+#: inc/settings/opt-land.php:20
+msgid "使用 DOMDocument 处理器"
+msgstr ""
+
+#: inc/settings/opt-land.php:21
+msgid " HTML 属性匹配更精准，但性能略差 [del]什么年代了还在用传统 preg_match_all()[/del]"
+msgstr ""
+
+#: inc/settings/opt-land.php:27
+msgid "添加图片描述"
+msgstr ""
+
+#: inc/settings/opt-land.php:28
+msgid "文章正文内的图片标签自动添加 alt 属性和懒加载属性"
+msgstr ""
+
+#: inc/settings/opt-land.php:34
+msgid "添加链接内链"
+msgstr ""
+
+#: inc/settings/opt-land.php:35
+msgid "给文章正文内链接标签自动添加 [code]rel=\"nofollow\"[/code] 和 [code]target=\"_blank\"[/code] 属性（仅对外部链接生效）"
+msgstr ""
+
+#: inc/settings/opt-land.php:41
+msgid "内链格式设置"
+msgstr ""
+
+#: inc/settings/opt-land.php:42
+msgid "接上一项设置，可选跳转方式"
+msgstr ""
+
+#: inc/settings/opt-land.php:46
+msgid "提示外部页面"
+msgstr ""
+
+#: inc/settings/opt-land.php:47
+msgid "使用内链跳转"
+msgstr ""
+
+#: inc/settings/opt-land.php:48
+msgid "直接跳转（不处理）"
+msgstr ""
+
+#: inc/settings/opt-land.php:53
+msgid "内容组件"
+msgstr ""
+
+#: inc/settings/opt-land.php:57
+msgid "设置文章列表输出的布局模板，文章列表的输出数量请在站点 [url=options-reading.php]阅读设置[/url] 中调整"
+msgstr ""
+
+#: inc/settings/opt-land.php:61
+msgid "文章时效性提示"
+msgstr ""
+
+#: inc/settings/opt-land.php:62
+msgid "在文章发布或更新时间超过天数后显示内容过期提示，留空时禁用"
+msgstr ""
+
+#: inc/settings/opt-land.php:68
+msgid "文末声明"
+msgstr ""
+
+#: inc/settings/opt-land.php:69
+msgid "在文章末尾输出版权声明等额外文本"
+msgstr ""
+
+#: inc/settings/opt-land.php:72
+msgid "本站部分内容转载自网络，作品版权归原作者及来源网站所有，任何内容转载、商业用途等均须联系原作者并注明来源。"
+msgstr ""
+
+#: inc/settings/opt-land.php:75
+msgid "加载文章提示组件"
+msgstr ""
+
+#: inc/settings/opt-land.php:76
+msgid "创建新的分类法，在文章开头位置输出文章完成状态（更新中、已停更），或提示读者风险操作，等有用的提示"
+msgstr ""
+
+#: inc/settings/opt-land.php:82
+msgid "加载推文组件"
+msgstr ""
+
+#: inc/settings/opt-land.php:83
+msgid "创建新的文章类型，以及推文组件页面"
+msgstr ""
+
+#: inc/settings/opt-land.php:89
+msgid "首页独立分区列表"
+msgstr ""
+
+#: inc/settings/opt-land.php:90
+msgid "添加独立分区列表，显示不同的分类文章"
+msgstr ""
+
+#: inc/settings/opt-land.php:96
+msgid "此项为空则自动分类名称"
+msgstr ""
+
+#: inc/settings/opt-land.php:102
+msgid "分类"
+msgstr ""
+
+#: inc/settings/opt-land.php:103
+msgid "选择要显示的分类"
+msgstr ""
+
+#: inc/settings/opt-land.php:110
+msgid "查询排序方式"
+msgstr ""
+
+#: inc/settings/opt-land.php:111
+msgid "选择查询的文章排序方式"
+msgstr ""
+
+#: inc/settings/opt-land.php:115
+msgid "发布时间"
+msgstr ""
+
+#: inc/settings/opt-land.php:117
+msgid "最后修改日期"
+msgstr ""
+
+#: inc/settings/opt-land.php:118
+msgid "随机"
+msgstr ""
+
+#: inc/settings/opt-land.php:119
+msgid "不排序"
+msgstr ""
+
+#: inc/settings/opt-land.php:124
+msgid "查询数量"
+msgstr ""
+
+#: inc/settings/opt-land.php:125
+msgid "选择查询的文章数量"
+msgstr ""
+
+#: inc/settings/opt-land.php:129
+msgid "5条"
+msgstr ""
+
+#: inc/settings/opt-land.php:130
+msgid "10条"
+msgstr ""
+
+#: inc/settings/opt-land.php:131
+msgid "20条"
+msgstr ""
+
+#: inc/settings/opt-land.php:138
+msgid "轮播设置"
+msgstr ""
+
+#: inc/settings/opt-land.php:142
+msgid "轮播组件外观切换"
+msgstr ""
+
+#: inc/settings/opt-land.php:143
+msgid "切换或关闭首页轮播，CMS模式为至少需要5篇文章，宽幅模式为至少需要1篇文章"
+msgstr ""
+
+#: inc/settings/opt-land.php:147
+msgid "关闭"
+msgstr ""
+
+#: inc/settings/opt-land.php:148
+msgid "经典（宽幅模式）"
+msgstr ""
+
+#: inc/settings/opt-land.php:149
+msgid "拼贴（三卡片）"
+msgstr ""
+
+#: inc/settings/opt-land.php:150
+msgid "三栏位（CMS模式）"
+msgstr ""
+
+#: inc/settings/opt-land.php:155
+msgid "轮播列表"
+msgstr ""
+
+#: inc/settings/opt-land.php:156
+msgid "添加轮播列表"
+msgstr ""
+
+#: inc/settings/opt-land.php:161
+#: inc/settings/opt-land.php:208
+#: inc/settings/opt-land.php:237
+#: inc/settings/opt-land.php:266
+#: inc/settings/opt-land.php:288
+msgid "链接"
+msgstr ""
+
+#: inc/settings/opt-land.php:162
+msgid "填入任意URL、或填写文章ID或文章别名 [b]*Tips: 不支持识别分类或标签[/b]"
+msgstr ""
+
+#: inc/settings/opt-land.php:168
+msgid "图片"
+msgstr ""
+
+#: inc/settings/opt-land.php:169
+msgid "轮播卡片的大图，留空时自动获取文章特色图片"
+msgstr ""
+
+#: inc/settings/opt-land.php:176
+msgid "轮播卡片的标题，留空时自动获取文章标题"
+msgstr ""
+
+#: inc/settings/opt-land.php:182
+msgid "描述"
+msgstr ""
+
+#: inc/settings/opt-land.php:183
+msgid "轮播卡片的描述，留空时自动获取文章摘要"
+msgstr ""
+
+#: inc/settings/opt-land.php:191
+msgid "页面广告位（AD）"
+msgstr ""
+
+#: inc/settings/opt-land.php:195
+msgid "全局顶部"
+msgstr ""
+
+#: inc/settings/opt-land.php:196
+msgid "广告位在页面顶部显示"
+msgstr ""
+
+#: inc/settings/opt-land.php:202
+#: inc/settings/opt-land.php:231
+#: inc/settings/opt-land.php:260
+#: inc/settings/opt-land.php:282
+msgid "广告标题，作为链接文本"
+msgstr ""
+
+#: inc/settings/opt-land.php:209
+#: inc/settings/opt-land.php:238
+#: inc/settings/opt-land.php:267
+#: inc/settings/opt-land.php:289
+msgid "广告的跳转链接"
+msgstr ""
+
+#: inc/settings/opt-land.php:215
+#: inc/settings/opt-land.php:244
+msgid "广告视图"
+msgstr ""
+
+#: inc/settings/opt-land.php:216
+#: inc/settings/opt-land.php:245
+msgid "广告的图片链接 "
+msgstr ""
+
+#: inc/settings/opt-land.php:224
+msgid "全局底部"
+msgstr ""
+
+#: inc/settings/opt-land.php:225
+msgid "广告位在页面底部显示"
+msgstr ""
+
+#: inc/settings/opt-land.php:253
+msgid "文内顶部"
+msgstr ""
+
+#: inc/settings/opt-land.php:254
+msgid "广告位在文章顶部显示（仅文本链接）"
+msgstr ""
+
+#: inc/settings/opt-land.php:275
+msgid "文内底部"
+msgstr ""
+
+#: inc/settings/opt-land.php:276
+msgid "广告位在文章底部显示（仅文本链接）"
+msgstr ""
+
+#: inc/settings/opt-notify.php:9
+msgid "消息通知"
+msgstr ""
+
+#: inc/settings/opt-notify.php:19
+msgid "添加自定义通知"
+msgstr ""
+
+#: inc/settings/opt-notify.php:25
+msgid "通知标题"
+msgstr ""
+
+#: inc/settings/opt-notify.php:32
+msgid "通知内容"
+msgstr ""
+
+#: inc/settings/opt-notify.php:39
+msgid "通知图标"
+msgstr ""
+
+#: inc/settings/opt-notify.php:45
+msgid "提示"
+msgstr ""
+
+#: inc/settings/opt-notify.php:53
+msgid "通知级别"
+msgstr ""
+
+#: inc/settings/opt-notify.php:54
+msgid ""
+"接收此消息的用户权限级别\r\n"
+"                    [br/]公开：全局消息，游客和所有用户可见\r\n"
+"                    [br/]注册用户：已登录的订阅者及以上权限用户可见\r\n"
+"                    [br/]作者用户：已登录的投稿者、作者及以上权限用户可见\r\n"
+"                    [br/]管理员用户：已登录的编辑权限用户、管理员可见"
+msgstr ""
+
+#: inc/settings/opt-notify.php:62
+msgid "公开"
+msgstr ""
+
+#: inc/settings/opt-notify.php:63
+msgid "注册用户"
+msgstr ""
+
+#: inc/settings/opt-notify.php:64
+msgid "作者用户"
+msgstr ""
+
+#: inc/settings/opt-notify.php:65
+msgid "管理员用户"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:9
+msgid "OpenList 客户端"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:15
+msgid "OpenList 客户端模块设置"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:19
+msgid "OpenList 是一个开源的网盘列表程序，此模块用于直接调用 OpenList 的文件列表显示在文章页面上"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:24
+msgid "服务器地址"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:25
+msgid "OpenList 的服务器地址"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:31
+msgid "用户名"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:32
+#: inc/settings/opt-oplist.php:39
+msgid "用于请求 OpenList API 登录的用户"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:38
+msgid "密码"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:45
+msgid "令牌缓存时间"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:46
+msgid "OpenList 的 JWt Token 缓存时间（小时），设置为 [code]0[/code] 则每次都重新请求令牌（*取决于 OpenList 站点配置，默认为 48 小时）"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:52
+msgid "启用文件图标匹配"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:53
+msgid "在 OpenList 返回文件列表时为文件匹配图标"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:59
+msgid "文件跳转设置"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:60
+msgid ""
+"设置从文件列表跳转到 OpenList 的方法\r\n"
+"                [br/]文件页面：直接跳转到 OpenList 的文件/文件夹详情页面\r\n"
+"                [br/]直接下载：下载文件（由 OpenList 完成 302 跳转）\r\n"
+"                [br/]代理下载：下载文件（由 OpenList 本机代理下载）\r\n"
+"                [br/]直链下载：循环请求尝试直接取出真实文件地址，会大幅增加加载时间\r\n"
+"                "
+msgstr ""
+
+#: inc/settings/opt-oplist.php:69
+msgid "文件页面"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:70
+msgid "直接下载"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:71
+msgid "代理下载"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:72
+msgid "直链下载"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:77
+msgid "默认列表描述"
+msgstr ""
+
+#: inc/settings/opt-oplist.php:78
+msgid "设置 OpenList 的文件列表底部默认的描述文本"
+msgstr ""
+
+#: inc/widgets/widget-add-menu.php:11
+msgid "AIYA-CMS 菜单"
+msgstr ""
+
+#: inc/widgets/widget-add-menu.php:13
+msgid "菜单卡片，菜单内容于 外观->菜单 中设置"
+msgstr ""
+
+#: inc/widgets/widget-add-menu.php:19
+msgid "菜单"
+msgstr ""
+
+#: inc/widgets/widget-comments.php:11
+msgid "AIYA-CMS 最近评论"
+msgstr ""
+
+#: inc/widgets/widget-comments.php:13
+msgid "评论列表卡片，显示最近评论"
+msgstr ""
+
+#: inc/widgets/widget-comments.php:19
+msgid "最近评论"
+msgstr ""
+
+#: inc/widgets/widget-comments.php:24
+#: inc/widgets/widget-post-comments.php:24
+#: inc/widgets/widget-post-likes.php:24
+#: inc/widgets/widget-post-newest.php:24
+#: inc/widgets/widget-post-random.php:24
+#: inc/widgets/widget-post-views.php:24
+#: inc/widgets/widget-tag-cloud.php:24
+msgid "显示数量"
+msgstr ""
+
+#: inc/widgets/widget-post-comments.php:11
+msgid "AIYA-CMS 热评文章"
+msgstr ""
+
+#: inc/widgets/widget-post-comments.php:13
+msgid "文章列表卡片，展示评论最多的文章"
+msgstr ""
+
+#: inc/widgets/widget-post-comments.php:19
+msgid "热评文章"
+msgstr ""
+
+#: inc/widgets/widget-post-likes.php:11
+msgid "AIYA-CMS 热赞文章"
+msgstr ""
+
+#: inc/widgets/widget-post-likes.php:13
+msgid "文章列表卡片，展示点赞量最多的文章"
+msgstr ""
+
+#: inc/widgets/widget-post-likes.php:19
+msgid "点赞排行"
+msgstr ""
+
+#: inc/widgets/widget-post-newest.php:11
+msgid "AIYA-CMS 最新文章"
+msgstr ""
+
+#: inc/widgets/widget-post-newest.php:13
+msgid "文章列表卡片，展示最近发布的文章"
+msgstr ""
+
+#: inc/widgets/widget-post-newest.php:19
+msgid "最新文章"
+msgstr ""
+
+#: inc/widgets/widget-post-random.php:11
+msgid "AIYA-CMS 随机文章"
+msgstr ""
+
+#: inc/widgets/widget-post-random.php:13
+msgid "文章列表卡片，展示随机的文章"
+msgstr ""
+
+#: inc/widgets/widget-post-random.php:19
+msgid "随机推荐"
+msgstr ""
+
+#: inc/widgets/widget-post-views.php:11
+msgid "AIYA-CMS 热门文章"
+msgstr ""
+
+#: inc/widgets/widget-post-views.php:13
+msgid "文章列表卡片，展示点击量最多的文章"
+msgstr ""
+
+#: inc/widgets/widget-post-views.php:19
+msgid "热门"
+msgstr ""
+
+#: inc/widgets/widget-search.php:11
+msgid "AIYA-CMS 搜索"
+msgstr ""
+
+#: inc/widgets/widget-search.php:13
+msgid "搜索框卡片"
+msgstr ""
+
+#: inc/widgets/widget-tag-cloud.php:11
+msgid "AIYA-CMS 标签云"
+msgstr ""
+
+#: inc/widgets/widget-tag-cloud.php:13
+msgid "标签云卡片，栏标签列表组件"
+msgstr ""
+
+#: inc/widgets/widget-tag-cloud.php:19
+msgid "热门标签"
+msgstr ""
+
+#: inc/widgets/widget-text-html.php:11
+msgid "AIYA-CMS 文本"
+msgstr ""
+
+#: inc/widgets/widget-text-html.php:13
+msgid "文本卡片，支持HTML"
+msgstr ""
+
+#: inc/widgets/widget-text-html.php:24
+msgid "是否输出为HTML"
+msgstr ""
+
+#: inc/widgets/widget-user-welcome.php:8
+msgid "AIYA-CMS 用户面板"
+msgstr ""
+
+#: inc/widgets/widget-user-welcome.php:10
+msgid "用户面板组件"
+msgstr ""
+
+#: templates/archive-tweet.php:16
+msgid "推文发布成功"
+msgstr ""
+
+#: templates/archive-tweet.php:17
+msgid "已提交，等待审核"
+msgstr ""
+
+#: templates/archive-tweet.php:18
+msgid "内容不能为空"
+msgstr ""
+
+#: templates/archive-tweet.php:19
+msgid "提交失败，请稍后重试"
+msgstr ""
+
+#: templates/archive-tweet.php:31
+msgid "标题（可选）"
+msgstr ""
+
+#: templates/archive-tweet.php:32
+msgid "分享点什么…"
+msgstr ""
+
+#: templates/archive-tweet.php:33
+msgid "标签，使用逗号分隔"
+msgstr ""
+
+#: templates/archive-tweet.php:34
+msgid "发布推文"
+msgstr ""
+
+#: templates/archive-tweet.php:41
+msgid "全部"
+msgstr ""
+
+#: templates/archive.php:11
+#: templates/author.php:36
+#: templates/index.php:128
+#: templates/search.php:11
+msgid "暂无内容"
+msgstr ""
+
+#: templates/archive.php:12
+msgid "当前没有任何文章被分类到此归档"
+msgstr ""
+
+#: templates/author.php:37
+msgid "当前作者没有发布任何文章"
+msgstr ""
+
+#: templates/author.php:75
+msgid "用户：「"
+msgstr ""
+
+#: templates/author.php:75
+msgid "」"
+msgstr ""
+
+#: templates/fragments/content-detail.php:40
+msgid "分类："
+msgstr ""
+
+#: templates/fragments/content-detail.php:86
+#: templates/fragments/content-detail.php:122
+#, php-format
+msgid "[ 上次更新于 %s ]"
+msgstr ""
+
+#: templates/fragments/loop-grid.php:65
+msgid " 阅读"
+msgstr ""
+
+#: templates/index.php:129
+msgid "暂无文章"
+msgstr ""
+
+#: templates/pages/external-auto.php:25
+msgid "页面加载中，即将跳转..."
+msgstr ""
+
+#: templates/pages/external-auto.php:28
+msgid "链接格式错误，返回首页..."
+msgstr ""
+
+#: templates/pages/external-auto.php:32
+msgid "解码失败，返回首页..."
+msgstr ""
+
+#: templates/pages/external-auto.php:155
+msgid "我们将带您前往外部链接，请注意账号安全。"
+msgstr ""
+
+#: templates/pages/external-auto.php:156
+msgid "如果没有自动跳转，请点击下方按钮"
+msgstr ""
+
+#: templates/pages/external-auto.php:160
+msgid "立即前往"
+msgstr ""
+
+#: templates/search.php:12
+msgid "搜索结果下没有文章"
+msgstr ""
+
+#: templates/search.php:52
+#, php-format
+msgid "搜索\"%s\"的结果"
+msgstr ""

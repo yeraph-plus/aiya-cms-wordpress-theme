@@ -1,6 +1,9 @@
+import { syncWordPressTranslations } from "../lib/utils"
+
 import { hydrateAllIslands } from '../runtime/islands';
 import { bootBadgeSlots } from '../runtime/badge-slots';
 import { bootIconSlots } from '../runtime/icon-slots';
+
 import '../styles/tailwind.css';
 
 export type CmsPageEntry = 'common' | 'home' | 'archive' | 'single' | 'user';
@@ -22,6 +25,9 @@ function bootstrapApplication() {
     }
 
     hasBootstrapped = true;
+
+    syncWordPressTranslations();
+
     document.documentElement.dataset.cmsAppMode = 'mpa';
 
     if (!document.documentElement.dataset.cmsPageEntry) {

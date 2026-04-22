@@ -1,3 +1,5 @@
+import { __, sprintf } from '@wordpress/i18n';
+
 import * as React from "react"
 
 import {
@@ -323,7 +325,7 @@ export default function OpenListClient(props: OpenListClientProps) {
         const { apiUrl, apiNonce } = getConfig()
         if (!apiNonce) {
             if (mountedRef.current) {
-                setError("Missing security nonce")
+                setError(__('缺少安全 nonce', 'aiya-cms'))
                 setLoading(false)
             }
             return
@@ -333,7 +335,7 @@ export default function OpenListClient(props: OpenListClientProps) {
             if (!mountedRef.current) return;
 
             if (!normalized.ok) {
-                setError(normalized.message || "请求失败");
+                setError(normalized.message || __('请求失败', 'aiya-cms'));
                 setFiles([]);
                 setPagination(null);
                 setFolderName("");
@@ -418,7 +420,7 @@ export default function OpenListClient(props: OpenListClientProps) {
             }
             console.error("Fetch error:", err);
             if (mountedRef.current) {
-                setError("网络连接错误，请稍后重试");
+                setError(__('网络连接错误，请稍后重试', 'aiya-cms'));
             }
         } finally {
             if (mountedRef.current) {
@@ -487,9 +489,9 @@ export default function OpenListClient(props: OpenListClientProps) {
     const sendToAria2 = React.useCallback(async (url: string, filename: string) => {
         const success = await sendToLocalAria2(aria2Config, url, filename);
         if (success) {
-            toast.success(`已发送到 Aria2: ${filename}`);
+            toast.success(sprintf(__('已发送到 Aria2: %s', 'aiya-cms'), filename));
         } else {
-            toast.error(`发送失败: ${filename}`);
+            toast.error(sprintf(__('发送失败: %s', 'aiya-cms'), filename));
         }
     }, [aria2Config]);
 
@@ -507,16 +509,16 @@ export default function OpenListClient(props: OpenListClientProps) {
             (async () => {
                 const result = await batchSendToLocalAria2(aria2Config, filesToSend);
                 if (result.failCount > 0) {
-                    throw new Error(`${result.failCount} 个文件发送失败`);
+                    throw new Error(sprintf(__('共 %d 个文件发送失败', 'aiya-cms'), result.failCount));
                 }
                 return result.successCount;
             })(),
             {
-                loading: `正在发送 ${total} 个文件到 Aria2...`,
+                loading: sprintf(__('正在发送 %d 个文件到 Aria2...', 'aiya-cms'), total),
                 success: (count) => {
-                    return `成功发送 ${count} 个文件到 Aria2`
+                    return sprintf(__('成功发送 %d 个文件到 Aria2', 'aiya-cms'), count);
                 },
-                error: (err) => `发送完成，但在 ${total} 个文件中: ${err.message}`,
+                error: (err) => sprintf(__('发送完成，但在 %d 个文件中: %s', 'aiya-cms'), total, err.message),
             }
         )
     };
@@ -555,7 +557,7 @@ export default function OpenListClient(props: OpenListClientProps) {
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                         className="px-0 hover:bg-transparent"
                     >
-                        文件名
+                        {__('文件名', 'aiya-cms')}
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                 )
@@ -584,17 +586,17 @@ export default function OpenListClient(props: OpenListClientProps) {
         },
         {
             accessorKey: "size",
-            header: "大小",
+            header: __('大小', 'aiya-cms'),
             cell: ({ row }) => <div className="text-sm text-muted-foreground whitespace-nowrap">{formatFileSize(row.getValue("size"))}</div>,
         },
         {
             accessorKey: "modified",
-            header: "修改时间",
+            header: __('修改时间', 'aiya-cms'),
             cell: ({ row }) => <div className="text-sm text-muted-foreground whitespace-nowrap">{formatDate(row.getValue("modified"))}</div>,
         },
         {
             id: "actions",
-            header: "操作",
+            header: __('操作', 'aiya-cms'),
             cell: ({ row }) => {
                 const file = row.original
                 return (
@@ -604,10 +606,10 @@ export default function OpenListClient(props: OpenListClientProps) {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => handleOpenLink(file.url)}
-                                title="新窗口打开"
+                                title={__('新窗口打开', 'aiya-cms')}
                             >
                                 <FolderOpen className="h-4 w-4 mr-1" />
-                                打开
+                                {__('打开', 'aiya-cms')}
                             </Button>
                         ) : (
                             <>
@@ -615,19 +617,19 @@ export default function OpenListClient(props: OpenListClientProps) {
                                     variant="outline"
                                     size="sm"
                                     onClick={() => handleDownload(file.url)}
-                                    title="使用浏览器下载"
+                                    title={__('使用浏览器下载', 'aiya-cms')}
                                 >
                                     <Download className="h-4 w-4" />
-                                    下载
+                                    {__('下载', 'aiya-cms')}
                                 </Button>
                                 <Button
                                     variant="outline"
                                     size="sm"
                                     onClick={() => sendToAria2(file.url, file.name)}
-                                    title="发送下载到 Aria2 客户端"
+                                    title={__('发送下载到 Aria2 客户端', 'aiya-cms')}
                                 >
                                     <Forward className="h-4 w-4" />
-                                    推送
+                                    {__('推送', 'aiya-cms')}
                                 </Button>
                             </>
                         )}
@@ -711,7 +713,7 @@ export default function OpenListClient(props: OpenListClientProps) {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <FolderOpen className="h-5 w-5" />
-                    {folderName || '加载中...'}
+                    {folderName || __('加载中', 'aiya-cms')}
                 </CardTitle>
                 <CardDescription>
                     {description && (
@@ -720,29 +722,29 @@ export default function OpenListClient(props: OpenListClientProps) {
                 </CardDescription>
                 <CardAction>
                     {Object.keys(rowSelection).length > 0 && (
-                        <Button variant="outline" size="default" onClick={handleBatchSendToAria2} className="mr-2" title={`批量推送 ${Object.keys(rowSelection).length} 个文件到下载客户端`}>
+                        <Button variant="outline" size="default" onClick={handleBatchSendToAria2} className="mr-2" title={sprintf(__('批量推送 %d 个文件到下载客户端', 'aiya-cms'), Object.keys(rowSelection).length)}>
                             <Send className="h-4 w-4" />
-                            推送下载
+                            {__('推送下载', 'aiya-cms')}
                         </Button>
                     )}
                     <Popover>
                         <PopoverTrigger asChild>
-                            <Button variant="outline" size="default" title="连接到下载客户端">
+                            <Button variant="outline" size="default" title={__('连接到下载客户端', 'aiya-cms')}>
                                 <Settings className="h-4 w-4" />
-                                使用客户端下载
+                                {__('使用客户端下载', 'aiya-cms')}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-80">
                             <div className="grid gap-4">
                                 <div className="space-y-2">
-                                    <h4 className="font-medium leading-none">下载客户端 RPC 连接设置</h4>
+                                    <h4 className="font-medium leading-none">{__('连接到下载客户端', 'aiya-cms')}</h4>
                                     <p className="text-sm text-muted-foreground">
-                                        配置 Aria2 客户端 RPC 连接以远程推送下载
+                                        {__('配置 Aria2 客户端 RPC 连接以远程推送下载', 'aiya-cms')}
                                     </p>
                                 </div>
                                 <div className="grid gap-2">
                                     <div className="grid grid-cols-3 items-center gap-4">
-                                        <Label htmlFor="preset">预设</Label>
+                                        <Label htmlFor="preset">{__('选择预设', 'aiya-cms')}</Label>
                                         <Select
                                             onValueChange={(value) => {
                                                 const preset = PRESET_ARIA2_CONFIGS.find(p => p.name === value);
@@ -752,7 +754,7 @@ export default function OpenListClient(props: OpenListClientProps) {
                                             }}
                                         >
                                             <SelectTrigger className="col-span-2 h-8 w-full">
-                                                <SelectValue placeholder="选择预设配置" />
+                                                <SelectValue placeholder={__('选择预设配置', 'aiya-cms')} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {PRESET_ARIA2_CONFIGS.map((preset) => (
@@ -764,7 +766,7 @@ export default function OpenListClient(props: OpenListClientProps) {
                                         </Select>
                                     </div>
                                     <div className="grid grid-cols-3 items-center gap-4">
-                                        <Label htmlFor="rpcUrl">RPC URL</Label>
+                                        <Label htmlFor="rpcUrl">{__('RPC URL', 'aiya-cms')}</Label>
                                         <Input
                                             id="rpcUrl"
                                             value={aria2Config.rpcUrl}
@@ -773,7 +775,7 @@ export default function OpenListClient(props: OpenListClientProps) {
                                         />
                                     </div>
                                     <div className="grid grid-cols-3 items-center gap-4">
-                                        <Label htmlFor="token">Secret</Label>
+                                        <Label htmlFor="token">{__('Secret', 'aiya-cms')}</Label>
                                         <Input
                                             id="token"
                                             type="password"
@@ -840,7 +842,7 @@ export default function OpenListClient(props: OpenListClientProps) {
                                         colSpan={columns.length}
                                         className="h-24 text-center"
                                     >
-                                        当前目录下没有文件
+                                        {__('当前目录下没有文件', 'aiya-cms')}
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -852,9 +854,9 @@ export default function OpenListClient(props: OpenListClientProps) {
                 {!loading && !_error && pagination && (
                     <div className="p-4 border-t space-y-3">
                         <div className="text-sm text-muted-foreground text-center">
-                            共 {pagination.total} 个文件
+                            {sprintf(__('共 %d 个文件', 'aiya-cms'), pagination.total)}
                             {pagination.per_page > 0 && pagination.total > pagination.per_page && (
-                                <span>，第 {pagination.page} / {Math.ceil(pagination.total / pagination.per_page)} 页</span>
+                                <span>{sprintf(__('，第 %d / %d 页', 'aiya-cms'), pagination.page, Math.ceil(pagination.total / pagination.per_page))}</span>
                             )}
                         </div>
                         {pagination.per_page > 0 && pagination.total > pagination.per_page && (
@@ -869,11 +871,11 @@ export default function OpenListClient(props: OpenListClientProps) {
                                                     if (pagination.page > 1) handlePageChange(pagination.page - 1);
                                                 }}
                                                 className={`gap-1 pl-2.5 ${pagination.page <= 1 ? "pointer-events-none opacity-50" : ""}`}
-                                                aria-label="上一页"
+                                                aria-label="Previous Page"
                                                 size="default"
                                             >
                                                 <ChevronLeft className="h-4 w-4" />
-                                                <span className="hidden sm:block">上一页</span>
+                                                <span className="hidden sm:block">{__('上一页', 'aiya-cms')}</span>
                                             </PaginationLink>
                                         </PaginationItem>
 
@@ -907,10 +909,10 @@ export default function OpenListClient(props: OpenListClientProps) {
                                                     }
                                                 }}
                                                 className={`gap-1 pr-2.5 ${pagination.page >= Math.ceil(pagination.total / pagination.per_page) ? "pointer-events-none opacity-50" : ""}`}
-                                                aria-label="下一页"
+                                                aria-label="Next Page"
                                                 size="default"
                                             >
-                                                <span className="hidden sm:block">下一页</span>
+                                                <span className="hidden sm:block">{__('下一页', 'aiya-cms')}</span>
                                                 <ChevronRight className="h-4 w-4" />
                                             </PaginationLink>
                                         </PaginationItem>

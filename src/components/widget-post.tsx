@@ -51,7 +51,7 @@ export default function WidgetPost({ posts, widgetTitle, className, postType = '
           <>
             <span className="flex items-center gap-1">
               <MessageSquare className="w-3 h-3" />
-              {post.comments} 条评论
+              {post.comments}
               <span>•</span>
               {post.date_ago}
             </span>
@@ -62,7 +62,7 @@ export default function WidgetPost({ posts, widgetTitle, className, postType = '
           <>
             <span className="flex items-center gap-1">
               <Heart className="w-3 h-3" />
-              {post.likes} 次点赞
+              {post.likes}
             </span>
           </>
         )
@@ -71,7 +71,7 @@ export default function WidgetPost({ posts, widgetTitle, className, postType = '
           <>
             <span className="flex items-center gap-1 text-orange-500 font-medium">
               <Eye className="w-3 h-3" />
-              {post.views} 次浏览
+              {post.views}
             </span>
           </>
         )

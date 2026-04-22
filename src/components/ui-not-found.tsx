@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 import {
   Empty,
   EmptyHeader,
@@ -17,16 +19,18 @@ export default function NotFound() {
           <EmptyMedia variant="icon" className="mb-4">
             <Terminal className="h-8 w-8 text-muted-foreground" />
           </EmptyMedia>
-          <EmptyTitle className="text-2xl font-bold">404 - 页面未找到</EmptyTitle>
+          <EmptyTitle className="text-2xl font-bold">
+            {__('页面未找到', 'aiya-cms')}
+          </EmptyTitle>
           <EmptyDescription className="text-md mt-2">
-            抱歉，您访问的页面不存在或已被移除
+            {__('抱歉，您访问的页面不存在或已被移除', 'aiya-cms')}
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent className="mt-8">
           <Button variant="outline" asChild>
             <a href="/" className="flex items-center gap-2">
               <ArrowLeft className="h-4 w-4" />
-              返回首页
+              {__('返回首页', 'aiya-cms')}
             </a>
           </Button>
         </EmptyContent>

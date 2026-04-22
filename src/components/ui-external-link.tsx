@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 import {
   Empty,
   EmptyHeader,
@@ -23,9 +25,10 @@ export default function UiExternalLink({ url, checked }: UiExternalLinkProps) {
             <EmptyMedia variant="icon" className="mb-4">
               <Unlink className="h-8 w-8 text-destructive" />
             </EmptyMedia>
-            <EmptyTitle className="text-2xl font-bold text-destructive">错误请求</EmptyTitle>
+            <EmptyTitle className="text-2xl font-bold text-destructive">{__('错误请求', 'aiya-cms')}</EmptyTitle>
+            <EmptyDescription className="text-md mt-2">{__('当前错误请求', 'aiya-cms')}</EmptyDescription>
             <EmptyDescription className="text-md mt-2">
-              当前页面是通过外部来源打开的，与本站点无关，如需访问请请手动复制链接。
+              {__('当前页面是通过外部来源打开的，与本站点无关，如需访问请请手动复制链接。', 'aiya-cms')}
             </EmptyDescription>
             <p className="text-sm text-muted-foreground bg-muted p-2 rounded max-w-md break-all select-all">
               {url}
@@ -35,7 +38,7 @@ export default function UiExternalLink({ url, checked }: UiExternalLinkProps) {
             <Button variant="outline" asChild>
               <a href="/" className="flex items-center gap-2">
                 <Home className="h-4 w-4" />
-                返回首页
+                {__('返回首页', 'aiya-cms')}
               </a>
             </Button>
           </EmptyContent>
@@ -51,9 +54,9 @@ export default function UiExternalLink({ url, checked }: UiExternalLinkProps) {
           <EmptyMedia variant="icon" className="mb-4">
             <Link className="h-8 w-8 text-muted-foreground" />
           </EmptyMedia>
-          <EmptyTitle className="text-2xl font-bold">即将离开</EmptyTitle>
+          <EmptyTitle className="text-2xl font-bold">{__('您即将离开', 'aiya-cms')}</EmptyTitle>
           <EmptyDescription className="text-md mt-2">
-            您即将离开本站，此链接将带您前往外部网站。
+            {__('您即将离开本站，此链接将带您前往外部网站。', 'aiya-cms')}
           </EmptyDescription>
           <p className="text-sm text-muted-foreground bg-muted p-2 rounded max-w-md break-all">
             {url}
@@ -62,7 +65,7 @@ export default function UiExternalLink({ url, checked }: UiExternalLinkProps) {
         <EmptyContent className="mt-8 flex flex-col items-center gap-4">
           <Button asChild>
             <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-              前往
+              {__('前往', 'aiya-cms')}
               <ArrowRight className="h-4 w-4" />
             </a>
           </Button>

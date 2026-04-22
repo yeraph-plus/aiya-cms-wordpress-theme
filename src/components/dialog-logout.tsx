@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 import * as React from "react"
 import { toast } from "sonner"
 import {Spinner} from '@/components/ui/spinner';
@@ -23,7 +25,7 @@ export function LogoutDialog({ open, onOpenChange }: LogoutDialogProps) {
   const handleLogout = async () => {
     const { apiUrl, apiNonce } = getConfig()
     if (!apiNonce) {
-      toast.error("Missing security nonce")
+      toast.error(__('缺少安全 nonce', 'aiya-cms'))
       return
     }
 
@@ -42,13 +44,13 @@ export function LogoutDialog({ open, onOpenChange }: LogoutDialogProps) {
         throw new Error('Logout failed')
       }
 
-      toast.success("退出登录成功")
+      toast.success(__('退出登录成功', 'aiya-cms'))
       setTimeout(() => {
         window.location.reload()
       }, 1000)
     } catch (error) {
       console.error('Logout error:', error)
-      toast.error("退出登录失败")
+      toast.error(__('退出登录失败', 'aiya-cms'))
       setIsLoading(false)
     }
   }
@@ -57,18 +59,18 @@ export function LogoutDialog({ open, onOpenChange }: LogoutDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>确认退出</DialogTitle>
+          <DialogTitle>{__('确认退出登录', 'aiya-cms')}</DialogTitle>
           <DialogDescription>
-            您确定要退出登录吗？
+            {__('您确定要退出登录吗？', 'aiya-cms')}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isLoading}>
-            取消
+            {__('取消', 'aiya-cms')}
           </Button>
           <Button variant="destructive" onClick={handleLogout} disabled={isLoading}>
             {isLoading && <Spinner className="mr-2" />}
-            确认退出
+            {__('确认退出登录', 'aiya-cms')}
           </Button>
         </DialogFooter>
       </DialogContent>

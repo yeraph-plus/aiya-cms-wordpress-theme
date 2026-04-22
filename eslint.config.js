@@ -9,6 +9,8 @@ export default [
       "build/**",
       "dist/**",
       "node_modules/**",
+      "vendor/**",
+      "plugins/**",
       "inc/**",
       "templates/**",
       "template-parts/**",

@@ -1,4 +1,4 @@
-"use client"
+import { __ } from '@wordpress/i18n';
 
 import * as React from "react"
 import { MasonryGrid } from "@/components/ui/masonry-grid"
@@ -152,7 +152,7 @@ function TweetCard({ post }: { post: Post }) {
           <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary" asChild>
             <a href={`${post.url}#comments`}>
               <MessageSquare className="w-4 h-4" />
-              <span className="sr-only">评论</span>
+              <span className="sr-only">{__('查看评论', 'aiya-cms')}</span>
             </a>
           </Button>
           <span className="text-xs mr-2">{post.comments}</span>
@@ -165,7 +165,7 @@ function TweetCard({ post }: { post: Post }) {
             disabled={isLoading || hasLiked}
           >
             <Heart className={cn("w-4 h-4", hasLiked && "fill-current")} />
-            <span className="sr-only">点赞</span>
+            <span className="sr-only">{__('点赞', 'aiya-cms')}</span>
           </Button>
           <span className="text-xs">{likes}</span>
         </div>
@@ -214,9 +214,9 @@ export default function LoopTweet({ posts, loopTitle, className }: TweetGridProp
         <Empty className="mx-auto my-8 border-dashed ">
           <EmptyHeader>
             <EmptyMedia variant="icon"><Inbox className="h-8 w-8" /></EmptyMedia>
-            <EmptyTitle>暂无内容</EmptyTitle>
+            <EmptyTitle>{__('暂无内容', 'aiya-cms')}</EmptyTitle>
             <EmptyDescription>
-              当前没有任何用户发表过推文
+              {__('当前没有任何用户发表过推文', 'aiya-cms')}
             </EmptyDescription>
           </EmptyHeader>
         </Empty>

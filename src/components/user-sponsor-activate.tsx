@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 import * as React from "react"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -51,19 +53,19 @@ export default function UserSponsorActivate({ code_from = [] }: Props) {
             if (response.ok) {
                 setMessage({
                     type: 'success',
-                    text: data.message || '激活成功',
+                    text: data.message || __('激活成功', 'aiya-cms'),
                     description: data.description
                 });
                 setOrder('');
             } else {
                 setMessage({
                     type: 'error',
-                    text: data.message || '激活失败',
+                    text: data.message || __('激活失败', 'aiya-cms'),
                     description: data.detail || data.data?.detail
                 });
             }
         } catch {
-            setMessage({ type: 'error', text: '请求失败', description: '请检查网络连接后重试' });
+            setMessage({ type: 'error', text: __('请求失败', 'aiya-cms'), description: __('请检查网络连接后重试', 'aiya-cms') });
         } finally {
             setLoading(false);
         }
@@ -71,9 +73,9 @@ export default function UserSponsorActivate({ code_from = [] }: Props) {
 
     const getSourceLabel = (source: string) => {
         const map: Record<string, string> = {
-            'code': '兑换码',
-            'afdian': '爱发电',
-            'patreon': 'Patreon'
+            'code': __('兑换码', 'aiya-cms'),
+            'afdian': __('爱发电', 'aiya-cms'),
+            'patreon': __('Patreon', 'aiya-cms'),
         };
         return map[source] || source;
     };
@@ -87,9 +89,9 @@ export default function UserSponsorActivate({ code_from = [] }: Props) {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <SwitchCamera className="w-6 h-6" />
-                    <h4 className=" font-bold tracking-tight">自助激活</h4>
+                    <h4 className=" font-bold tracking-tight">{__('自助激活', 'aiya-cms')}</h4>
                 </CardTitle>
-                <CardDescription>使用您获得的订单号或激活码激活赞助者身份</CardDescription>
+                <CardDescription>{__('使用您获得的订单号或激活码激活赞助者身份', 'aiya-cms')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 {message && (
@@ -102,7 +104,7 @@ export default function UserSponsorActivate({ code_from = [] }: Props) {
                 <form onSubmit={handleSubmit} className="flex items-end gap-2">
                     <Select value={orderBy} onValueChange={setOrderBy}>
                         <SelectTrigger className="w-[140px]">
-                            <SelectValue placeholder="选择方式" />
+                            <SelectValue placeholder={__('选择方式', 'aiya-cms')} />
                         </SelectTrigger>
                         <SelectContent>
                             {sources.map((method) => (
@@ -114,14 +116,14 @@ export default function UserSponsorActivate({ code_from = [] }: Props) {
                     </Select>
                     <Input
                         className="w-full flex-1"
-                        placeholder="请输入您的订单号 / 激活码"
+                        placeholder={__('请输入您的订单号 / 激活码', 'aiya-cms')}
                         value={order}
                         onChange={(e) => setOrder(e.target.value)}
                         required
                     />
                     <Button type="submit" disabled={loading}>
                         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        立即激活
+                        {__('立即激活', 'aiya-cms')}
                     </Button>
                 </form>
             </CardContent>

@@ -20,5 +20,6 @@
 - 插件体系（basic-optimize / framework-required）：见 [plugins.md](./plugins.md)
 - 主题 PHP 侧（inc/core、inc/settings、aya_opt）：见 [theme.md](./theme.md)
 - 前端与模板对接（React 群岛、props 传递、命名约定）：见 [frontend-and-templates.md](./frontend-and-templates.md)
+- 翻译与文本域约定（aiya-cms / aiya-framework）：见 [i18n.md](./i18n.md)
 - 开发与贡献约定（AI/协作者必读）：见 [ai-guidelines.md](./ai-guidelines.md)
 

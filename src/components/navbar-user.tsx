@@ -1,4 +1,4 @@
-"use client"
+import { __ } from '@wordpress/i18n';
 
 import * as React from "react"
 import {
@@ -69,13 +69,13 @@ const IconMap: Record<string, React.ElementType> = {
 }
 
 const roleMap: Record<string, string> = {
-  administrator: "管理员",
-  editor: "编辑",
-  author: "作者",
-  contributor: "贡献者",
-  subscriber: "用户",
-  guest: "访客",
-  sponsor: "会员",
+  administrator: __('管理员', 'aiya-cms'),
+  editor: __('编辑', 'aiya-cms'),
+  author: __('作者', 'aiya-cms'),
+  contributor: __('贡献者', 'aiya-cms'),
+  subscriber: __('用户', 'aiya-cms'),
+  guest: __('访客', 'aiya-cms'),
+  sponsor: __('会员', 'aiya-cms'),
 }
 
 export default function NavUser(props: UserLoginData) {
@@ -95,10 +95,10 @@ export default function NavUser(props: UserLoginData) {
             size={compact ? "icon" : "default"}
             onClick={() => setShowLogin(true)}
             className={cn(compact ? "h-9 w-9 rounded-full" : "h-8 px-3")}
-            aria-label="登录"
+            aria-label={__('登录', 'aiya-cms')}
           >
             <LogIn className={cn("w-4 h-4", compact ? "" : "mr-2")} />
-            {compact ? <span className="sr-only">登录</span> : "登录"}
+            {compact ? <span className="sr-only">{__('登录', 'aiya-cms')}</span> : __('登录', 'aiya-cms')}
           </Button>
           {!compact && enable_register && (
             <Button
@@ -107,7 +107,7 @@ export default function NavUser(props: UserLoginData) {
               className="h-8 px-3"
             >
               <UserPlus className="w-4 h-4 mr-2" />
-              注册
+              {__('注册', 'aiya-cms')}
             </Button>
           )}
         </div>
@@ -141,11 +141,11 @@ export default function NavUser(props: UserLoginData) {
                 ? "h-9 w-9 px-0 flex items-center justify-center rounded-full"
                 : "h-9 w-9 md:w-auto px-0 md:px-3 flex items-center gap-2 justify-center md:justify-start"
             )}
-            aria-label="用户菜单"
+            aria-label="User Menu"
           >
             <Avatar className={cn(compact ? "h-8 w-8" : "h-7 w-7 md:h-8 md:w-8")}>
               <AvatarImage src={data.avatar} alt={data.name} />
-              <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+              <AvatarFallback className="rounded-lg">User</AvatarFallback>
             </Avatar>
             <div className={cn("flex-1 text-left leading-tight max-w-[120px]", compact ? "hidden" : "hidden md:grid")}>
               {data.name}
@@ -203,7 +203,7 @@ export default function NavUser(props: UserLoginData) {
 
           <DropdownMenuItem onClick={() => setShowLogout(true)} className="text-destructive focus:text-destructive cursor-pointer">
             <LogOut className="mr-2 h-4 w-4 text-destructive" />
-            退出登录
+            {__('退出登录', 'aiya-cms')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

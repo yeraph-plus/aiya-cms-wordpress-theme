@@ -1,4 +1,10 @@
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
+import { __ } from '@wordpress/i18n';
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle
+} from "@/components/ui/empty";
 import { cn } from "@/lib/utils";
 
 interface LoopGridEmptyProps {
@@ -8,8 +14,8 @@ interface LoopGridEmptyProps {
 }
 
 export default function LoopGridEmpty({
-  title = "暂无内容",
-  description = "当前列表没有任何文章可显示",
+  title = __('暂无内容', 'aiya-cms'),
+  description = __('当前列表没有任何文章可显示', 'aiya-cms'),
   className,
 }: LoopGridEmptyProps) {
   return (

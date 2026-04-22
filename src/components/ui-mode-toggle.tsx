@@ -1,4 +1,4 @@
-"use client"
+import { __ } from '@wordpress/i18n';
 
 import * as React from "react"
 import { Moon, Sun, Laptop } from "lucide-react"
@@ -53,13 +53,13 @@ export default function ModeToggle() {
   const getTooltipText = () => {
     switch (theme) {
       case 'light':
-        return "切换到深色模式"
+        return __('切换到深色模式', 'aiya-cms')
       case 'dark':
-        return "切换到跟随系统"
+        return __('切换到跟随系统', 'aiya-cms')
       case 'system':
-        return "切换到浅色模式"
+        return __('切换到浅色模式', 'aiya-cms')
       default:
-        return "切换主题"
+        return __('切换主题', 'aiya-cms')
     }
   }
 
@@ -68,7 +68,7 @@ export default function ModeToggle() {
       <TooltipTrigger asChild>
         <Button variant="outline" size="icon" className="h-9 w-9 px-0" onClick={cycleTheme}>
           {getIcon()}
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">{__('切换主题', 'aiya-cms')}</span>
         </Button>
       </TooltipTrigger>
       <TooltipContent>

@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -47,24 +49,24 @@ export default function CookieConsent({ policyUrl }: { policyUrl?: string }) {
       <Card className="shadow-lg border-primary/20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <CardHeader className="flex flex-row items-center gap-2">
           <Cookie className="h-5 w-5 text-primary" />
-          <CardTitle className="text-lg">Cookie 使用提示</CardTitle>
+          <CardTitle className="text-lg">{__('Cookie 使用提示', 'aiya-cms')}</CardTitle>
         </CardHeader>
         <CardContent className="pb-2">
           <CardDescription>
-            我们使用 Cookie 来提升您的浏览体验，分析网站流量并提供个性化内容。继续使用本网站即表示您同意我们使用 Cookie。
+            {__('我们使用 Cookie 来提升您的浏览体验，分析网站流量并提供个性化内容。继续使用本网站即表示您同意我们使用 Cookie。', 'aiya-cms')}
             {policyUrl && (
               <a href={policyUrl} className="underline hover:text-primary ml-1" target="_blank" rel="noopener noreferrer">
-                了解更多
+                {__('了解更多', 'aiya-cms')}
               </a>
             )}
           </CardDescription>
         </CardContent>
         <CardFooter className="justify-end gap-2">
-           <Button variant="outline" size="sm" onClick={handleDecline}>
-            拒绝
+          <Button variant="outline" size="sm" onClick={handleDecline}>
+            {__('拒绝', 'aiya-cms')}
           </Button>
           <Button size="sm" onClick={handleAccept}>
-            我同意
+            {__('同意', 'aiya-cms')}
           </Button>
         </CardFooter>
       </Card>

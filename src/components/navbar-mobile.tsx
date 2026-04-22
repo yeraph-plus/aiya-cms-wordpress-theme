@@ -1,4 +1,4 @@
-"use client"
+import { __ } from '@wordpress/i18n';
 
 import * as React from "react"
 import {
@@ -34,6 +34,8 @@ import { Input } from "@/components/ui/input"
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import ModeToggle from "@/components/ui-mode-toggle"
@@ -70,11 +72,11 @@ const levelMeta: Record<
   NotifyLevel,
   { label: string; Icon: React.ComponentType<{ className?: string }>; iconClassName: string }
 > = {
-  success: { label: "成功", Icon: CheckCircle2, iconClassName: "text-emerald-500" },
-  info: { label: "提示", Icon: Info, iconClassName: "text-sky-500" },
-  warning: { label: "警告", Icon: AlertTriangle, iconClassName: "text-amber-500" },
-  error: { label: "错误", Icon: XCircle, iconClassName: "text-rose-500" },
-  message: { label: "消息", Icon: CircleEllipsis, iconClassName: "text-muted-foreground" },
+  success: { label: __('成功', 'aiya-cms'), Icon: CheckCircle2, iconClassName: "text-emerald-500" },
+  info: { label: __('提示', 'aiya-cms'), Icon: Info, iconClassName: "text-sky-500" },
+  warning: { label: __('警告', 'aiya-cms'), Icon: AlertTriangle, iconClassName: "text-amber-500" },
+  error: { label: __('错误', 'aiya-cms'), Icon: XCircle, iconClassName: "text-rose-500" },
+  message: { label: __('消息', 'aiya-cms'), Icon: CircleEllipsis, iconClassName: "text-muted-foreground" },
 }
 
 function normalizeMenuNodes(nodes: NavbarMobileProps["menu"]): MenuNode[] {
@@ -233,7 +235,7 @@ function InlineMenuLevel({
                       onClick={onNavigate}
                       aria-current={item.is_active ? "page" : undefined}
                     >
-                      进入 {item.label}
+                      {item.label}
                     </a>
                   </DropdownMenuItem>
                 )}
@@ -279,7 +281,7 @@ function InlineMenuLevel({
                       onClick={onNavigate}
                       aria-current={item.is_active ? "page" : undefined}
                     >
-                      进入 {item.label}
+                      {__('进入', 'aiya-cms')} {' '} {item.label}
                     </a>
                   </Button>
                 )}
@@ -341,7 +343,7 @@ function MobileSearch({ onSubmitted }: { onSubmitted: () => void }) {
               onClick={handleClear}
             >
               <X className="h-3 w-3 text-muted-foreground" />
-              <span className="sr-only">清除</span>
+              <span className="sr-only">{__('清除', 'aiya-cms')}</span>
             </Button>
           )}
         </div>
@@ -376,6 +378,10 @@ export default function NavbarMobile({ menu, notes }: NavbarMobileProps) {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="flex h-full w-[88vw] max-w-sm flex-col p-0">
+        <SheetTitle className="sr-only">{__('移动导航', 'aiya-cms')}</SheetTitle>
+        <SheetDescription className="sr-only">
+          {__('移动端导航抽屉，包含搜索、菜单、站点通知和主题切换。', 'aiya-cms')}
+        </SheetDescription>
         <div className="shrink-0 border-t bg-background px-4 py-4"></div>
         <div className="flex-1 overflow-y-auto px-4 scrollbar-hide">
           <section className="py-4">
@@ -384,21 +390,21 @@ export default function NavbarMobile({ menu, notes }: NavbarMobileProps) {
 
           <section className="border-t py-4">
             <div className="mb-3 flex items-center justify-between">
-              <div className="text-sm font-medium">菜单</div>
+              <div className="text-sm font-medium">{__('菜单', 'aiya-cms')}</div>
             </div>
 
             {items.length > 0 ? (
               <InlineMenuLevel items={items} level={1} onNavigate={() => setOpen(false)} />
             ) : (
               <div className="rounded-md border border-dashed px-3 py-4 text-sm text-muted-foreground">
-                暂无可用导航菜单。
+                {__('暂无可用导航菜单', 'aiya-cms')}
               </div>
             )}
           </section>
 
           <section className="border-t py-4">
             <div className="mb-3 flex items-center justify-between">
-              <div className="text-sm font-medium">站点通知</div>
+              <div className="text-sm font-medium">{__('站点通知', 'aiya-cms')}</div>
               <Badge className="">{notifyNotes.length}</Badge>
             </div>
             {notifyNotes.length > 0 ? (
@@ -435,7 +441,7 @@ export default function NavbarMobile({ menu, notes }: NavbarMobileProps) {
               </div>
             ) : (
               <div className="rounded-md border border-dashed px-3 py-4 text-sm text-muted-foreground">
-                当前没有新的站点通知。
+                {__('当前没有新的站点通知', 'aiya-cms')}
               </div>
             )}
           </section>

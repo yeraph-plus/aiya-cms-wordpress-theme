@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 import { cn } from "@/lib/utils";
 import { Megaphone } from "lucide-react";
 
@@ -29,12 +31,12 @@ export default function ContentAdSpace({ ads, className }: ContentAdSpaceProps) 
             "block relative group overflow-hidden rounded-lg border border-border bg-muted/30 transition-all hover:border-primary/50 hover:shadow-sm no-underline",
             isSingleAd && "w-full md:max-w-2xl md:mx-auto"
           )}
-          title={`外部链接 “${ad.title}”`}
+          title={__('外部链接', 'aiya-cms') + ad.title}
         >
           <div className="w-full h-auto overflow-hidden">
             <img
               src={ad.view}
-              alt={ad.title || 'Advertisement'}
+              alt={ad.title || __('广告', 'aiya-cms')}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
             />
@@ -42,7 +44,7 @@ export default function ContentAdSpace({ ads, className }: ContentAdSpaceProps) 
           {ad.title && (
             <span className="absolute top-2 left-2 px-1.5 py-0.5 text-[12px] uppercase font-bold tracking-wider bg-black/50 text-white rounded backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
               <Megaphone className="w-3 h-3 inline-block mr-1" />
-              推广 | {ad.title}
+              __('推广', 'aiya-cms') {ad.title}
             </span>
           )}
         </a>

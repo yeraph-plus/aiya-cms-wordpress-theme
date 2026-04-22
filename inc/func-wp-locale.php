@@ -12,11 +12,26 @@ if (!defined('ABSPATH')) {
 
 add_filter('determine_locale', 'ayar_locale_auto_convert_filter', 1);
 //add_action('after_setup_theme', 'aya_theme_textdomain_load');
+//add_action('wp_enqueue_scripts', 'aya_theme_enqueue_frontend_translations', 2);
 
-// 在当前文件中加载主题语言包。
+// 加载主题语言包
 function aya_theme_textdomain_load()
 {
-    load_theme_textdomain(AYA_THEME_TEXTDOMAIN, AYA_PATH . '/languages');
+    load_theme_textdomain(AYA_THEME_TEXTDOMAIN, get_template_directory() . '/languages');
+    load_theme_textdomain(AYA_FRAMEWORK_TEXTDOMAIN, get_template_directory() . '/plugins/languages/');
+}
+
+// 为前端应用注入语言包数据
+function aya_theme_enqueue_frontend_translations()
+{
+    $handle = 'aya-theme-frontend-i18n';
+
+    if (!wp_script_is($handle, 'registered')) {
+        wp_register_script($handle, '', ['wp-i18n'], aya_theme_version(), false);
+    }
+
+    wp_enqueue_script($handle);
+    wp_set_script_translations($handle, AYA_THEME_TEXTDOMAIN, get_template_directory() . '/languages');
 }
 
 // 获取浏览器语言

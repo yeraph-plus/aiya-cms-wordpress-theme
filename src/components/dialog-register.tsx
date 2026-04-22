@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 import * as React from "react"
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from "@/components/ui/button"
@@ -32,13 +34,13 @@ export function RegisterDialog({ open, onOpenChange }: RegisterDialogProps) {
     e.preventDefault()
     
     if (password !== confirmPassword) {
-      setError("两次输入的密码不一致")
+      setError(__('两次输入的密码不一致', 'aiya-cms'))
       return
     }
 
     const { apiUrl, apiNonce } = getConfig()
     if (!apiNonce) {
-      setError("Missing security nonce")
+      setError(__('页面已过期，请刷新页面重试', 'aiya-cms'))
       return
     }
 
@@ -63,16 +65,16 @@ export function RegisterDialog({ open, onOpenChange }: RegisterDialogProps) {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || "注册失败")
+        throw new Error(data.message || __('注册失败', 'aiya-cms'))
       }
 
       // Registration successful, show toast and reload page (auto-login handled by API)
-      toast.success("注册成功")
+      toast.success(__('注册成功', 'aiya-cms'))
       setTimeout(() => {
         window.location.reload()
       }, 1000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "注册发生错误")
+      setError(err instanceof Error ? err.message : __('注册发生错误', 'aiya-cms'))
     } finally {
       setIsLoading(false)
     }
@@ -82,18 +84,18 @@ export function RegisterDialog({ open, onOpenChange }: RegisterDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>注册</DialogTitle>
+          <DialogTitle>{__('注册', 'aiya-cms')}</DialogTitle>
           <DialogDescription>
-            请输入您的信息以创建新账户。
+            {__('请输入您的信息以创建新账户。', 'aiya-cms')}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
           <Field>
-            <Label htmlFor="username">用户名</Label>
+            <Label htmlFor="username">{__('用户名', 'aiya-cms')}</Label>
             <Input
               id="username"
               type="text"
-              placeholder="您的用户名"
+              placeholder={__('您的用户名', 'aiya-cms')}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               disabled={isLoading}
@@ -101,7 +103,7 @@ export function RegisterDialog({ open, onOpenChange }: RegisterDialogProps) {
             />
           </Field>
           <Field>
-            <Label htmlFor="email">邮箱</Label>
+            <Label htmlFor="email">{__('邮箱', 'aiya-cms')}</Label>
             <Input
               id="email"
               type="email"
@@ -113,7 +115,7 @@ export function RegisterDialog({ open, onOpenChange }: RegisterDialogProps) {
             />
           </Field>
           <Field>
-            <Label htmlFor="password">密码</Label>
+            <Label htmlFor="password">{__('密码', 'aiya-cms')}</Label>
             <Input
               id="password"
               type="password"
@@ -124,9 +126,10 @@ export function RegisterDialog({ open, onOpenChange }: RegisterDialogProps) {
             />
           </Field>
           <Field>
-            <Label htmlFor="confirmPassword">确认密码</Label>
+            <Label htmlFor="confirmPassword">{__('确认密码', 'aiya-cms')}</Label>
             <Input
               id="confirmPassword"
+              placeholder={__('确认您的密码', 'aiya-cms')}
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -142,7 +145,7 @@ export function RegisterDialog({ open, onOpenChange }: RegisterDialogProps) {
           <DialogFooter>
             <Button type="submit" disabled={isLoading}>
               {isLoading && <Spinner className="mr-2" />}
-              注册
+              {__('注册', 'aiya-cms')}
             </Button>
           </DialogFooter>
         </form>

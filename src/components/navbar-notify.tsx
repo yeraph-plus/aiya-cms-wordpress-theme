@@ -1,4 +1,4 @@
-"use client"
+import { __ } from '@wordpress/i18n';
 
 import * as React from "react"
 import { AlertTriangle, Bell, CheckCircle2, CircleEllipsis, Info, XCircle } from "lucide-react"
@@ -37,11 +37,11 @@ const levelMeta: Record<
   NotifyLevel,
   { label: string; Icon: React.ComponentType<{ className?: string }>; iconClassName: string }
 > = {
-  success: { label: "成功", Icon: CheckCircle2, iconClassName: "text-emerald-500" },
-  info: { label: "提示", Icon: Info, iconClassName: "text-sky-500" },
-  warning: { label: "警告", Icon: AlertTriangle, iconClassName: "text-amber-500" },
-  error: { label: "错误", Icon: XCircle, iconClassName: "text-rose-500" },
-  message: { label: "消息", Icon: CircleEllipsis, iconClassName: "text-muted-foreground" },
+  success: { label: __('确认', 'aiya-cms'), Icon: CheckCircle2, iconClassName: "text-emerald-500" },
+  info: { label: __('提示', 'aiya-cms'), Icon: Info, iconClassName: "text-sky-500" },
+  warning: { label: __('警告', 'aiya-cms'), Icon: AlertTriangle, iconClassName: "text-amber-500" },
+  error: { label: __('错误', 'aiya-cms'), Icon: XCircle, iconClassName: "text-rose-500" },
+  message: { label: __('消息', 'aiya-cms'), Icon: CircleEllipsis, iconClassName: "text-muted-foreground" },
 }
 
 export default function NavNotify(props: any) {
@@ -98,8 +98,8 @@ export default function NavNotify(props: any) {
       </PopoverTrigger>
       <PopoverContent align="end" sideOffset={8} className="w-[340px] p-0">
         <div className="flex items-center justify-between px-4 py-3">
-          <div className="text-sm font-medium">站点通知</div>
-          <div className="text-xs text-muted-foreground">{count} 条</div>
+          <div className="text-sm font-medium">{__('站点通知', 'aiya-cms')}</div>
+          <div className="text-xs text-muted-foreground">{`${count} +${__('条', 'aiya-cms')}`}</div>
         </div>
         <div className="max-h-[420px] overflow-auto">
           <div className="p-2 space-y-2">

@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 import * as React from "react"
 import { UserCog, UserRoundPen, UserRoundKey } from "lucide-react"
 import { Spinner } from '@/components/ui/spinner';
@@ -94,12 +96,12 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
       const data = await response.json()
 
       if (data.code && data.code !== 'success' && data.code !== 200) {
-        throw new Error(data.message || data.detail || "更新失败")
+        throw new Error(data.message || data.detail || __('更新失败', 'aiya-cms'))
       }
 
-      toast.success(data.message || "资料已更新")
+      toast.success(data.message || __('资料已更新', 'aiya-cms'))
     } catch (err: any) {
-      toast.error(err.message || "更新发生错误")
+      toast.error(err.message || __('更新发生错误', 'aiya-cms'))
     } finally {
       setIsProfileLoading(false)
     }
@@ -109,12 +111,12 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
     e.preventDefault()
 
     if (!passwordData.pass || !passwordData.pass_again) {
-      toast.error("请输入新密码")
+      toast.error(__('请输入新密码', 'aiya-cms'))
       return
     }
 
     if (passwordData.pass !== passwordData.pass_again) {
-      toast.error("两次输入的密码不一致")
+      toast.error(__('两次输入的密码不一致', 'aiya-cms'))
       return
     }
 
@@ -139,10 +141,10 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
       const data = await response.json()
 
       if (data.code && data.code !== 'success' && data.code !== 200) {
-        throw new Error(data.message || data.detail || "更新失败")
+        throw new Error(data.message || data.detail || __('更新失败', 'aiya-cms'))
       }
 
-      toast.success(data.message || "密码已更新，请重新登录")
+      toast.success(data.message || __('密码已更新，请重新登录', 'aiya-cms'))
       setPasswordData({ pass: "", pass_again: "" })
 
       // Optionally reload after a delay to force re-login if needed
@@ -151,7 +153,7 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
       }, 1500)
 
     } catch (err: any) {
-      toast.error(err.message || "更新发生错误")
+      toast.error(err.message || __('更新发生错误', 'aiya-cms'))
     } finally {
       setIsPasswordLoading(false)
     }
@@ -161,59 +163,59 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
     <>
       <div className="flex items-center gap-2 pl-2 mb-4">
         <UserCog className="w-6 h-6 text-primary" />
-        <h2 className="text-xl font-bold tracking-tight">用户设置</h2>
+        <h2 className="text-xl font-bold tracking-tight">{__('用户设置', 'aiya-cms')}</h2>
       </div>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <UserRoundPen className="w-6 h-6" />
-            <h4 className="font-bold tracking-tight">修改个人资料</h4>
+            <h4 className="font-bold tracking-tight">{__('修改个人资料', 'aiya-cms')}</h4>
           </CardTitle>
           <CardDescription>
-            更新您的个人信息和账户设置
+            {__('更新您的个人信息和账户设置', 'aiya-cms')}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleProfileSubmit}>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="last_name">姓氏</Label>
+                <Label htmlFor="last_name">{__('姓氏', 'aiya-cms')}</Label>
                 <Input
                   id="last_name"
                   value={profileData.last_name}
                   onChange={handleProfileChange}
-                  placeholder="姓"
+                  placeholder={__('姓', 'aiya-cms')}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="first_name">名字</Label>
+                <Label htmlFor="first_name">{__('名字', 'aiya-cms')}</Label>
                 <Input
                   id="first_name"
                   value={profileData.first_name}
                   onChange={handleProfileChange}
-                  placeholder="名"
+                  placeholder={__('名', 'aiya-cms')}
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="nickname">昵称</Label>
+              <Label htmlFor="nickname">{__('昵称', 'aiya-cms')}</Label>
               <Input
                 id="nickname"
                 value={profileData.nickname}
                 onChange={handleProfileChange}
-                placeholder="显示的昵称"
+                placeholder={__('显示的昵称', 'aiya-cms')}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="locale">界面语言</Label>
+              <Label htmlFor="locale">{__('界面语言', 'aiya-cms')}</Label>
               <Select
                 value={profileData.locale}
                 onValueChange={(value) => setProfileData((prev) => ({ ...prev, locale: value }))}
               >
                 <SelectTrigger id="locale" className="w-full">
-                  <SelectValue placeholder="选择语言" />
+                  <SelectValue placeholder={__('选择语言', 'aiya-cms')} />
                 </SelectTrigger>
                 <SelectContent>
                   {LANGUAGE_OPTIONS.map((option) => (
@@ -226,7 +228,7 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">邮箱地址</Label>
+              <Label htmlFor="email">{__('邮箱地址', 'aiya-cms')}</Label>
               <Input
                 id="email"
                 type="email"
@@ -238,7 +240,7 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="user_url">个人网站</Label>
+              <Label htmlFor="user_url">{__('个人网站', 'aiya-cms')}</Label>
               <Input
                 id="user_url"
                 type="url"
@@ -249,12 +251,12 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">个人说明</Label>
+              <Label htmlFor="description">{__('个人说明', 'aiya-cms')}</Label>
               <Textarea
                 id="description"
                 value={profileData.description}
                 onChange={handleProfileChange}
-                placeholder="介绍一下自己..."
+                placeholder={__('请介绍一下自己...', 'aiya-cms')}
                 className="min-h-[100px]"
               />
             </div>
@@ -262,7 +264,7 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
           <CardFooter className="flex justify-end mt-4">
             <Button type="submit" disabled={isProfileLoading}>
               {isProfileLoading && <Spinner className="mr-2" />}
-              保存资料
+              {__('保存资料', 'aiya-cms')}
             </Button>
           </CardFooter>
         </form>
@@ -272,33 +274,33 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <UserRoundKey className="w-6 h-6" />
-            <h4 className=" font-bold tracking-tight">修改密码</h4>
+            <h4 className=" font-bold tracking-tight">{__('修改密码', 'aiya-cms')}</h4>
           </CardTitle>
           <CardDescription>
-            为了您的账户安全，建议定期更换密码
+            {__('为了您的账户安全，建议定期更换密码', 'aiya-cms')}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handlePasswordSubmit}>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="pass">新密码</Label>
+                <Label htmlFor="pass">{__('新密码', 'aiya-cms')}</Label>
                 <Input
                   id="pass"
                   type="password"
                   value={passwordData.pass}
                   onChange={handlePasswordChange}
-                  placeholder="请输入新密码"
+                  placeholder={__('请输入新密码', 'aiya-cms')}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="pass_again">确认新密码</Label>
+                <Label htmlFor="pass_again">{__('确认新密码', 'aiya-cms')}</Label>
                 <Input
                   id="pass_again"
                   type="password"
                   value={passwordData.pass_again}
                   onChange={handlePasswordChange}
-                  placeholder="再次输入新密码"
+                  placeholder={__('再次输入新密码', 'aiya-cms')}
                 />
               </div>
             </div>
@@ -306,7 +308,7 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
           <CardFooter className="flex justify-end mt-4">
             <Button type="submit" variant="outline" disabled={isPasswordLoading}>
               {isPasswordLoading && <Spinner className="mr-2" />}
-              修改密码
+              {__('修改密码', 'aiya-cms')}
             </Button>
           </CardFooter>
         </form>

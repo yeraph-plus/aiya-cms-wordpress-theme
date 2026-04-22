@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 import { useState, useEffect } from "react";
 import { ArrowUp } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -64,7 +66,7 @@ export default function BackToTop() {
           </Button>
         </TooltipTrigger>
         <TooltipContent side="left">
-          <p>返回顶部 <KbdGroup><Kbd>Ctrl</Kbd><span>+</span><Kbd>↑</Kbd></KbdGroup></p>
+          <p>{__('返回顶部', 'aiya-cms')} <KbdGroup><Kbd>Ctrl</Kbd><span>+</span><Kbd>↑</Kbd></KbdGroup></p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

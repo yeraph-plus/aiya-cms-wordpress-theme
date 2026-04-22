@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 import {
     Avatar,
     AvatarFallback,
@@ -15,13 +17,13 @@ export interface LoopAuthorProps {
 }
 
 const roleMap: Record<string, string> = {
-    administrator: "管理员",
-    editor: "编辑",
-    author: "作者",
-    contributor: "贡献者",
-    subscriber: "用户",
-    guest: "访客",
-    sponsor: "会员",
+    administrator: __('管理员', 'aiya-cms'),
+    editor: __('编辑', 'aiya-cms'),
+    author: __('作者', 'aiya-cms'),
+    contributor: __('贡献者', 'aiya-cms'),
+    subscriber: __('用户', 'aiya-cms'),
+    guest: __('访客', 'aiya-cms'),
+    sponsor: __('会员', 'aiya-cms'),
 }
 
 export default function LoopAuthor({
@@ -53,7 +55,7 @@ export default function LoopAuthor({
                     </div>
 
                     <p className="text-muted-foreground leading-relaxed max-w-2xl">
-                        {description || "这位用户很懒，什么都没有写..."}
+                        {description}
                     </p>
                 </div>
             </CardContent>

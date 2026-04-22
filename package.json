@@ -66,6 +66,6 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "cross-env": "cross-env NODE_ENV=development vite",
-    "archive": "dir-archiver --src ./ --dest ../aiya-cms-release.zip --includebasedir true --exclude .DS_Store .vscode .github .git .gitattributes .gitignore .gitmodules .npmrc screenshot src vendor composer.json composer.lock .phpcs.xml.dist phpstan.neon.dist node_modules package.json package-lock.json gulpfile.js webpack.config.js vite.config.ts README.md LICENSE plugin-functions.php"
+    "archive": "dir-archiver --src ./ --dest ../aiya-cms-release.zip --includebasedir true --exclude .DS_Store  .vscode .github .git .gitattributes .gitignore .gitmodules screenshot src docs composer.json composer.lock plugin-functions.php .phpcs.xml.dist phpstan.neon.dist .npmrc node_modules package.json package-lock.json tsconfig.node.json tsconfig.json tsconfig.app.json components.json eslint.config.js gulpfile.js webpack.config.js vite.config.ts"
   }
 }

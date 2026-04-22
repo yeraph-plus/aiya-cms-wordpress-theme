@@ -38,6 +38,7 @@ define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); // or MINUTE_IN_SECONDS
 define('AYA_PASSWORD_RESET_TOKEN_TTL', 30 * MINUTE_IN_SECONDS);
 // 主题翻译域
 define('AYA_THEME_TEXTDOMAIN', 'aiya-cms');
+define('AYA_FRAMEWORK_TEXTDOMAIN', 'aiya-framework');
 
 /*
  * ------------------------------------------------------------------------------
@@ -135,6 +136,52 @@ if (!class_exists('AYF') || !class_exists('AYP')) {
     }
 
     return aya_magic();
+}
+
+//转为输出
+function aya_echo($data, $special = 'attr')
+{
+    // 直接配置 WP 的清理方法
+    switch ($special) {
+        case 'html':
+            echo esc_html($data);
+            break;
+        case 'url':
+            echo esc_url($data);
+            break;
+        case 'js':
+            echo esc_js($data);
+            break;
+        case '':
+        case 'attr':
+        default:
+            echo esc_attr($data);
+            break;
+    }
+}
+
+//获取主题版本
+function aya_theme_version()
+{
+    return wp_get_theme()->get('Version');
+}
+
+//判断开发模式
+function aya_is_debug()
+{
+    return (defined('WP_DEBUG') && WP_DEBUG === true);
+}
+
+//获取设置项
+function aya_opt($opt_name, $opt_slug, $opt_bool = false)
+{
+    return ($opt_bool) ? AYF::get_checked($opt_name, $opt_slug) : AYF::get_opt($opt_name, $opt_slug);
+}
+
+//获取文章meta的设置项
+function aya_post_opt($opt_name, $opt_box_id, $post_id = 0)
+{
+    return AYF::get_post_meta($opt_name, $opt_box_id, $post_id);
 }
 
 

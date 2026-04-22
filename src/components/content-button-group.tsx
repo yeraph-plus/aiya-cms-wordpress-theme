@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 import { useState } from "react";
 import { Heart, Bookmark } from "lucide-react";
 import { toast } from "sonner";
@@ -70,7 +72,7 @@ export default function ContentButtonGroup({
     }
 
     setIsFavoriteLoading(true);
-    const toastId = toast.loading(isFavorited ? "正在取消收藏..." : "正在收藏...");
+    const toastId = toast.loading(isFavorited ? __('正在取消收藏...', 'aiya-cms') : __('正在收藏...', 'aiya-cms'));
 
     try {
       const { apiUrl, apiNonce } = getConfig();
@@ -88,13 +90,13 @@ export default function ContentButtonGroup({
       if (data.success && data.data.status === "done") {
         const nextFavorited = data.data.action === "added";
         setIsFavorited(nextFavorited);
-        toast.success(nextFavorited ? "已收藏" : "已取消", { id: toastId });
+        toast.success(nextFavorited ? __('已收藏', 'aiya-cms') : __('已取消', 'aiya-cms'), { id: toastId });
       } else {
-        toast.error("请先登录", { id: toastId });
+        toast.error(__('请先登录', 'aiya-cms'), { id: toastId });
       }
     } catch (error) {
       console.error("Favorite toggle failed:", error);
-      toast.error("操作失败", { id: toastId });
+      toast.error(__('操作失败', 'aiya-cms'), { id: toastId });
     } finally {
       setIsFavoriteLoading(false);
     }
@@ -102,12 +104,12 @@ export default function ContentButtonGroup({
 
   const favoriteLabel = isFavoriteLoading
     ? isFavorited
-      ? "取消中"
-      : "收藏中"
+      ? __('取消中', 'aiya-cms')
+      : __('收藏中', 'aiya-cms')
     : isFavorited
-      ? "已收藏"
-      : "收藏";
-  const likeLabel = isLikeLoading ? "处理中" : hasLiked ? "已赞" : "点赞";
+      ? __('已收藏', 'aiya-cms')
+      : __('收藏', 'aiya-cms');
+  const likeLabel = isLikeLoading ? __('处理中', 'aiya-cms') : hasLiked ? __('已赞', 'aiya-cms') : __('点赞', 'aiya-cms');
   const hasLikeCount =
     likeCount !== "" && likeCount !== null && likeCount !== undefined;
   const favoriteActive = isFavorited || isFavoriteLoading;
