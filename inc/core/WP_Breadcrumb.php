@@ -26,7 +26,7 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
             //基本的面包屑项，以首页开始
             $items = [
                 [
-                    'label' => __('首页', 'AIYA'),
+                    'label' => __('首页', 'aiya-cms'),
                     'url' => home_url('/'),
                 ]
             ];
@@ -54,7 +54,7 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
                 } elseif (is_tag()) {
                     // 标签页
                     $items[] = [
-                        'label' => __('标签', 'AIYA'),
+                        'label' => __('标签', 'aiya-cms'),
                         'url' => '',
                     ];
                     $items[] = [
@@ -64,7 +64,7 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
                 } elseif (is_author()) {
                     // 作者页
                     $items[] = [
-                        'label' => __('作者', 'AIYA'),
+                        'label' => __('作者', 'aiya-cms'),
                         'url' => '',
                     ];
                     $items[] = [
@@ -125,7 +125,7 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
                     } else {
                         // 如果没有父级，添加"媒体"标签
                         $items[] = [
-                            'label' => __('媒体库', 'AIYA'),
+                            'label' => __('媒体库', 'aiya-cms'),
                             'url' => '',
                         ];
                     }
@@ -219,7 +219,7 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
             } elseif (is_search()) {
                 // 搜索结果页
                 $items[] = [
-                    'label' => sprintf(__('搜索: %s', 'AIYA'), get_search_query()),
+                    'label' => sprintf(__('搜索: %s', 'aiya-cms'), get_search_query()),
                     'url' => get_search_link(get_search_query()),
                 ];
 
@@ -230,7 +230,7 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
             } elseif (is_404()) {
                 // 404页面
                 $items[] = [
-                    'label' => __('404 NOT FOUND', 'AIYA'),
+                    'label' => __('404 NOT FOUND', 'aiya-cms'),
                     'url' => '',
                 ];
             }
@@ -269,29 +269,29 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
         {
             if (is_year()) {
                 $items[] = [
-                    'label' => sprintf(__('%s年', 'AIYA'), get_the_time('Y')),
+                    'label' => sprintf(__('%s年', 'aiya-cms'), get_the_time('Y')),
                     'url' => get_year_link(get_the_time('Y')),
                 ];
             } else if (is_month()) {
                 $items[] = [
-                    'label' => sprintf(__('%s年', 'AIYA'), get_the_time('Y')),
+                    'label' => sprintf(__('%s年', 'aiya-cms'), get_the_time('Y')),
                     'url' => get_year_link(get_the_time('Y')),
                 ];
                 $items[] = [
-                    'label' => sprintf(__('%s月', 'AIYA'), get_the_time('m')),
+                    'label' => sprintf(__('%s月', 'aiya-cms'), get_the_time('m')),
                     'url' => get_month_link(get_the_time('Y'), get_the_time('m')),
                 ];
             } else if (is_day()) {
                 $items[] = [
-                    'label' => sprintf(__('%s年', 'AIYA'), get_the_time('Y')),
+                    'label' => sprintf(__('%s年', 'aiya-cms'), get_the_time('Y')),
                     'url' => get_year_link(get_the_time('Y')),
                 ];
                 $items[] = [
-                    'label' => sprintf(__('%s月', 'AIYA'), get_the_time('m')),
+                    'label' => sprintf(__('%s月', 'aiya-cms'), get_the_time('m')),
                     'url' => get_month_link(get_the_time('Y'), get_the_time('m')),
                 ];
                 $items[] = [
-                    'label' => sprintf(__('%s日', 'AIYA'), get_the_time('d')),
+                    'label' => sprintf(__('%s日', 'aiya-cms'), get_the_time('d')),
                     'url' => get_day_link(get_the_time('Y'), get_the_time('m'), get_the_time('d')),
                 ];
             }
@@ -302,7 +302,7 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
         {
             $paged = get_query_var('paged');
             $items[] = [
-                'label' => sprintf(__('第 %s 页', 'AIYA'), $paged),
+                'label' => sprintf(__('第 %s 页', 'aiya-cms'), $paged),
                 'url' => get_pagenum_link($paged),
             ];
         }

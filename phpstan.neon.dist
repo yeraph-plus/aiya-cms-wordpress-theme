@@ -1,0 +1,26 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+
+parameters:
+    level: 1
+
+    paths:
+        - functions.php
+        - inc
+        - templates
+        - plugins
+
+    excludePaths:
+        analyse:
+            - */vendor/*
+            - */node_modules/*
+            - */build/*
+            - */src/*
+            - */assets/*
+
+    bootstrapFiles:
+        - vendor/szepeviktor/phpstan-wordpress/bootstrap.php
+
+    inferPrivatePropertyTypeFromConstructor: true
+    treatPhpDocTypesAsCertain: false

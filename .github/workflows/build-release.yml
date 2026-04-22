@@ -14,6 +14,7 @@ jobs:
               uses: actions/checkout@v4
               with:
                   fetch-depth: 0
+                  submodules: recursive
 
             - name: Extract theme version from tag
               id: release_version
@@ -22,18 +23,16 @@ jobs:
             - name: Generate changelog from commits
               id: changelog
               run: |
-                  # fetch all git history with refname
-                  ALL_TAGS=$(git tag --sort=-v:refname)
-                  # get previous tag
                   CURRENT_TAG=${GITHUB_REF#refs/tags/}
-                  PREVIOUS_TAG=$(echo "$ALL_TAGS" | grep -B1 "$CURRENT_TAG" | head -n1 | grep -v "$CURRENT_TAG" || echo "")
+                  PREVIOUS_TAG=$(git tag --sort=-v:refname | grep -Fxv "$CURRENT_TAG" | head -n1 || true)
                   echo "Current tag: $CURRENT_TAG"
                   echo "Previous tag: $PREVIOUS_TAG"
-                  echo "Total commits: $(git rev-list --count HEAD)"
-                  # if no previous tag, generate changelog from all commits
+
+                  # Only include commits between the previous tag and the current tag.
+                  # For the first release, return an empty changelog instead of all history.
                   if [ -z "$PREVIOUS_TAG" ]; then
-                      CHANGELOG=$(git log --pretty=format:"- %s" --no-merges)
-                      echo "Generating changelog from all commits (first release)"
+                      CHANGELOG="- Initial release"
+                      echo "No previous tag found, using initial release note"
                   else
                       CHANGELOG=$(git log ${PREVIOUS_TAG}..${CURRENT_TAG} --pretty=format:"- %s" --no-merges)
                       echo "Generating changelog from ${PREVIOUS_TAG} to ${CURRENT_TAG}"
@@ -43,19 +42,27 @@ jobs:
                   echo "$CHANGELOG" >> $GITHUB_OUTPUT
                   echo "EOF" >> $GITHUB_OUTPUT
 
-            - name: Temporary Clone framework plugin repository
-              run: |
-                  git clone https://github.com/yeraph-plus/aiya-cms-theme-framework.git aiya-cms-framework-plugin
-
-            - name: Setup node
+            - name: Setup Node
               uses: actions/setup-node@v4
               with:
-                  node-version: 22
+                  node-version: 24
                   cache: "npm"
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.2"
+                  tools: composer:v2
+                  coverage: none
 
             - name: Install dependencies
               run: |
                   npm ci
+
+            - name: Install plugin runtime dependencies
+              working-directory: ./plugins
+              run: |
+                  composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --no-progress
 
             - name: Vite Build
               run: npm run build
@@ -64,18 +71,51 @@ jobs:
               run: |
                   sed -i "s/Version: .*/Version: ${{ steps.release_version.outputs.VERSION }}/" style.css
 
-            - name: Archive theme package for zip
-              run: npx dir-archiver --src ./ --dest ../aiya-cms-release.zip --includebasedir true --exclude .DS_Store .vscode .git .gitattributes .github .gitignore .gitmodules screenshot src vendor composer.json composer.lock node_modules .npmrc package.json package-lock.json gulpfile.js webpack.config.js vite.config.ts aiya-cms-framework-plugin aiya-cms-framework-plugin.zip
-
-            - name: Archive plugin package for zip
-              run: npx dir-archiver --src ./aiya-cms-framework-plugin --dest ../aiya-cms-framework-plugin.zip --includebasedir true --exclude .DS_Stor .vscode .github .git .gitattributes .gitignore .gitmodules screenshot
-
-            - name: Rename files for release
+            - name: Prepare theme package staging directory
               run: |
-                  mv ../aiya-cms-framework-plugin.zip ../aiya-cms-framework-plugin-${{ steps.release_version.outputs.VERSION }}.zip
-                  mv ../aiya-cms-release.zip ../aiya-cms-theme-${{ steps.release_version.outputs.VERSION }}.zip
-                  ls -la ../aiya-cms-framework-plugin-${{ steps.release_version.outputs.VERSION }}.zip
-                  ls -la ../aiya-cms-theme-${{ steps.release_version.outputs.VERSION }}.zip
+                PACKAGE_ROOT=../release-package
+                THEME_DIR_NAME=$(basename "$GITHUB_WORKSPACE")
+                THEME_DIR="$PACKAGE_ROOT/$THEME_DIR_NAME"
+
+                rm -rf "$PACKAGE_ROOT"
+                mkdir -p "$PACKAGE_ROOT"
+                cp -a . "$THEME_DIR"
+
+                find "$THEME_DIR" -name ".DS_Store" -type f -delete
+                find "$THEME_DIR" -name ".git" -exec rm -rf {} +
+                find "$THEME_DIR" -name ".gitattributes" -type f -delete
+                find "$THEME_DIR" -name ".gitignore" -type f -delete
+                find "$THEME_DIR" -name ".gitmodules" -type f -delete
+                find "$THEME_DIR" -name ".vscode" -type d -prune -exec rm -rf {} +
+
+                rm -rf "$THEME_DIR/.github"
+                rm -rf "$THEME_DIR/src"
+                rm -rf "$THEME_DIR/node_modules"
+                rm -rf "$THEME_DIR/vendor"
+                rm -rf "$THEME_DIR/plugins/screenshot"
+                rm -f "$THEME_DIR/.npmrc"
+                rm -f "$THEME_DIR/.gitignore"
+                rm -f "$THEME_DIR/.gitmodules"
+                rm -f "$THEME_DIR/composer.json"
+                rm -f "$THEME_DIR/composer.lock"
+                rm -f "$THEME_DIR/.phpcs.xml.dist"
+                rm -f "$THEME_DIR/phpstan.neon.dist"
+                rm -f "$THEME_DIR/package.json"
+                rm -f "$THEME_DIR/package-lock.json"
+                rm -f "$THEME_DIR/gulpfile.js"
+                rm -f "$THEME_DIR/webpack.config.js"
+                rm -f "$THEME_DIR/vite.config.ts"
+                rm -f "$THEME_DIR/plugins/plugin-functions.php"
+
+            - name: Archive theme package for ZIP
+              run: |
+                THEME_DIR_NAME=$(basename "$GITHUB_WORKSPACE")
+                npx dir-archiver \
+                  --src ../release-package/$THEME_DIR_NAME \
+                  --dest ../aiya-cms-theme-${{ steps.release_version.outputs.VERSION }}-release.zip \
+                  --includebasedir true \
+                  --exclude .DS_Store
+                  ls -la ../aiya-cms-theme-${{ steps.release_version.outputs.VERSION }}-release.zip
 
             - name: Create Release
               id: create_release
@@ -92,11 +132,9 @@ jobs:
                       ${{ steps.changelog.outputs.CHANGELOG }}
 
                       #### Files Included
-                      - aiya-cms-theme-${{ steps.release_version.outputs.VERSION }}.zip
-                      - aiya-cms-framework-plugin-${{ steps.release_version.outputs.VERSION }}.zip
+                      - aiya-cms-theme-${{ steps.release_version.outputs.VERSION }}-release.zip
                   files: |
-                      ../aiya-cms-theme-${{ steps.release_version.outputs.VERSION }}.zip
-                      ../aiya-cms-framework-plugin-${{ steps.release_version.outputs.VERSION }}.zip
+                      ../aiya-cms-theme-${{ steps.release_version.outputs.VERSION }}-release.zip
                   draft: false
                   prerelease: false
 

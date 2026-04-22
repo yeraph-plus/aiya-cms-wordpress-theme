@@ -8,21 +8,21 @@ class AYA_Widget_Text_Html extends AYA_Widget
     {
         $widget_args = array(
             'id' => 'widget-text-html',
-            'title' => 'AIYA-CMS 文本',
+            'title' => __('AIYA-CMS 文本', 'aiya-cms'),
             'classname' => 'widget-panel',
-            'desc' => '文本卡片，支持HTML',
+            'desc' => __('文本卡片，支持HTML', 'aiya-cms'),
             'field_build' => array(
                 array(
                     'type' => 'textarea',
                     'id' => 'text',
-                    'name' => '内容',
+                    'name' => __('内容', 'aiya-cms'),
                     'default' => '',
                 ),
                 array(
                     'type' => 'checkbox',
                     'id' => 'type_html',
-                    'name' => '是否输出为HTML',
-                    'default' => '5',
+                    'name' => __('是否输出为HTML', 'aiya-cms'),
+                    'default' => 'true',
                 ),
             ),
         );

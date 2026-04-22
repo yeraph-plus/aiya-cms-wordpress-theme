@@ -167,7 +167,6 @@ if (!class_exists('AYA_WP_Menu_Object')) {
     add_action('wp_update_nav_menu', array('AYA_WP_Menu_Object', 'delete_cache'));
     add_action('wp_delete_nav_menu', array('AYA_WP_Menu_Object', 'delete_cache'));
 
-
     //获取菜单
     function aya_get_menu($menu_name)
     {

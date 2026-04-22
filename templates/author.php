@@ -33,8 +33,8 @@ aya_react_island(
 if (!have_posts()) {
     //没有文章
     aya_react_island('ui-empty', [
-        'title' => __('暂无内容', 'AIYA'),
-        'description' => __('当前作者没有发布任何文章', 'AIYA'),
+        'title' => __('暂无内容', 'aiya-cms'),
+        'description' => __('当前作者没有发布任何文章', 'aiya-cms'),
     ]);
 } else {
     //执行主循环
@@ -72,7 +72,7 @@ if (!have_posts()) {
     aya_template_part_load('loop-grid', [
         'posts' => $loop_porps,
         'label_icon' => 'contact-round',
-        'label_title' => __('用户：「', 'AIYA') . get_queried_object()->display_name . __('」', 'AIYA'),
+        'label_title' => __('用户：「', 'aiya-cms') . get_queried_object()->display_name . __('」', 'aiya-cms'),
         'is_main_loop' => true,
     ]);
 

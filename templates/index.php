@@ -56,8 +56,8 @@ if ($carousel_section !== 'off' && !$is_pre_paged) {
                 continue;
             }
 
-            //尝试压缩原图
-            $try_to_thumb = aya_get_post_thumb($c_item['thumbnail'], '', 1200, 640);
+            //尝试压缩原图（使用一个空ID跳过缓存体）
+            $try_to_thumb = aya_get_post_thumb($c_item['thumbnail'], 0, 1200, 640);
 
             if ($try_to_thumb !== false) {
                 $c_item['thumbnail'] = $try_to_thumb;
@@ -125,8 +125,8 @@ if (!empty($post_sections) && !$is_pre_paged) {
 if (!have_posts()) {
     //没有文章
     aya_react_island('ui-empty', [
-        'title' => __('暂无内容', 'AIYA'),
-        'description' => __('暂无文章', 'AIYA'),
+        'title' => __('暂无内容', 'aiya-cms'),
+        'description' => __('暂无文章', 'aiya-cms'),
     ]);
 } else {
     //执行主循环
@@ -165,7 +165,7 @@ if (!have_posts()) {
     aya_template_part_load('loop-grid', [
         'posts' => $loop_porps,
         'label_icon' => 'house',
-        'label_title' => '首页',
+        'label_title' => __('首页', 'aiya-cms'),
         'is_main_loop' => true,
     ]);
 

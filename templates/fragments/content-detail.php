@@ -37,7 +37,7 @@ $render_categories = static function ($categories) {
         return;
     }
     $html = '';
-    $html .= '<span class="text-muted-foreground">' . __('分类：', 'AIYA') . '</span>';
+    $html .= '<span class="text-muted-foreground">' . __('分类：', 'aiya-cms') . '</span>';
     foreach ($categories as $index => $cat) {
         $html .= '<a href="' . esc_attr($cat['url']) . '" class="bg-primary/90 text-primary-foreground hover:bg-primary/80 text-sm px-2 py-1 rounded-md">';
         $html .= esc_html($cat['name']);
@@ -83,7 +83,7 @@ $render_tags = static function ($tags) {
                             <div class="flex items-center gap-1.5" title="<?php aya_echo($date_iso); ?>">
                                 <span class="icon-slot shrink-0" data-icon="calendar" data-icon-size="4"></span>
                                 <time datetime="<?php aya_echo($date_iso); ?>"><?php aya_echo($date); ?></time>
-                                <span class="opacity-80"><?php aya_echo(sprintf(__('[ 上次更新于 %s ]'), $modified_ago)); ?></span>
+                                <span class="opacity-80"><?php aya_echo(sprintf(__('[ 上次更新于 %s ]', 'aiya-cms'), $modified_ago)); ?></span>
                             </div>
                             <div class="flex items-center gap-1.5">
                                 <span class="icon-slot shrink-0" data-icon="views" data-icon-size="4"></span>
@@ -119,7 +119,7 @@ $render_tags = static function ($tags) {
                         <div class="flex items-center gap-1.5" title="<?php aya_echo($date_iso); ?>">
                             <span class="icon-slot shrink-0" data-icon="calendar" data-icon-size="4"></span>
                             <time datetime="<?php aya_echo($date_iso); ?>"><?php aya_echo($date); ?></time>
-                            <span class="opacity-80"><?php aya_echo(sprintf(__('[ 上次更新于 %s ]'), $modified_ago)); ?></span>
+                            <span class="opacity-80"><?php aya_echo(sprintf(__('[ 上次更新于 %s ]', 'aiya-cms'), $modified_ago)); ?></span>
                         </div>
                         <div class="flex items-center gap-1.5">
                             <span class="icon-slot shrink-0" data-icon="views" data-icon-size="4"></span>

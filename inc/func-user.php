@@ -54,19 +54,19 @@ function aya_user_show_favorites_profile($user)
 
     // 开始输出区块
 ?>
-    <h2><?php _e('收藏夹', 'AIYA'); ?></h2>
+    <h2><?php __('收藏夹', 'aiya-cms'); ?></h2>
 
     <?php if (empty($favorites)): ?>
-        <p><?php _e('暂无收藏文章', 'AIYA'); ?></p>
+        <p><?php __('暂无收藏文章', 'aiya-cms'); ?></p>
     <?php else: ?>
-        <p><?php printf(__('共有 <strong>%d</strong> 篇收藏文章', 'AIYA'), count($favorites)); ?></p>
+        <p><?php printf(__('共有 <strong>%d</strong> 篇收藏文章', 'aiya-cms'), count($favorites)); ?></p>
         <div class="favorite-posts-list" style="margin-top: 15px;">
             <table class="widefat" style="width: 100%;">
                 <thead>
                     <tr>
-                        <th style="width: 60%;"><?php _e('文章标题', 'AIYA'); ?></th>
-                        <th><?php _e('作者', 'AIYA'); ?></th>
-                        <th><?php _e('发布日期', 'AIYA'); ?></th>
+                        <th style="width: 60%;"><?php __('文章标题', 'aiya-cms'); ?></th>
+                        <th><?php __('作者', 'aiya-cms'); ?></th>
+                        <th><?php __('发布日期', 'aiya-cms'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -348,23 +348,19 @@ function aya_is_sponsor($user_id = 0)
         if (!is_user_logged_in()) {
             return false;
         }
-
         $user_id = get_current_user_id();
     }
-
     //如果是编辑以上权限用户
     if (user_can($user_id, 'edit_pages')) {
         return true;
     }
-
-    //获取当前禁用状态
+    // 获取当前禁用状态
     $force_cancel = get_user_meta($user_id, 'aya_force_cancel_sponsor', true);
-    //获取到期时间
+    // 获取到期时间
     $expiration = get_user_meta($user_id, 'sponsor_expiration', true);
-
+    // 获取当前时间戳
     $now = current_time('timestamp');
-
-    //如果到期时间大于当前时间，并且没有强制取消
+    // 如果到期时间大于当前时间，并且没有强制取消
     return ($expiration && $expiration > $now && $force_cancel != '1');
 }
 
@@ -414,7 +410,7 @@ add_action('pre_get_users', 'aya_sponsor_sort_trigger_count_users');
 
 function aya_sponsor_add_trigger_count_column($columns)
 {
-    $columns['aya_sponsor_trigger_count'] = __('赞助权限计数器', 'AIYA');
+    $columns['aya_sponsor_trigger_count'] = __('赞助权限计数器', 'aiya-cms');
     return $columns;
 }
 
@@ -454,12 +450,11 @@ function aya_sponsor_user_auto_trigger_count($user_id = 0)
     //如果未指定用户ID，则使用当前用户
     if (empty($user_id)) {
         if (!is_user_logged_in()) {
-            return '';
+            return;
         }
 
         $user_id = get_current_user_id();
     }
-
     //如果是赞助用户，则计数器+1
     if (aya_is_sponsor($user_id)) {
         $trigger_count = (int) get_user_meta($user_id, 'aya_trigger_count_sponsor', true);
@@ -494,7 +489,7 @@ function aya_sponsor_show_orders_user_profile($user)
     if (isset($_GET['fix_sponsor_data']) && $_GET['fix_sponsor_data'] === '1' && isset($_GET['user_id']) && intval($_GET['user_id']) === intval($user->ID)) {
         //nonce 验证防止 CSRF
         if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'aya_fix_sponsor_' . $user->ID)) {
-            echo '<div class="notice notice-error"><p>' . __('安全验证失败，请重试', 'AIYA') . '</p></div>';
+            echo '<div class="notice notice-error"><p>' . __('安全验证失败，请重试', 'aiya-cms') . '</p></div>';
         } else {
             //恢复订阅
             $review_cancel = (isset($_GET['review_cancel']) && $_GET['review_cancel'] === '1');
@@ -502,7 +497,7 @@ function aya_sponsor_show_orders_user_profile($user)
             $fix_result = aya_sponsor_fix_user_data($user->ID, $review_cancel);
 
             if ($fix_result === true) {
-                echo '<div class="updated"><p>' . __('用户订阅数据已修复', 'AIYA') . '</p></div>';
+                echo '<div class="updated"><p>' . __('用户订阅数据已修复', 'aiya-cms') . '</p></div>';
             } elseif (is_string($fix_result)) {
                 echo '<div class="notice notice-warning"><p>' . esc_html($fix_result) . '</p></div>';
             }
@@ -510,58 +505,58 @@ function aya_sponsor_show_orders_user_profile($user)
     }
     //开始输出区块表单
 ?>
-    <h2><?php _e('赞助者管理', 'AIYA'); ?></h2>
+    <h2><?php __('赞助者管理', 'aiya-cms'); ?></h2>
     <p>
-        <?php _e('当前订阅状态：', 'AIYA'); ?>
+        <?php __('当前订阅状态：', 'aiya-cms'); ?>
         <?php if ($force_cancel == '1'): ?>
-            <span style="color:red;"><?php _e('已被管理员强制取消', 'AIYA'); ?></span>
+            <span style="color:red;"><?php __('已被管理员强制取消', 'aiya-cms'); ?></span>
         <?php elseif ($is_valid): ?>
-            <span style="color:green;"><?php _e('有效', 'AIYA'); ?>&nbsp;&nbsp;</span>
-            <?php printf(__('剩余 <strong>%d</strong> 天', 'AIYA'), $left_days); ?>
+            <span style="color:green;"><?php __('有效', 'aiya-cms'); ?>&nbsp;&nbsp;</span>
+            <?php printf(__('剩余 <strong>%d</strong> 天', 'aiya-cms'), $left_days); ?>
         <?php else: ?>
-            <span style="color:gray;"><?php _e('无效', 'AIYA'); ?></span>
+            <span style="color:gray;"><?php __('无效', 'aiya-cms'); ?></span>
         <?php endif; ?>
     </p>
     <table class="form-table">
         <tr>
-            <th><label><?php _e('重新验证订阅有效性', 'AIYA'); ?></label></th>
+            <th><label><?php __('重新验证订阅有效性', 'aiya-cms'); ?></label></th>
             <td>
                 <a href="<?php echo esc_url(wp_nonce_url(add_query_arg(array('fix_sponsor_data' => 1), $current_url), 'aya_fix_sponsor_' . $user->ID)); ?>" class="button">
-                    <?php _e('重新计算到期日', 'AIYA'); ?>
+                    <?php __('重新计算到期日', 'aiya-cms'); ?>
                 </a>
                 <a href="<?php echo esc_url(wp_nonce_url(add_query_arg(array('fix_sponsor_data' => 1, 'review_cancel' => 1), $current_url), 'aya_fix_sponsor_' . $user->ID)); ?>" class="button" style="margin-left: 10px;">
-                    <?php _e('恢复赞助者权限', 'AIYA'); ?>
+                    <?php __('恢复赞助者权限', 'aiya-cms'); ?>
                 </a>
             </td>
         </tr>
         <tr>
-            <th><label for="aya_force_cancel_sponsor"><?php _e('取消此用户赞助者权限', 'AIYA'); ?></label></th>
+            <th><label for="aya_force_cancel_sponsor"><?php __('取消此用户赞助者权限', 'aiya-cms'); ?></label></th>
             <td>
                 <input type="checkbox" name="aya_force_cancel_sponsor" id="aya_force_cancel_sponsor" value="1" <?php checked($force_cancel, '1'); ?> />
-                <span class="description"><?php _e('勾选后，该用户即使有赞助订单生效也视为非赞助者。', 'AIYA'); ?></span>
+                <span class="description"><?php __('勾选后，该用户即使有赞助订单生效也视为非赞助者。', 'aiya-cms'); ?></span>
             </td>
         </tr>
         <tr>
-            <th><label for="aya_admin_add_order_days"><?php _e('手动添加赞助订单', 'AIYA'); ?></label></th>
+            <th><label for="aya_admin_add_order_days"><?php __('手动添加赞助订单', 'aiya-cms'); ?></label></th>
             <td>
                 <input type="number" name="aya_admin_add_order_days" id="aya_admin_add_order_days" min="1" step="1" value="" />
-                <p class="description"><?php _e('输入要添加的赞助天数（必填）', 'AIYA'); ?></p>
+                <p class="description"><?php __('输入要添加的赞助天数（必填）', 'aiya-cms'); ?></p>
             </td>
         </tr>
     </table>
-    <h3><?php _e('赞助订单记录', 'AIYA'); ?></h3>
+    <h3><?php __('赞助订单记录', 'aiya-cms'); ?></h3>
     <p>
-        <?php printf(__('累计已赞助 <strong>%d</strong> 天', 'AIYA'), $total_days); ?>
+        <?php printf(__('累计已赞助 <strong>%d</strong> 天', 'aiya-cms'), $total_days); ?>
     </p>
     <div class="sponsor-orders-list" style="margin-top: 15px;">
         <table class="widefat" style="width: 100%;">
             <thead>
                 <tr>
-                    <th><?php _e('订单号', 'AIYA'); ?></th>
-                    <th><?php _e('开始时间', 'AIYA'); ?></th>
-                    <th><?php _e('天数', 'AIYA'); ?></th>
-                    <th><?php _e('来源', 'AIYA'); ?></th>
-                    <th><?php _e('状态', 'AIYA'); ?></th>
+                    <th><?php __('订单号', 'aiya-cms'); ?></th>
+                    <th><?php __('开始时间', 'aiya-cms'); ?></th>
+                    <th><?php __('天数', 'aiya-cms'); ?></th>
+                    <th><?php __('来源', 'aiya-cms'); ?></th>
+                    <th><?php __('状态', 'aiya-cms'); ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -677,35 +672,48 @@ function aya_user_get_login_data()
         //仪表盘链接
         if (user_can($user_id, 'edit_pages')) {
             $dorpdown_menus[] = [
-                'label' => __('管理后台', 'AIYA'),
+                'label' => __('管理后台', 'aiya-cms'),
                 'icon' => 'dashboard',
                 'url' => admin_url(),
                 'targe_blank' => true
             ];
         }
 
+        //为文章页添加直接跳转编辑页面的菜单
+        if (user_can($user_id, 'edit_pages') && (aya_is_where() == 'single' || aya_is_where() == 'page')) {
+
+            $post_id = get_queried_object_id();
+            if (!empty($post_id)) {
+                $dorpdown_menus[] = [
+                    'label' => __('编辑当前文章', 'aiya-cms'),
+                    'icon' => 'edit',
+                    'url' => admin_url('post.php?post=' . $post_id . '&action=edit'),
+                ];
+            }
+        }
+
         $dorpdown_menus[] = [
-            'label' => __('个人主页', 'AIYA'),
+            'label' => __('个人主页', 'aiya-cms'),
             'icon' => 'profile',
             'url' => get_author_posts_url($user_id),
         ];
 
         if (aya_opt('site_sponsor_module_bool', 'access')) {
             $dorpdown_menus[] = [
-                'label' => __('获取订阅', 'AIYA'),
+                'label' => __('获取订阅', 'aiya-cms'),
                 'icon' => 'sponsor',
                 'url' => home_url('sponsor'),
             ];
         }
 
         $dorpdown_menus[] = [
-            'label' => __('我的收藏', 'AIYA'),
+            'label' => __('我的收藏', 'aiya-cms'),
             'icon' => 'inbox',
             'url' => home_url('user-favlist'),
         ];
 
         $dorpdown_menus[] = [
-            'label' => __('个人资料', 'AIYA'),
+            'label' => __('个人资料', 'aiya-cms'),
             'icon' => 'settings',
             'url' => home_url('user-settings'),
         ];

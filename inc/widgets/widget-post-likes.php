@@ -8,20 +8,20 @@ class AYA_Widget_Post_Likes extends AYA_Widget
     {
         $widget_args = [
             'id' => 'widget-post-top-likes',
-            'title' => 'AIYA-CMS 热赞文章',
+            'title' => __('AIYA-CMS 热赞文章', 'aiya-cms'),
             'classname' => 'widget-card-box',
-            'desc' => '文章列表卡片，展示点赞量最多的文章',
+            'desc' => __('文章列表卡片，展示点赞量最多的文章', 'aiya-cms'),
             'field_build' => [
                 [
                     'type' => 'input',
                     'id' => 'title',
-                    'name' => '标题',
-                    'default' => '点赞排行',
+                    'name' => __('标题', 'aiya-cms'),
+                    'default' => __('点赞排行', 'aiya-cms'),
                 ],
                 [
                     'type' => 'input',
                     'id' => 'limit',
-                    'name' => '显示数量',
+                    'name' => __('显示数量', 'aiya-cms'),
                     'default' => '5',
                 ],
             ],

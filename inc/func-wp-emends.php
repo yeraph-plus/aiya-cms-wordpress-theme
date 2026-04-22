@@ -152,7 +152,7 @@ function aya_rewrite_land_page_document_title($title)
     global $aya_land_page;
 
     //获取标题参数
-    $page_title = $aya_land_page[$page_type]['title'] ?? __('独立页面', 'AIYA');
+    $page_title = $aya_land_page[$page_type]['title'] ?? __('独立页面', 'aiya-cms');
 
     //获取站点名称
     $site_name = get_bloginfo('name');
@@ -477,24 +477,6 @@ function aya_content_filter_img_tag($content)
 // 在主题首次启用时添加默认提示分类
 add_action('aya_install', 'aya_tax_tips_add_default_terms');
 
-// 注册文章操作的 MetaBox
-AYF::new_box([
-    'title' => '重新发布',
-    'id' => 'reset_post_datetime_box',
-    'context' => 'normal',
-    'priority' => 'low',
-    'add_box_in' => ['post'],
-    'fields' => [
-        [
-            'title' => '重新发布',
-            'desc' => '刷新文章发布日期到当前时间',
-            'id' => 'reset_post_datetime',
-            'type' => 'switch',
-            'default' => false,
-        ],
-    ],
-]);
-
 if (aya_opt('site_post_add_tips_terms_bool', 'land')) {
     //注册提示分类法
     AYF::module(
@@ -502,7 +484,7 @@ if (aya_opt('site_post_add_tips_terms_bool', 'land')) {
         'Register_Tax_Type',
         [
             'status' => [
-                'name' => __('小贴士', 'AIYA'),
+                'name' => __('小贴士', 'aiya-cms'),
                 'slug' => 'tips',
                 'post_type' => ['post'],
             ],
@@ -513,16 +495,16 @@ if (aya_opt('site_post_add_tips_terms_bool', 'land')) {
         'add_meta_in' => 'tips',
         'fields' => [
             [
-                'title' => '提示框颜色',
-                'desc' => '选择提示框样式，提示用户重要的消息',
+                'title' => __('提示框颜色', 'aiya-cms'),
+                'desc' => __('选择提示框样式，提示用户重要的消息', 'aiya-cms'),
                 'id' => 'alert_level',
                 'type' => 'select',
                 'sub' => [
-                    'default' => '默认',
-                    'info' => '信息蓝',
-                    'success' => '成功绿',
-                    'warning' => '警告黄',
-                    'error' => '危险红',
+                    'default' => __('默认', 'aiya-cms'),
+                    'info' => __('信息蓝', 'aiya-cms'),
+                    'success' => __('成功绿', 'aiya-cms'),
+                    'warning' => __('警告黄', 'aiya-cms'),
+                    'error' => __('危险红', 'aiya-cms'),
                 ],
                 'default' => 'default',
             ],
@@ -536,24 +518,24 @@ function aya_tax_tips_add_default_terms()
     $taxonomy = 'tips';
 
     $terms = [
-        '更新中' => [
-            'description' => '这篇文章正在更新中，可能还会有新的内容添加。',
+        __('更新中', 'aiya-cms') => [
+            'description' => __('这篇文章正在更新中，可能还会有新的内容添加。', 'aiya-cms'),
             'slug' => 'updating'
         ],
-        '需要更新' => [
-            'description' => '这篇文章的信息已经失效，当前内容仅供参考。',
+        __('需要更新', 'aiya-cms') => [
+            'description' => __('这篇文章的信息已经失效，当前内容仅供参考。', 'aiya-cms'),
             'slug' => 'invalid'
         ],
-        '已废弃' => [
-            'description' => '这篇文章的信息已经废弃，不再更新。',
+        __('已废弃', 'aiya-cms') => [
+            'description' => __('这篇文章的信息已经废弃，不再更新。', 'aiya-cms'),
             'slug' => 'abandoned'
         ],
-        '危险操作' => [
-            'description' => '这篇教程包含修改系统核心文件等操作，请注意备份。',
+        __('危险操作', 'aiya-cms') => [
+            'description' => __('这篇教程包含修改系统核心文件等操作，请注意备份。', 'aiya-cms'),
             'slug' => 'dangerous'
         ],
-        '来源不明' => [
-            'description' => '这篇文章的信息来源未经证明，捕风捉影罢了。',
+        __('来源不明', 'aiya-cms') => [
+            'description' => __('这篇文章的信息来源未经证明，捕风捉影罢了。', 'aiya-cms'),
             'slug' => 'rumor'
         ],
     ];
@@ -586,9 +568,9 @@ function aya_get_post_tips($post_id = 0)
         if (time() > $last_time + (DAY_IN_SECONDS * $post_outdated_days)) {
             $tips[] = [
                 'alert' => 'default',
-                'name' => '时效性提示',
+                'name' => __('时效性提示', 'aiya-cms'),
                 'description' => sprintf(
-                    '这篇文章发布于 %s 前，部分信息可能已过时，请留意。',
+                    __('这篇文章发布于 %s 前，部分信息可能已过时，请留意。', 'aiya-cms'),
                     human_time_diff($publish_time, time())
                 ),
             ];

@@ -37,16 +37,9 @@ $post_obj = new AYA_Post_In_While();
     </div>
     <!-- Content End -->
     <?php
-    //使权限计数器工作一次
-    // TODO 应该提前注册此方法使其在restapi中也可用
-    // TODO 重构oplist加载方法直接从meta中提取不传参
-    aya_sponsor_user_auto_trigger_count();
-
     //加载文件列表组件
-    $oplist_props = function_exists('aya_oplist_cli_get_props') ? aya_oplist_cli_get_props() : null;
-
-    if (is_array($oplist_props) && $oplist_props !== []) {
-        aya_react_island('open-list-client', $oplist_props);
+    if (aya_is_oplist_cli_ready($post_obj->id)) {
+        aya_react_island('open-list-client', ['postId' => $post_obj->id]);
     }
 
     //获取上下篇文章

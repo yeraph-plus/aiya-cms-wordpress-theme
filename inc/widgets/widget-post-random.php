@@ -8,20 +8,20 @@ class AYA_Widget_Post_Random extends AYA_Widget
     {
         $widget_args = [
             'id' => 'widget-post-random',
-            'title' => 'AIYA-CMS 随机文章',
+            'title' => __('AIYA-CMS 随机文章', 'aiya-cms'),
             'classname' => 'widget-panel',
-            'desc' => '文章列表卡片，展示随机的文章',
+            'desc' => __('文章列表卡片，展示随机的文章', 'aiya-cms'),
             'field_build' => [
                 [
                     'type' => 'input',
                     'id' => 'title',
-                    'name' => '标题',
-                    'default' => '随机推荐',
+                    'name' => __('标题', 'aiya-cms'),
+                    'default' => __('随机推荐', 'aiya-cms'),
                 ],
                 [
                     'type' => 'input',
                     'id' => 'limit',
-                    'name' => '显示数量',
+                    'name' => __('显示数量', 'aiya-cms'),
                     'default' => '5',
                 ],
             ],

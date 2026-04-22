@@ -36,6 +36,8 @@ define('AYA_CACHE_SECOND', HOUR_IN_SECONDS); // or MINUTE_IN_SECONDS
 //define('AYA_MODIFY_VISITORS', 10);
 // 密码重置Token过期时间
 define('AYA_PASSWORD_RESET_TOKEN_TTL', 30 * MINUTE_IN_SECONDS);
+// 主题翻译域
+define('AYA_THEME_TEXTDOMAIN', 'aiya-cms');
 
 /*
  * ------------------------------------------------------------------------------
@@ -72,7 +74,7 @@ $GLOBALS['aya_land_page'] = [
         'template' => 'external-auto',
         'orginal' => false,
         'callback' => function () {
-            aya_add_breadcrumb_item(__('跳转页面', 'AIYA'), '#');
+            aya_add_breadcrumb_item(__('跳转页面', 'aiya-cms'), '#');
         }
     ],
     'link' => [
@@ -80,7 +82,7 @@ $GLOBALS['aya_land_page'] = [
         'template' => 'external-link',
         'orginal' => true,
         'callback' => function () {
-            aya_add_breadcrumb_item(__('外部链接提示', 'AIYA'), '#');
+            aya_add_breadcrumb_item(__('外部链接提示', 'aiya-cms'), '#');
         }
     ],
     'sponsor' => [
@@ -88,7 +90,7 @@ $GLOBALS['aya_land_page'] = [
         'template' => 'sponsor-plan',
         'orginal' => true,
         'callback' => function () {
-            aya_add_breadcrumb_item(__('获取订阅', 'AIYA'), '#');
+            aya_add_breadcrumb_item(__('获取订阅', 'aiya-cms'), '#');
         }
     ],
     'user-favlist' => [
@@ -96,7 +98,7 @@ $GLOBALS['aya_land_page'] = [
         'template' => 'user-favlist',
         'orginal' => true,
         'callback' => function () {
-            aya_add_breadcrumb_item(__('收藏列表', 'AIYA'), '#');
+            aya_add_breadcrumb_item(__('收藏列表', 'aiya-cms'), '#');
         }
     ],
     'user-settings' => [
@@ -104,7 +106,7 @@ $GLOBALS['aya_land_page'] = [
         'template' => 'user-settings',
         'original' => true,
         'callback' => function () {
-            aya_add_breadcrumb_item(__('用户设置', 'AIYA'), '#');
+            aya_add_breadcrumb_item(__('用户设置', 'aiya-cms'), '#');
         }
     ],
     'reset-password' => [
@@ -112,7 +114,7 @@ $GLOBALS['aya_land_page'] = [
         'template' => 'reset-password',
         'orginal' => true,
         'callback' => function () {
-            aya_add_breadcrumb_item(__('重置密码', 'AIYA'), '#');
+            aya_add_breadcrumb_item(__('重置密码', 'aiya-cms'), '#');
         }
     ],
 ];
@@ -124,8 +126,8 @@ aya_require('functions', 'plugins', true);
 if (!class_exists('AYF') || !class_exists('AYP')) {
 
     if (!is_admin()) {
-        $error_title = __('AIYA-CMS 启动错误', 'AIYA');
-        $error_msg = __('AIYA-CMS 未找到主题框架依赖，请安装并激活 AIYA-Optimize 插件。', 'AIYA');
+        $error_title = __('AIYA-CMS 启动错误', 'aiya-cms');
+        $error_msg = __('AIYA-CMS 未找到主题框架依赖，请安装并激活 AIYA-Optimize 插件。', 'aiya-cms');
 
         wp_die($error_msg, $error_title, ['response' => 500]);
 
@@ -137,7 +139,6 @@ if (!class_exists('AYF') || !class_exists('AYP')) {
 
 
 //加载SDK
-aya_require('BFI_Thumb', 'lib');
 aya_require('XDeode', 'lib');
 aya_require('Http_Request', 'lib');
 aya_require('Afdian_API', 'lib');
@@ -155,6 +156,8 @@ aya_require('WP_Term', 'core');
 aya_require('func-public');
 aya_require('func-wp-emends');
 aya_require('func-wp-scripts');
+aya_require('func-wp-locale');
+aya_require('func-downgrade-fix');
 aya_require('func-tweet-post');
 
 //模板方法
@@ -284,7 +287,7 @@ AYF::module('Admin_Custom', [
     //隐藏后台仪表盘欢迎模块和WordPress新闻
     'remove_admin_dashboard_wp_news' => true,
     //替换后台页脚信息
-    'admin_footer_replace' => __('感谢使用 <b>AIYA-CMS</b> 主题，欢迎访问 <a href="https://www.yeraph.com" target="_blank">Yeraph Studio</a> 了解更多。', 'AIYA'),
+    'admin_footer_replace' => __('感谢使用 <b>AIYA-CMS</b> 主题，欢迎访问 <a href="https://www.yeraph.com" target="_blank">Yeraph Studio</a> 了解更多。', 'aiya-cms'),
 ]);
 
 //注册小工具 Tips：请确保此时要注册的小工具的文件已被require
@@ -330,18 +333,18 @@ AYF::module('Widget_Unload', [
 //注册导航菜单
 AYF::module('Register_Menu', [
     //'菜单ID' => '菜单名',
-    'header-menu' => __('主要菜单', 'AIYA'),
-    'footer-menu' => __('页脚菜单（单层级）', 'AIYA'),
-    'widget-menu' => __('小工具菜单', 'AIYA'),
+    'header-menu' => __('主要菜单', 'aiya-cms'),
+    'footer-menu' => __('页脚菜单（单层级）', 'aiya-cms'),
+    'widget-menu' => __('小工具菜单', 'aiya-cms'),
 ]);
 
 //注册小工具栏位
 AYF::module('Register_Sidebar', [
     //'边栏ID' => '边栏名',
-    'index-widget' => __('首页', 'AIYA'),
-    'archive-widget' => __('归档页面', 'AIYA'),
-    'single-widget' => __('正文页面', 'AIYA'),
-    'author-widget' => __('用户页面', 'AIYA'),
+    'index-widget' => __('首页', 'aiya-cms'),
+    'archive-widget' => __('归档页面', 'aiya-cms'),
+    'single-widget' => __('正文页面', 'aiya-cms'),
+    'author-widget' => __('用户页面', 'aiya-cms'),
 ]);
 
 //浏览量计数器
@@ -349,3 +352,5 @@ AYF::module('Record_Visitors', true);
 
 //启用小工具缓存插件
 AYP::action('Widget_Cache', true);
+
+// TODO 接入WordPress i18n 功能

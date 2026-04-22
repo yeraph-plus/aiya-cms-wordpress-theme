@@ -21,12 +21,12 @@ $api->register_route('logout', [
         $nonce = $request->get_header('X-WP-Nonce');
         //验证nonce
         if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return $api->error_response('permission_denied', ['detail' => __('安全退出失败', 'AIYA')]);
+            return $api->error_response('permission_denied', ['detail' => __('安全退出失败', 'aiya-cms')]);
         }
         //执行退出
         wp_logout();
 
-        return $api->response(['message' => __('已退出登录', 'AIYA')]);
+        return $api->response(['message' => __('已退出登录', 'aiya-cms')]);
     },
     'permission_callback' => function () {
         return is_user_logged_in();
@@ -42,7 +42,7 @@ $api->register_route('login', [
         $nonce = $request->get_header('X-WP-Nonce');
         //验证nonce
         if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return $api->error_response('permission_denied', ['detail' => __('客户端已失效，请刷新页面后重试', 'AIYA')]);
+            return $api->error_response('permission_denied', ['detail' => __('客户端已失效，请刷新页面后重试', 'aiya-cms')]);
         }
 
         //接取参数
@@ -63,11 +63,11 @@ $api->register_route('login', [
 
         if (is_wp_error($user)) {
             //$real_error_message = $user->get_error_message();
-            return $api->error_response('permission_denied', ['detail' => __('登录邮箱或密码错误', 'AIYA')]);
+            return $api->error_response('permission_denied', ['detail' => __('登录邮箱或密码错误', 'aiya-cms')]);
         }
 
         //刷新页面
-        return $api->response(['message' => __('欢迎回来，', 'AIYA') . $user->display_name]);
+        return $api->response(['message' => __('欢迎回来，', 'aiya-cms') . $user->display_name]);
     },
     'permission_callback' => function () {
         return !is_user_logged_in();
@@ -152,7 +152,7 @@ $api->register_route('register', [
         $nonce = $request->get_header('X-WP-Nonce');
         //验证nonce
         if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return $api->error_response('permission_denied', ['detail' => __('客户端已失效，请刷新页面后重试', 'AIYA')]);
+            return $api->error_response('permission_denied', ['detail' => __('客户端已失效，请刷新页面后重试', 'aiya-cms')]);
         }
 
         //接取参数
@@ -163,25 +163,25 @@ $api->register_route('register', [
 
         //检查参数
         if (empty($register_name) || empty($email) || empty($password)) {
-            return $api->error_response('invalid_param', ['detail' => '用户名、邮箱或密码不能为空']);
+            return $api->error_response('invalid_param', ['detail' => __('用户名、邮箱或密码不能为空', 'aiya-cms')]);
         }
         //验证密码一致性
         if ($password !== $password_confirm) {
-            return $api->error_response('invalid_param', ['detail' => '两次输入的密码不一致']);
+            return $api->error_response('invalid_param', ['detail' => __('两次输入的密码不一致', 'aiya-cms')]);
         }
         //密码强度校验：至少8位，包含字母和数字
         if (mb_strlen($password) < 8) {
-            return $api->error_response('invalid_param', ['detail' => __('密码长度不能少于8位', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('密码长度不能少于8位', 'aiya-cms')]);
         }
         if (!preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password)) {
-            return $api->error_response('invalid_param', ['detail' => __('密码必须同时包含字母和数字', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('密码必须同时包含字母和数字', 'aiya-cms')]);
         }
         //验证传入是否是邮箱
         if (!is_email($email)) {
-            return $api->error_response('invalid_param', ['detail' => '邮箱格式不正确']);
+            return $api->error_response('invalid_param', ['detail' => __('邮箱格式不正确', 'aiya-cms')]);
         }
         if (email_exists($email)) {
-            return $api->error_response('invalid_param', ['detail' => '此邮箱已被注册']);
+            return $api->error_response('invalid_param', ['detail' => __('此邮箱已被注册', 'aiya-cms')]);
         }
 
         //登录名方法
@@ -196,7 +196,7 @@ $api->register_route('register', [
 
         if (is_wp_error($user_id)) {
             //$real_error_message = $user->get_error_message();
-            return $api->error_response('invalid_param', ['detail' => __('无法创建用户，请重试', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('无法创建用户，请重试', 'aiya-cms')]);
         }
 
         //将用户名设置为display_name
@@ -210,7 +210,7 @@ $api->register_route('register', [
         wp_set_auth_cookie($user_id);
 
         //刷新页面
-        return $api->response(['message' => __('欢迎你，', 'AIYA') . $register_name]);
+        return $api->response(['message' => __('欢迎你，', 'aiya-cms') . $register_name]);
     },
     'permission_callback' => function () {
         return !is_user_logged_in() && get_option('users_can_register');
@@ -219,22 +219,18 @@ $api->register_route('register', [
         'username' => [
             'required' => true,
             'type' => 'string',
-            'description' => '用户名'
         ],
         'password' => [
             'required' => true,
             'type' => 'string',
-            'description' => '密码'
         ],
         'password_confirm' => [
             'required' => true,
             'type' => 'string',
-            'description' => '确认密码'
         ],
         'email' => [
             'required' => true,
             'type' => 'string',
-            'description' => '邮箱'
         ]
     ]
 ]);
@@ -247,7 +243,7 @@ $api->register_route('forgot_password', [
         $nonce = $request->get_header('X-WP-Nonce');
         //验证nonce
         if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return $api->error_response('permission_denied', ['detail' => __('客户端已失效，请刷新页面后重试', 'AIYA')]);
+            return $api->error_response('permission_denied', ['detail' => __('客户端已失效，请刷新页面后重试', 'aiya-cms')]);
         }
 
         //接取参数
@@ -255,24 +251,24 @@ $api->register_route('forgot_password', [
 
         //检查参数
         if (empty($email)) {
-            return $api->error_response('invalid_param', ['detail' => __('请提供注册邮箱', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('请提供注册邮箱', 'aiya-cms')]);
         }
 
         //验证传入是否是邮箱
         if (!is_email($email)) {
-            return $api->error_response('invalid_param', ['detail' => __('邮箱格式不正确', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('邮箱格式不正确', 'aiya-cms')]);
         }
 
         //检查邮箱是否存在
         $user = get_user_by('email', $email);
         if (!$user) {
-            return $api->error_response('invalid_param', ['detail' => __('如果邮箱存在将发送邮件', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('如果邮箱存在将发送邮件', 'aiya-cms')]);
         }
 
         //生成重置密码链接
         $key = get_password_reset_key($user);
         if (is_wp_error($key)) {
-            return $api->error_response('server_error', ['detail' => __('无法生成密码重置链接，请稍后再试', 'AIYA')]);
+            return $api->error_response('server_error', ['detail' => __('无法生成密码重置链接，请稍后再试', 'aiya-cms')]);
         }
 
         //发送重置密码邮件
@@ -280,25 +276,25 @@ $api->register_route('forgot_password', [
         $reset_link = add_query_arg(['token' => $reset_token,], home_url('/reset-password/'));
 
         //邮件标题
-        $subject = sprintf(__('[%s] 密码重置', 'AIYA'), wp_specialchars_decode(get_option('blogname')));
+        $subject = sprintf(__('[%s] 密码重置', 'aiya-cms'), wp_specialchars_decode(get_option('blogname')));
 
         //邮件内容
-        $message = __('有人请求重置以下账号的密码：', 'AIYA') . "\r\n\r\n";
+        $message = __('有人请求重置以下账号的密码：', 'aiya-cms') . "\r\n\r\n";
         $message .= network_home_url('/') . "\r\n\r\n";
-        $message .= sprintf(__('用户名: %s', 'AIYA'), $user->user_login) . "\r\n\r\n";
-        $message .= __('如果这不是您本人的操作，请忽略此邮件。', 'AIYA') . "\r\n\r\n";
-        $message .= __('要重置密码，请访问以下链接:', 'AIYA') . "\r\n\r\n";
-        $message .= __('此链接仅在30分钟内有效。', 'AIYA') . "\r\n\r\n";
+        $message .= sprintf(__('用户名: %s', 'aiya-cms'), $user->user_login) . "\r\n\r\n";
+        $message .= __('如果这不是您本人的操作，请忽略此邮件。', 'aiya-cms') . "\r\n\r\n";
+        $message .= __('要重置密码，请访问以下链接:', 'aiya-cms') . "\r\n\r\n";
+        $message .= __('此链接仅在30分钟内有效。', 'aiya-cms') . "\r\n\r\n";
         $message .= $reset_link . "\r\n";
 
         //发送邮件
         $mail_sent = wp_mail($user->user_email, $subject, $message);
 
         if (!$mail_sent) {
-            return $api->error_response('server_error', ['detail' => __('发送重置密码邮件失败，请稍后再试', 'AIYA')]);
+            return $api->error_response('server_error', ['detail' => __('发送重置密码邮件失败，请稍后再试', 'aiya-cms')]);
         }
 
-        return $api->response(['message' => __('密码重置链接已发送到您的邮箱，请查收', 'AIYA')]);
+        return $api->response(['message' => __('密码重置链接已发送到您的邮箱，请查收', 'aiya-cms')]);
     },
     'permission_callback' => function () {
         return !is_user_logged_in();
@@ -307,7 +303,6 @@ $api->register_route('forgot_password', [
         'email' => [
             'required' => true,
             'type' => 'string',
-            'description' => '用户注册邮箱'
         ]
     ]
 ]);
@@ -320,17 +315,17 @@ $api->register_route('validate_password_reset', [
         $payload = aya_get_password_reset_payload($token);
 
         if (!$payload) {
-            return $api->error_response('invalid_param', ['detail' => __('重置链接缺少必要参数', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('重置链接缺少必要参数', 'aiya-cms')]);
         }
 
         $user = check_password_reset_key($payload['key'], $payload['login']);
         if (is_wp_error($user)) {
             delete_transient($payload['token_key']);
-            return $api->error_response('invalid_key', ['detail' => __('重置链接无效或已过期，请重新申请找回密码', 'AIYA')]);
+            return $api->error_response('invalid_key', ['detail' => __('重置链接无效或已过期，请重新申请找回密码', 'aiya-cms')]);
         }
 
         return $api->response([
-            'message' => __('重置链接有效，请输入新密码', 'AIYA'),
+            'message' => __('重置链接有效，请输入新密码', 'aiya-cms'),
             'login' => $user->user_login,
         ]);
     },
@@ -339,7 +334,6 @@ $api->register_route('validate_password_reset', [
         'token' => [
             'required' => true,
             'type' => 'string',
-            'description' => '密码重置令牌'
         ]
     ]
 ]);
@@ -354,28 +348,28 @@ $api->register_route('reset_password', [
         $password_confirm = (string) $request->get_param('password_confirm');
 
         if (!$payload) {
-            return $api->error_response('invalid_param', ['detail' => __('重置链接缺少必要参数', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('重置链接缺少必要参数', 'aiya-cms')]);
         }
 
         if (empty($password) || empty($password_confirm)) {
-            return $api->error_response('invalid_param', ['detail' => __('请输入新密码并确认', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('请输入新密码并确认', 'aiya-cms')]);
         }
 
         if ($password !== $password_confirm) {
-            return $api->error_response('invalid_param', ['detail' => __('两次输入的密码不一致', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('两次输入的密码不一致', 'aiya-cms')]);
         }
 
         if (mb_strlen($password) < 8) {
-            return $api->error_response('invalid_param', ['detail' => __('密码长度不能少于8位', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('密码长度不能少于8位', 'aiya-cms')]);
         }
         if (!preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password)) {
-            return $api->error_response('invalid_param', ['detail' => __('密码必须同时包含字母和数字', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('密码必须同时包含字母和数字', 'aiya-cms')]);
         }
 
         $user = check_password_reset_key($payload['key'], $payload['login']);
         if (is_wp_error($user)) {
             delete_transient($payload['token_key']);
-            return $api->error_response('invalid_key', ['detail' => __('重置链接无效或已过期，请重新申请找回密码', 'AIYA')]);
+            return $api->error_response('invalid_key', ['detail' => __('重置链接无效或已过期，请重新申请找回密码', 'aiya-cms')]);
         }
 
         reset_password($user, $password);
@@ -383,7 +377,7 @@ $api->register_route('reset_password', [
 
         return $api->response([
             'status' => 'done',
-            'message' => __('密码已重置，请使用新密码登录', 'AIYA'),
+            'message' => __('密码已重置，请使用新密码登录', 'aiya-cms'),
             'redirect' => home_url('/'),
         ]);
     },
@@ -392,17 +386,14 @@ $api->register_route('reset_password', [
         'token' => [
             'required' => true,
             'type' => 'string',
-            'description' => '密码重置令牌'
         ],
         'password' => [
             'required' => true,
             'type' => 'string',
-            'description' => '新密码'
         ],
         'password_confirm' => [
             'required' => true,
             'type' => 'string',
-            'description' => '确认新密码'
         ]
     ]
 ]);
@@ -413,11 +404,12 @@ $api->register_route('update_profile', [
     'callback' => function (WP_REST_Request $request) use ($api) {
         $nonce = $request->get_header('X-WP-Nonce');
         if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return $api->error_response('permission_denied', ['detail' => __('验证失败', 'AIYA')]);
+            return $api->error_response('permission_denied', ['detail' => __('验证失败', 'aiya-cms')]);
         }
 
         $user_id = get_current_user_id();
         $params = $request->get_params();
+        $allowed_locales = ['zh_CN', 'zh_TW', 'zh_HK', 'en_US'];
 
         $userdata = ['ID' => $user_id];
         $errors = [];
@@ -438,16 +430,23 @@ $api->register_route('update_profile', [
         if (isset($params['user_url'])) {
             $userdata['user_url'] = esc_url_raw($params['user_url']);
         }
+        if (isset($params['locale'])) {
+            $locale = sanitize_text_field($params['locale']);
+
+            if (!in_array($locale, $allowed_locales, true)) {
+                $errors[] = __('不支持的语言设置', 'aiya-cms');
+            }
+        }
 
         // Handle email update
         if (isset($params['email'])) {
             if (!is_email($params['email'])) {
-                $errors[] = __('邮箱格式不正确', 'AIYA');
+                $errors[] = __('邮箱格式不正确', 'aiya-cms');
             } else {
                 $current_user = wp_get_current_user();
                 if ($params['email'] !== $current_user->user_email) {
                     if (email_exists($params['email'])) {
-                        $errors[] = __('该邮箱已被使用', 'AIYA');
+                        $errors[] = __('该邮箱已被使用', 'aiya-cms');
                     } else {
                         $userdata['user_email'] = $params['email'];
                     }
@@ -465,9 +464,14 @@ $api->register_route('update_profile', [
             return $api->error_response('update_failed', ['detail' => $user_id->get_error_message()]);
         }
 
+        if (isset($locale) && empty($errors)) {
+            update_user_meta($user_id, 'locale', $locale);
+        }
+
         return $api->response([
             'status' => 'done',
-            'message' => __('资料已更新', 'AIYA')
+            'message' => __('资料已更新', 'aiya-cms'),
+            'locale' => isset($locale) ? $locale : get_user_locale($user_id),
         ]);
     },
     'permission_callback' => function () {
@@ -477,32 +481,30 @@ $api->register_route('update_profile', [
         'first_name' => [
             'required' => false,
             'type' => 'string',
-            'description' => '用户姓名'
         ],
         'last_name' => [
             'required' => false,
             'type' => 'string',
-            'description' => '用户姓氏'
         ],
         'nickname' => [
             'required' => false,
             'type' => 'string',
-            'description' => '用户昵称'
         ],
         'description' => [
             'required' => false,
             'type' => 'string',
-            'description' => '用户描述'
         ],
         'user_url' => [
             'required' => false,
             'type' => 'string',
-            'description' => '用户个人网站URL'
         ],
         'email' => [
             'required' => false,
             'type' => 'string',
-            'description' => '用户邮箱'
+        ],
+        'locale' => [
+            'required' => false,
+            'type' => 'string',
         ],
     ]
 ]);
@@ -513,7 +515,7 @@ $api->register_route('update_password', [
     'callback' => function (WP_REST_Request $request) use ($api) {
         $nonce = $request->get_header('X-WP-Nonce');
         if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return $api->error_response('permission_denied', ['detail' => __('验证失败', 'AIYA')]);
+            return $api->error_response('permission_denied', ['detail' => __('验证失败', 'aiya-cms')]);
         }
 
         $user_id = get_current_user_id();
@@ -526,17 +528,17 @@ $api->register_route('update_password', [
         if (!empty($params['pass']) && !empty($params['pass_again'])) {
             if ($params['pass'] === $params['pass_again']) {
                 if (mb_strlen($params['pass']) < 8) {
-                    $errors[] = __('密码长度不能少于8位', 'AIYA');
+                    $errors[] = __('密码长度不能少于8位', 'aiya-cms');
                 } else if (!preg_match('/[A-Za-z]/', $params['pass']) || !preg_match('/[0-9]/', $params['pass'])) {
-                    $errors[] = __('密码必须同时包含字母和数字', 'AIYA');
+                    $errors[] = __('密码必须同时包含字母和数字', 'aiya-cms');
                 } else {
                     $userdata['user_pass'] = $params['pass'];
                 }
             } else {
-                $errors[] = __('两次输入的密码不一致', 'AIYA');
+                $errors[] = __('两次输入的密码不一致', 'aiya-cms');
             }
         } else {
-            $errors[] = __('请输入新密码', 'AIYA');
+            $errors[] = __('请输入新密码', 'aiya-cms');
         }
 
         if (!empty($errors)) {
@@ -551,7 +553,7 @@ $api->register_route('update_password', [
 
         return $api->response([
             'status' => 'done',
-            'message' => __('密码已更新，请重新登录', 'AIYA')
+            'message' => __('密码已更新，请重新登录', 'aiya-cms')
         ]);
     },
     'permission_callback' => function () {
@@ -561,12 +563,10 @@ $api->register_route('update_password', [
         'pass' => [
             'required' => true,
             'type' => 'string',
-            'description' => '新密码'
         ],
         'pass_again' => [
             'required' => true,
             'type' => 'string',
-            'description' => '确认新密码'
         ],
     ]
 ]);
@@ -579,7 +579,7 @@ $api->register_route('post_like', [
         $nonce = $request->get_header('X-WP-Nonce');
         //验证nonce
         if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return $api->error_response('permission_denied', ['detail' => __('验证失败', 'AIYA')]);
+            return $api->error_response('permission_denied', ['detail' => __('验证失败', 'aiya-cms')]);
         }
 
         $post_id = absint($request->get_param('post_id'));
@@ -618,7 +618,7 @@ $api->register_route('post_favorite', [
     'callback' => function (WP_REST_Request $request) use ($api) {
         $nonce = $request->get_header('X-WP-Nonce');
         if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return $api->error_response('permission_denied', ['detail' => __('验证失败', 'AIYA')]);
+            return $api->error_response('permission_denied', ['detail' => __('验证失败', 'aiya-cms')]);
         }
 
         $post_id = $request->get_param('post_id');
@@ -670,7 +670,7 @@ $api->register_route('sponsor_activate', [
         $nonce = $request->get_header('X-WP-Nonce');
         //验证nonce
         if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return $api->error_response('permission_denied', ['detail' => __('客户端已失效，请刷新页面后重试', 'AIYA')]);
+            return $api->error_response('permission_denied', ['detail' => __('客户端已失效，请刷新页面后重试', 'aiya-cms')]);
         }
 
         //接取参数
@@ -681,7 +681,7 @@ $api->register_route('sponsor_activate', [
         $allowed_order_by = ['code', 'afdian', 'patreon', 'mbd', 'kofi', 'gumroad'];
 
         if (empty($order_by) || !in_array($order_by, $allowed_order_by)) {
-            return $api->error_response('invalid_param', ['detail' => __('未定义的接口', 'AIYA')]);
+            return $api->error_response('invalid_param', ['detail' => __('未定义的接口', 'aiya-cms')]);
         }
 
         //调用接口函数
@@ -692,13 +692,13 @@ $api->register_route('sponsor_activate', [
         if (function_exists($verify_func)) {
             $verify = call_user_func($verify_func, $order);
         } else {
-            $verify = ['status' => false, 'detail' => __('系统错误', 'AIYA')];
+            $verify = ['status' => false, 'detail' => __('系统错误', 'aiya-cms')];
         }
 
         if ($verify['status']) {
             //处理完成
             return $api->response([
-                'message' => __('订单激活成功', 'AIYA'),
+                'message' => __('订单激活成功', 'aiya-cms'),
                 'description' => $verify['detail']
             ]);
         } else {
@@ -713,12 +713,10 @@ $api->register_route('sponsor_activate', [
         'order_by' => [
             'required' => true,
             'type' => 'string',
-            'description' => '查询订单的接口名'
         ],
         'order' => [
             'required' => true,
             'type' => 'string',
-            'description' => '订单号或其他标识符'
         ],
     ]
 ]);
@@ -731,38 +729,81 @@ $api->register_route('oplist_fs', [
         $nonce = $request->get_header('X-WP-Nonce');
         //验证nonce
         if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return $api->error_response('permission_denied', ['detail' => __('安全验证失败，请刷新页面后重试', 'AIYA')]);
+            return $api->error_response('permission_denied', ['detail' => __('安全验证失败，请刷新页面后重试', 'aiya-cms')]);
         }
 
         //接取参数
         $params = $request->get_json_params();
 
-        $fs_method = $params['fs_method'];
+        $post_id = isset($params['post_id']) ? absint($params['post_id']) : 0;
+        if ($post_id <= 0) {
+            return $api->error_response('invalid_param', ['detail' => __('非法访问', 'aiya-cms')]);
+        }
+
+        // 检查文章是否存在
+        $post = get_post($post_id);
+        if (!$post instanceof WP_Post) {
+            return $api->error_response('not_found', ['detail' => __('文章不存在', 'aiya-cms')]);
+        }
+
+        $box_id = 'oplist_client';
+
+        // 检查文章是否配置了 OpenList 客户端
+        if (!aya_is_oplist_cli_ready($post_id, false)) {
+            return $api->error_response('not_found', ['detail' => __('文件访问未获授权', 'aiya-cms')]);
+        }
+
+        // 检查文章是否配置了赞助者权限
+        $sponsor_can = filter_var(aya_post_opt('sponsor_can', $box_id, $post_id), FILTER_VALIDATE_BOOLEAN);
+
+        if ($sponsor_can && !aya_is_sponsor()) {
+            return $api->error_response('permission_denied', ['detail' => __('未获授权', 'aiya-cms')]);
+        }
+        // 增加计数器
+        if ($sponsor_can) {
+            aya_sponsor_user_auto_trigger_count();
+        }
+
+        $fs_method = (string) aya_post_opt('fs_method', $box_id, $post_id);
+        $password = (string) aya_post_opt('password', $box_id, $post_id);
+        $desc = (string) aya_post_opt('desc', $box_id, $post_id);
+        $per_page = intval(aya_post_opt('per_page', $box_id, $post_id));
+        $page = isset($params['page']) ? max(1, intval($params['page'])) : 1;
+        $refresh = filter_var(aya_post_opt('refresh', $box_id, $post_id), FILTER_VALIDATE_BOOLEAN);
+
         $fs_atts = [];
+        $root_path = '/';
         switch ($fs_method) {
             case 'list':
             case 'get':
-                $fs_atts['path'] = '/' . trim($params['path'], '/');
-                $fs_atts['password'] = trim($params['password']);
-                $fs_atts['per_page'] = isset($params['per_page']) ? intval($params['per_page']) : 0;
-                $fs_atts['page'] = isset($params['page']) ? intval($params['page']) : 1;
-                $fs_atts['refresh'] = filter_var($params['refresh'], FILTER_VALIDATE_BOOLEAN);
+                $path = '/' . trim((string) aya_post_opt('path', $box_id, $post_id), '/');
+                $fs_atts['path'] = $path;
+                $fs_atts['password'] = $password;
+                $fs_atts['per_page'] = $per_page;
+                $fs_atts['page'] = $page;
+                $fs_atts['refresh'] = $refresh;
+                $root_path = $path;
                 break;
             case 'dirs':
-                $fs_atts['path'] = '/' . trim($params['path'], '/');
-                $fs_atts['password'] = trim($params['password']);
-                $fs_atts['force_root'] = filter_var($params['force_root'], FILTER_VALIDATE_BOOLEAN);
+                $path = '/' . trim((string) aya_post_opt('path', $box_id, $post_id), '/');
+                $fs_atts['path'] = $path;
+                $fs_atts['password'] = $password;
+                $fs_atts['force_root'] = false;
+                $root_path = $path;
                 break;
             case 'search':
-                $fs_atts['parent'] = '/' . trim($params['parent'], '/');
-                $fs_atts['keywords'] = trim($params['keywords']);
-                $fs_atts['scope'] = intval($params['scope']);
-                $fs_atts['page'] = isset($params['page']) ? intval($params['page']) : 1;
-                $fs_atts['per_page'] = isset($params['per_page']) ? intval($params['per_page']) : 0;
-                $fs_atts['password'] = trim($params['password']);
+                $parent = '/' . trim((string) aya_post_opt('parent', $box_id, $post_id), '/');
+                $fs_atts['parent'] = $parent;
+                $fs_atts['keywords'] = (string) aya_post_opt('keywords', $box_id, $post_id);
+                $fs_atts['scope'] = 2;
+                $fs_atts['page'] = $page;
+                $fs_atts['per_page'] = $per_page;
+                $fs_atts['password'] = $password;
+                $fs_atts['refresh'] = $refresh;
+                $root_path = $parent;
                 break;
             default:
-                return $api->error_response('invalid_param', ['detail' => __('未定义的请求类型', 'AIYA')]);
+                return $api->error_response('invalid_param', ['detail' => __('未定义的请求类型', 'aiya-cms')]);
         }
 
         $oplist_cli = aya_oplist_cli_init();
@@ -770,32 +811,47 @@ $api->register_route('oplist_fs', [
 
         //错误处理
         if (!is_array($fs_content)) {
+            $fs_error = is_string($fs_content) ? $fs_content : __('未知错误', 'aiya-cms');
             //识别一些常见错误
-            if (strpos($fs_content, 'EOF') !== false) {
-                $msg = __('本地服务器发送请求失败', 'AIYA');
-            } else if (strpos($fs_content, '400') !== false) {
-                $msg = __('参数错误', 'AIYA');
-            } else if (strpos($fs_content, '401') !== false) {
-                $msg = __('令牌失效', 'AIYA');
-            } else if (strpos($fs_content, '403') !== false) {
-                $msg = __('文件访问被拒绝', 'AIYA');
-            } else if (strpos($fs_content, '500') !== false) {
-                $msg = __('文件/目录位置不存在，或搜索功能未就绪', 'AIYA');
-            } else if (strpos($fs_content, 'your.openlist.server') !== false) {
-                $msg = __('请先完成后台设置', 'AIYA');
+            if (is_string($fs_content) && strpos($fs_content, 'EOF') !== false) {
+                $msg = __('本地服务器发送请求失败', 'aiya-cms');
+            } else if (is_string($fs_content) && strpos($fs_content, '400') !== false) {
+                $msg = __('参数错误', 'aiya-cms');
+            } else if (is_string($fs_content) && strpos($fs_content, '401') !== false) {
+                $msg = __('令牌失效', 'aiya-cms');
+            } else if (is_string($fs_content) && strpos($fs_content, '403') !== false) {
+                $msg = __('文件访问被拒绝', 'aiya-cms');
+            } else if (is_string($fs_content) && strpos($fs_content, '500') !== false) {
+                $msg = __('文件/目录位置不存在，或搜索功能未就绪', 'aiya-cms');
+            } else if (is_string($fs_content) && strpos($fs_content, 'your.openlist.server') !== false) {
+                $msg = __('请先完成后台设置', 'aiya-cms');
             } else {
-                $msg = __('访问错误', 'AIYA');
+                $msg = __('访问错误', 'aiya-cms');
             }
-            return $api->error_response('not_found', ['detail' => $msg . ' (' . $fs_content . ') ']);
+            return $api->error_response('not_found', ['detail' => $msg . ' (' . $fs_error . ') ']);
         }
+
+        // 截取当前目录名称
+        $folder_trim_path = trim((string) $root_path, '/');
+        $desc_folder = ($folder_trim_path === '' ? 'Root' : basename($folder_trim_path));
+        $desc_content = aya_preg_desc(($desc === '' ? aya_opt('site_oplist_file_desc', 'oplist') : $desc));
 
         //处理返回前端的数据结构
         return $api->response([
-            'content' => aya_oplist_rebuild_content($fs_content, $params),
-            'per_page' => intval($params['per_page']),
-            'page' => intval($params['page']),
+            'content' => aya_oplist_rebuild_content($fs_content, [
+                'fs_method' => $fs_method,
+                'path' => $root_path,
+                'password' => $password,
+                'ignore_dir' => true,
+                'parent' => $root_path,
+                'keywords' => $fs_atts['keywords'] ?? '',
+                'scope' => 2,
+            ]),
+            'per_page' => intval($fs_atts['per_page'] ?? 0),
+            'page' => intval($fs_atts['page'] ?? $page),
             'total' => intval($fs_content['total']),
-
+            'folder_name' => $desc_folder,
+            'description' => $desc_content,
         ]);
     },
     'permission_callback' => function () {

@@ -1,5 +1,25 @@
 import * as React from "react"
-import { Folder, FolderOpen, FileText, FileArchive, Image, Music, Video, FileCode, Database, File, Lock, Download, ChevronLeft, ChevronRight, Settings, Send, ArrowUpDown } from "lucide-react"
+
+import {
+    Folder,
+    FolderOpen,
+    FileText,
+    FileArchive,
+    Image,
+    Music,
+    Video,
+    FileCode,
+    Database,
+    File,
+    Lock,
+    Download,
+    ChevronLeft,
+    ChevronRight,
+    Settings,
+    Forward,
+    Send,
+    ArrowUpDown
+} from "lucide-react"
 import { toast } from "sonner"
 import { getConfig } from "@/lib/utils"
 import {
@@ -47,39 +67,37 @@ import {
     type SortingState,
 } from "@tanstack/react-table"
 
-interface OpenListFile {
+// `oplist_fs` API contract
+type OpenListApiRequest = {
+    post_id: number;
+    page: number;
+};
+type OpenListApiFile = {
     name: string;
     type: string;
     size: number;
     modified: string;
     url: string;
-}
-
-interface OpenListPagination {
-    total: number;
+};
+type OpenListApiSuccessResponse = {
+    content: OpenListApiFile[];
     per_page: number;
     page: number;
-}
-
+    total: number;
+    folder_name: string;
+    description: string;
+};
+type OpenListPagination = Pick<OpenListApiSuccessResponse, "total" | "per_page" | "page">;
 interface Aria2Config {
     rpcUrl: string;
     token: string;
 }
-
-interface OpenListRoute {
-    fs_method: 'list' | 'get' | 'dirs' | 'search' | 'rawurl';
-    path: string;
-    password?: string;
-    page?: number;
-    per_page?: number;
-    refresh?: boolean;
-    ignore_dir?: boolean;
-    parent?: string;
-    keywords?: string;
-    scope?: number; //0:all 1:dir 2:file
-    content?: string;
-    [key: string]: any;
-}
+type Aria2BatchResult = {
+    total: number;
+    successCount: number;
+    failCount: number;
+    failNames: string[];
+};
 
 type StableJson = null | boolean | number | string | StableJson[] | { [key: string]: StableJson };
 
@@ -121,15 +139,22 @@ function getOpenListClientCache() {
 type NormalizedOpenListResponse =
     | {
         ok: true;
-        content: OpenListFile[];
-        total: number;
-        per_page: number;
-        page: number;
+        data: OpenListApiSuccessResponse;
     }
     | {
         ok: false;
         message: string;
     };
+
+const PRESET_ARIA2_CONFIGS = [
+    { name: "Aria2Core", url: "http://localhost:6800/jsonrpc" },
+    { name: "MotrixNext", url: "http://localhost:16800/jsonrpc" },
+    { name: "Motrix", url: "http://localhost:16800/jsonrpc" },
+];
+
+type OpenListClientProps = {
+    postId?: number;
+};
 
 function cleanUrl(url: unknown): string {
     if (typeof url !== "string") return "";
@@ -145,7 +170,7 @@ function normalizeOpenListResponse(raw: any, pageFallback: number): NormalizedOp
 
     const contentRaw = payload?.content;
     if (Array.isArray(contentRaw)) {
-        const content: OpenListFile[] = contentRaw.map((f: any) => ({
+        const content: OpenListApiFile[] = contentRaw.map((f: any) => ({
             name: typeof f?.name === "string" ? f.name : "",
             type: typeof f?.type === "string" ? f.type : "file",
             size: typeof f?.size === "number" ? f.size : Number(f?.size) || 0,
@@ -155,10 +180,14 @@ function normalizeOpenListResponse(raw: any, pageFallback: number): NormalizedOp
 
         return {
             ok: true,
-            content,
-            total: typeof payload?.total === "number" ? payload.total : Number(payload?.total) || content.length,
-            per_page: typeof payload?.per_page === "number" ? payload.per_page : Number(payload?.per_page) || 0,
-            page: typeof payload?.page === "number" ? payload.page : Number(payload?.page) || pageFallback,
+            data: {
+                content,
+                total: typeof payload?.total === "number" ? payload.total : Number(payload?.total) || content.length,
+                per_page: typeof payload?.per_page === "number" ? payload.per_page : Number(payload?.per_page) || 0,
+                page: typeof payload?.page === "number" ? payload.page : Number(payload?.page) || pageFallback,
+                folder_name: typeof payload?.folder_name === "string" ? payload.folder_name : "",
+                description: typeof payload?.description === "string" ? payload.description : "",
+            },
         };
     }
 
@@ -172,36 +201,94 @@ function normalizeOpenListResponse(raw: any, pageFallback: number): NormalizedOp
     return { ok: false, message };
 }
 
-const PRESET_ARIA2_CONFIGS = [
-    { name: "Motrix", url: "http://localhost:16800/jsonrpc" },
-    { name: "Aria2c", url: "http://localhost:6800/jsonrpc" },
-];
+function createAria2AddUriPayload(config: Aria2Config, url: string, filename: string) {
+    const id = `aiya-cms-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const params: unknown[] = [];
+    if (config.token) {
+        params.push(`token:${config.token}`);
+    }
+    params.push([url]);
+    params.push({ out: filename });
+    return {
+        jsonrpc: "2.0",
+        method: "aria2.addUri",
+        id,
+        params,
+    };
+}
 
-type OpenListClientProps = Partial<OpenListRoute> & { content?: string };
+async function sendToLocalAria2(config: Aria2Config, url: string, filename: string): Promise<boolean> {
+    const safeUrl = cleanUrl(url);
+    if (!safeUrl) return false;
 
-function hasNonEmptyProps(props: OpenListClientProps | undefined | null): props is OpenListClientProps {
-    return !!props && Object.keys(props).length > 0;
+    const payload = createAria2AddUriPayload(config, safeUrl, filename);
+    try {
+        const res = await fetch(config.rpcUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) {
+            return false;
+        }
+
+        const data = await res.json();
+        if (data?.error) {
+            return false;
+        }
+
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+async function batchSendToLocalAria2(config: Aria2Config, files: OpenListApiFile[]): Promise<Aria2BatchResult> {
+    const result: Aria2BatchResult = {
+        total: files.length,
+        successCount: 0,
+        failCount: 0,
+        failNames: [],
+    };
+
+    for (const file of files) {
+        if (file.type === "folder") continue;
+        const success = await sendToLocalAria2(config, file.url, file.name);
+        if (success) {
+            result.successCount += 1;
+        } else {
+            result.failCount += 1;
+            result.failNames.push(file.name);
+        }
+    }
+
+    return result;
+}
+
+function hasValidPostId(props: OpenListClientProps | undefined | null): props is OpenListClientProps {
+    return !!props && typeof props.postId === "number" && props.postId > 0;
 }
 
 export default function OpenListClient(props: OpenListClientProps) {
-    const fs: OpenListRoute | null = React.useMemo(() => {
-        if (hasNonEmptyProps(props)) {
-            return props as OpenListRoute;
-        }
-
-        if (typeof window !== 'undefined') {
-            return ((window as any).AIYA_OPLIST_CLI ?? null) as OpenListRoute | null;
+    const request: number | null = React.useMemo(() => {
+        if (hasValidPostId(props)) {
+            return props.postId as number;
         }
 
         return null;
     }, [props]);
 
-    const fsKey = React.useMemo(() => (fs ? stableStringify(fs) : ""), [fs]);
+    const requestKey = React.useMemo(() => (request ? stableStringify(request) : ""), [request]);
 
     const [loading, setLoading] = React.useState(false);
     const [_error, setError] = React.useState<string | null>(null);
-    const [files, setFiles] = React.useState<OpenListFile[]>([]);
+    const [files, setFiles] = React.useState<OpenListApiFile[]>([]);
     const [pagination, setPagination] = React.useState<OpenListPagination | null>(null);
+    const [folderName, setFolderName] = React.useState<string>("");
+    const [description, setDescription] = React.useState<string>("");
     const [_clickedFiles, setClickedFiles] = React.useState<Set<string>>(new Set());
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [rowSelection, setRowSelection] = React.useState({})
@@ -227,7 +314,7 @@ export default function OpenListClient(props: OpenListClientProps) {
     const mountedRef = React.useRef(false);
 
     const fetchData = React.useCallback(async (page: number = 1) => {
-        if (!fs) return;
+        if (!request) return;
         if (mountedRef.current) {
             setLoading(true);
             setError(null);
@@ -249,36 +336,43 @@ export default function OpenListClient(props: OpenListClientProps) {
                 setError(normalized.message || "请求失败");
                 setFiles([]);
                 setPagination(null);
+                setFolderName("");
+                setDescription("");
                 return;
             }
 
-            if (normalized.content.length === 0) {
-                setError("当前目录下没有文件");
+            const data = normalized.data;
+            if (data.content.length === 0) {
+                setError(null);
                 setFiles([]);
+                setFolderName(data.folder_name);
+                setDescription(data.description);
                 setPagination({
-                    total: normalized.total || 0,
-                    per_page: normalized.per_page || 0,
-                    page: normalized.page || page,
+                    total: data.total || 0,
+                    per_page: data.per_page || 0,
+                    page: data.page || page,
                 });
                 return;
             }
 
             setError(null);
-            setFiles(normalized.content);
+            setFiles(data.content);
+            setFolderName(data.folder_name);
+            setDescription(data.description);
             setPagination({
-                total: normalized.total || 0,
-                per_page: normalized.per_page || 0,
-                page: normalized.page || page,
+                total: data.total || 0,
+                per_page: data.per_page || 0,
+                page: data.page || page,
             });
         };
 
         try {
-            const payload = { ...fs, page };
+            const payload: OpenListApiRequest = { post_id: request, page };
             const cacheKey = stableStringify({ apiUrl, payload });
 
             const cache = getOpenListClientCache();
             const cached = cache.data.get(cacheKey);
-            if (cached && Date.now() - cached.ts < 3000 && !payload.refresh) {
+            if (cached && Date.now() - cached.ts < 3000) {
                 applyNormalized(cached.data);
                 return;
             }
@@ -311,13 +405,13 @@ export default function OpenListClient(props: OpenListClientProps) {
             cache.inflight.delete(cacheKey);
 
             const normalized = normalizeOpenListResponse(raw, page);
-            if (response.ok && !payload.refresh && normalized.ok) {
+            if (response.ok && normalized.ok) {
                 cache.data.set(cacheKey, { ts: Date.now(), data: normalized });
             }
             applyNormalized(normalized);
         } catch (err) {
             try {
-                const payload = { ...fs, page };
+                const payload: OpenListApiRequest = { post_id: request, page };
                 const cacheKey = stableStringify({ apiUrl, payload });
                 getOpenListClientCache().inflight.delete(cacheKey);
             } catch {
@@ -331,7 +425,7 @@ export default function OpenListClient(props: OpenListClientProps) {
                 setLoading(false);
             }
         }
-    }, [fs]);
+    }, [request]);
 
     React.useEffect(() => {
         mountedRef.current = true;
@@ -341,17 +435,17 @@ export default function OpenListClient(props: OpenListClientProps) {
     }, []);
 
     React.useEffect(() => {
-        if (fs) {
-            fetchData(fs.page || 1);
+        if (request) {
+            fetchData(1);
         }
-    }, [fetchData, fs]);
+    }, [fetchData, request]);
 
     React.useEffect(() => {
-        if (!fs || !import.meta.env.DEV) return;
+        if (!request || !import.meta.env.DEV) return;
         const cache = getOpenListClientCache();
-        if (cache.logged.has(fsKey)) return;
-        cache.logged.add(fsKey);
-    }, [fs, fsKey]);
+        if (cache.logged.has(requestKey)) return;
+        cache.logged.add(requestKey);
+    }, [request, requestKey]);
 
     const handlePageChange = (page: number) => {
         if (!pagination) return;
@@ -390,81 +484,32 @@ export default function OpenListClient(props: OpenListClientProps) {
         return new Date(dateString).toLocaleDateString();
     };
 
-    const sendToAria2Core = React.useCallback(async (url: string, filename: string): Promise<boolean> => {
-        const safeUrl = cleanUrl(url);
-        if (!safeUrl) return false;
-
-        const id = `aiya-cms-${Date.now()}`;
-        const params: any[] = [];
-        if (aria2Config.token) {
-            params.push(`token:${aria2Config.token}`);
-        }
-        params.push([safeUrl]);
-        params.push({ out: filename });
-
-        const payload = {
-            jsonrpc: '2.0',
-            method: 'aria2.addUri',
-            id,
-            params
-        };
-
-        try {
-            const res = await fetch(aria2Config.rpcUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-            });
-
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-
-            const data = await res.json();
-            if (data.error) {
-                throw new Error(data.error.message || 'Unknown RPC error');
-            }
-
-            return true;
-        } catch (err) {
-            console.error("Aria2 error:", err);
-            return false;
-        }
-    }, [aria2Config]);
-
     const sendToAria2 = React.useCallback(async (url: string, filename: string) => {
-        const success = await sendToAria2Core(url, filename);
+        const success = await sendToLocalAria2(aria2Config, url, filename);
         if (success) {
             toast.success(`已发送到 Aria2: ${filename}`);
         } else {
             toast.error(`发送失败: ${filename}`);
         }
-    }, [sendToAria2Core]);
+    }, [aria2Config]);
 
     const handleBatchSendToAria2 = async () => {
         const selectedRows = table.getFilteredSelectedRowModel().rows
         if (selectedRows.length === 0) return
 
-        const total = selectedRows.length
-        let successCount = 0
-        let failCount = 0
+        const filesToSend = selectedRows.map((row) => row.original)
+        const total = filesToSend.length
 
         // Clear selection immediately
         setRowSelection({})
 
         toast.promise(
             (async () => {
-                for (const row of selectedRows) {
-                    const file = row.original
-                    if (file.type === 'folder') continue
-                    const success = await sendToAria2Core(file.url, file.name)
-                    if (success) successCount++
-                    else failCount++
+                const result = await batchSendToLocalAria2(aria2Config, filesToSend);
+                if (result.failCount > 0) {
+                    throw new Error(`${result.failCount} 个文件发送失败`);
                 }
-                if (failCount > 0) throw new Error(`${failCount} 个文件发送失败`)
-                return successCount
+                return result.successCount;
             })(),
             {
                 loading: `正在发送 ${total} 个文件到 Aria2...`,
@@ -476,7 +521,7 @@ export default function OpenListClient(props: OpenListClientProps) {
         )
     };
 
-    const columns: ColumnDef<OpenListFile>[] = React.useMemo(() => [
+    const columns: ColumnDef<OpenListApiFile>[] = React.useMemo(() => [
         {
             id: "select",
             header: ({ table }) => {
@@ -581,7 +626,7 @@ export default function OpenListClient(props: OpenListClientProps) {
                                     onClick={() => sendToAria2(file.url, file.name)}
                                     title="发送下载到 Aria2 客户端"
                                 >
-                                    <Send className="h-4 w-4" />
+                                    <Forward className="h-4 w-4" />
                                     推送
                                 </Button>
                             </>
@@ -659,38 +704,38 @@ export default function OpenListClient(props: OpenListClientProps) {
         return pages;
     };
 
-    if (!fs) return null;
+    if (!request) return null;
 
     return (
         <Card className="w-full rounded-lg">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <FolderOpen className="h-5 w-5" />
-                    {fs.path?.split('/').pop() || '无文件'}
+                    {folderName || '加载中...'}
                 </CardTitle>
                 <CardDescription>
-                    {fs.content && (
-                        <span dangerouslySetInnerHTML={{ __html: String(fs.content) }} />
+                    {description && (
+                        <span dangerouslySetInnerHTML={{ __html: String(description) }} />
                     )}
                 </CardDescription>
                 <CardAction>
                     {Object.keys(rowSelection).length > 0 && (
-                        <Button variant="outline" size="default" onClick={handleBatchSendToAria2} className="mr-2" title={`批量发送文件到下载客户端`}>
+                        <Button variant="outline" size="default" onClick={handleBatchSendToAria2} className="mr-2" title={`批量推送 ${Object.keys(rowSelection).length} 个文件到下载客户端`}>
                             <Send className="h-4 w-4" />
-                            批量推送 {Object.keys(rowSelection).length} 个文件
+                            推送下载
                         </Button>
                     )}
                     <Popover>
                         <PopoverTrigger asChild>
-                            <Button variant="outline" size="default" title="连接下载客户端">
+                            <Button variant="outline" size="default" title="连接到下载客户端">
                                 <Settings className="h-4 w-4" />
-                                连接下载客户端
+                                使用客户端下载
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-80">
                             <div className="grid gap-4">
                                 <div className="space-y-2">
-                                    <h4 className="font-medium leading-none"> RPC 连接设置</h4>
+                                    <h4 className="font-medium leading-none">下载客户端 RPC 连接设置</h4>
                                     <p className="text-sm text-muted-foreground">
                                         配置 Aria2 客户端 RPC 连接以远程推送下载
                                     </p>
@@ -744,128 +789,135 @@ export default function OpenListClient(props: OpenListClientProps) {
                 </CardAction>
             </CardHeader>
             <CardContent className="">
-                <Table className="">
-                    <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead key={header.id} className={header.id === "actions" ? "sticky right-0" : ""}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
-                                        </TableHead>
-                                    )
-                                })}
-                            </TableRow>
-                        ))}
-                    </TableHeader>
-                    <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className={cell.column.id === "actions" ? "sticky right-0" : ""}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
-                                    ))}
+                {loading ? (
+                    <div className="flex justify-center items-center h-32">
+                        <Spinner className="h-8 w-8" />
+                    </div>
+                ) : _error ? (
+                    <div className="h-24 flex items-center justify-center text-destructive">
+                        {_error}
+                    </div>
+                ) : (
+                    <Table className="">
+                        <TableHeader>
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <TableRow key={headerGroup.id}>
+                                    {headerGroup.headers.map((header) => {
+                                        return (
+                                            <TableHead key={header.id} className={header.id === "actions" ? "sticky right-0" : ""}>
+                                                {header.isPlaceholder
+                                                    ? null
+                                                    : flexRender(
+                                                        header.column.columnDef.header,
+                                                        header.getContext()
+                                                    )}
+                                            </TableHead>
+                                        )
+                                    })}
                                 </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="h-24 text-center"
-                                >
-                                    {loading ? (
-                                        <div className="flex justify-center items-center h-32">
-                                            <Spinner className="h-6 w-6" />
-                                        </div>
-                                    ) : (
-                                        "没有文件"
-                                    )}
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
+                            ))}
+                        </TableHeader>
+                        <TableBody>
+                            {table.getRowModel().rows?.length ? (
+                                table.getRowModel().rows.map((row) => (
+                                    <TableRow
+                                        key={row.id}
+                                        data-state={row.getIsSelected() && "selected"}
+                                    >
+                                        {row.getVisibleCells().map((cell) => (
+                                            <TableCell key={cell.id} className={cell.column.id === "actions" ? "sticky right-0" : ""}>
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={columns.length}
+                                        className="h-24 text-center"
+                                    >
+                                        当前目录下没有文件
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                )}
 
                 {/* Pagination */}
-                {pagination && (
-                    <div className="p-4 flex justify-between items-center border-t">
-                        {pagination.per_page > 0 && pagination.total > pagination.per_page ? (
-                            <Pagination>
-                                <PaginationContent>
-                                    <PaginationItem>
-                                        <PaginationLink
-                                            href="#"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                if (pagination.page > 1) handlePageChange(pagination.page - 1);
-                                            }}
-                                            className={`gap-1 pl-2.5 ${pagination.page <= 1 ? "pointer-events-none opacity-50" : ""}`}
-                                            aria-label="上一页"
-                                            size="default"
-                                        >
-                                            <ChevronLeft className="h-4 w-4" />
-                                            <span className="hidden sm:block">上一页</span>
-                                        </PaginationLink>
-                                    </PaginationItem>
-
-                                    {getPageNumbers().map((page, i) => (
-                                        <PaginationItem key={i}>
-                                            {page === "..." ? (
-                                                <PaginationEllipsis />
-                                            ) : (
-                                                <PaginationLink
-                                                    href="#"
-                                                    isActive={page === pagination.page}
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        handlePageChange(page as number);
-                                                    }}
-                                                >
-                                                    {page}
-                                                </PaginationLink>
-                                            )}
-                                        </PaginationItem>
-                                    ))}
-
-                                    <PaginationItem>
-                                        <PaginationLink
-                                            href="#"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                const totalPages = Math.ceil(pagination.total / pagination.per_page);
-                                                if (pagination.page < totalPages) {
-                                                    handlePageChange(pagination.page + 1);
-                                                }
-                                            }}
-                                            className={`gap-1 pr-2.5 ${pagination.page >= Math.ceil(pagination.total / pagination.per_page) ? "pointer-events-none opacity-50" : ""}`}
-                                            aria-label="下一页"
-                                            size="default"
-                                        >
-                                            <span className="hidden sm:block">下一页</span>
-                                            <ChevronRight className="h-4 w-4" />
-                                        </PaginationLink>
-                                    </PaginationItem>
-                                </PaginationContent>
-                            </Pagination>
-                        ) : (
-                            <div />
-                        )}
-                        <div className="text-sm text-muted-foreground hidden sm:block">
+                {!loading && !_error && pagination && (
+                    <div className="p-4 border-t space-y-3">
+                        <div className="text-sm text-muted-foreground text-center">
                             共 {pagination.total} 个文件
+                            {pagination.per_page > 0 && pagination.total > pagination.per_page && (
+                                <span>，第 {pagination.page} / {Math.ceil(pagination.total / pagination.per_page)} 页</span>
+                            )}
                         </div>
+                        {pagination.per_page > 0 && pagination.total > pagination.per_page && (
+                            <div className="flex justify-center">
+                                <Pagination>
+                                    <PaginationContent>
+                                        <PaginationItem>
+                                            <PaginationLink
+                                                href="#"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    if (pagination.page > 1) handlePageChange(pagination.page - 1);
+                                                }}
+                                                className={`gap-1 pl-2.5 ${pagination.page <= 1 ? "pointer-events-none opacity-50" : ""}`}
+                                                aria-label="上一页"
+                                                size="default"
+                                            >
+                                                <ChevronLeft className="h-4 w-4" />
+                                                <span className="hidden sm:block">上一页</span>
+                                            </PaginationLink>
+                                        </PaginationItem>
+
+                                        {getPageNumbers().map((page, i) => (
+                                            <PaginationItem key={i}>
+                                                {page === "..." ? (
+                                                    <PaginationEllipsis />
+                                                ) : (
+                                                    <PaginationLink
+                                                        href="#"
+                                                        isActive={page === pagination.page}
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            handlePageChange(page as number);
+                                                        }}
+                                                    >
+                                                        {page}
+                                                    </PaginationLink>
+                                                )}
+                                            </PaginationItem>
+                                        ))}
+
+                                        <PaginationItem>
+                                            <PaginationLink
+                                                href="#"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    const totalPages = Math.ceil(pagination.total / pagination.per_page);
+                                                    if (pagination.page < totalPages) {
+                                                        handlePageChange(pagination.page + 1);
+                                                    }
+                                                }}
+                                                className={`gap-1 pr-2.5 ${pagination.page >= Math.ceil(pagination.total / pagination.per_page) ? "pointer-events-none opacity-50" : ""}`}
+                                                aria-label="下一页"
+                                                size="default"
+                                            >
+                                                <span className="hidden sm:block">下一页</span>
+                                                <ChevronRight className="h-4 w-4" />
+                                            </PaginationLink>
+                                        </PaginationItem>
+                                    </PaginationContent>
+                                </Pagination>
+                            </div>
+                        )}
                     </div>
                 )}
             </CardContent>

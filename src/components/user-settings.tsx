@@ -4,6 +4,13 @@ import { Spinner } from '@/components/ui/spinner';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { getConfig } from "@/lib/utils"
@@ -21,11 +28,19 @@ interface UserSettingsProps {
     email: string
     first_name: string
     last_name: string
+    locale: string
     nickname: string
     description: string
     user_url: string
   }
 }
+
+const LANGUAGE_OPTIONS = [
+  { value: "zh_CN", label: "简体中文" },
+  { value: "zh_TW", label: "繁体中文" },
+  { value: "zh_HK", label: "香港中文" },
+  { value: "en_US", label: "English" },
+]
 
 export default function UserSettings({ initialUser }: UserSettingsProps) {
   const [isProfileLoading, setIsProfileLoading] = React.useState(false)
@@ -35,6 +50,7 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
     email: initialUser.email,
     first_name: initialUser.first_name,
     last_name: initialUser.last_name,
+    locale: initialUser.locale,
     nickname: initialUser.nickname,
     description: initialUser.description,
     user_url: initialUser.user_url,
@@ -188,6 +204,25 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
                 onChange={handleProfileChange}
                 placeholder="显示的昵称"
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="locale">界面语言</Label>
+              <Select
+                value={profileData.locale}
+                onValueChange={(value) => setProfileData((prev) => ({ ...prev, locale: value }))}
+              >
+                <SelectTrigger id="locale" className="w-full">
+                  <SelectValue placeholder="选择语言" />
+                </SelectTrigger>
+                <SelectContent>
+                  {LANGUAGE_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">

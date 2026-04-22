@@ -10,22 +10,22 @@ if (is_admin()) {
 
     AYA_Shortcode::shortcode_register('hidden-content', array(
         'id' => 'sc-display-hide',
-        'title' => '隐藏文本段',
-        'note' => '包含在此简码内的文本不会在前台显示，用于充当文章编辑时的注释，或隐藏一段文本',
+        'title' => __('隐藏文本段', 'aiya-cms'),
+        'note' => __('包含在此简码内的文本不会在前台显示，用于充当文章编辑时的注释，或隐藏一段文本', 'aiya-cms'),
         'template' => '[hide {{attributes}}]<br/> {{content}} <br/>[/hide]',
         'field_build' => [
             [
                 'id' => 'content',
                 'type' => 'textarea',
-                'label' => '内容',
-                'desc' => '在这里输入要隐藏的文本',
+                'label' => __('内容', 'aiya-cms'),
+                'desc' => __('在这里输入要隐藏的文本', 'aiya-cms'),
                 'default' => '隐藏的文本段。',
             ],
             [
                 'id' => 'inline',
                 'type' => 'checkbox',
-                'label' => '作为注释输出',
-                'desc' => '使当前段落作为 html 注释输出到前台页面，或者完全不输出',
+                'label' => __('作为注释输出', 'aiya-cms'),
+                'desc' => __('使当前段落作为 html 注释输出到前台页面，或者完全不输出', 'aiya-cms'),
                 'default' => false,
             ]
         ]
@@ -33,22 +33,22 @@ if (is_admin()) {
 
     AYA_Shortcode::shortcode_register('email-link', array(
         'id' => 'sc-email-link',
-        'title' => 'E-mail 链接',
-        'note' => '将电子邮件地址字符转换为 HTML 实体显示，避免被爬虫抓取',
+        'title' => __('E-mail 链接', 'aiya-cms'),
+        'note' => __('将电子邮件地址字符转换为 HTML 实体显示，避免被爬虫抓取', 'aiya-cms'),
         'template' => '[email {{attributes}}] {{content}} [/email]',
         'field_build' => [
             [
                 'id' => 'content',
                 'type' => 'text',
-                'label' => '邮件地址',
-                'desc' => '例如： admin@example.com',
+                'label' => __('邮件地址', 'aiya-cms'),
+                'desc' => __('例如： admin@example.com', 'aiya-cms'),
                 'default' => '',
             ],
             [
                 'id' => 'mailto',
                 'type' => 'checkbox',
-                'label' => '使用 mailto 链接',
-                'desc' => '转换为 mailto 链接，或直接显示',
+                'label' => __('使用 mailto 链接', 'aiya-cms'),
+                'desc' => __('转换为 mailto 链接，或直接显示', 'aiya-cms'),
                 'default' => false,
             ]
         ]
@@ -56,22 +56,22 @@ if (is_admin()) {
 
     AYA_Shortcode::shortcode_register('quick-li-content', array(
         'id' => 'sc-li-list',
-        'title' => '快捷列表（li）',
-        'note' => '将文本按行转换为列表显示',
+        'title' => __('快捷列表（li）', 'aiya-cms'),
+        'note' => __('将文本按行转换为列表显示', 'aiya-cms'),
         'template' => '[list {{attributes}}]<br/> {{content}} <br/>[/list]',
         'field_build' => [
             [
                 'id' => 'content',
                 'type' => 'textarea',
-                'label' => '内容',
-                'desc' => '按每行顺序格式化结构为：<li>第1行</li>/<li>第2行</li>',
+                'label' => __('内容', 'aiya-cms'),
+                'desc' => __('按每行顺序格式化结构为：<li>第1行</li>/<li>第2行</li>', 'aiya-cms'),
                 'default' => '',
             ],
             [
                 'id' => 'order',
                 'type' => 'checkbox',
-                'label' => '编号列表',
-                'desc' => '启用此项将显示为编号列表，否则使用符号列表',
+                'label' => __('编号列表', 'aiya-cms'),
+                'desc' => __('启用此项将显示为编号列表，否则使用符号列表', 'aiya-cms'),
                 'default' => false,
             ]
         ]
@@ -79,26 +79,26 @@ if (is_admin()) {
 
     AYA_Shortcode::shortcode_register('quick-col-content', array(
         'id' => 'sc-col-list',
-        'title' => '快捷列表（Column）',
-        'note' => '将文本按行转换为描述列表显示',
+        'title' => __('快捷列表（Column）', 'aiya-cms'),
+        'note' => __('将文本按行转换为描述列表显示', 'aiya-cms'),
         'template' => '[col_list {{attributes}}]<br/> {{content}} <br/>[/col_list]',
         'field_build' => [
             [
                 'id' => 'content',
                 'type' => 'textarea',
-                'label' => '内容',
-                'desc' => '按每行顺序格式化结构为：<dt>第1行</dt>/<dd>第2行</dd>',
+                'label' => __('内容', 'aiya-cms'),
+                'desc' => __('按每行顺序格式化结构为：<dt>第1行</dt>/<dd>第2行</dd>', 'aiya-cms'),
                 'default' => '',
             ],
             [
                 'id' => 'dt_width',
                 'type' => 'select',
-                'label' => '列表比例',
-                'desc' => '选择描述列表的宽度比例',
+                'label' => __('列表比例', 'aiya-cms'),
+                'desc' => __('选择描述列表的宽度比例', 'aiya-cms'),
                 'sub' => [
-                    '1' => '1/4列表',
-                    '2' => '1/2列表',
-                    '3' => '3/4列表',
+                    '1' => __('1/4列表', 'aiya-cms'),
+                    '2' => __('1/2列表', 'aiya-cms'),
+                    '3' => __('3/4列表', 'aiya-cms'),
                 ],
                 'default' => '1',
             ],
@@ -107,75 +107,75 @@ if (is_admin()) {
 
     AYA_Shortcode::shortcode_register('collapse-content', array(
         'id' => 'sc-collapse-content',
-        'title' => '折叠面板',
-        'note' => '创建一个折叠面板，用于在文章中可以展开或收起的内容',
+        'title' => __('折叠面板', 'aiya-cms'),
+        'note' => __('创建一个折叠面板，用于在文章中可以展开或收起的内容', 'aiya-cms'),
         'template' => '[collapse {{attributes}}] {{content}} [/collapse]',
         'field_build' => [
             [
                 'id' => 'title',
                 'type' => 'text',
-                'label' => '标题',
-                'desc' => '折叠面板的标题',
-                'default' => '点击展开内容',
+                'label' => __('标题', 'aiya-cms'),
+                'desc' => __('折叠面板的标题', 'aiya-cms'),
+                'default' => __('点击展开内容', 'aiya-cms'),
             ],
             [
                 'id' => 'content',
                 'type' => 'textarea',
-                'label' => '内容',
-                'desc' => '折叠面板的内容',
-                'default' => '这里是折叠面板的内容。',
+                'label' => __('内容', 'aiya-cms'),
+                'desc' => __('折叠面板的内容', 'aiya-cms'),
+                'default' => __('这里是折叠面板的内容。'),
             ],
         ]
     ));
 
     AYA_Shortcode::shortcode_register('alert-content', array(
         'id' => 'sc-alert-content',
-        'title' => '警告卡片',
-        'note' => '创建一个警告提示',
+        'title' => __('警告卡片', 'aiya-cms'),
+        'note' => __('创建一个警告提示', 'aiya-cms'),
         'template' => '[alert {{attributes}}] {{content}} [/alert]',
         'field_build' => [
             [
                 'id' => 'name',
                 'type' => 'text',
-                'label' => '标题',
-                'desc' => '警告提示的标题',
-                'default' => '点击展开内容',
+                'label' => __('标题', 'aiya-cms'),
+                'desc' => __('警告提示的标题', 'aiya-cms'),
+                'default' => __('点击展开内容', 'aiya-cms'),
             ],
             [
                 'id' => 'type',
                 'type'  => 'select',
-                'label' => '级别',
-                'desc'  => '警告提示的级别',
+                'label' => __('级别', 'aiya-cms'),
+                'desc'  => __('警告提示的级别', 'aiya-cms'),
                 'sub' => array(
-                    'default' => '默认',
-                    'warning' => '警告',
-                    'info' => '信息',
-                    'success' => '成功',
-                    'error' => '错误',
+                    'default' => __('默认', 'aiya-cms'),
+                    'warning' => __('警告', 'aiya-cms'),
+                    'info' => __('信息', 'aiya-cms'),
+                    'success' => __('成功', 'aiya-cms'),
+                    'error' => __('错误', 'aiya-cms'),
                 ),
                 'default' => 'default',
             ],
             [
                 'id' => 'content',
                 'type' => 'textarea',
-                'label' => '内容',
-                'desc' => '警告提示的内容',
-                'default' => '这里是警告提示的内容。',
+                'label' => __('内容', 'aiya-cms'),
+                'desc' => __('警告提示的内容', 'aiya-cms'),
+                'default' => __('这里是警告提示的内容。'),
             ],
         ]
     ));
 
     AYA_Shortcode::shortcode_register('clipboard-box', array(
         'id' => 'sc-clipboard-box',
-        'title' => '一键复制',
-        'note' => '创建一个提供复制功能的卡片，用于快捷复制文本或打开链接',
+        'title' => __('一键复制', 'aiya-cms'),
+        'note' => __('创建一个提供复制功能的卡片，用于快捷复制文本或打开链接', 'aiya-cms'),
         'template' => '[clip_board {{attributes}}] {{content}} [/clip_board]',
         'field_build' => [
             [
                 'id' => 'content',
                 'type' => 'textarea',
-                'label' => '内容',
-                'desc' => '需要被复制的文本或链接',
+                'label' => __('内容', 'aiya-cms'),
+                'desc' => __('需要被复制的文本或链接', 'aiya-cms'),
                 'default' => 'magnet:?xt=urn:btih:',
             ]
         ]
@@ -183,68 +183,68 @@ if (is_admin()) {
 
     AYA_Shortcode::shortcode_register('sponsor-ship-content', array(
         'id' => 'sc-sponsor-ship-content',
-        'title' => '赞助者可见',
-        'note' => '创建一个赞助后的内容块，用于在文章中显示仅限赞助商可见的内容',
+        'title' => __('赞助者可见', 'aiya-cms'),
+        'note' => __('创建一个赞助后的内容块，用于在文章中显示仅限赞助商可见的内容', 'aiya-cms'),
         'template' => '[sponsor_ship {{attributes}}] {{content}} [/sponsor_ship]',
         'field_build' => [
             [
                 'id' => 'title',
                 'type' => 'text',
-                'label' => '标题',
-                'desc' => '内容块的标题',
-                'default' => '支援者限定',
+                'label' => __('标题', 'aiya-cms'),
+                'desc' => __('内容块的标题', 'aiya-cms'),
+                'default' => __('支援者限定', 'aiya-cms'),
             ],
             [
                 'id' => 'content',
                 'type' => 'textarea',
-                'label' => '内容',
-                'desc' => '赞助者可见的内容',
-                'default' => '这是赞助者可见的内容。',
+                'label' => __('内容', 'aiya-cms'),
+                'desc' => __('赞助者可见的内容', 'aiya-cms'),
+                'default' => __('这是赞助者可见的内容。'),
             ],
         ]
     ));
 
     AYA_Shortcode::shortcode_register('logged-in-content', array(
         'id' => 'sc-logged-in-content',
-        'title' => '登录后可见',
-        'note' => '创建一个登录后可见的内容块，用于在文章中显示仅限登录用户可见的内容',
+        'title' => __('登录后可见', 'aiya-cms'),
+        'note' => __('创建一个登录后可见的内容块，用于在文章中显示仅限登录用户可见的内容', 'aiya-cms'),
         'template' => '[logged_in {{attributes}}] {{content}} [/logged_in]',
         'field_build' => [
             [
                 'id' => 'title',
                 'type' => 'text',
-                'label' => '标题',
-                'desc' => '内容块的标题',
-                'default' => '登录后下载',
+                'label' => __('标题', 'aiya-cms'),
+                'desc' => __('内容块的标题', 'aiya-cms'),
+                'default' => __('登录后下载', 'aiya-cms'),
             ],
             [
                 'id' => 'content',
                 'type' => 'textarea',
-                'label' => '内容',
-                'desc' => '登录后可见的内容',
-                'default' => '这是登录后可见的内容。',
+                'label' => __('内容', 'aiya-cms'),
+                'desc' => __('登录后可见的内容', 'aiya-cms'),
+                'default' => __('这是登录后可见的内容。'),
             ],
         ]
     ));
 
     AYA_Shortcode::shortcode_register('bili-iframe', array(
         'id' => 'sc-bili-card',
-        'title' => '嵌入B站视频',
-        'note' => '嵌入B站的H5播放器到页面',
+        'title' => __('嵌入B站视频', 'aiya-cms'),
+        'note' => __('嵌入B站的H5播放器到页面', 'aiya-cms'),
         'template' => '[bili_iframe {{attributes}} /]',
         'field_build' => [
             [
                 'id' => 'bvid',
                 'type' => 'text',
-                'label' => 'BV号',
-                'desc' => 'BV号，例如BV1UT42167xb',
+                'label' => __('BV号', 'aiya-cms'),
+                'desc' => __('BV号，例如BV1UT42167xb', 'aiya-cms'),
                 'default' => '',
             ],
             [
                 'id' => 'h5_player',
                 'type' => 'checkbox',
-                'label' => '使用 HTML5 播放器',
-                'desc' => '切换使用B站标准的外链播放器或者移动端HTML5播放器',
+                'label' => __('使用 HTML5 播放器', 'aiya-cms'),
+                'desc' => __('切换使用B站标准的外链播放器或者移动端HTML5播放器', 'aiya-cms'),
                 'default' => true,
             ]
         ]
@@ -252,22 +252,22 @@ if (is_admin()) {
 
     AYA_Shortcode::shortcode_register('afdian-iframe', array(
         'id' => 'sc-afdian-card',
-        'title' => '嵌入爱发电主页',
-        'note' => '嵌入爱发电的主页或按钮到页面',
+        'title' => __('嵌入爱发电主页', 'aiya-cms'),
+        'note' => __('嵌入爱发电的主页或按钮到页面', 'aiya-cms'),
         'template' => '[afdian_iframe {{attributes}} /]',
         'field_build' => [
             [
                 'id' => 'slug',
                 'type' => 'text',
-                'label' => '后缀',
-                'desc' => '创作者个人主页后缀，留空时使用系统设置',
+                'label' => __('后缀', 'aiya-cms'),
+                'desc' => __('创作者个人主页后缀，留空时使用系统设置'),
                 'default' => '',
             ],
             [
                 'id' => 'type_btn',
                 'type' => 'checkbox',
-                'label' => '使用按钮链接',
-                'desc' => '使当前段落作为 html 注释输出到前台页面，或者完全不输出',
+                'label' => __('使用按钮链接', 'aiya-cms'),
+                'desc' => __('使当前段落作为 html 注释输出到前台页面，或者完全不输出'),
                 'default' => false,
             ]
         ]
@@ -275,8 +275,8 @@ if (is_admin()) {
 
     AYA_Shortcode::shortcode_register('github-iframe', array(
         'id' => 'sc-github-repo',
-        'title' => '嵌入GitHub仓库',
-        'note' => '嵌入GitHub仓库卡片到页面（填写“用户名/仓库名”）',
+        'title' => __('嵌入GitHub仓库', 'aiya-cms'),
+        'note' => __('嵌入GitHub仓库卡片到页面（填写“用户名/仓库名”）', 'aiya-cms'),
         'template' => '[github_card {{attributes}} /]',
         'field_build' => [
             [
@@ -530,14 +530,14 @@ function aya_shortcode_sponsor_ship_content($atts = array(), $content = '')
     $html .= '<div class="flex items-center gap-2 mb-2">';
     $html .= '<span class="icon-slot shrink-0 text-pink-600" data-icon="lock-keyhole" data-icon-size="6"></span>';
 
-    $html .= '<span class="text-xl font-bold">' . __('赞助内容', 'AIYA') . '</span>';
+    $html .= '<span class="text-xl font-bold">' . __('赞助内容', 'aiya-cms') . '</span>';
     $html .= '</div>';
     $html .= '<span>';
 
     if ($user_level == 'guest') {
-        $html .= __('此内容仅限订阅用户可见，请登录后查看', 'AIYA');
+        $html .= __('此内容仅限订阅用户可见，请登录后查看', 'aiya-cms');
     } else {
-        $html .= __('仅限订阅用户可见：', 'AIYA') . '<a href="' . home_url('sponsor') . '" class="link">' . __('获取订阅', 'AIYA') . '</a>';
+        $html .= __('仅限订阅用户可见：', 'aiya-cms') . '<a href="' . home_url('sponsor') . '" class="link">' . __('获取订阅', 'aiya-cms') . '</a>';
     }
     $html .= '</span>';
     $html .= '</div>';
@@ -567,9 +567,9 @@ function aya_shortcode_logged_in_content($atts = array(), $content = '')
     $html .= '<div class="flex items-center gap-2 mb-2">';
     $html .= '<span class="icon-slot shrink-0 text-primary/95" data-icon="lock-keyhole" data-icon-size="6"></span>';
 
-    $html .= '<span class="text-xl font-bold">' . __('隐藏内容', 'AIYA') . '</span>';
+    $html .= '<span class="text-xl font-bold">' . __('隐藏内容', 'aiya-cms') . '</span>';
     $html .= '</div>';
-    $html .= '<span>' . __('仅限登录后查看，请先登录', 'AIYA') . '</span>';
+    $html .= '<span>' . __('仅限登录后查看，请先登录', 'aiya-cms') . '</span>';
     $html .= '</div>';
 
     return $html;

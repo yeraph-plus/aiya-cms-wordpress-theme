@@ -33,10 +33,6 @@ $player_options = [
         <?php echo $post_obj->content; ?>
     </div>
 
-    <?php
-    aya_render_hydrated_island(
-        'hy-content-end',
-        ['endDivider' => true]
-    );
+    <?php 
     ?>
 </article>

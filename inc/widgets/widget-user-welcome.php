@@ -5,9 +5,9 @@ class AYA_Widget_User_Welcome extends AYA_Widget
     {
         $widget_args = array(
             'id' => 'widget-welcome',
-            'title' => 'AIYA-CMS 用户面板',
+            'title' => __('AIYA-CMS 用户面板', 'aiya-cms'),
             'classname' => 'widget-card-box',
-            'desc' => '用户面板组件',
+            'desc' => __('用户面板组件', 'aiya-cms'),
         );
 
         return $widget_args;
@@ -17,9 +17,6 @@ class AYA_Widget_User_Welcome extends AYA_Widget
         // 使用 aya_user_get_login_data 获取用户数据
         $user_data = aya_user_get_login_data();
 
-        aya_react_island(
-            'widget-user-welcome',
-            $user_data
-        );
+        aya_react_island('widget-user-welcome', $user_data);
     }
 }

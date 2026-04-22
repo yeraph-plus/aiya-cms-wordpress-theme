@@ -54,6 +54,11 @@ function aya_oplist_transient_token()
     $expire_hours = aya_opt('site_oplist_server_token_hours', 'oplist');
     $expire_hours = intval($expire_hours);
 
+    //网络失败或接口未返回有效令牌时，直接终止
+    if (!is_string($get_token) || $get_token === '') {
+        return false;
+    }
+
     //不缓存时直接返回
     if ($expire_hours == 0) {
         return $get_token;
@@ -361,10 +366,121 @@ function aya_oplist_rebuild_content($content, $raw_atts)
 
 /*
  * ------------------------------------------------------------------------------
- *  OpenList 短代码组件
+ *  OpenList 组件方法
  * ------------------------------------------------------------------------------
  */
 
+AYF::new_box([
+    'title' => 'OpenList 客户端',
+    'id' => 'oplist_client',
+    'context' => 'normal',
+    'priority' => 'low',
+    'add_box_in' => ['post'],
+    'desc' => 'OpenList 客户端加载模块',
+    'fields' => [
+        [
+            'id' => 'sponsor_can',
+            'title' => '支援者限定',
+            'desc' => '仅对赞助者用户开放',
+            'type' => 'switch',
+            'default' => true,
+        ],
+        [
+            'id' => 'fs_method',
+            'title' => '请求方法',
+            'desc' => '选择请求方法',
+            'type' => 'select',
+            'sub' => [
+                'off' => '关闭',
+                'list' => '列出文件目录',
+                'get' => '获取某个文件/目录',
+                'dirs' => '获取目录',
+                'search' => '搜索文件',
+            ],
+            'default' => 'off',
+        ],
+        [
+            'id' => 'path',
+            'title' => '目录',
+            'desc' => '请求的目录或文件路径',
+            'type' => 'text',
+            'default' => '',
+        ],
+        [
+            'id' => 'desc',
+            'title' => '描述',
+            'desc' => '请求的目录描述信息，留空时使用默认描述',
+            'type' => 'textarea',
+            'default' => '',
+        ],
+        [
+            'id' => 'parent',
+            'title' => '搜索目录',
+            'desc' => '请求的搜索根目录路径 *仅搜索模式下',
+            'type' => 'text',
+            'default' => '',
+        ],
+        [
+            'id' => 'keywords',
+            'title' => '搜索关键词',
+            'desc' => '搜索的关键词 *仅搜索模式下',
+            'type' => 'text',
+            'default' => '',
+        ],
+        [
+            'id' => 'per_page',
+            'title' => '分页显示参数',
+            'desc' => '每页显示的文件数量，留空时显示全部',
+            'type' => 'text',
+            'default' => '0',
+        ],
+        [
+            'id' => 'password',
+            'title' => '访问密码',
+            'desc' => '请求的目录或文件的访问密码',
+            'type' => 'text',
+            'default' => '',
+        ],
+        [
+            'id' => 'refresh',
+            'title' => '强制刷新',
+            'desc' => '是否强制刷新（跳过缓存）',
+            'type' => 'switch',
+            'default' => false,
+        ],
+    ],
+]);
+
+// 检查文章是否配置了文件列表
+function aya_is_oplist_cli_ready($post_id = 0)
+{
+    $post_id = absint($post_id);
+
+    if ($post_id <= 0) {
+        return false;
+    }
+    // 检查文章是否配置了请求方法
+    $fs_method = aya_post_opt('fs_method', 'oplist_client', $post_id);
+    if (!in_array($fs_method, ['list', 'get', 'dirs', 'search'], true)) {
+        return false;
+    }
+    // 检查文章是否配置了搜索关键词
+    if ($fs_method === 'search') {
+        $keywords = (string) aya_post_opt('keywords', 'oplist_client', $post_id);
+        return $keywords !== '';
+    }
+    // 检查文章是否配置了目录路径
+    $path = (string) aya_post_opt('path', 'oplist_client', $post_id);
+    return $path !== '';
+}
+
+/*
+ * ------------------------------------------------------------------------------
+ *  OpenList 旧短代码迁移层
+ * ------------------------------------------------------------------------------
+ */
+
+/*
 if (is_admin()) {
     AYA_Shortcode::shortcode_register('oplist-client', [
         'id' => 'sc-oplist-client',
@@ -481,7 +597,6 @@ if (is_admin()) {
         ]
     ]);
 
-
     AYA_Shortcode::shortcode_register('plyr-client', [
         'id' => 'sc-plyr-client',
         'title' => 'Plyr 播放列表',
@@ -523,30 +638,71 @@ if (is_admin()) {
         ]
     ]);
 }
+*/
 
 //短代码功能
 add_shortcode('oplist_cli', 'aya_oplist_cli_shortcode_fs_methods');
 
-$GLOBALS['aya_oplist_cli_props'] ??= null;
-
-function aya_oplist_cli_set_props($props)
+function aya_oplist_cli_get_current_post_id()
 {
-    if (!is_array($props) || $props === []) {
-        return;
+    global $post;
+
+    if ($post instanceof WP_Post) {
+        return (int) $post->ID;
     }
 
-    $GLOBALS['aya_oplist_cli_props'] = $props;
+    $post_id = get_the_ID();
+    if (!empty($post_id)) {
+        return (int) $post_id;
+    }
+
+    $post_id = get_queried_object_id();
+
+    return !empty($post_id) ? (int) $post_id : 0;
 }
 
-function aya_oplist_cli_get_props()
+function aya_oplist_cli_prepare_metabox_field($value)
 {
-    $props = $GLOBALS['aya_oplist_cli_props'] ?? null;
-
-    if (!is_array($props) || $props === []) {
-        return null;
+    if (is_array($value)) {
+        $value = array_filter($value);
+        return $value === [] ? [] : $value;
     }
 
-    return $props;
+    $value = wp_unslash((string) $value);
+    $value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+
+    return $value;
+}
+
+function aya_oplist_cli_has_saved_meta($post_id)
+{
+    if ($post_id <= 0) {
+        return false;
+    }
+
+    return metadata_exists('post', $post_id, 'aya_box_oplist_client');
+}
+
+function aya_oplist_cli_persist_post_meta($post_id, $atts)
+{
+    if ($post_id <= 0 || !is_array($atts) || aya_oplist_cli_has_saved_meta($post_id)) {
+        return false;
+    }
+
+    $fs_method = (string) ($atts['fs_method'] ?? 'list');
+    if ($fs_method !== 'list') {
+        return false;
+    }
+
+    $meta_values = [
+        'sponsor_can' => '1',
+        'fs_method' => aya_oplist_cli_prepare_metabox_field('list'),
+        'path' => aya_oplist_cli_prepare_metabox_field('/' . trim((string) ($atts['path'] ?? '/'), '/')),
+    ];
+
+    update_post_meta($post_id, 'aya_box_oplist_client', $meta_values);
+
+    return true;
 }
 
 //AIYA-CMS 短代码组件：OpenList功能卡片
@@ -558,32 +714,19 @@ function aya_oplist_cli_shortcode_fs_methods($atts = array(), $content = null)
         return '';
     }
 
-    if (!aya_is_sponsor()) {
-        return __('未获授权', 'AIYA');
-    }
-
     $atts = shortcode_atts(
         array(
             'fs_method' => 'list',
-            'path' => '/',
-            'password' => '',
-            'per_page' => 0,
-            'refresh' => false,
-            'ignore_dir' => true,
-            'parent' => '',
-            'keywords' => '',
-            'scope' => 2,
+            'path' => '',
         ),
         $atts,
     );
 
-    if ($content == '') {
-        $content = aya_opt('site_oplist_file_desc', 'oplist');
+    $post_id = aya_oplist_cli_get_current_post_id();
+
+    if ($post_id > 0) {
+        aya_oplist_cli_persist_post_meta($post_id, $atts);
     }
-
-    $atts['content'] = $content;
-
-    aya_oplist_cli_set_props($atts);
 
     return '';
 }
@@ -593,7 +736,7 @@ function aya_oplist_cli_shortcode_fs_methods($atts = array(), $content = null)
  *  Plyr 播放器 短代码组件
  * ------------------------------------------------------------------------------
  */
-
+/*
 //短代码功能
 add_shortcode('plyr_cli', 'aya_plyr_shortcodes_playlist_methods');
 
@@ -619,7 +762,7 @@ function aya_plyr_shortcodes_playlist_methods($atts = array(), $content = '')
         array(
             'src' => '',
             'poster' => '',
-            'title' => __('无标题', 'AIYA'),
+            'title' => __('无标题', 'aiya-cms'),
             'type' => 'auto',
         ),
         $atts,
@@ -647,3 +790,4 @@ function aya_plyr_shortcodes_playlist_methods($atts = array(), $content = '')
 
     return '';
 }
+*/

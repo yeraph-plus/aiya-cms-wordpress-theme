@@ -8,20 +8,20 @@ class AYA_Widget_Comments extends AYA_Widget
     {
         $widget_args = array(
             'id' => 'widget-comment-newest',
-            'title' => 'AIYA-CMS 最近评论',
+            'title' => __('AIYA-CMS 最近评论', 'aiya-cms'),
             'classname' => 'widget-panel',
-            'desc' => '评论列表卡片，显示最近评论',
+            'desc' => __('评论列表卡片，显示最近评论', 'aiya-cms'),
             'field_build' => array(
                 array(
                     'type' => 'input',
                     'id' => 'title',
-                    'name' => '标题',
-                    'default' => '最近评论',
+                    'name' => __('标题', 'aiya-cms'),
+                    'default' => __('最近评论', 'aiya-cms'),
                 ),
                 array(
                     'type' => 'input',
                     'id' => 'limit',
-                    'name' => '显示数量',
+                    'name' => __('显示数量', 'aiya-cms'),
                     'default' => '10',
                 ),
             ),

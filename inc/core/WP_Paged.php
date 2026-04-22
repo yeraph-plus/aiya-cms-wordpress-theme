@@ -88,11 +88,11 @@ if (!class_exists('AYA_WP_Paged_Object')) {
                 'end_size' => 1,  // 开始和结束处显示的页码数
                 'mid_size' => 2,  // 当前页码左右两边显示的页码数
                 'prev_next' => true, // 是否显示上一页下一页
-                'prev_text' => __('&laquo; Previous', 'AIYA'), // 上一页文本
-                'next_text' => __('Next &raquo;', 'AIYA'),     // 下一页文本
+                'prev_text' => __('&laquo; Previous', 'aiya-cms'), // 上一页文本
+                'next_text' => __('Next &raquo;', 'aiya-cms'),     // 下一页文本
                 'add_args' => [],  // 添加到URL的参数
                 'add_fragment' => '', // 添加到URL的片段
-                'pages_text' => __('Page %1$s of %2$s', 'AIYA'), // 页码文本
+                'pages_text' => __('Page %1$s of %2$s', 'aiya-cms'), // 页码文本
                 'aria_current' => 'page', // aria-current属性
             ]);
 
@@ -301,8 +301,8 @@ if (!class_exists('AYA_WP_Paged_Object')) {
     {
         $paged = AYA_WP_Paged_Object::get_pagination([
             'mid_size' => 3,
-            'prev_text' => __('上一页', 'AIYA'),
-            'next_text' => __('下一页', 'AIYA'),
+            'prev_text' => __('上一页', 'aiya-cms'),
+            'next_text' => __('下一页', 'aiya-cms'),
         ]);
 
         if (!empty($paged) || $paged['total'] != 1) {

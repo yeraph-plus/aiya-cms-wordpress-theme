@@ -76,6 +76,12 @@ function aya_opt($opt_name, $opt_slug, $opt_bool = false)
     return ($opt_bool) ? AYF::get_checked($opt_name, $opt_slug) : AYF::get_opt($opt_name, $opt_slug);
 }
 
+//获取文章meta的设置项
+function aya_post_opt($opt_name, $opt_box_id, $post_id = 0)
+{
+    return AYF::get_post_meta($opt_name, $opt_box_id, $post_id);
+}
+
 //URL参数时间窗口签名
 function aya_build_http_params($raw_params, $time_window = 30)
 {
@@ -311,106 +317,6 @@ function aya_is_where()
     }
 
     return $here_is;
-}
-
-/*
- * ------------------------------------------------------------------------------
- * COOKIE 操作
- * ------------------------------------------------------------------------------
- */
-
-//添加 COOKIE
-function set_cookie($key, $token, $time = 86400)
-{
-    //默认保存24小时
-    setcookie($key, $token, time() + $time, COOKIEPATH, COOKIE_DOMAIN);
-}
-
-//获取 COOKIE
-function get_cookie($key, $len = 0)
-{
-    //检查Cookie是否存在
-    if (!isset($_COOKIE[$key])) {
-        return false;
-    }
-    //检查Cookie是否正确
-    if ($len != 0 && $len != strlen($_COOKIE[$key])) {
-        return false;
-    }
-    return $_COOKIE[$key];
-}
-
-//销毁 COOKIE
-function delete_cookie($key, $time = 999999999)
-{
-    setcookie($key, '', time() - $time, COOKIEPATH, COOKIE_DOMAIN);
-}
-
-//新建会话
-function open_session()
-{
-    session_start();
-}
-
-//关闭会话
-function close_session()
-{
-    session_write_close();
-}
-
-//请求会话
-function call_session($ation)
-{
-    open_session();
-
-    try {
-        $ation();
-    } finally {
-        close_session();
-    }
-}
-
-/*
- * ------------------------------------------------------------------------------
- * AJAX操作
- * ------------------------------------------------------------------------------
- */
-
-//注册异步方法
-function aya_ajax_register($name, $callback, $public = false)
-{
-    add_action('wp_ajax_' . $name, $callback);
-
-    if ($public) {
-        add_action('wp_ajax_nopriv_' . $name, $callback);
-    }
-}
-
-//获取AJAX位置
-function aya_ajax_url()
-{
-    return admin_url('admin-ajax.php');
-}
-
-//配置AJAX动作
-function aya_ajax_action($action, $args = array())
-{
-    $url = aya_ajax_url() . '?action=' . $action;
-
-    if (!empty($args)) {
-        $url .= '&' . http_build_query($args);
-    }
-
-    return $url;
-}
-
-//访问原始 POST 数据
-function aya_get_req_body()
-{
-    //使用PHP伪协议方法
-    $body = @file_get_contents('php://input');
-
-    return json_decode($body, true);
 }
 
 /*

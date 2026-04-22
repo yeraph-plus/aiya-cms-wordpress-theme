@@ -105,7 +105,7 @@ export default defineConfig({
         home: resolve(__dirname, 'src/entrypoints/home.ts'),
         archive: resolve(__dirname, 'src/entrypoints/archive.ts'),
         single: resolve(__dirname, 'src/entrypoints/single.ts'),
-        user: resolve(__dirname, 'src/entrypoints/user.ts'),
+        standalone: resolve(__dirname, 'src/entrypoints/standalone.ts'),
       },
       output: {
         //定义输出文件名

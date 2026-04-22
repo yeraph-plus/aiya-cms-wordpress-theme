@@ -88,7 +88,7 @@ class AYA_WP_Term_Object
 
         //检查名称
         if (strlen($the_name) === 0) {
-            $the_name = __('无名称', 'AIYA');
+            $the_name = __('无名称', 'aiya-cms');
         }
 
         //清理HTML输出

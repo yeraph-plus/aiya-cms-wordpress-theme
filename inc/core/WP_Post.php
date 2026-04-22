@@ -119,7 +119,7 @@ if (!class_exists('AYA_WP_Post_Object')) {
 
             //检查文章标题
             if (empty($the_title)) {
-                $the_title = __('无标题', 'AIYA');
+                $the_title = __('无标题', 'aiya-cms');
             }
             //清理HTML输出
             if ($attribute == true) {
@@ -145,43 +145,43 @@ if (!class_exists('AYA_WP_Post_Object')) {
             //基本状态
             switch ($status) {
                 case 'pending':
-                    $the_status['pending'] = __('待审', 'AIYA');
+                    $the_status['pending'] = __('待审', 'aiya-cms');
                     break;
                 case 'future':
-                    $the_status['future'] = __('定时发布', 'AIYA');
+                    $the_status['future'] = __('定时发布', 'aiya-cms');
                     break;
                 case 'private':
-                    $the_status['private'] = __('私密', 'AIYA');
+                    $the_status['private'] = __('私密', 'aiya-cms');
                     break;
                 case 'draft':
-                    $the_status['draft'] = __('草稿', 'AIYA');
+                    $the_status['draft'] = __('草稿', 'aiya-cms');
                     break;
                 case 'auto-draft':
-                    $the_status['auto-draft'] = __('自动草稿', 'AIYA');
+                    $the_status['auto-draft'] = __('自动草稿', 'aiya-cms');
                     break;
                 case 'inherit':
-                    $the_status['inherit'] = __('修订版本', 'AIYA');
+                    $the_status['inherit'] = __('修订版本', 'aiya-cms');
                     break;
                 case 'trash':
-                    $the_status['trash'] = __('已删除', 'AIYA');
+                    $the_status['trash'] = __('已删除', 'aiya-cms');
                     break;
                 case 'publish':
                 default:
-                    //$the_status[] = ['publish' => __('已发布', 'AIYA')];
+                    //$the_status[] = ['publish' => __('已发布', 'aiya-cms')];
                     break;
             }
             //是置顶文章
             if (is_sticky($post_id)) {
-                $the_status['sticky'] = __('置顶', 'AIYA');
+                $the_status['sticky'] = __('置顶', 'aiya-cms');
             }
             //是密码保护
             if (!empty($post->post_password)) {
-                $the_status['password'] = __('密码保护', 'AIYA');
+                $the_status['password'] = __('密码保护', 'aiya-cms');
             }
             //是最近发布
             $publish_time = get_post_time('U', false, $post, true);
             if (date('U') - $publish_time < 86400) {
-                $the_status['newest'] = __('最新', 'AIYA');
+                $the_status['newest'] = __('最新', 'aiya-cms');
             }
 
             return $the_status;
@@ -224,7 +224,7 @@ if (!class_exists('AYA_WP_Post_Object')) {
             //如果文章加密
             if (!empty($post->post_password)) {
 
-                return __('这篇文章受密码保护，输入密码才能阅读。', 'AIYA');
+                return __('这篇文章受密码保护，输入密码才能阅读。', 'aiya-cms');
             }
             //如果设置了用户摘要，则直接输出摘要内容
             if (!empty($post->post_excerpt)) {
@@ -244,7 +244,7 @@ if (!class_exists('AYA_WP_Post_Object')) {
                 return wp_kses_post($the_preview);
             }
 
-            return __('这篇文章没有摘要内容。', 'AIYA');
+            return __('这篇文章没有摘要内容。', 'aiya-cms');
         }
         //获取评论数
         public function get_post_comments($modified = false)
@@ -261,13 +261,13 @@ if (!class_exists('AYA_WP_Post_Object')) {
             if ($modified == true) {
                 //关闭评论
                 if (empty($the_comment_status)) {
-                    return __('评论已关闭', 'AIYA');
+                    return __('评论已关闭', 'aiya-cms');
                 }
                 //计数评论
                 if ($the_comment_count > 0) {
-                    return $the_comment_count . __('条评论', 'AIYA');
+                    return $the_comment_count . __('条评论', 'aiya-cms');
                 } else {
-                    return __('无人评论', 'AIYA');
+                    return __('无人评论', 'aiya-cms');
                 }
             }
 
@@ -277,7 +277,7 @@ if (!class_exists('AYA_WP_Post_Object')) {
         public function diff_timeago($time)
         {
             //更新：使用WordPress内置方法
-            return human_time_diff($time, current_time('timestamp')) . __('前', 'AIYA');
+            return human_time_diff($time, current_time('timestamp')) . __('前', 'aiya-cms');
         }
         //获取发布时间
         public function get_post_date($date_mod = 'publish_date')

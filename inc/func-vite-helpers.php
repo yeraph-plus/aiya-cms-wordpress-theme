@@ -66,8 +66,8 @@ function aya_vite_get_manifest()
     //产生报错
     else {
         if (!is_admin()) {
-            $error_title = __('AIYA-CMS 启动错误', 'AIYA');
-            $error_msg = __('没有找到生产环境文件，请检查 Vite 配置是否正确。', 'AIYA');
+            $error_title = __('AIYA-CMS 启动错误', 'aiya-cms');
+            $error_msg = __('没有找到生产环境文件，请检查 Vite 配置是否正确。', 'aiya-cms');
 
             wp_die($error_msg, $error_title, array('response' => 500));
 
@@ -91,7 +91,7 @@ function aya_vite_active_entries()
 
     if ($land_page !== false) {
         if (in_array($land_page, ['sponsor', 'user-favlist', 'user-settings'], true)) {
-            $entries[] = 'src/entrypoints/user.ts';
+            $entries[] = 'src/entrypoints/standalone.ts';
         }
         return array_values(array_unique($entries));
     }

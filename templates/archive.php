@@ -8,8 +8,8 @@ if (!defined('ABSPATH')) {
 if (!have_posts()) {
     //没有文章
     aya_react_island('ui-empty', [
-        'title' => __('暂无内容', 'AIYA'),
-        'description' => __('当前没有任何文章被分类到此归档', 'AIYA'),
+        'title' => __('暂无内容', 'aiya-cms'),
+        'description' => __('当前没有任何文章被分类到此归档', 'aiya-cms'),
     ]);
 } else {
     //执行主循环

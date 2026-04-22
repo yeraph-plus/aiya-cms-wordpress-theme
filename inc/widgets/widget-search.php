@@ -8,9 +8,9 @@ class AYA_Widget_Search extends AYA_Widget
     {
         $widget_args = array(
             'id' => 'widget-search',
-            'title' => 'AIYA-CMS 搜索',
+            'title' => __('AIYA-CMS 搜索', 'aiya-cms'),
             'classname' => 'widget-panel',
-            'desc' => '搜索框卡片',
+            'desc' => __('搜索框卡片', 'aiya-cms'),
         );
 
         return $widget_args;

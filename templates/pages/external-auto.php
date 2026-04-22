@@ -22,14 +22,14 @@ if (function_exists('aya_home_url_referer_check') && aya_home_url_referer_check(
         //判断是否是网址
         if (filter_var($external_url, FILTER_VALIDATE_URL)) {
             $jump_url = $external_url;
-            $title = __('页面加载中，即将跳转...', 'AIYA');
+            $title = __('页面加载中，即将跳转...', 'aiya-cms');
         } else {
             $jump_url = home_url();
-            $title = __('链接格式错误，返回首页...', 'AIYA');
+            $title = __('链接格式错误，返回首页...', 'aiya-cms');
         }
     } else {
         $jump_url = home_url();
-        $title = __('解码失败，返回首页...', 'AIYA');
+        $title = __('解码失败，返回首页...', 'aiya-cms');
     }
 } else {
     return wp_redirect(home_url());
@@ -152,12 +152,12 @@ if (function_exists('aya_home_url_referer_check') && aya_home_url_referer_check(
     <div class="card">
         <div class="content">
             <h1><?php echo $title; ?></h1>
-            <p><?php _e('我们将带您前往外部链接，请注意账号安全。', 'AIYA'); ?></p>
-            <p style="font-size: 0.8rem; margin-top: 0.25rem;"><?php _e('如果没有自动跳转，请点击下方按钮', 'AIYA'); ?></p>
+            <p><?php __('我们将带您前往外部链接，请注意账号安全。', 'aiya-cms'); ?></p>
+            <p style="font-size: 0.8rem; margin-top: 0.25rem;"><?php __('如果没有自动跳转，请点击下方按钮', 'aiya-cms'); ?></p>
         </div>
 
         <a href="<?php echo esc_url($jump_url); ?>" class="btn">
-            <?php _e('立即前往', 'AIYA'); ?>
+            <?php __('立即前往', 'aiya-cms'); ?>
         </a>
 
         <div class="url-preview" title="<?php echo esc_attr($jump_url); ?>">

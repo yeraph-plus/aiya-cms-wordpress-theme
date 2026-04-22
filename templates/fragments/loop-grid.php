@@ -62,7 +62,7 @@ $render_status_badges = static function ($status_list) {
                         <span>•</span>
                         <span class="flex items-center gap-1">
                             <span class="icon-slot shrink-0" data-icon="views" data-icon-size="3"></span>
-                            <span><?php aya_echo($post['views'] . __(' 阅读', 'AIYA')); ?></span>
+                            <span><?php aya_echo($post['views'] . __(' 阅读', 'aiya-cms')); ?></span>
                         </span>
                     </div>
                     <div data-post-grid-categories class="hidden md:flex gap-1 mb-2 overflow-hidden whitespace-nowrap">

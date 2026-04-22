@@ -28,14 +28,14 @@ $pagination_html = static function ($paged = array()) {
 
     $html = '<nav role="navigation" aria-label="Pagination" class="my-4mx-auto flex w-full justify-center">';
     if (!empty($prev_link['url'])) {
-        $html .= '<a href="' . esc_url($prev_link['url']) . '" rel="prev" aria-label="Go previous page" class="inline-flex h-9 items-center rounded-md px-3 text-sm hover:bg-accent">' . esc_html(($prev_link['text'] ?? __('上一页', 'AIYA'))) . '</a>';
+        $html .= '<a href="' . esc_url($prev_link['url']) . '" rel="prev" aria-label="Go previous page" class="inline-flex h-9 items-center rounded-md px-3 text-sm hover:bg-accent">' . esc_html(($prev_link['text'] ?? __('上一页', 'aiya-cms'))) . '</a>';
     } else {
-        $html .= '<span class="inline-flex h-9 items-center rounded-md px-3 text-sm opacity-50">' . esc_html(__('上一页', 'AIYA')) . '</span>';
+        $html .= '<span class="inline-flex h-9 items-center rounded-md px-3 text-sm opacity-50">' . esc_html(__('上一页', 'aiya-cms')) . '</span>';
     }
     if (!empty($next_link['url'])) {
-        $html .= '<a href="' . esc_url($next_link['url']) . '" rel="next" aria-label="Go next page" class="inline-flex h-9 items-center rounded-md px-3 text-sm hover:bg-accent">' . esc_html(($next_link['text'] ?? __('下一页', 'AIYA'))) . '</a>';
+        $html .= '<a href="' . esc_url($next_link['url']) . '" rel="next" aria-label="Go next page" class="inline-flex h-9 items-center rounded-md px-3 text-sm hover:bg-accent">' . esc_html(($next_link['text'] ?? __('下一页', 'aiya-cms'))) . '</a>';
     } else {
-        $html .= '<span class="inline-flex h-9 items-center rounded-md px-3 text-sm opacity-50">' . esc_html(__('下一页', 'AIYA')) . '</span>';
+        $html .= '<span class="inline-flex h-9 items-center rounded-md px-3 text-sm opacity-50">' . esc_html(__('下一页', 'aiya-cms')) . '</span>';
     }
     $html .= '</nav>';
 

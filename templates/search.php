@@ -8,8 +8,8 @@ if (!defined('ABSPATH')) {
 if (!have_posts()) {
     //没有文章
     aya_react_island('ui-empty', [
-        'title' => __('暂无内容', 'AIYA'),
-        'description' => __('搜索结果下没有文章', 'AIYA'),
+        'title' => __('暂无内容', 'aiya-cms'),
+        'description' => __('搜索结果下没有文章', 'aiya-cms'),
     ]);
 } else {
 
@@ -49,7 +49,7 @@ if (!have_posts()) {
     aya_template_part_load('loop-grid', [
         'posts' => $loop_porps,
         'label_icon' => 'search',
-        'label_title' => sprintf(__('搜索"%s"的结果'), get_search_query()),
+        'label_title' => sprintf(__('搜索"%s"的结果', 'aiya-cms'), get_search_query()),
         'is_main_loop' => true,
     ]);
 

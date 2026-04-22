@@ -8,20 +8,20 @@ class AYA_Widget_Tag_Cloud extends AYA_Widget
     {
         $widget_args = array(
             'id' => 'widget-tag-cloud',
-            'title' => 'AIYA-CMS 标签云',
+            'title' => __('AIYA-CMS 标签云', 'aiya-cms'),
             'classname' => 'widget-panel',
-            'desc' => '标签云卡片，栏标签列表组件',
+            'desc' => __('标签云卡片，栏标签列表组件', 'aiya-cms'),
             'field_build' => array(
                 [
                     'type' => 'input',
                     'id' => 'title',
-                    'name' => '标题',
-                    'default' => '热门标签',
+                    'name' => __('标题', 'aiya-cms'),
+                    'default' => __('热门标签', 'aiya-cms'),
                 ],
                 [
                     'type' => 'input',
                     'id' => 'limit',
-                    'name' => '显示数量',
+                    'name' => __('显示数量', 'aiya-cms'),
                     'default' => '20',
                 ],
             ),

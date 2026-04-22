@@ -11,6 +11,7 @@ import {
   Inbox,
   Gauge,
   Ticket,
+  Pencil,
   Bolt,
 } from "lucide-react"
 
@@ -61,6 +62,7 @@ export interface UserLoginData {
 const IconMap: Record<string, React.ElementType> = {
   dashboard: Gauge,
   profile: User,
+  edit: Pencil,
   sponsor: Ticket,
   inbox: Inbox,
   settings: Bolt,

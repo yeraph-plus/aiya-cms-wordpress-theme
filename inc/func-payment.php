@@ -304,12 +304,12 @@ function aya_add_afdian_sponsor_plans($order_plan)
         //爱发电主页方案
         $order_plan['afdian'] = [
             'color' => '#946ce6',
-            'title' => __('支持创作，用爱发电', 'AIYA'),
-            'desc' => __('查看爱发电创作者主页', 'AIYA'),
+            'title' => __('支持创作，用爱发电', 'aiya-cms'),
+            'desc' => __('查看爱发电创作者主页', 'aiya-cms'),
             'price' => '',
             'href' => $afd_home,
-            'href_title' => __('爱发电主页', 'AIYA'),
-            'triggered_msg' => __('在当前页面输入爱发电平台订单号激活本站订阅即可查看专属内容', 'AIYA'),
+            'href_title' => __('爱发电主页', 'aiya-cms'),
+            'triggered_msg' => __('在当前页面输入爱发电平台订单号激活本站订阅即可查看专属内容', 'aiya-cms'),
             'refresh' => false,
         ];
 
@@ -326,7 +326,7 @@ function aya_add_afdian_sponsor_plans($order_plan)
         //方案详情页
         $afd_order_create = aya_get_afdian_link() . 'order/create?';
         //创建留言消息
-        $remark_format = __('来自 「%s」 用户 %s 发送的赞助订单~', 'AIYA');
+        $remark_format = __('来自 「%s」 用户 %s 发送的赞助订单~', 'aiya-cms');
 
         $remark_msg = urlencode(sprintf($remark_format, $site_name, $user_name));
 
@@ -338,12 +338,12 @@ function aya_add_afdian_sponsor_plans($order_plan)
 
             $order_plan['afdian_optional'] = [
                 'color' => '#946ce6',
-                'title' => __('自选金额赞助', 'AIYA'),
-                'desc' => __('在爱发电支持我', 'AIYA'),
-                'price' => __('自选金额', 'AIYA'),
+                'title' => __('自选金额赞助', 'aiya-cms'),
+                'desc' => __('在爱发电支持我', 'aiya-cms'),
+                'price' => __('自选金额', 'aiya-cms'),
                 'href' => $plan_url,
-                'href_title' => __('爱发电订阅', 'AIYA'),
-                'triggered_msg' => __('已经支持，稍后并刷新页面即可查看赞助记录', 'AIYA'),
+                'href_title' => __('爱发电订阅', 'aiya-cms'),
+                'triggered_msg' => __('已经支持，稍后并刷新页面即可查看赞助记录', 'aiya-cms'),
                 'refresh' => true,
             ];
         }
@@ -359,12 +359,12 @@ function aya_add_afdian_sponsor_plans($order_plan)
 
                 $order_plan['afdian_preset'] = [
                     'color' => '#946ce6',
-                    'title' => __('赞助方案订阅', 'AIYA'),
-                    'desc' => __('订阅我的赞助方案', 'AIYA'),
+                    'title' => __('赞助方案订阅', 'aiya-cms'),
+                    'desc' => __('订阅我的赞助方案', 'aiya-cms'),
                     'price' => '',
                     'href' => $plan_url,
-                    'href_title' => __('爱发电订阅', 'AIYA'),
-                    'triggered_msg' => __('已经支持，稍后并刷新页面即可查看专属内容', 'AIYA'),
+                    'href_title' => __('爱发电订阅', 'aiya-cms'),
+                    'triggered_msg' => __('已经支持，稍后并刷新页面即可查看专属内容', 'aiya-cms'),
                     'refresh' => true,
                 ];
             }
@@ -381,7 +381,7 @@ function aya_verify_code_by_afdian($order_id)
     if (aya_afdian_ping_server() === false) {
         return [
             'status' => false,
-            'detail' => __('爱发电接口不可用，请联系管理员', 'AIYA'),
+            'detail' => __('爱发电接口不可用，请联系管理员', 'aiya-cms'),
         ];
     }
 
@@ -389,7 +389,7 @@ function aya_verify_code_by_afdian($order_id)
     if (aya_sponsor_order_exists('afd_' . $order_id)) {
         return [
             'status' => false,
-            'detail' => __('此订单已被激活过了，请查看订单记录', 'AIYA'),
+            'detail' => __('此订单已被激活过了，请查看订单记录', 'aiya-cms'),
         ];
     }
 
@@ -400,7 +400,7 @@ function aya_verify_code_by_afdian($order_id)
     if ($afd_order === false) {
         return [
             'status' => false,
-            'detail' => __('没有查询到订单，请确认订单号是否正确，或于爱发电平台私信作者询问', 'AIYA'),
+            'detail' => __('没有查询到订单，请确认订单号是否正确，或于爱发电平台私信作者询问', 'aiya-cms'),
         ];
     }
 
@@ -413,15 +413,15 @@ function aya_verify_code_by_afdian($order_id)
     $result = aya_sponsor_key_activation($activate_order, $activate_days, 'afdian');
 
     //合并订单信息
-    $order_info = '<br>';
-    $order_info .= '订单号：' . $afd_order['out_trade_no'] . '<br>';
-    $order_info .= '赞助方案：' . $afd_order['plan_title'] . '<br>';
-    $order_info .= '赞助周期：' . $afd_order['month'] . '个月<br>';
-    $order_info .= '金额：' . $afd_order['show_amount'] . '（折后 ' . $afd_order['total_amount'] . ' ）<br>';
-    $order_info .= '留言：' . (!empty($afd_order['remark']) ? $afd_order['remark'] : '无') . '<br>';
-    $order_info .= '兑换码：' . (!empty($afd_order['redeem_id']) ? $afd_order['redeem_id'] : '无') . '<br>';
+    $order_info = PHP_EOL;
+    $order_info .= __('订单号：', 'aiya-cms') . $afd_order['out_trade_no'] . PHP_EOL;
+    $order_info .= __('赞助方案：', 'aiya-cms') . $afd_order['plan_title'] . PHP_EOL;
+    $order_info .= __('赞助周期：', 'aiya-cms') . $afd_order['month'] . __('个月', 'aiya-cms') . PHP_EOL;
+    $order_info .= __('金额：', 'aiya-cms') . $afd_order['show_amount'] . __('（折后', 'aiya-cms') . $afd_order['total_amount'] . __('）', 'aiya-cms') . PHP_EOL;
+    $order_info .= __('留言：', 'aiya-cms') . __('无留言', 'aiya-cms') . (!empty($afd_order['remark']) ? $afd_order['remark'] : __('无', 'aiya-cms')) . PHP_EOL;
+    $order_info .= __('兑换码：', 'aiya-cms') . __('无', 'aiya-cms') . (!empty($afd_order['redeem_id']) ? $afd_order['redeem_id'] : __('无', 'aiya-cms')) . PHP_EOL;
 
-    $success = ($result) ? __('刷新页面即可查看激活记录', 'AIYA') : __('当前无法创建激活，稍后重试', 'AIYA');
+    $success = ($result) ? __('刷新页面即可查看激活记录', 'aiya-cms') : __('当前无法创建激活，稍后重试', 'aiya-cms');
 
     //返回订单信息
     return [
@@ -490,18 +490,18 @@ function aya_verify_code_by_code($code)
 
     $current_user_id = get_current_user_id();
     if (!$current_user_id) {
-        return ['status' => false, 'detail' => __('请先登录', 'AIYA')];
+        return ['status' => false, 'detail' => __('请先登录', 'aiya-cms')];
     }
 
     // 先查询兑换码获取时长信息
     $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE code = %s", $code));
 
     if (!$row) {
-        return ['status' => false, 'detail' => __('无效的兑换码', 'AIYA')];
+        return ['status' => false, 'detail' => __('无效的兑换码', 'aiya-cms')];
     }
 
     if ($row->status == 1 || !empty($row->user_id)) {
-        return ['status' => false, 'detail' => __('兑换码已被使用', 'AIYA')];
+        return ['status' => false, 'detail' => __('兑换码已被使用', 'aiya-cms')];
     }
 
     // 原子更新：防止并发竞态条件下同一激活码被重复兑换
@@ -513,14 +513,14 @@ function aya_verify_code_by_code($code)
     ));
 
     if ($affected === 0) {
-        return ['status' => false, 'detail' => __('兑换码已被使用', 'AIYA')];
+        return ['status' => false, 'detail' => __('兑换码已被使用', 'aiya-cms')];
     }
 
     // 尝试激活权限
     $result = aya_sponsor_key_activation($code, $row->duration, 'code');
 
     if ($result) {
-        return ['status' => true, 'detail' => __('兑换成功，权限已激活', 'AIYA')];
+        return ['status' => true, 'detail' => __('兑换成功，权限已激活', 'aiya-cms')];
     } else {
         // 激活失败，回滚激活码状态
         $wpdb->update(
@@ -528,7 +528,7 @@ function aya_verify_code_by_code($code)
             ['user_id' => null, 'status' => 0, 'used_to' => null],
             ['code' => $code]
         );
-        return ['status' => false, 'detail' => __('激活失败，可能是您已拥有该时段的权限或系统错误', 'AIYA')];
+        return ['status' => false, 'detail' => __('激活失败，可能是您已拥有该时段的权限或系统错误', 'aiya-cms')];
     }
 }
 
@@ -537,8 +537,8 @@ add_action('admin_menu', function () {
     //启用时加载
     if (aya_opt('site_sponsor_convert_bool', 'access')) {
         add_menu_page(
-            '激活码管理',
-            '激活码管理',
+            __('兑换码管理', 'aiya-cms'),
+            __('兑换码管理', 'aiya-cms'),
             'manage_options',
             'convert-management',
             'render_convert_order_page',
@@ -557,7 +557,7 @@ function render_convert_order_page()
     // 处理删除所有请求
     if (isset($_POST['aya_delete_all_codes']) && check_admin_referer('aya_delete_all_codes_action')) {
         $wpdb->query("TRUNCATE TABLE $table_name");
-        echo '<div class="updated notice is-dismissible"><p>' . __('所有兑换码已删除', 'AIYA') . '</p></div>';
+        echo '<div class="updated notice is-dismissible"><p>' . __('所有兑换码已删除', 'aiya-cms') . '</p></div>';
     }
 
     // 处理生成请求
@@ -578,9 +578,9 @@ function render_convert_order_page()
                 ]);
                 if ($res) $generated++;
             }
-            echo '<div class="updated notice is-dismissible"><p>' . sprintf(__('成功生成 %d 个兑换码', 'AIYA'), $generated) . '</p></div>';
+            echo '<div class="updated notice is-dismissible"><p>' . sprintf(__('成功生成 %d 个兑换码', 'aiya-cms'), $generated) . '</p></div>';
         } else {
-            echo '<div class="error notice is-dismissible"><p>' . __('请输入有效的数量和天数', 'AIYA') . '</p></div>';
+            echo '<div class="error notice is-dismissible"><p>' . __('请输入有效的数量和天数', 'aiya-cms') . '</p></div>';
         }
     }
 
@@ -602,51 +602,51 @@ function render_convert_order_page()
 
 ?>
     <div class="wrap">
-        <h1 class="wp-heading-inline"><?php _e('激活码管理', 'AIYA'); ?></h1>
+        <h1 class="wp-heading-inline"><?php __('激活码管理', 'aiya-cms'); ?></h1>
         <hr class="wp-header-end">
 
         <div class="card" style="max-width: 100%; margin-top: 20px;">
-            <h2><?php _e('批量生成兑换码', 'AIYA'); ?></h2>
+            <h2><?php __('批量生成兑换码', 'aiya-cms'); ?></h2>
             <form method="post" action="" class="layout-form">
                 <?php wp_nonce_field('aya_generate_codes_action'); ?>
                 <table class="form-table">
                     <tr>
-                        <th scope="row"><label for="quantity"><?php _e('生成数量', 'AIYA'); ?></label></th>
+                        <th scope="row"><label for="quantity"><?php __('生成数量', 'aiya-cms'); ?></label></th>
                         <td><input name="quantity" type="number" id="quantity" value="1" class="small-text" min="1" max="100"></td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="days"><?php _e('有效期天数', 'AIYA'); ?></label></th>
+                        <th scope="row"><label for="days"><?php __('有效期天数', 'aiya-cms'); ?></label></th>
                         <td><input name="days" type="number" id="days" value="7" class="small-text" min="1"></td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="prefix"><?php _e('前缀 (可选)', 'AIYA'); ?></label></th>
+                        <th scope="row"><label for="prefix"><?php __('前缀 (可选)', 'aiya-cms'); ?></label></th>
                         <td><input name="prefix" type="text" id="prefix" value="" class="regular-text" placeholder="PREFIX-"></td>
                     </tr>
                 </table>
                 <p class="submit">
-                    <input type="submit" name="aya_generate_codes" id="submit" class="button button-primary" value="<?php _e('生成兑换码', 'AIYA'); ?>">
+                    <input type="submit" name="aya_generate_codes" id="submit" class="button button-primary" value="<?php __('生成兑换码', 'aiya-cms'); ?>">
                 </p>
             </form>
 
-            <form method="post" action="" onsubmit="return confirm('<?php _e('确定要删除所有兑换码吗？此操作不可恢复！', 'AIYA'); ?>');">
+            <form method="post" action="" onsubmit="return confirm('<?php __('确定要删除所有兑换码吗？此操作不可恢复！', 'aiya-cms'); ?>');">
                 <?php wp_nonce_field('aya_delete_all_codes_action'); ?>
-                <input type="submit" name="aya_delete_all_codes" class="button button-link-delete" value="<?php _e('删除所有已创建的激活码', 'AIYA'); ?>">
+                <input type="submit" name="aya_delete_all_codes" class="button button-link-delete" value="<?php __('删除所有已创建的激活码', 'aiya-cms'); ?>">
             </form>
 
             <div style="margin-top: 20px; padding-top: 20px;"></div>
 
-            <h2 class="screen-reader-text"><?php _e('兑换码列表', 'AIYA'); ?></h2>
+            <h2 class="screen-reader-text"><?php __('兑换码列表', 'aiya-cms'); ?></h2>
 
             <table class="wp-list-table widefat fixed striped table-view-list">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th><?php _e('兑换码', 'AIYA'); ?></th>
-                        <th><?php _e('天数', 'AIYA'); ?></th>
-                        <th><?php _e('状态', 'AIYA'); ?></th>
-                        <th><?php _e('使用者ID', 'AIYA'); ?></th>
-                        <th><?php _e('使用时间', 'AIYA'); ?></th>
-                        <th><?php _e('创建时间', 'AIYA'); ?></th>
+                        <th><?php __('兑换码', 'aiya-cms'); ?></th>
+                        <th><?php __('天数', 'aiya-cms'); ?></th>
+                        <th><?php __('状态', 'aiya-cms'); ?></th>
+                        <th><?php __('使用者ID', 'aiya-cms'); ?></th>
+                        <th><?php __('使用时间', 'aiya-cms'); ?></th>
+                        <th><?php __('创建时间', 'aiya-cms'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -658,9 +658,9 @@ function render_convert_order_page()
                                 <td><?php echo esc_html($row->duration); ?></td>
                                 <td>
                                     <?php if ($row->status == 1) : ?>
-                                        <span class="badge badge-success" style="color:green"><?php _e('已使用', 'AIYA'); ?></span>
+                                        <span class="badge badge-success" style="color:green"><?php __('已使用', 'aiya-cms'); ?></span>
                                     <?php else : ?>
-                                        <span class="badge" style="color:gray"><?php _e('未使用', 'AIYA'); ?></span>
+                                        <span class="badge" style="color:gray"><?php __('未使用', 'aiya-cms'); ?></span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -678,7 +678,7 @@ function render_convert_order_page()
                         <?php endforeach; ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="7"><?php _e('暂无数据', 'AIYA'); ?></td>
+                            <td colspan="7"><?php __('暂无数据', 'aiya-cms'); ?></td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -688,7 +688,7 @@ function render_convert_order_page()
         <?php if ($total_pages > 1) : ?>
             <div class="tablenav bottom">
                 <div class="tablenav-pages">
-                    <span class="displaying-num"><?php printf(__('%s 个项目', 'AIYA'), $total_items); ?></span>
+                    <span class="displaying-num"><?php printf(__('%s 个项目', 'aiya-cms'), $total_items); ?></span>
                     <?php
                     echo paginate_links([
                         'base' => add_query_arg('paged', '%#%'),

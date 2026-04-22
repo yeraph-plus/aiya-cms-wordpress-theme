@@ -64,3 +64,45 @@
 
 - 主题在 `inc/settings/*.php` 中调用 `AYF::new_opt([...])` 定义设置页面
 - 主题在运行时通过 `aya_opt($fieldId, $optSlug, $isBool)` 读取值（见 `inc/func-public.php`）
+
+## `plugins/` 子仓库提交流程备忘（Submodule）
+
+当前项目将 `plugins/` 作为子模块，指向仓库 `https://github.com/yeraph-plus/aiya-cms-theme-framework.git`，并跟踪 `main` 分支。日常开发时，`plugins/` 内的提交与主仓库提交是两套独立流程。
+
+### 1) 在子仓库提交并推送
+
+```bash
+cd plugins
+git checkout main
+git pull --ff-only origin main
+
+# 修改代码后
+git add .
+git commit -m "feat: your change"
+git push origin main
+```
+
+### 2) 在主仓库记录子模块指针（推荐）
+
+```bash
+cd ..
+git add plugins
+git commit -m "chore: bump plugins submodule pointer"
+git push
+```
+
+说明：
+- 如果只做第 1 步而不做第 2 步，其他人仅拉主仓库时不会自动得到你子仓库的新提交。
+- 已在 `plugins/.gitignore` 中忽略的本地测试文件不会进入子仓库提交。
+
+### 3) 拉取子仓库最新提交（本地或 CI）
+
+```bash
+git submodule sync --recursive
+git submodule update --init --recursive --remote
+git -C plugins pull --ff-only origin main
+```
+
+说明：
+- 上述命令用于将 `plugins/` 更新到远程最新 `main`。
+- Submodule 模式下，主仓库始终会记录一个子模块提交指针（gitlink），这是 Git 机制本身。

@@ -8,15 +8,15 @@ class AYA_Widget_Menu extends AYA_Widget
     {
         $widget_args = array(
             'id' => 'widget-menu',
-            'title' => 'AIYA-CMS 菜单',
+            'title' => __('AIYA-CMS 菜单', 'aiya-cms'),
             'classname' => 'widget-panel',
-            'desc' => '菜单卡片，菜单内容于 外观->菜单 中设置',
+            'desc' => __('菜单卡片，菜单内容于 外观->菜单 中设置', 'aiya-cms'),
             'field_build' => [
                 [
                     'type' => 'input',
                     'id' => 'title',
-                    'name' => '标题',
-                    'default' => '菜单',
+                    'name' => __('标题', 'aiya-cms'),
+                    'default' => __('菜单', 'aiya-cms'),
                 ],
             ],
         );
