@@ -45,7 +45,7 @@ function aya_payment_callback_save_log($log_name, $log_data)
     $today = date('Y-m-d');
 
     //文件名加盐
-    $rand_name = substr(md5($today . AUTH_SALT), 0, 6);
+    $rand_name = substr(md5($today . wp_salt()), 0, 6);
 
     $log_file = $log_dir . '/webhook-' . $today . '-' . $rand_name . '.log';
 
@@ -417,7 +417,7 @@ function aya_verify_code_by_afdian($order_id)
     $order_info .= __('订单号：', 'aiya-cms') . $afd_order['out_trade_no'] . PHP_EOL;
     $order_info .= __('赞助方案：', 'aiya-cms') . $afd_order['plan_title'] . PHP_EOL;
     $order_info .= __('赞助周期：', 'aiya-cms') . $afd_order['month'] . __('个月', 'aiya-cms') . PHP_EOL;
-    $order_info .= __('金额：', 'aiya-cms') . $afd_order['show_amount'] . __('（折后', 'aiya-cms') . $afd_order['total_amount'] . __('）', 'aiya-cms') . PHP_EOL;
+    $order_info .= __('金额：', 'aiya-cms') . $afd_order['show_amount'] . __(' 折后金额：', 'aiya-cms') . $afd_order['total_amount'] . PHP_EOL;
     $order_info .= __('留言：', 'aiya-cms') . __('无留言', 'aiya-cms') . (!empty($afd_order['remark']) ? $afd_order['remark'] : __('无', 'aiya-cms')) . PHP_EOL;
     $order_info .= __('兑换码：', 'aiya-cms') . __('无', 'aiya-cms') . (!empty($afd_order['redeem_id']) ? $afd_order['redeem_id'] : __('无', 'aiya-cms')) . PHP_EOL;
 
@@ -602,51 +602,51 @@ function render_convert_order_page()
 
 ?>
     <div class="wrap">
-        <h1 class="wp-heading-inline"><?php __('激活码管理', 'aiya-cms'); ?></h1>
+        <h1 class="wp-heading-inline"><?php _e('兑换码管理', 'aiya-cms'); ?></h1>
         <hr class="wp-header-end">
-
+        
         <div class="card" style="max-width: 100%; margin-top: 20px;">
-            <h2><?php __('批量生成兑换码', 'aiya-cms'); ?></h2>
+            <h2><?php _e('批量生成兑换码', 'aiya-cms'); ?></h2>
             <form method="post" action="" class="layout-form">
                 <?php wp_nonce_field('aya_generate_codes_action'); ?>
                 <table class="form-table">
                     <tr>
-                        <th scope="row"><label for="quantity"><?php __('生成数量', 'aiya-cms'); ?></label></th>
+                        <th scope="row"><label for="quantity"><?php _e('生成数量', 'aiya-cms'); ?></label></th>
                         <td><input name="quantity" type="number" id="quantity" value="1" class="small-text" min="1" max="100"></td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="days"><?php __('有效期天数', 'aiya-cms'); ?></label></th>
+                        <th scope="row"><label for="days"><?php _e('有效期天数', 'aiya-cms'); ?></label></th>
                         <td><input name="days" type="number" id="days" value="7" class="small-text" min="1"></td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="prefix"><?php __('前缀 (可选)', 'aiya-cms'); ?></label></th>
+                        <th scope="row"><label for="prefix"><?php _e('前缀 (可选)', 'aiya-cms'); ?></label></th>
                         <td><input name="prefix" type="text" id="prefix" value="" class="regular-text" placeholder="PREFIX-"></td>
                     </tr>
                 </table>
                 <p class="submit">
-                    <input type="submit" name="aya_generate_codes" id="submit" class="button button-primary" value="<?php __('生成兑换码', 'aiya-cms'); ?>">
+                    <input type="submit" name="aya_generate_codes" id="submit" class="button button-primary" value="<?php _e('生成兑换码', 'aiya-cms'); ?>">
                 </p>
             </form>
 
-            <form method="post" action="" onsubmit="return confirm('<?php __('确定要删除所有兑换码吗？此操作不可恢复！', 'aiya-cms'); ?>');">
+            <form method="post" action="" onsubmit="return confirm('<?php _e('确定要删除所有兑换码吗？此操作不可恢复！', 'aiya-cms'); ?>');">
                 <?php wp_nonce_field('aya_delete_all_codes_action'); ?>
-                <input type="submit" name="aya_delete_all_codes" class="button button-link-delete" value="<?php __('删除所有已创建的激活码', 'aiya-cms'); ?>">
+                <input type="submit" name="aya_delete_all_codes" class="button button-link-delete" value="<?php _e('删除所有已创建的兑换码', 'aiya-cms'); ?>">
             </form>
 
             <div style="margin-top: 20px; padding-top: 20px;"></div>
 
-            <h2 class="screen-reader-text"><?php __('兑换码列表', 'aiya-cms'); ?></h2>
+            <h2 class="screen-reader-text"><?php _e('兑换码列表', 'aiya-cms'); ?></h2>
 
             <table class="wp-list-table widefat fixed striped table-view-list">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th><?php __('兑换码', 'aiya-cms'); ?></th>
-                        <th><?php __('天数', 'aiya-cms'); ?></th>
-                        <th><?php __('状态', 'aiya-cms'); ?></th>
-                        <th><?php __('使用者ID', 'aiya-cms'); ?></th>
-                        <th><?php __('使用时间', 'aiya-cms'); ?></th>
-                        <th><?php __('创建时间', 'aiya-cms'); ?></th>
+                        <th><?php _e('兑换码', 'aiya-cms'); ?></th>
+                        <th><?php _e('天数', 'aiya-cms'); ?></th>
+                        <th><?php _e('状态', 'aiya-cms'); ?></th>
+                        <th><?php _e('使用者ID', 'aiya-cms'); ?></th>
+                        <th><?php _e('使用时间', 'aiya-cms'); ?></th>
+                        <th><?php _e('创建时间', 'aiya-cms'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -658,9 +658,9 @@ function render_convert_order_page()
                                 <td><?php echo esc_html($row->duration); ?></td>
                                 <td>
                                     <?php if ($row->status == 1) : ?>
-                                        <span class="badge badge-success" style="color:green"><?php __('已使用', 'aiya-cms'); ?></span>
+                                        <span class="badge badge-success" style="color:green"><?php _e('已使用', 'aiya-cms'); ?></span>
                                     <?php else : ?>
-                                        <span class="badge" style="color:gray"><?php __('未使用', 'aiya-cms'); ?></span>
+                                        <span class="badge" style="color:gray"><?php _e('未使用', 'aiya-cms'); ?></span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -678,7 +678,7 @@ function render_convert_order_page()
                         <?php endforeach; ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="7"><?php __('暂无数据', 'aiya-cms'); ?></td>
+                            <td colspan="7"><?php _e('暂无数据', 'aiya-cms'); ?></td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

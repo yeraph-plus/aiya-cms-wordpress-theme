@@ -11,8 +11,8 @@ if (!defined('ABSPATH')) {
  */
 
 add_filter('determine_locale', 'ayar_locale_auto_convert_filter', 1);
-//add_action('after_setup_theme', 'aya_theme_textdomain_load');
-//add_action('wp_enqueue_scripts', 'aya_theme_enqueue_frontend_translations', 2);
+add_action('after_setup_theme', 'aya_theme_textdomain_load');
+// add_action('wp_enqueue_scripts', 'aya_theme_enqueue_frontend_translations', 2);
 
 // 加载主题语言包
 function aya_theme_textdomain_load()
@@ -103,6 +103,12 @@ function ayar_locale_auto_convert_filter($locale)
 {
     if (is_admin()) {
         return $locale;
+    }
+
+    $normalized = aya_normalize_locale($locale);
+
+    if ($normalized !== 'zh_CN') {
+        return $normalized;
     }
 
     return aya_get_user_locale();

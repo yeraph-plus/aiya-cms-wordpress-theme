@@ -474,6 +474,147 @@ function aya_is_oplist_cli_ready($post_id = 0)
     return $path !== '';
 }
 
+// 调用 Rest API 命名空间
+$api = new AYA_WP_REST_API('aiya/v1');
+
+// OpenList 请求接口
+$api->register_route('oplist_fs', [
+    'methods' => 'POST',
+    'callback' => function (WP_REST_Request $request) use ($api) {
+        //获取nonce参数
+        $nonce = $request->get_header('X-WP-Nonce');
+        //验证nonce
+        if (!wp_verify_nonce($nonce, 'wp_rest')) {
+            return $api->error_response('permission_denied', ['detail' => __('安全验证失败，请刷新页面后重试', 'aiya-cms')]);
+        }
+
+        //接取参数
+        $params = $request->get_json_params();
+
+        $post_id = isset($params['post_id']) ? absint($params['post_id']) : 0;
+        if ($post_id <= 0) {
+            return $api->error_response('invalid_param', ['detail' => __('非法访问', 'aiya-cms')]);
+        }
+
+        // 检查文章是否存在
+        $post = get_post($post_id);
+        if (!$post instanceof WP_Post) {
+            return $api->error_response('not_found', ['detail' => __('文章不存在', 'aiya-cms')]);
+        }
+
+        $box_id = 'oplist_client';
+
+        // 检查文章是否配置了 OpenList 客户端
+        if (!aya_is_oplist_cli_ready($post_id, false)) {
+            return $api->error_response('not_found', ['detail' => __('文件访问未获授权', 'aiya-cms')]);
+        }
+
+        // 检查文章是否配置了赞助者权限
+        $sponsor_can = filter_var(aya_post_opt('sponsor_can', $box_id, $post_id), FILTER_VALIDATE_BOOLEAN);
+
+        if ($sponsor_can && !aya_is_sponsor()) {
+            return $api->error_response('permission_denied', ['detail' => __('未获授权', 'aiya-cms')]);
+        }
+        // 增加计数器
+        if ($sponsor_can) {
+            aya_sponsor_user_auto_trigger_count();
+        }
+
+        $fs_method = (string) aya_post_opt('fs_method', $box_id, $post_id);
+        $password = (string) aya_post_opt('password', $box_id, $post_id);
+        $desc = (string) aya_post_opt('desc', $box_id, $post_id);
+        $per_page = intval(aya_post_opt('per_page', $box_id, $post_id));
+        $page = isset($params['page']) ? max(1, intval($params['page'])) : 1;
+        $refresh = filter_var(aya_post_opt('refresh', $box_id, $post_id), FILTER_VALIDATE_BOOLEAN);
+
+        $fs_atts = [];
+        $root_path = '/';
+        switch ($fs_method) {
+            case 'list':
+            case 'get':
+                $path = '/' . trim((string) aya_post_opt('path', $box_id, $post_id), '/');
+                $fs_atts['path'] = $path;
+                $fs_atts['password'] = $password;
+                $fs_atts['per_page'] = $per_page;
+                $fs_atts['page'] = $page;
+                $fs_atts['refresh'] = $refresh;
+                $root_path = $path;
+                break;
+            case 'dirs':
+                $path = '/' . trim((string) aya_post_opt('path', $box_id, $post_id), '/');
+                $fs_atts['path'] = $path;
+                $fs_atts['password'] = $password;
+                $fs_atts['force_root'] = false;
+                $root_path = $path;
+                break;
+            case 'search':
+                $parent = '/' . trim((string) aya_post_opt('parent', $box_id, $post_id), '/');
+                $fs_atts['parent'] = $parent;
+                $fs_atts['keywords'] = (string) aya_post_opt('keywords', $box_id, $post_id);
+                $fs_atts['scope'] = 2;
+                $fs_atts['page'] = $page;
+                $fs_atts['per_page'] = $per_page;
+                $fs_atts['password'] = $password;
+                $fs_atts['refresh'] = $refresh;
+                $root_path = $parent;
+                break;
+            default:
+                return $api->error_response('invalid_param', ['detail' => __('未定义的请求类型', 'aiya-cms')]);
+        }
+
+        $oplist_cli = aya_oplist_cli_init();
+        $fs_content = $oplist_cli->fs_request($fs_method, $fs_atts, true);
+
+        //错误处理
+        if (!is_array($fs_content)) {
+            $fs_error = is_string($fs_content) ? $fs_content : __('未知错误', 'aiya-cms');
+            //识别一些常见错误
+            if (is_string($fs_content) && strpos($fs_content, 'EOF') !== false) {
+                $msg = __('本地服务器发送请求失败', 'aiya-cms');
+            } else if (is_string($fs_content) && strpos($fs_content, '400') !== false) {
+                $msg = __('参数错误', 'aiya-cms');
+            } else if (is_string($fs_content) && strpos($fs_content, '401') !== false) {
+                $msg = __('令牌失效', 'aiya-cms');
+            } else if (is_string($fs_content) && strpos($fs_content, '403') !== false) {
+                $msg = __('文件访问被拒绝', 'aiya-cms');
+            } else if (is_string($fs_content) && strpos($fs_content, '500') !== false) {
+                $msg = __('文件/目录位置不存在，或搜索功能未就绪', 'aiya-cms');
+            } else if (is_string($fs_content) && strpos($fs_content, 'your.openlist.server') !== false) {
+                $msg = __('请先完成后台设置', 'aiya-cms');
+            } else {
+                $msg = __('访问错误', 'aiya-cms');
+            }
+            return $api->error_response('not_found', ['detail' => $msg . ' (' . $fs_error . ') ']);
+        }
+
+        // 截取当前目录名称
+        $folder_trim_path = trim((string) $root_path, '/');
+        $desc_folder = ($folder_trim_path === '' ? 'Root' : basename($folder_trim_path));
+        $desc_content = aya_preg_desc(($desc === '' ? aya_opt('site_oplist_file_desc', 'oplist') : $desc));
+
+        //处理返回前端的数据结构
+        return $api->response([
+            'content' => aya_oplist_rebuild_content($fs_content, [
+                'fs_method' => $fs_method,
+                'path' => $root_path,
+                'password' => $password,
+                'ignore_dir' => true,
+                'parent' => $root_path,
+                'keywords' => $fs_atts['keywords'] ?? '',
+                'scope' => 2,
+            ]),
+            'per_page' => intval($fs_atts['per_page'] ?? 0),
+            'page' => intval($fs_atts['page'] ?? $page),
+            'total' => intval($fs_content['total']),
+            'folder_name' => $desc_folder,
+            'description' => $desc_content,
+        ]);
+    },
+    'permission_callback' => function () {
+        return is_user_logged_in();
+    }
+]);
+
 /*
  * ------------------------------------------------------------------------------
  *  OpenList 旧短代码迁移层

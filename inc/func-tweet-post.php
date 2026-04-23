@@ -14,30 +14,27 @@ if (!defined('ABSPATH')) {
 add_action('after_setup_theme', 'aya_post_type_tweet_action');
 //MetaBox注册
 add_action('add_meta_boxes', 'aya_post_type_tweet_add_meta_box');
-//前台发帖处理
-add_action('admin_post_aya_submit_tweet', 'aya_tweet_handle_front_submit');
-add_action('admin_post_nopriv_aya_submit_tweet', 'aya_tweet_handle_front_submit_guest');
 //归档筛选
-add_action('pre_get_posts', 'aya_tweet_archive_filter_by_tag');
+add_action('pre_get_posts', 'aya_tweet_post_archive_filter_by_tag');
 
+//注册推文文章类型和标签分类法
 function aya_post_type_tweet_action()
 {
-    //注册文章类型
     AYF::module(
-        //'文章类型' => array('name' => '文章类型名','slug' => '别名','icon' => '图标','in_homepage' => 允许显示在首页),
         'Register_Post_Type',
+        //'文章类型' => array('name' => '文章类型名','slug' => '别名','icon' => '图标','public' => 允许查询),
         [
             'tweet' => [
                 'name' => __('推文', 'aiya-cms'),
                 'slug' => 'tweet',
                 'icon' => 'dashicons-format-quote',
-                'in_homepage' => false,
+                'public' => true,
             ],
         ]
     );
-    //注册推文标签分类法（非层级，类似标签）
     AYF::module(
         'Register_Tax_Type',
+        //'分类法类型' => array('name' => '分类法类型名','slug' => '别名','post_type' => '文章类型名','tag_mode' => 作为标签),
         [
             'tweet_tag' => [
                 'name' => __('推文标签', 'aiya-cms'),
@@ -69,72 +66,25 @@ function aya_tweet_product_sticky()
     );
 }
 
-//前台发帖未登录处理
-function aya_tweet_handle_front_submit_guest()
-{
-    wp_safe_redirect(wp_login_url(get_post_type_archive_link('tweet')));
-    exit;
-}
-
-//前台发帖处理
-function aya_tweet_handle_front_submit()
-{
-    if (!is_user_logged_in()) {
-        aya_tweet_handle_front_submit_guest();
-    }
-
-    check_admin_referer('aya_submit_tweet_action', 'aya_submit_tweet_nonce');
-
-    $title = sanitize_text_field(wp_unslash($_POST['tweet_title'] ?? ''));
-    $content = wp_kses_post(wp_unslash($_POST['tweet_content'] ?? ''));
-    $tags_text = sanitize_text_field(wp_unslash($_POST['tweet_tags'] ?? ''));
-
-    if ($content === '') {
-        wp_safe_redirect(add_query_arg('tweet_status', 'empty', get_post_type_archive_link('tweet')));
-        exit;
-    }
-
-    if ($title === '') {
-        $title = mb_substr(wp_strip_all_tags($content), 0, 24);
-    }
-
-    $post_status = current_user_can('publish_posts') ? 'publish' : 'pending';
-
-    $post_id = wp_insert_post([
-        'post_type' => 'tweet',
-        'post_status' => $post_status,
-        'post_author' => get_current_user_id(),
-        'post_title' => $title,
-        'post_content' => $content,
-    ], true);
-
-    if (is_wp_error($post_id) || !$post_id) {
-        wp_safe_redirect(add_query_arg('tweet_status', 'error', get_post_type_archive_link('tweet')));
-        exit;
-    }
-
-    if ($tags_text !== '') {
-        $tags = preg_split('/[，,\s]+/u', $tags_text);
-        $tags = array_values(array_filter(array_unique(array_map('sanitize_text_field', (array) $tags))));
-        if (!empty($tags)) {
-            wp_set_object_terms($post_id, $tags, 'tweet_tag', false);
-        }
-    }
-
-    $status = ($post_status === 'publish') ? 'published' : 'pending';
-    wp_safe_redirect(add_query_arg('tweet_status', $status, get_post_type_archive_link('tweet')));
-    exit;
-}
-
-//推文归档按标签筛选
-function aya_tweet_archive_filter_by_tag($query)
+// 归档筛选推文标签
+function aya_tweet_post_archive_filter_by_tag($query)
 {
     if (is_admin() || !$query->is_main_query() || !$query->is_post_type_archive('tweet')) {
         return;
     }
 
-    $tag_slug = sanitize_title(wp_unslash($_GET['tweet_tag'] ?? ''));
-    if ($tag_slug === '') {
+    $tag_param = wp_unslash($_GET['t_tag'] ?? '');
+
+    if (is_array($tag_param)) {
+        $tag_slugs = array_map('sanitize_title', $tag_param);
+    } else {
+        $tag_slugs = preg_split('/[，,\s]+/u', (string) $tag_param);
+        $tag_slugs = array_map('sanitize_title', $tag_slugs);
+    }
+
+    $tag_slugs = array_values(array_filter(array_unique($tag_slugs)));
+
+    if (empty($tag_slugs)) {
         return;
     }
 
@@ -142,7 +92,477 @@ function aya_tweet_archive_filter_by_tag($query)
         [
             'taxonomy' => 'tweet_tag',
             'field' => 'slug',
-            'terms' => $tag_slug,
+            'terms' => $tag_slugs,
+            'operator' => 'AND',
         ]
     ]);
+}
+
+// 查询推文标签列表
+function aya_tweet_post_get_tags_list()
+{
+    $terms = get_terms([
+        'taxonomy' => 'tweet_tag',
+        'hide_empty' => false,
+        'orderby' => 'count',
+        'order' => 'DESC',
+    ]);
+
+    if (is_wp_error($terms)) {
+        return false;
+    }
+
+    $items = [];
+    foreach ($terms as $term) {
+        if (!$term instanceof WP_Term) {
+            continue;
+        }
+        $items[] = [
+            'id' => (int) $term->term_id,
+            'name' => $term->name,
+            'slug' => $term->slug,
+            'count' => (int) $term->count,
+        ];
+    }
+
+    return $items;
+}
+
+/*
+ * ------------------------------------------------------------------------------
+ * 推文文章类型接口
+ * ------------------------------------------------------------------------------
+ */
+
+// 推文格式提交过滤
+function aya_tweet_post_insert_from_request(AYA_WP_REST_API $api, WP_REST_Request $request, $post = null)
+{
+    $tweet_content = wp_kses_post((string) $request->get_param('content'));
+    $tweet_title = sanitize_text_field((string) $request->get_param('title'));
+    $tweet_status = in_array($request->get_param('status'), ['publish', 'draft', 'pending'], true) ? $request->get_param('status') : 'pending';
+    $tweet_tags = aya_tweet_extract_tags_from_content($tweet_content);
+    $gallery_images = aya_tweet_sanitize_gallery_images($request->get_param('gallery_images'));
+
+    if ($tweet_content === '') {
+        return $api->error_response('invalid_param', ['detail' => __('帖子内容不能为空', 'aiya-cms')]);
+    }
+
+    $post_data = [
+        'post_type' => 'tweet',
+        'post_status' => $tweet_status,
+        'post_title' => $tweet_title,
+        'post_content' => $tweet_content,
+        'post_modified' => current_time('mysql'),
+        'post_modified_gmt' => current_time('mysql', true),
+    ];
+
+    if ($post instanceof WP_Post) {
+        $post_data['ID'] = (int) $post->ID;
+    } else {
+        $post_data['post_author'] = get_current_user_id();
+    }
+
+    $post_id = wp_insert_post($post_data, true);
+
+    if (is_wp_error($post_id) || !$post_id) {
+        return $api->error_response('server_error', ['detail' => __('帖子发布失败，请稍后重试', 'aiya-cms')]);
+    }
+
+    wp_set_object_terms($post_id, $tweet_tags, 'tweet_tag', false);
+    update_post_meta($post_id, 'gallery_images', $gallery_images);
+
+    return $post_id;
+}
+
+// 从推文内容中提取标签
+function aya_tweet_extract_tags_from_content($content)
+{
+    $content = wp_strip_all_tags((string) $content);
+
+    if ($content === '') {
+        return [];
+    }
+
+    preg_match_all('/#([^#\r\n]+)#/u', $content, $matches);
+
+    if (empty($matches[1]) || !is_array($matches[1])) {
+        return [];
+    }
+
+    $tag_names = array_map('sanitize_text_field', $matches[1]);
+    $tag_names = array_map('trim', $tag_names);
+    $tag_names = array_values(array_filter(array_unique($tag_names), function ($tag_name) {
+        return $tag_name !== '';
+    }));
+
+    if (empty($tag_names)) {
+        return [];
+    }
+
+    $terms = get_terms([
+        'taxonomy' => 'tweet_tag',
+        'hide_empty' => false,
+        'name' => $tag_names,
+    ]);
+
+    if (is_wp_error($terms) || empty($terms)) {
+        return [];
+    }
+
+    $valid_tags = [];
+    foreach ($terms as $term) {
+        if (!$term instanceof WP_Term) {
+            continue;
+        }
+
+        $valid_tags[] = $term->name;
+    }
+
+    return array_values(array_unique($valid_tags));
+}
+
+// 准备帖子项
+function aya_tweet_post_prepare_in_while($post)
+{
+    if (!$post instanceof WP_Post) {
+        return [];
+    }
+
+    $post_obj = new AYA_Post_In_While($post);
+
+    return [
+        'id' => $post_obj->id,
+        'url' => (string) $post_obj->url,
+        'title' => (string) $post_obj->title,
+        'attr_title' => (string) $post_obj->attr_title,
+        'content' => (string) $post_obj->content,
+        'date' => (string) $post_obj->date,
+        'date_iso' => (string) $post_obj->date_iso,
+        'comments' => (string) $post_obj->comments,
+        'likes' => (string) $post_obj->likes,
+        'status' => (array) $post_obj->status,
+        'tags' => $post_obj->tag_list,
+        'author' => [
+            'name' => (string) $post_obj->author_name,
+            'avatar' => (string) $post_obj->author_avatar_x64,
+        ],
+        'gallery_images' => aya_tweet_sanitize_gallery_images(get_post_meta($post_obj->id, 'gallery_images', true)),
+    ];
+}
+
+// 调用 Rest API 命名空间
+$api = new AYA_WP_REST_API('aiya/v1');
+
+// 创建推文
+$api->register_route('tweet/create', [
+    'methods' => 'POST',
+    'callback' => function (WP_REST_Request $request) use ($api) {
+        //验证nonce
+        $nonce_check = aya_rest_api_verify_nonce($api, $request);
+
+        if (is_wp_error($nonce_check)) {
+            return $nonce_check;
+        }
+
+        $post_id = aya_tweet_post_insert_from_request($api, $request);
+
+        if (is_wp_error($post_id) || !$post_id) {
+            return $post_id;
+        }
+
+        return $api->response([
+            'message' => __('帖子已发布', 'aiya-cms'),
+            'post_data' => aya_tweet_post_prepare_in_while(get_post($post_id)),
+        ], 201);
+    },
+    'permission_callback' => function () {
+        return is_user_logged_in();
+    },
+    'args' => [
+        'title' => [
+            'required' => false,
+            'type' => 'string',
+        ],
+        'content' => [
+            'required' => true,
+            'type' => 'string',
+        ],
+        'status' => [
+            'required' => false,
+            'type' => 'string',
+        ],
+        'gallery_images' => [
+            'required' => false,
+            'type' => 'array',
+            'sanitize_callback' => function ($value) {
+                return aya_tweet_sanitize_gallery_images($value);
+            },
+        ],
+    ]
+]);
+
+// 编辑推文
+$api->register_route('tweet/update', [
+    'methods' => 'POST',
+    'callback' => function (WP_REST_Request $request) use ($api) {
+        //验证nonce
+        $nonce_check = aya_rest_api_verify_nonce($api, $request);
+
+        if (is_wp_error($nonce_check)) {
+            return $nonce_check;
+        }
+
+        // 更新前检查流程
+        $post_id = absint($request->get_param('post_id'));
+        if ($post_id <= 0) {
+            return $api->error_response('invalid_param', ['detail' => __('缺少帖子ID', 'aiya-cms')]);
+        }
+
+        $post = get_post($post_id);
+        if (!$post instanceof WP_Post || $post->post_type !== 'tweet') {
+            return $api->error_response('not_found', ['detail' => __('帖子不存在', 'aiya-cms')]);
+        }
+
+        if ((int) $post->post_author !== get_current_user_id() && !current_user_can('edit_others_posts')) {
+            return $api->error_response('permission_denied', ['detail' => __('没有更新这条帖子的权限', 'aiya-cms')]);
+        }
+
+        $post_id = aya_tweet_post_insert_from_request($api, $request, $post);
+
+        if (is_wp_error($post_id) || !$post_id) {
+            return $post_id;
+        }
+
+        return $api->response([
+            'message' => __('帖子已更新', 'aiya-cms'),
+            'post_data' => aya_tweet_post_prepare_in_while(get_post($post_id)),
+        ], 201);
+    },
+    'permission_callback' => function () {
+        return is_user_logged_in();
+    },
+    'args' => [
+        'post_id' => [
+            'required' => true,
+            'type' => 'numeric',
+        ],
+        'title' => [
+            'required' => false,
+            'type' => 'string',
+        ],
+        'content' => [
+            'required' => true,
+            'type' => 'string',
+        ],
+        'status' => [
+            'required' => false,
+            'type' => 'string',
+        ],
+        'gallery_images' => [
+            'required' => false,
+            'type' => 'array',
+            'sanitize_callback' => function ($value) {
+                return aya_tweet_sanitize_gallery_images($value);
+            },
+        ],
+    ]
+]);
+
+// 删除推文
+$api->register_route('tweet/delete', [
+    'methods' => 'POST',
+    'callback' => function (WP_REST_Request $request) use ($api) {
+        //验证nonce
+        $nonce_check = aya_rest_api_verify_nonce($api, $request);
+
+        if (is_wp_error($nonce_check)) {
+            return $nonce_check;
+        }
+
+        // 删除前检查流程
+        $post_id = absint($request->get_param('post_id'));
+        if ($post_id <= 0) {
+            return $api->error_response('invalid_param', ['detail' => __('缺少帖子ID', 'aiya-cms')]);
+        }
+
+        $post = get_post($post_id);
+        if (!$post instanceof WP_Post || $post->post_type !== 'tweet') {
+            return $api->error_response('not_found', ['detail' => __('帖子不存在', 'aiya-cms')]);
+        }
+
+        if ((int) $post->post_author !== get_current_user_id() && !current_user_can('delete_others_posts')) {
+            return $api->error_response('permission_denied', ['detail' => __('没有删除这条帖子的权限', 'aiya-cms')]);
+        }
+
+        $deleted = wp_delete_post($post_id, true);
+        if (!$deleted) {
+            return $api->error_response('server_error', ['detail' => __('删除帖子失败', 'aiya-cms')]);
+        }
+
+        return $api->response([
+            'message' => __('帖子已删除', 'aiya-cms'),
+            'post_id' => $post_id,
+        ]);
+    },
+    'permission_callback' => function () {
+        return is_user_logged_in();
+    },
+    'args' => [
+        'post_id' => [
+            'required' => true,
+            'type' => 'numeric',
+        ],
+    ]
+]);
+
+/*
+ * ------------------------------------------------------------------------------
+ * 推文图片上传接口
+ * ------------------------------------------------------------------------------
+ */
+
+function aya_tweet_handle_upload_image(AYA_WP_REST_API $api, $upload)
+{
+    if (!is_array($upload) || empty($upload['tmp_name'])) {
+        return $api->error_response('invalid_param', ['detail' => __('未检测到上传文件', 'aiya-cms')]);
+    }
+
+    if (!empty($upload['error'])) {
+        return $api->error_response('invalid_param', ['detail' => __('图片上传失败', 'aiya-cms')]);
+    }
+
+    $max_size = 5 * 1024 * 1024;
+    if (!empty($upload['size']) && (int) $upload['size'] > $max_size) {
+        return $api->error_response('invalid_param', ['detail' => __('图片大小不能超过 5MB', 'aiya-cms')]);
+    }
+
+    $image_info = @getimagesize($upload['tmp_name']);
+    if (!is_array($image_info) || empty($image_info['mime'])) {
+        return $api->error_response('invalid_param', ['detail' => __('只允许上传图片文件', 'aiya-cms')]);
+    }
+
+    $mime_map = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/gif' => 'gif',
+        'image/webp' => 'webp',
+        'image/avif' => 'avif',
+    ];
+
+    $mime = strtolower((string) $image_info['mime']);
+    if (!isset($mime_map[$mime])) {
+        return $api->error_response('invalid_param', ['detail' => __('仅支持 jpg、png、gif、webp、avif 图片', 'aiya-cms')]);
+    }
+
+    $upload_subdir = aya_tweet_get_upload_subdir();
+    $upload_dir = aya_tweet_get_upload_dir($upload_subdir);
+
+    if (!wp_mkdir_p($upload_dir) || !is_dir($upload_dir)) {
+        return $api->error_response('server_error', ['detail' => __('创建上传目录失败', 'aiya-cms')]);
+    }
+
+    $filename = wp_unique_filename($upload_dir, wp_generate_password(8, false, false) . '-' . time() . '.' . $mime_map[$mime]);
+    $destination = trailingslashit($upload_dir) . $filename;
+    $source_file = $upload['tmp_name'];
+
+    if (function_exists('aya_image_manager_process_uploaded_image')) {
+        $source_file = aya_image_manager_process_uploaded_image($source_file, false);
+
+        if ($source_file === false || !is_string($source_file) || $source_file === '') {
+            return $api->error_response('server_error', ['detail' => __('图片处理失败', 'aiya-cms')]);
+        }
+    }
+
+    if (!@move_uploaded_file($source_file, $destination) && !@rename($source_file, $destination)) {
+        return $api->error_response('server_error', ['detail' => __('保存图片失败', 'aiya-cms')]);
+    }
+
+    @chmod($destination, 0644);
+
+    $relative_path = ltrim($upload_subdir . '/' . $filename, '/');
+
+    return [
+        'relative_path' => $relative_path,
+        'url' => aya_tweet_get_upload_url($relative_path),
+    ];
+}
+
+// 上传推文图片
+$api->register_route('tweet/upload_image', [
+    'methods' => 'POST',
+    'callback' => function (WP_REST_Request $request) use ($api) {
+        $nonce_check = aya_rest_api_verify_nonce($api, $request);
+
+        if (is_wp_error($nonce_check)) {
+            return $nonce_check;
+        }
+
+        $files = $request->get_file_params();
+        $result = aya_tweet_handle_upload_image($api, $files['file'] ?? null);
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        return $api->response([
+            'message' => __('图片上传成功', 'aiya-cms'),
+            'path' => $result['relative_path'],
+            'url' => $result['url'],
+        ], 201);
+    },
+    'permission_callback' => function () {
+        return is_user_logged_in();
+    },
+]);
+
+function aya_tweet_sanitize_gallery_images($images)
+{
+    if (!is_array($images)) {
+        return [];
+    }
+
+    $items = [];
+
+    foreach ($images as $image) {
+        $image = ltrim(wp_normalize_path(sanitize_text_field((string) $image)), '/');
+
+        if ($image === '' || strpos($image, '..') !== false) {
+            continue;
+        }
+
+        if (!preg_match('#^[0-9]{4}/[0-9]{2}/[0-9]{2}/[A-Za-z0-9_-]+\.(jpg|png|gif|webp|avif)$#', $image)) {
+            continue;
+        }
+
+        $items[] = $image;
+    }
+
+    return array_values(array_unique($items));
+}
+
+function aya_tweet_get_upload_subdir()
+{
+    return gmdate('Y/m/d', current_time('timestamp'));
+}
+
+function aya_tweet_get_upload_dir($subdir = '')
+{
+    $base_dir = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'upload-tweet';
+
+    if ($subdir === '') {
+        return $base_dir;
+    }
+
+    return $base_dir . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, trim($subdir, '/'));
+}
+
+function aya_tweet_get_upload_url($filename = '')
+{
+    $base_url = content_url('upload-tweet');
+
+    if ($filename === '') {
+        return $base_url;
+    }
+
+    return trailingslashit($base_url) . ltrim($filename, '/');
 }

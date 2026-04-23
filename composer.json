@@ -27,13 +27,14 @@
         "php:cs": "@php ./vendor/bin/phpcs --standard=.phpcs.xml.dist",
         "php:cbf": "@php ./vendor/bin/phpcbf --standard=.phpcs.xml.dist",
         "php:stan": "@php ./vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --memory-limit=1G",
-        "i18n:pot-theme": "@php ./vendor/wp-cli/wp-cli/php/boot-fs.php i18n make-pot . languages/aiya-cms.pot --domain=aiya-cms --exclude=node_modules,build,dist,vendor,.trae,plugins",
-        "i18n:pot-framework": "@php ./vendor/wp-cli/wp-cli/php/boot-fs.php i18n make-pot plugins plugins/languages/aiya-framework.pot --domain=aiya-framework --exclude=node_modules,build,dist,vendor,.git,.trae",
+        "i18n:pot-theme": "@php ./vendor/wp-cli/wp-cli/php/boot-fs.php i18n make-pot . languages/aiya-cms.pot --domain=aiya-cms --exclude=node_modules,build,dist,vendor,plugins,.git",
+        "i18n:pot-framework": "@php ./vendor/wp-cli/wp-cli/php/boot-fs.php i18n make-pot plugins plugins/languages/aiya-framework.pot --domain=aiya-framework --exclude=node_modules,build,dist,vendor,.git",
+        "i18n:pot-theme:update-po": "@php ./vendor/wp-cli/wp-cli/php/boot-fs.php i18n update-po languages/aiya-cms.pot languages --no-purge",
         "i18n:pot": [
             "@i18n:pot-theme",
             "@i18n:pot-framework"
         ],
-        "i18n:json": "wp i18n make-json languages --no-purge"
+        "i18n:json": "@php ./vendor/wp-cli/wp-cli/php/boot-fs.php i18n make-json languages"
     },
     "config": {
         "allow-plugins": {

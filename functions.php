@@ -46,7 +46,7 @@ define('AYA_FRAMEWORK_TEXTDOMAIN', 'aiya-framework');
  * ------------------------------------------------------------------------------
  */
 
-global $aya_post_type, $aya_land_page, $aya_tax_type;
+global $aya_land_page;
 
 //require
 function aya_require($name, $path = '', $special = false)
@@ -71,7 +71,7 @@ function aya_require($name, $path = '', $special = false)
 $GLOBALS['aya_land_page'] = [
     //'URL路径' => ['template' => '模板路径','title' => '页面标题','orginal' => true/false在模板路由中是否加载页头页脚)
     'go' => [
-        'title' => '跳转页面',
+        'title' => __('跳转页面', 'aiya-cms'),
         'template' => 'external-auto',
         'orginal' => false,
         'callback' => function () {
@@ -79,7 +79,7 @@ $GLOBALS['aya_land_page'] = [
         }
     ],
     'link' => [
-        'title' => '外部链接',
+        'title' => __('外部链接提示', 'aiya-cms'),
         'template' => 'external-link',
         'orginal' => true,
         'callback' => function () {
@@ -87,7 +87,7 @@ $GLOBALS['aya_land_page'] = [
         }
     ],
     'sponsor' => [
-        'title' => '获取订阅',
+        'title' => __('获取订阅', 'aiya-cms'),
         'template' => 'sponsor-plan',
         'orginal' => true,
         'callback' => function () {
@@ -95,7 +95,7 @@ $GLOBALS['aya_land_page'] = [
         }
     ],
     'user-favlist' => [
-        'title' => '收藏列表',
+        'title' => __('收藏列表', 'aiya-cms'),
         'template' => 'user-favlist',
         'orginal' => true,
         'callback' => function () {
@@ -103,7 +103,7 @@ $GLOBALS['aya_land_page'] = [
         }
     ],
     'user-settings' => [
-        'title' => '用户设置',
+        'title' => __('用户设置', 'aiya-cms'),
         'template' => 'user-settings',
         'original' => true,
         'callback' => function () {
@@ -111,7 +111,7 @@ $GLOBALS['aya_land_page'] = [
         }
     ],
     'reset-password' => [
-        'title' => '重置密码',
+        'title' => __('重置密码', 'aiya-cms'),
         'template' => 'reset-password',
         'orginal' => true,
         'callback' => function () {

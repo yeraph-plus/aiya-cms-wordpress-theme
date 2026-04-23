@@ -1,718 +1,724 @@
-# Copyright (C) 2026 Yeraph
-# This file is distributed under the GNU General Public License v3.0.
 msgid ""
 msgstr ""
-"Project-Id-Version: AIYA-CMS 3.0.0\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/aiya-cms-wordpress-theme\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-23T18:23:16+08:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.12.0\n"
-"X-Domain: aiya-cms\n"
+"POT-Creation-Date: 2026-04-23T04:14:48+08:00\n"
+"PO-Revision-Date: 2026-04-23T07:53:03+00:00\n"
+"Language: zh_TW\n"
+"X-Generator: Poedit 3.9\n"
+"X-Poedit-Basepath: .\n"
 
 #. Theme Name of the theme
 #: style.css:2
 #: inc/settings/opt-basic.php:22
 msgid "AIYA-CMS"
-msgstr ""
+msgstr "AIYA-CMS"
 
 #. Theme URI of the theme
 #. Author URI of the theme
 #: style.css:3
 #: style.css:9
 msgid "https://www.yeraph.com/"
-msgstr ""
+msgstr "https://www.yeraph.com/"
 
 #. Description of the theme
 #: style.css:4
 msgid "一款全旧的 WordPress CMS主题"
-msgstr ""
+msgstr "一款全舊的 WordPress CMS主題"
 
 #. Author of the theme
 #: style.css:8
 msgid "Yeraph"
-msgstr ""
+msgstr "Yeraph"
 
 #: functions.php:78
 msgid "跳转页面"
-msgstr ""
+msgstr "跳轉頁面"
 
 #: functions.php:86
 msgid "外部链接提示"
-msgstr ""
+msgstr "外部鏈接提示"
 
 #: functions.php:94
 #: inc/func-shotcodes.php:540
 #: inc/func-user.php:703
 msgid "获取订阅"
-msgstr ""
+msgstr "獲取訂閱"
 
 #: functions.php:102
 msgid "收藏列表"
-msgstr ""
+msgstr "收藏列表"
 
 #: functions.php:110
 msgid "用户设置"
-msgstr ""
+msgstr "用戶設置"
 
 #: functions.php:118
 msgid "重置密码"
-msgstr ""
+msgstr "重置密碼"
 
 #: functions.php:130
 #: inc/func-vite-helpers.php:69
 msgid "AIYA-CMS 启动错误"
-msgstr ""
+msgstr "AIYA-CMS 啟動錯誤"
 
 #: functions.php:131
 msgid "AIYA-CMS 未找到主题框架依赖，请安装并激活 AIYA-Optimize 插件。"
-msgstr ""
+msgstr "AIYA-CMS 未找到主題框架依賴，請安裝並激活 AIYA-Optimize 插件。"
 
 #: functions.php:337
 msgid "感谢使用 <b>AIYA-CMS</b> 主题，欢迎访问 <a href=\"https://www.yeraph.com\" target=\"_blank\">Yeraph Studio</a> 了解更多。"
-msgstr ""
+msgstr "感謝使用 <b>AIYA-CMS</b> 主題，歡迎訪問 <a href=\"https://www.yeraph.com\" target=\"_blank\">Yeraph Studio</a> 瞭解更多。"
 
 #: functions.php:383
 msgid "主要菜单"
-msgstr ""
+msgstr "主要菜單"
 
 #: functions.php:384
 msgid "页脚菜单（单层级）"
-msgstr ""
+msgstr "頁腳菜單（單層級）"
 
 #: functions.php:385
 msgid "小工具菜单"
-msgstr ""
+msgstr "小工具菜單"
 
 #: functions.php:391
 #: inc/core/WP_Breadcrumb.php:29
 #: templates/index.php:168
 msgid "首页"
-msgstr ""
+msgstr "首頁"
 
 #: functions.php:392
 msgid "归档页面"
-msgstr ""
+msgstr "歸檔頁面"
 
 #: functions.php:393
 msgid "正文页面"
-msgstr ""
+msgstr "正文頁面"
 
 #: functions.php:394
 msgid "用户页面"
-msgstr ""
+msgstr "用戶頁面"
 
 #: inc/core/WP_Breadcrumb.php:57
 msgid "标签"
-msgstr ""
+msgstr "標籤"
 
 #: inc/core/WP_Breadcrumb.php:67
 #: inc/func-user.php:68
 msgid "作者"
-msgstr ""
+msgstr "作者"
 
 #: inc/core/WP_Breadcrumb.php:128
 msgid "媒体库"
-msgstr ""
+msgstr "媒體庫"
 
 #: inc/core/WP_Breadcrumb.php:222
 #, php-format
 msgid "搜索: %s"
-msgstr ""
+msgstr "搜索: %s"
 
 #: inc/core/WP_Breadcrumb.php:233
 msgid "404 NOT FOUND"
-msgstr ""
+msgstr "404 NOT FOUND"
 
 #: inc/core/WP_Breadcrumb.php:272
 #: inc/core/WP_Breadcrumb.php:277
 #: inc/core/WP_Breadcrumb.php:286
 #, php-format
 msgid "%s年"
-msgstr ""
+msgstr "%s年"
 
 #: inc/core/WP_Breadcrumb.php:281
 #: inc/core/WP_Breadcrumb.php:290
 #, php-format
 msgid "%s月"
-msgstr ""
+msgstr "%s月"
 
 #: inc/core/WP_Breadcrumb.php:294
 #, php-format
 msgid "%s日"
-msgstr ""
+msgstr "%s日"
 
 #: inc/core/WP_Breadcrumb.php:305
 #, php-format
 msgid "第 %s 页"
-msgstr ""
+msgstr "第 %s 頁"
 
 #: inc/core/WP_Paged.php:91
 msgid "&laquo; Previous"
-msgstr ""
+msgstr "&laquo; Previous"
 
 #: inc/core/WP_Paged.php:92
 msgid "Next &raquo;"
-msgstr ""
+msgstr "Next &raquo;"
 
 #: inc/core/WP_Paged.php:95
 #, php-format
 msgid "Page %1$s of %2$s"
-msgstr ""
+msgstr "Page %1$s of %2$s"
 
 #: inc/core/WP_Paged.php:304
 #: templates/fragments/pagination.php:31
 #: templates/fragments/pagination.php:33
 msgid "上一页"
-msgstr ""
+msgstr "上一頁"
 
 #: inc/core/WP_Paged.php:305
 #: templates/fragments/pagination.php:36
 #: templates/fragments/pagination.php:38
 msgid "下一页"
-msgstr ""
+msgstr "下一頁"
 
 #: inc/core/WP_Post.php:122
 msgid "无标题"
-msgstr ""
+msgstr "無標題"
 
 #: inc/core/WP_Post.php:148
 msgid "待审"
-msgstr ""
+msgstr "待審"
 
 #: inc/core/WP_Post.php:151
 msgid "定时发布"
-msgstr ""
+msgstr "定時發佈"
 
 #: inc/core/WP_Post.php:154
 msgid "私密"
-msgstr ""
+msgstr "私密"
 
 #: inc/core/WP_Post.php:157
 msgid "草稿"
-msgstr ""
+msgstr "草稿"
 
 #: inc/core/WP_Post.php:160
 msgid "自动草稿"
-msgstr ""
+msgstr "自動草稿"
 
 #: inc/core/WP_Post.php:163
 msgid "修订版本"
-msgstr ""
+msgstr "修訂版本"
 
 #: inc/core/WP_Post.php:166
 msgid "已删除"
-msgstr ""
+msgstr "已刪除"
 
 #: inc/core/WP_Post.php:175
 #: inc/func-tweet-post.php:55
 msgid "置顶"
-msgstr ""
+msgstr "置頂"
 
 #: inc/core/WP_Post.php:179
 msgid "密码保护"
-msgstr ""
+msgstr "密碼保護"
 
 #: inc/core/WP_Post.php:184
 msgid "最新"
-msgstr ""
+msgstr "最新"
 
 #: inc/core/WP_Post.php:227
 msgid "这篇文章受密码保护，输入密码才能阅读。"
-msgstr ""
+msgstr "這篇文章受密碼保護，輸入密碼才能閱讀。"
 
 #: inc/core/WP_Post.php:247
 msgid "这篇文章没有摘要内容。"
-msgstr ""
+msgstr "這篇文章沒有摘要內容。"
 
 #: inc/core/WP_Post.php:264
 msgid "评论已关闭"
-msgstr ""
+msgstr "評論已關閉"
 
 #: inc/core/WP_Post.php:268
 msgid "条评论"
-msgstr ""
+msgstr "條評論"
 
 #: inc/core/WP_Post.php:270
 msgid "无人评论"
-msgstr ""
+msgstr "無人評論"
 
 #: inc/core/WP_Post.php:280
 msgid "前"
-msgstr ""
+msgstr "前"
 
 #: inc/core/WP_Term.php:91
 msgid "无名称"
-msgstr ""
+msgstr "無名稱"
 
 #: inc/func-api-router.php:24
 msgid "安全退出失败"
-msgstr ""
+msgstr "安全退出失敗"
 
 #: inc/func-api-router.php:29
 msgid "已退出登录"
-msgstr ""
+msgstr "已退出登錄"
 
 #: inc/func-api-router.php:45
 #: inc/func-api-router.php:155
 #: inc/func-api-router.php:246
 #: inc/func-api-router.php:673
 msgid "客户端已失效，请刷新页面后重试"
-msgstr ""
+msgstr "客戶端已失效，請刷新頁面後重試"
 
 #: inc/func-api-router.php:66
 msgid "登录邮箱或密码错误"
-msgstr ""
+msgstr "登錄郵箱或密碼錯誤"
 
 #: inc/func-api-router.php:70
 msgid "欢迎回来，"
-msgstr ""
+msgstr "歡迎回來，"
 
 #: inc/func-api-router.php:166
 msgid "用户名、邮箱或密码不能为空"
-msgstr ""
+msgstr "用戶名、郵箱或密碼不能為空"
 
 #: inc/func-api-router.php:170
 #: inc/func-api-router.php:359
 #: inc/func-api-router.php:538
 msgid "两次输入的密码不一致"
-msgstr ""
+msgstr "兩次輸入的密碼不一致"
 
 #: inc/func-api-router.php:174
 #: inc/func-api-router.php:363
 #: inc/func-api-router.php:531
 msgid "密码长度不能少于8位"
-msgstr ""
+msgstr "密碼長度不能少於8位"
 
 #: inc/func-api-router.php:177
 #: inc/func-api-router.php:366
 #: inc/func-api-router.php:533
 msgid "密码必须同时包含字母和数字"
-msgstr ""
+msgstr "密碼必須同時包含字母和數字"
 
 #: inc/func-api-router.php:181
 #: inc/func-api-router.php:259
 #: inc/func-api-router.php:444
 msgid "邮箱格式不正确"
-msgstr ""
+msgstr "郵箱格式不正確"
 
 #: inc/func-api-router.php:184
 msgid "此邮箱已被注册"
-msgstr ""
+msgstr "此郵箱已被註冊"
 
 #: inc/func-api-router.php:199
 msgid "无法创建用户，请重试"
-msgstr ""
+msgstr "無法創建用戶，請重試"
 
 #: inc/func-api-router.php:213
 msgid "欢迎你，"
-msgstr ""
+msgstr "歡迎你，"
 
 #: inc/func-api-router.php:254
 msgid "请提供注册邮箱"
-msgstr ""
+msgstr "請提供註冊郵箱"
 
 #: inc/func-api-router.php:265
 msgid "如果邮箱存在将发送邮件"
-msgstr ""
+msgstr "如果郵箱存在將發送郵件"
 
 #: inc/func-api-router.php:271
 msgid "无法生成密码重置链接，请稍后再试"
-msgstr ""
+msgstr "無法生成密碼重置鏈接，請稍後再試"
 
 #: inc/func-api-router.php:279
 #, php-format
 msgid "[%s] 密码重置"
-msgstr ""
+msgstr "[%s] 密碼重置"
 
 #: inc/func-api-router.php:282
 msgid "有人请求重置以下账号的密码："
-msgstr ""
+msgstr "有人請求重置以下賬號的密碼："
 
 #: inc/func-api-router.php:284
 #, php-format
 msgid "用户名: %s"
-msgstr ""
+msgstr "用戶名: %s"
 
 #: inc/func-api-router.php:285
 msgid "如果这不是您本人的操作，请忽略此邮件。"
-msgstr ""
+msgstr "如果這不是您本人的操作，請忽略此郵件。"
 
 #: inc/func-api-router.php:286
 msgid "要重置密码，请访问以下链接:"
-msgstr ""
+msgstr "要重置密碼，請訪問以下鏈接:"
 
 #: inc/func-api-router.php:287
 msgid "此链接仅在30分钟内有效。"
-msgstr ""
+msgstr "此鏈接僅在30分鐘內有效。"
 
 #: inc/func-api-router.php:294
 msgid "发送重置密码邮件失败，请稍后再试"
-msgstr ""
+msgstr "發送重置密碼郵件失敗，請稍後再試"
 
 #: inc/func-api-router.php:297
 msgid "密码重置链接已发送到您的邮箱，请查收"
-msgstr ""
+msgstr "密碼重置鏈接已發送到您的郵箱，請查收"
 
 #: inc/func-api-router.php:318
 #: inc/func-api-router.php:351
 msgid "重置链接缺少必要参数"
-msgstr ""
+msgstr "重置鏈接缺少必要參數"
 
 #: inc/func-api-router.php:324
 #: inc/func-api-router.php:372
 msgid "重置链接无效或已过期，请重新申请找回密码"
-msgstr ""
+msgstr "重置鏈接無效或已過期，請重新申請找回密碼"
 
 #: inc/func-api-router.php:328
 msgid "重置链接有效，请输入新密码"
-msgstr ""
+msgstr "重置鏈接有效，請輸入新密碼"
 
 #: inc/func-api-router.php:355
 msgid "请输入新密码并确认"
-msgstr ""
+msgstr "請輸入新密碼並確認"
 
 #: inc/func-api-router.php:380
 msgid "密码已重置，请使用新密码登录"
-msgstr ""
+msgstr "密碼已重置，請使用新密碼登錄"
 
 #: inc/func-api-router.php:407
 #: inc/func-api-router.php:518
 #: inc/func-api-router.php:582
 #: inc/func-api-router.php:621
 msgid "验证失败"
-msgstr ""
+msgstr "驗證失敗"
 
 #: inc/func-api-router.php:437
 msgid "不支持的语言设置"
-msgstr ""
+msgstr "不支持的語言設置"
 
 #: inc/func-api-router.php:449
 msgid "该邮箱已被使用"
-msgstr ""
+msgstr "該郵箱已被使用"
 
 #: inc/func-api-router.php:473
 msgid "资料已更新"
-msgstr ""
+msgstr "資料已更新"
 
 #: inc/func-api-router.php:541
 msgid "请输入新密码"
-msgstr ""
+msgstr "請輸入新密碼"
 
 #: inc/func-api-router.php:556
 msgid "密码已更新，请重新登录"
-msgstr ""
+msgstr "密碼已更新，請重新登錄"
 
 #: inc/func-api-router.php:684
 msgid "未定义的接口"
-msgstr ""
+msgstr "未定義的接口"
 
 #: inc/func-api-router.php:695
 msgid "系统错误"
-msgstr ""
+msgstr "系統錯誤"
 
 #: inc/func-api-router.php:701
 msgid "订单激活成功"
-msgstr ""
+msgstr "訂單激活成功"
 
 #: inc/func-api-router.php:732
 msgid "安全验证失败，请刷新页面后重试"
-msgstr ""
+msgstr "安全驗證失敗，請刷新頁面後重試"
 
 #: inc/func-api-router.php:740
 msgid "非法访问"
-msgstr ""
+msgstr "非法訪問"
 
 #: inc/func-api-router.php:746
 msgid "文章不存在"
-msgstr ""
+msgstr "文章不存在"
 
 #: inc/func-api-router.php:753
 msgid "文件访问未获授权"
-msgstr ""
+msgstr "文件訪問未獲授權"
 
 #: inc/func-api-router.php:760
 msgid "未获授权"
-msgstr ""
+msgstr "未獲授權"
 
 #: inc/func-api-router.php:806
 msgid "未定义的请求类型"
-msgstr ""
+msgstr "未定義的請求類型"
 
 #: inc/func-api-router.php:814
 msgid "未知错误"
-msgstr ""
+msgstr "未知錯誤"
 
 #: inc/func-api-router.php:817
 msgid "本地服务器发送请求失败"
-msgstr ""
+msgstr "本地服務器發送請求失敗"
 
 #: inc/func-api-router.php:819
 msgid "参数错误"
-msgstr ""
+msgstr "參數錯誤"
 
 #: inc/func-api-router.php:821
 msgid "令牌失效"
-msgstr ""
+msgstr "令牌失效"
 
 #: inc/func-api-router.php:823
 msgid "文件访问被拒绝"
-msgstr ""
+msgstr "文件訪問被拒絕"
 
 #: inc/func-api-router.php:825
 msgid "文件/目录位置不存在，或搜索功能未就绪"
-msgstr ""
+msgstr "文件/目錄位置不存在，或搜索功能未就緒"
 
 #: inc/func-api-router.php:827
 msgid "请先完成后台设置"
-msgstr ""
+msgstr "請先完成後臺設置"
 
 #: inc/func-api-router.php:829
 msgid "访问错误"
-msgstr ""
+msgstr "訪問錯誤"
 
 #: inc/func-payment.php:307
 msgid "支持创作，用爱发电"
-msgstr ""
+msgstr "支持創作，用愛發電"
 
 #: inc/func-payment.php:308
 msgid "查看爱发电创作者主页"
-msgstr ""
+msgstr "查看愛發電創作者主頁"
 
 #: inc/func-payment.php:311
 #: inc/settings/opt-access.php:78
 msgid "爱发电主页"
-msgstr ""
+msgstr "愛發電主頁"
 
 #: inc/func-payment.php:312
 msgid "在当前页面输入爱发电平台订单号激活本站订阅即可查看专属内容"
-msgstr ""
+msgstr "在當前頁面輸入愛發電平臺訂單號激活本站訂閱即可查看專屬內容"
 
 #: inc/func-payment.php:329
 #, php-format
 msgid "来自 「%s」 用户 %s 发送的赞助订单~"
-msgstr ""
+msgstr "來自 「%s」 用戶 %s 發送的贊助訂單~"
 
 #: inc/func-payment.php:341
 msgid "自选金额赞助"
-msgstr ""
+msgstr "自選金額贊助"
 
 #: inc/func-payment.php:342
 msgid "在爱发电支持我"
-msgstr ""
+msgstr "在愛發電支持我"
 
 #: inc/func-payment.php:343
 msgid "自选金额"
-msgstr ""
+msgstr "自選金額"
 
 #: inc/func-payment.php:345
 #: inc/func-payment.php:366
 msgid "爱发电订阅"
-msgstr ""
+msgstr "愛發電訂閱"
 
 #: inc/func-payment.php:346
 msgid "已经支持，稍后并刷新页面即可查看赞助记录"
-msgstr ""
+msgstr "已經支持，稍後並刷新頁面即可查看贊助記錄"
 
 #: inc/func-payment.php:362
 msgid "赞助方案订阅"
-msgstr ""
+msgstr "贊助方案訂閱"
 
 #: inc/func-payment.php:363
 msgid "订阅我的赞助方案"
-msgstr ""
+msgstr "訂閱我的贊助方案"
 
 #: inc/func-payment.php:367
 msgid "已经支持，稍后并刷新页面即可查看专属内容"
-msgstr ""
+msgstr "已經支持，稍後並刷新頁面即可查看專屬內容"
 
 #: inc/func-payment.php:384
 msgid "爱发电接口不可用，请联系管理员"
-msgstr ""
+msgstr "愛發電接口不可用，請聯繫管理員"
 
 #: inc/func-payment.php:392
 msgid "此订单已被激活过了，请查看订单记录"
-msgstr ""
+msgstr "此訂單已被激活過了，請查看訂單記錄"
 
 #: inc/func-payment.php:403
 msgid "没有查询到订单，请确认订单号是否正确，或于爱发电平台私信作者询问"
-msgstr ""
+msgstr "沒有查詢到訂單，請確認訂單號是否正確，或於愛發電平臺私信作者詢問"
 
 #: inc/func-payment.php:417
 msgid "订单号："
-msgstr ""
+msgstr "訂單號："
 
 #: inc/func-payment.php:418
 msgid "赞助方案："
-msgstr ""
+msgstr "贊助方案："
 
 #: inc/func-payment.php:419
 msgid "赞助周期："
-msgstr ""
+msgstr "贊助週期："
 
 #: inc/func-payment.php:419
 msgid "个月"
-msgstr ""
+msgstr "個月"
 
 #: inc/func-payment.php:420
 msgid "金额："
-msgstr ""
+msgstr "金額："
 
 #: inc/func-payment.php:420
-msgid " 折后金额："
-msgstr ""
+msgid "（折后"
+msgstr "（折後"
+
+#: inc/func-payment.php:420
+msgid "）"
+msgstr "）"
 
 #: inc/func-payment.php:421
 msgid "留言："
-msgstr ""
+msgstr "留言："
 
 #: inc/func-payment.php:421
 msgid "无留言"
-msgstr ""
+msgstr "無留言"
 
 #: inc/func-payment.php:421
 #: inc/func-payment.php:422
 msgid "无"
-msgstr ""
+msgstr "無"
 
 #: inc/func-payment.php:422
 msgid "兑换码："
-msgstr ""
+msgstr "兌換碼："
 
 #: inc/func-payment.php:424
 msgid "刷新页面即可查看激活记录"
-msgstr ""
+msgstr "刷新頁面即可查看激活記錄"
 
 #: inc/func-payment.php:424
 msgid "当前无法创建激活，稍后重试"
-msgstr ""
+msgstr "當前無法創建激活，稍後重試"
 
 #: inc/func-payment.php:493
 msgid "请先登录"
-msgstr ""
+msgstr "請先登錄"
 
 #: inc/func-payment.php:500
 msgid "无效的兑换码"
-msgstr ""
+msgstr "無效的兌換碼"
 
 #: inc/func-payment.php:504
 #: inc/func-payment.php:516
 msgid "兑换码已被使用"
-msgstr ""
+msgstr "兌換碼已被使用"
 
 #: inc/func-payment.php:523
 msgid "兑换成功，权限已激活"
-msgstr ""
+msgstr "兌換成功，權限已激活"
 
 #: inc/func-payment.php:531
 msgid "激活失败，可能是您已拥有该时段的权限或系统错误"
-msgstr ""
+msgstr "激活失敗，可能是您已擁有該時段的權限或系統錯誤"
 
 #: inc/func-payment.php:540
 #: inc/func-payment.php:541
-#: inc/func-payment.php:605
 msgid "兑换码管理"
-msgstr ""
+msgstr "兌換碼管理"
 
 #: inc/func-payment.php:560
 msgid "所有兑换码已删除"
-msgstr ""
+msgstr "所有兌換碼已刪除"
 
 #: inc/func-payment.php:581
 #, php-format
 msgid "成功生成 %d 个兑换码"
-msgstr ""
+msgstr "成功生成 %d 個兌換碼"
 
 #: inc/func-payment.php:583
 msgid "请输入有效的数量和天数"
-msgstr ""
+msgstr "請輸入有效的數量和天數"
+
+#: inc/func-payment.php:605
+msgid "激活码管理"
+msgstr "激活碼管理"
 
 #: inc/func-payment.php:609
 msgid "批量生成兑换码"
-msgstr ""
+msgstr "批量生成兌換碼"
 
 #: inc/func-payment.php:614
 msgid "生成数量"
-msgstr ""
+msgstr "生成數量"
 
 #: inc/func-payment.php:618
 msgid "有效期天数"
-msgstr ""
+msgstr "有效期天數"
 
 #: inc/func-payment.php:622
 msgid "前缀 (可选)"
-msgstr ""
+msgstr "前綴 (可選)"
 
 #: inc/func-payment.php:627
 msgid "生成兑换码"
-msgstr ""
+msgstr "生成兌換碼"
 
 #: inc/func-payment.php:631
 msgid "确定要删除所有兑换码吗？此操作不可恢复！"
-msgstr ""
+msgstr "確定要刪除所有兌換碼嗎？此操作不可恢復！"
 
 #: inc/func-payment.php:633
-msgid "删除所有已创建的兑换码"
-msgstr ""
+msgid "删除所有已创建的激活码"
+msgstr "刪除所有已創建的激活碼"
 
 #: inc/func-payment.php:638
 msgid "兑换码列表"
-msgstr ""
+msgstr "兌換碼列表"
 
 #: inc/func-payment.php:644
 msgid "兑换码"
-msgstr ""
+msgstr "兌換碼"
 
 #: inc/func-payment.php:645
 #: inc/func-user.php:557
 msgid "天数"
-msgstr ""
+msgstr "天數"
 
 #: inc/func-payment.php:646
 #: inc/func-user.php:559
 msgid "状态"
-msgstr ""
+msgstr "狀態"
 
 #: inc/func-payment.php:647
 msgid "使用者ID"
-msgstr ""
+msgstr "使用者ID"
 
 #: inc/func-payment.php:648
 msgid "使用时间"
-msgstr ""
+msgstr "使用時間"
 
 #: inc/func-payment.php:649
 msgid "创建时间"
-msgstr ""
+msgstr "創建時間"
 
 #: inc/func-payment.php:661
 msgid "已使用"
-msgstr ""
+msgstr "已使用"
 
 #: inc/func-payment.php:663
 msgid "未使用"
-msgstr ""
+msgstr "未使用"
 
 #: inc/func-payment.php:681
 msgid "暂无数据"
-msgstr ""
+msgstr "暫無數據"
 
 #: inc/func-payment.php:691
 #, php-format
 msgid "%s 个项目"
-msgstr ""
+msgstr "%s 個項目"
 
 #: inc/func-shotcodes.php:13
 msgid "隐藏文本段"
-msgstr ""
+msgstr "隱藏文本段"
 
 #: inc/func-shotcodes.php:14
 msgid "包含在此简码内的文本不会在前台显示，用于充当文章编辑时的注释，或隐藏一段文本"
-msgstr ""
+msgstr "包含在此簡碼內的文本不會在前臺顯示，用於充當文章編輯時的註釋，或隱藏一段文本"
 
 #: inc/func-shotcodes.php:20
 #: inc/func-shotcodes.php:66
@@ -724,103 +730,103 @@ msgstr ""
 #: inc/func-shotcodes.php:223
 #: inc/widgets/widget-text-html.php:18
 msgid "内容"
-msgstr ""
+msgstr "內容"
 
 #: inc/func-shotcodes.php:21
 msgid "在这里输入要隐藏的文本"
-msgstr ""
+msgstr "在這裡輸入要隱藏的文本"
 
 #: inc/func-shotcodes.php:27
 msgid "作为注释输出"
-msgstr ""
+msgstr "作為註釋輸出"
 
 #: inc/func-shotcodes.php:28
 msgid "使当前段落作为 html 注释输出到前台页面，或者完全不输出"
-msgstr ""
+msgstr "使當前段落作為 html 註釋輸出到前臺頁面，或者完全不輸出"
 
 #: inc/func-shotcodes.php:36
 msgid "E-mail 链接"
-msgstr ""
+msgstr "E-mail 鏈接"
 
 #: inc/func-shotcodes.php:37
 msgid "将电子邮件地址字符转换为 HTML 实体显示，避免被爬虫抓取"
-msgstr ""
+msgstr "將電子郵件地址字符轉換為 HTML 實體顯示，避免被爬蟲抓取"
 
 #: inc/func-shotcodes.php:43
 msgid "邮件地址"
-msgstr ""
+msgstr "郵件地址"
 
 #: inc/func-shotcodes.php:44
 msgid "例如： admin@example.com"
-msgstr ""
+msgstr "例如： admin@example.com"
 
 #: inc/func-shotcodes.php:50
 msgid "使用 mailto 链接"
-msgstr ""
+msgstr "使用 mailto 鏈接"
 
 #: inc/func-shotcodes.php:51
 msgid "转换为 mailto 链接，或直接显示"
-msgstr ""
+msgstr "轉換為 mailto 鏈接，或直接顯示"
 
 #: inc/func-shotcodes.php:59
 msgid "快捷列表（li）"
-msgstr ""
+msgstr "快捷列表（li）"
 
 #: inc/func-shotcodes.php:60
 msgid "将文本按行转换为列表显示"
-msgstr ""
+msgstr "將文本按行轉換為列表顯示"
 
 #: inc/func-shotcodes.php:67
 msgid "按每行顺序格式化结构为：<li>第1行</li>/<li>第2行</li>"
-msgstr ""
+msgstr "按每行順序格式化結構為：<li>第1行</li>/<li>第2行</li>"
 
 #: inc/func-shotcodes.php:73
 msgid "编号列表"
-msgstr ""
+msgstr "編號列表"
 
 #: inc/func-shotcodes.php:74
 msgid "启用此项将显示为编号列表，否则使用符号列表"
-msgstr ""
+msgstr "啟用此項將顯示為編號列表，否則使用符號列表"
 
 #: inc/func-shotcodes.php:82
 msgid "快捷列表（Column）"
-msgstr ""
+msgstr "快捷列表（Column）"
 
 #: inc/func-shotcodes.php:83
 msgid "将文本按行转换为描述列表显示"
-msgstr ""
+msgstr "將文本按行轉換為描述列表顯示"
 
 #: inc/func-shotcodes.php:90
 msgid "按每行顺序格式化结构为：<dt>第1行</dt>/<dd>第2行</dd>"
-msgstr ""
+msgstr "按每行順序格式化結構為：<dt>第1行</dt>/<dd>第2行</dd>"
 
 #: inc/func-shotcodes.php:96
 msgid "列表比例"
-msgstr ""
+msgstr "列表比例"
 
 #: inc/func-shotcodes.php:97
 msgid "选择描述列表的宽度比例"
-msgstr ""
+msgstr "選擇描述列表的寬度比例"
 
 #: inc/func-shotcodes.php:99
 msgid "1/4列表"
-msgstr ""
+msgstr "1/4列表"
 
 #: inc/func-shotcodes.php:100
 msgid "1/2列表"
-msgstr ""
+msgstr "1/2列表"
 
 #: inc/func-shotcodes.php:101
 msgid "3/4列表"
-msgstr ""
+msgstr "3/4列表"
 
 #: inc/func-shotcodes.php:110
 msgid "折叠面板"
-msgstr ""
+msgstr "摺疊面板"
 
 #: inc/func-shotcodes.php:111
 msgid "创建一个折叠面板，用于在文章中可以展开或收起的内容"
-msgstr ""
+msgstr "創建一個摺疊面板，用於在文章中可以展開或收起的內容"
 
 #: inc/func-shotcodes.php:117
 #: inc/func-shotcodes.php:140
@@ -842,898 +848,898 @@ msgstr ""
 #: inc/widgets/widget-post-views.php:18
 #: inc/widgets/widget-tag-cloud.php:18
 msgid "标题"
-msgstr ""
+msgstr "標題"
 
 #: inc/func-shotcodes.php:118
 msgid "折叠面板的标题"
-msgstr ""
+msgstr "摺疊面板的標題"
 
 #: inc/func-shotcodes.php:119
 #: inc/func-shotcodes.php:142
 msgid "点击展开内容"
-msgstr ""
+msgstr "點擊展開內容"
 
 #: inc/func-shotcodes.php:125
 msgid "折叠面板的内容"
-msgstr ""
+msgstr "摺疊面板的內容"
 
 #: inc/func-shotcodes.php:133
 msgid "警告卡片"
-msgstr ""
+msgstr "警告卡片"
 
 #: inc/func-shotcodes.php:134
 msgid "创建一个警告提示"
-msgstr ""
+msgstr "創建一個警告提示"
 
 #: inc/func-shotcodes.php:141
 msgid "警告提示的标题"
-msgstr ""
+msgstr "警告提示的標題"
 
 #: inc/func-shotcodes.php:147
 msgid "级别"
-msgstr ""
+msgstr "級別"
 
 #: inc/func-shotcodes.php:148
 msgid "警告提示的级别"
-msgstr ""
+msgstr "警告提示的級別"
 
 #: inc/func-shotcodes.php:150
 #: inc/func-wp-emends.php:503
 msgid "默认"
-msgstr ""
+msgstr "默認"
 
 #: inc/func-shotcodes.php:151
 #: inc/settings/opt-notify.php:47
 msgid "警告"
-msgstr ""
+msgstr "警告"
 
 #: inc/func-shotcodes.php:152
 #: inc/settings/opt-notify.php:44
 msgid "信息"
-msgstr ""
+msgstr "信息"
 
 #: inc/func-shotcodes.php:153
 #: inc/settings/opt-notify.php:46
 msgid "成功"
-msgstr ""
+msgstr "成功"
 
 #: inc/func-shotcodes.php:154
 #: inc/settings/opt-notify.php:48
 msgid "错误"
-msgstr ""
+msgstr "錯誤"
 
 #: inc/func-shotcodes.php:162
 msgid "警告提示的内容"
-msgstr ""
+msgstr "警告提示的內容"
 
 #: inc/func-shotcodes.php:170
 msgid "一键复制"
-msgstr ""
+msgstr "一鍵複製"
 
 #: inc/func-shotcodes.php:171
 msgid "创建一个提供复制功能的卡片，用于快捷复制文本或打开链接"
-msgstr ""
+msgstr "創建一個提供複製功能的卡片，用於快捷複製文本或打開鏈接"
 
 #: inc/func-shotcodes.php:178
 msgid "需要被复制的文本或链接"
-msgstr ""
+msgstr "需要被複制的文本或鏈接"
 
 #: inc/func-shotcodes.php:186
 msgid "赞助者可见"
-msgstr ""
+msgstr "贊助者可見"
 
 #: inc/func-shotcodes.php:187
 msgid "创建一个赞助后的内容块，用于在文章中显示仅限赞助商可见的内容"
-msgstr ""
+msgstr "創建一個贊助後的內容塊，用於在文章中顯示僅限贊助商可見的內容"
 
 #: inc/func-shotcodes.php:194
 #: inc/func-shotcodes.php:217
 msgid "内容块的标题"
-msgstr ""
+msgstr "內容塊的標題"
 
 #: inc/func-shotcodes.php:195
 msgid "支援者限定"
-msgstr ""
+msgstr "支援者限定"
 
 #: inc/func-shotcodes.php:201
 msgid "赞助者可见的内容"
-msgstr ""
+msgstr "贊助者可見的內容"
 
 #: inc/func-shotcodes.php:209
 msgid "登录后可见"
-msgstr ""
+msgstr "登錄後可見"
 
 #: inc/func-shotcodes.php:210
 msgid "创建一个登录后可见的内容块，用于在文章中显示仅限登录用户可见的内容"
-msgstr ""
+msgstr "創建一個登錄後可見的內容塊，用於在文章中顯示僅限登錄用戶可見的內容"
 
 #: inc/func-shotcodes.php:218
 msgid "登录后下载"
-msgstr ""
+msgstr "登錄後下載"
 
 #: inc/func-shotcodes.php:224
 msgid "登录后可见的内容"
-msgstr ""
+msgstr "登錄後可見的內容"
 
 #: inc/func-shotcodes.php:232
 msgid "嵌入B站视频"
-msgstr ""
+msgstr "嵌入B站視頻"
 
 #: inc/func-shotcodes.php:233
 msgid "嵌入B站的H5播放器到页面"
-msgstr ""
+msgstr "嵌入B站的H5播放器到頁面"
 
 #: inc/func-shotcodes.php:239
 msgid "BV号"
-msgstr ""
+msgstr "BV號"
 
 #: inc/func-shotcodes.php:240
 msgid "BV号，例如BV1UT42167xb"
-msgstr ""
+msgstr "BV號，例如BV1UT42167xb"
 
 #: inc/func-shotcodes.php:246
 msgid "使用 HTML5 播放器"
-msgstr ""
+msgstr "使用 HTML5 播放器"
 
 #: inc/func-shotcodes.php:247
 msgid "切换使用B站标准的外链播放器或者移动端HTML5播放器"
-msgstr ""
+msgstr "切換使用B站標準的外鏈播放器或者移動端HTML5播放器"
 
 #: inc/func-shotcodes.php:255
 msgid "嵌入爱发电主页"
-msgstr ""
+msgstr "嵌入愛發電主頁"
 
 #: inc/func-shotcodes.php:256
 msgid "嵌入爱发电的主页或按钮到页面"
-msgstr ""
+msgstr "嵌入愛發電的主頁或按鈕到頁面"
 
 #: inc/func-shotcodes.php:262
 msgid "后缀"
-msgstr ""
+msgstr "後綴"
 
 #: inc/func-shotcodes.php:269
 msgid "使用按钮链接"
-msgstr ""
+msgstr "使用按鈕鏈接"
 
 #: inc/func-shotcodes.php:278
 msgid "嵌入GitHub仓库"
-msgstr ""
+msgstr "嵌入GitHub倉庫"
 
 #: inc/func-shotcodes.php:279
 msgid "嵌入GitHub仓库卡片到页面（填写“用户名/仓库名”）"
-msgstr ""
+msgstr "嵌入GitHub倉庫卡片到頁面（填寫“用戶名/倉庫名”）"
 
 #: inc/func-shotcodes.php:533
 msgid "赞助内容"
-msgstr ""
+msgstr "贊助內容"
 
 #: inc/func-shotcodes.php:538
 msgid "此内容仅限订阅用户可见，请登录后查看"
-msgstr ""
+msgstr "此內容僅限訂閱用戶可見，請登錄後查看"
 
 #: inc/func-shotcodes.php:540
 msgid "仅限订阅用户可见："
-msgstr ""
+msgstr "僅限訂閱用戶可見："
 
 #: inc/func-shotcodes.php:570
 msgid "隐藏内容"
-msgstr ""
+msgstr "隱藏內容"
 
 #: inc/func-shotcodes.php:572
 msgid "仅限登录后查看，请先登录"
-msgstr ""
+msgstr "僅限登錄後查看，請先登錄"
 
 #: inc/func-tweet-post.php:31
 #: templates/archive-tweet.php:81
 msgid "推文"
-msgstr ""
+msgstr "推文"
 
 #: inc/func-tweet-post.php:43
 msgid "推文标签"
-msgstr ""
+msgstr "推文標籤"
 
 #: inc/func-tweet-post.php:68
 msgid "置顶这篇文章"
-msgstr ""
+msgstr "置頂這篇文章"
 
 #: inc/func-user.php:57
 msgid "收藏夹"
-msgstr ""
+msgstr "收藏夾"
 
 #: inc/func-user.php:60
 msgid "暂无收藏文章"
-msgstr ""
+msgstr "暫無收藏文章"
 
 #: inc/func-user.php:62
 #, php-format
 msgid "共有 <strong>%d</strong> 篇收藏文章"
-msgstr ""
+msgstr "共有 <strong>%d</strong> 篇收藏文章"
 
 #: inc/func-user.php:67
 msgid "文章标题"
-msgstr ""
+msgstr "文章標題"
 
 #: inc/func-user.php:69
 msgid "发布日期"
-msgstr ""
+msgstr "發佈日期"
 
 #: inc/func-user.php:413
 msgid "赞助权限计数器"
-msgstr ""
+msgstr "贊助權限計數器"
 
 #: inc/func-user.php:492
 msgid "安全验证失败，请重试"
-msgstr ""
+msgstr "安全驗證失敗，請重試"
 
 #: inc/func-user.php:500
 msgid "用户订阅数据已修复"
-msgstr ""
+msgstr "用戶訂閱數據已修復"
 
 #: inc/func-user.php:508
 msgid "赞助者管理"
-msgstr ""
+msgstr "贊助者管理"
 
 #: inc/func-user.php:510
 msgid "当前订阅状态："
-msgstr ""
+msgstr "當前訂閱狀態："
 
 #: inc/func-user.php:512
 msgid "已被管理员强制取消"
-msgstr ""
+msgstr "已被管理員強制取消"
 
 #: inc/func-user.php:514
 msgid "有效"
-msgstr ""
+msgstr "有效"
 
 #: inc/func-user.php:515
 #, php-format
 msgid "剩余 <strong>%d</strong> 天"
-msgstr ""
+msgstr "剩餘 <strong>%d</strong> 天"
 
 #: inc/func-user.php:517
 msgid "无效"
-msgstr ""
+msgstr "無效"
 
 #: inc/func-user.php:522
 msgid "重新验证订阅有效性"
-msgstr ""
+msgstr "重新驗證訂閱有效性"
 
 #: inc/func-user.php:525
 msgid "重新计算到期日"
-msgstr ""
+msgstr "重新計算到期日"
 
 #: inc/func-user.php:528
 msgid "恢复赞助者权限"
-msgstr ""
+msgstr "恢復贊助者權限"
 
 #: inc/func-user.php:533
 msgid "取消此用户赞助者权限"
-msgstr ""
+msgstr "取消此用戶贊助者權限"
 
 #: inc/func-user.php:536
 msgid "勾选后，该用户即使有赞助订单生效也视为非赞助者。"
-msgstr ""
+msgstr "勾選後，該用戶即使有贊助訂單生效也視為非贊助者。"
 
 #: inc/func-user.php:540
 msgid "手动添加赞助订单"
-msgstr ""
+msgstr "手動添加贊助訂單"
 
 #: inc/func-user.php:543
 msgid "输入要添加的赞助天数（必填）"
-msgstr ""
+msgstr "輸入要添加的贊助天數（必填）"
 
 #: inc/func-user.php:547
 msgid "赞助订单记录"
-msgstr ""
+msgstr "贊助訂單記錄"
 
 #: inc/func-user.php:549
 #, php-format
 msgid "累计已赞助 <strong>%d</strong> 天"
-msgstr ""
+msgstr "累計已贊助 <strong>%d</strong> 天"
 
 #: inc/func-user.php:555
 msgid "订单号"
-msgstr ""
+msgstr "訂單號"
 
 #: inc/func-user.php:556
 msgid "开始时间"
-msgstr ""
+msgstr "開始時間"
 
 #: inc/func-user.php:558
 msgid "来源"
-msgstr ""
+msgstr "來源"
 
 #: inc/func-user.php:675
 msgid "管理后台"
-msgstr ""
+msgstr "管理後臺"
 
 #: inc/func-user.php:688
 msgid "编辑当前文章"
-msgstr ""
+msgstr "編輯當前文章"
 
 #: inc/func-user.php:696
 msgid "个人主页"
-msgstr ""
+msgstr "個人主頁"
 
 #: inc/func-user.php:710
 msgid "我的收藏"
-msgstr ""
+msgstr "我的收藏"
 
 #: inc/func-user.php:716
 msgid "个人资料"
-msgstr ""
+msgstr "個人資料"
 
 #: inc/func-vite-helpers.php:70
 msgid "没有找到生产环境文件，请检查 Vite 配置是否正确。"
-msgstr ""
+msgstr "沒有找到生產環境文件，請檢查 Vite 配置是否正確。"
 
 #: inc/func-wp-emends.php:155
 msgid "独立页面"
-msgstr ""
+msgstr "獨立頁面"
 
 #: inc/func-wp-emends.php:487
 msgid "小贴士"
-msgstr ""
+msgstr "小貼士"
 
 #: inc/func-wp-emends.php:498
 msgid "提示框颜色"
-msgstr ""
+msgstr "提示框顏色"
 
 #: inc/func-wp-emends.php:499
 msgid "选择提示框样式，提示用户重要的消息"
-msgstr ""
+msgstr "選擇提示框樣式，提示用戶重要的消息"
 
 #: inc/func-wp-emends.php:504
 msgid "信息蓝"
-msgstr ""
+msgstr "信息藍"
 
 #: inc/func-wp-emends.php:505
 msgid "成功绿"
-msgstr ""
+msgstr "成功綠"
 
 #: inc/func-wp-emends.php:506
 msgid "警告黄"
-msgstr ""
+msgstr "警告黃"
 
 #: inc/func-wp-emends.php:507
 msgid "危险红"
-msgstr ""
+msgstr "危險紅"
 
 #: inc/func-wp-emends.php:521
 msgid "更新中"
-msgstr ""
+msgstr "更新中"
 
 #: inc/func-wp-emends.php:522
 msgid "这篇文章正在更新中，可能还会有新的内容添加。"
-msgstr ""
+msgstr "這篇文章正在更新中，可能還會有新的內容添加。"
 
 #: inc/func-wp-emends.php:525
 msgid "需要更新"
-msgstr ""
+msgstr "需要更新"
 
 #: inc/func-wp-emends.php:526
 msgid "这篇文章的信息已经失效，当前内容仅供参考。"
-msgstr ""
+msgstr "這篇文章的信息已經失效，當前內容僅供參考。"
 
 #: inc/func-wp-emends.php:529
 msgid "已废弃"
-msgstr ""
+msgstr "已廢棄"
 
 #: inc/func-wp-emends.php:530
 msgid "这篇文章的信息已经废弃，不再更新。"
-msgstr ""
+msgstr "這篇文章的信息已經廢棄，不再更新。"
 
 #: inc/func-wp-emends.php:533
 msgid "危险操作"
-msgstr ""
+msgstr "危險操作"
 
 #: inc/func-wp-emends.php:534
 msgid "这篇教程包含修改系统核心文件等操作，请注意备份。"
-msgstr ""
+msgstr "這篇教程包含修改系統核心文件等操作，請注意備份。"
 
 #: inc/func-wp-emends.php:537
 msgid "来源不明"
-msgstr ""
+msgstr "來源不明"
 
 #: inc/func-wp-emends.php:538
 msgid "这篇文章的信息来源未经证明，捕风捉影罢了。"
-msgstr ""
+msgstr "這篇文章的信息來源未經證明，捕風捉影罷了。"
 
 #: inc/func-wp-emends.php:571
 msgid "时效性提示"
-msgstr ""
+msgstr "時效性提示"
 
 #: inc/func-wp-emends.php:573
 #, php-format
 msgid "这篇文章发布于 %s 前，部分信息可能已过时，请留意。"
-msgstr ""
+msgstr "這篇文章發佈於 %s 前，部分信息可能已過時，請留意。"
 
 #: inc/settings/opt-access.php:9
 msgid "订阅接入"
-msgstr ""
+msgstr "訂閱接入"
 
 #: inc/settings/opt-access.php:12
 msgid "AIYA-CMS 主题，第三方平台接口设置"
-msgstr ""
+msgstr "AIYA-CMS 主題，第三方平臺接口設置"
 
 #: inc/settings/opt-access.php:20
 msgid "社交登录设置"
-msgstr ""
+msgstr "社交登錄設置"
 
 #: inc/settings/opt-access.php:47
 msgid "赞助者订阅设置"
-msgstr ""
+msgstr "贊助者訂閱設置"
 
 #: inc/settings/opt-access.php:51
 msgid "启用赞助者权限模块"
-msgstr ""
+msgstr "啟用贊助者權限模塊"
 
 #: inc/settings/opt-access.php:52
 msgid "启用赞助者权限和相关功能，允许用户购买查看专属内容"
-msgstr ""
+msgstr "啟用贊助者權限和相關功能，允許用戶購買查看專屬內容"
 
 #: inc/settings/opt-access.php:58
 msgid "订阅说明页面"
-msgstr ""
+msgstr "訂閱說明頁面"
 
 #: inc/settings/opt-access.php:59
 msgid "指定一个页面，展示于赞助者组件模块下方"
-msgstr ""
+msgstr "指定一個頁面，展示於贊助者組件模塊下方"
 
 #: inc/settings/opt-access.php:66
 msgid "爱发电接口设置"
-msgstr ""
+msgstr "愛發電接口設置"
 
 #: inc/settings/opt-access.php:70
 msgid "此接口用于完成爱发电平台订阅与站内赞助者系统联动，请根据 [url=https://afdian.com/dashboard/dev]爱发电开发者[/url] 页面完成设置（账号需要为爱发电认证用户）。"
-msgstr ""
+msgstr "此接口用於完成愛發電平臺訂閱與站內贊助者系統聯動，請根據 [url=https://afdian.com/dashboard/dev]愛發電開發者[/url] 頁面完成設置（賬號需要為愛發電認證用戶）。"
 
 #: inc/settings/opt-access.php:74
 msgid "自动回调或用户手动激活爱发电订单时，系统仅会验证用户在爱发电平台来源的赞助订单有效性[b]（即任意赞助金额均会为用户激活相同的权限）[/b]。如果要求用户赞助最小金额，请在爱发电的主页设置中隐藏“自选金额赞助”。"
-msgstr ""
+msgstr "自動回調或用戶手動激活愛發電訂單時，系統僅會驗證用戶在愛發電平臺來源的贊助訂單有效性[b]（即任意贊助金額均會為用戶激活相同的權限）[/b]。如果要求用戶贊助最小金額，請在愛發電的主頁設置中隱藏“自選金額贊助”。"
 
 #: inc/settings/opt-access.php:79
 msgid "你的爱发电主页名，[b]仅需填写网址SLUG部分[/b]，即 [code]https://afdian.net/a/{SLUG}[/code]"
-msgstr ""
+msgstr "你的愛發電主頁名，[b]僅需填寫網址SLUG部分[/b]，即 [code]https://afdian.net/a/{SLUG}[/code]"
 
 #: inc/settings/opt-access.php:85
 msgid "开发者用户 ID"
-msgstr ""
+msgstr "開發者用戶 ID"
 
 #: inc/settings/opt-access.php:86
 msgid "你的爱发电账号的 [code]user_id[/code]，可在开发者页面查询"
-msgstr ""
+msgstr "你的愛發電賬號的 [code]user_id[/code]，可在開發者頁面查詢"
 
 #: inc/settings/opt-access.php:92
 msgid "开发者专属 Token"
-msgstr ""
+msgstr "開發者專屬 Token"
 
 #: inc/settings/opt-access.php:93
 msgid "由爱发电提供给你的 Token ，可在开发者页面查询，[b]切勿泄露，意外损失时请及时重置[/b]"
-msgstr ""
+msgstr "由愛發電提供給你的 Token ，可在開發者頁面查詢，[b]切勿洩露，意外損失時請及時重置[/b]"
 
 #: inc/settings/opt-access.php:99
 msgid "使用自动回调时，请在爱发电开发者页面中设置此站点的回调地址：[code]"
-msgstr ""
+msgstr "使用自動回調時，請在愛發電開發者頁面中設置此站點的回調地址：[code]"
 
 #: inc/settings/opt-access.php:103
 msgid "使用爱发电激活订阅"
-msgstr ""
+msgstr "使用愛發電激活訂閱"
 
 #: inc/settings/opt-access.php:104
 msgid "当用户通过爱发电平台支付后获得网站内的赞助者权限"
-msgstr ""
+msgstr "當用戶通過愛發電平臺支付後獲得網站內的贊助者權限"
 
 #: inc/settings/opt-access.php:110
 msgid "自动回调方式"
-msgstr ""
+msgstr "自動回調方式"
 
 #: inc/settings/opt-access.php:111
 msgid "设置支持自动回调激活的方案，显示于主题的 “获取订阅”页面"
-msgstr ""
+msgstr "設置支持自動回調激活的方案，顯示於主題的 “獲取訂閱”頁面"
 
 #: inc/settings/opt-access.php:115
 msgid "不使用"
-msgstr ""
+msgstr "不使用"
 
 #: inc/settings/opt-access.php:116
 msgid "自选金额方案"
-msgstr ""
+msgstr "自選金額方案"
 
 #: inc/settings/opt-access.php:117
 msgid "使用预设方案"
-msgstr ""
+msgstr "使用預設方案"
 
 #: inc/settings/opt-access.php:122
 msgid "预设方案链接"
-msgstr ""
+msgstr "預設方案鏈接"
 
 #: inc/settings/opt-access.php:123
 msgid "需要填写你的爱发电主页->赞助方案详情（支付页面）的 URL 地址 [br/]*链接需要包含有效的 [code]plan_id[/code] 参数，否则无法正确回调 [br/]e.g. [code]https://afdian.net/order/create? plan_id=xxxxxxxxxxxxxxxxxxxxxxxx[/code]"
-msgstr ""
+msgstr "需要填寫你的愛發電主頁->贊助方案詳情（支付頁面）的 URL 地址 [br/]*鏈接需要包含有效的 [code]plan_id[/code] 參數，否則無法正確回調 [br/]e.g. [code]https://afdian.net/order/create? plan_id=xxxxxxxxxxxxxxxxxxxxxxxx[/code]"
 
 #: inc/settings/opt-access.php:129
 msgid "保存爱发电回调日志"
-msgstr ""
+msgstr "保存愛發電回調日誌"
 
 #: inc/settings/opt-access.php:130
 msgid "启用后，保存爱发电平台 WebHook 发回的信息到 LOG ，用于回查激活记录，日志文件保存位置 [code]./wp-content/webhook_logs[/code] "
-msgstr ""
+msgstr "啟用後，保存愛發電平臺 WebHook 發回的信息到 LOG ，用於回查激活記錄，日誌文件保存位置 [code]./wp-content/webhook_logs[/code] "
 
 #: inc/settings/opt-access.php:136
 msgid "激活码接口设置"
-msgstr ""
+msgstr "激活碼接口設置"
 
 #: inc/settings/opt-access.php:140
 msgid "此接口为通用发卡兑换接口，启用后，会在后台添加独立的激活码管理页面"
-msgstr ""
+msgstr "此接口為通用髮卡兌換接口，啟用後，會在後臺添加獨立的激活碼管理頁面"
 
 #: inc/settings/opt-access.php:144
 msgid "使用激活码兑换订阅"
-msgstr ""
+msgstr "使用激活碼兌換訂閱"
 
 #: inc/settings/opt-access.php:145
 msgid "会在订阅权限组件中显示“激活码”的兑换选项"
-msgstr ""
+msgstr "會在訂閱權限組件中顯示“激活碼”的兌換選項"
 
 #: inc/settings/opt-access.php:156
 msgid "易支付接口设置"
-msgstr ""
+msgstr "易支付接口設置"
 
 #: inc/settings/opt-access.php:160
 msgid "此接口为易支付（彩虹版）兼容接口，由于各支付平台提供的接口存在差异，上线业务前请测试"
-msgstr ""
+msgstr "此接口為易支付（彩虹版）兼容接口，由於各支付平臺提供的接口存在差異，上線業務前請測試"
 
 #: inc/settings/opt-access.php:164
 msgid "易支付接口仅能够自动回调，掉单时需要在你的服务商后台手动补单。请在订阅说明中保留用户可以联系到的客服方式，及时补单防止被平台认定为欺诈商户。"
-msgstr ""
+msgstr "易支付接口僅能夠自動回調，掉單時需要在你的服務商後臺手動補單。請在訂閱說明中保留用戶可以聯繫到的客服方式，及時補單防止被平臺認定為欺詐商戶。"
 
 #: inc/settings/opt-access.php:180
 msgid "接口地址"
-msgstr ""
+msgstr "接口地址"
 
 #: inc/settings/opt-access.php:181
 msgid "易支付接口地址，仅支持 https:// "
-msgstr ""
+msgstr "易支付接口地址，僅支持 https:// "
 
 #: inc/settings/opt-access.php:187
 msgid "商户ID"
-msgstr ""
+msgstr "商戶ID"
 
 #: inc/settings/opt-access.php:188
 msgid "易支付商户 ID ，由服务商提供"
-msgstr ""
+msgstr "易支付商戶 ID ，由服務商提供"
 
 #: inc/settings/opt-access.php:194
 msgid "商户密钥"
-msgstr ""
+msgstr "商戶密鑰"
 
 #: inc/settings/opt-access.php:195
 msgid "易支付商户密钥（key），由服务商提供"
-msgstr ""
+msgstr "易支付商戶密鑰（key），由服務商提供"
 
 #: inc/settings/opt-access.php:201
 msgid "使用易支付激活订阅"
-msgstr ""
+msgstr "使用易支付激活訂閱"
 
 #: inc/settings/opt-access.php:202
 msgid "用户可以通过易支付平台支付后获得网站内的赞助者权限"
-msgstr ""
+msgstr "用戶可以通過易支付平臺支付後獲得網站內的贊助者權限"
 
 #: inc/settings/opt-access.php:208
 msgid "赞助者权限商品设置"
-msgstr ""
+msgstr "贊助者權限商品設置"
 
 #: inc/settings/opt-access.php:209
 msgid "配置用于购买赞助者权限的商品"
-msgstr ""
+msgstr "配置用於購買贊助者權限的商品"
 
 #: inc/settings/opt-access.php:214
 msgid "订阅名称"
-msgstr ""
+msgstr "訂閱名稱"
 
 #: inc/settings/opt-access.php:217
 msgid "月度订阅"
-msgstr ""
+msgstr "月度訂閱"
 
 #: inc/settings/opt-access.php:220
 msgid "商品价格（￥）"
-msgstr ""
+msgstr "商品價格（￥）"
 
 #: inc/settings/opt-access.php:226
 msgid "激活周期（天）"
-msgstr ""
+msgstr "激活週期（天）"
 
 #: inc/settings/opt-access.php:234
 msgid "支付方式"
-msgstr ""
+msgstr "支付方式"
 
 #: inc/settings/opt-access.php:235
 msgid "选择需要使用的支付方式，可用性请询问你的服务商"
-msgstr ""
+msgstr "選擇需要使用的支付方式，可用性請詢問你的服務商"
 
 #: inc/settings/opt-access.php:239
 msgid "支付宝"
-msgstr ""
+msgstr "支付寶"
 
 #: inc/settings/opt-access.php:240
 msgid "微信"
-msgstr ""
+msgstr "微信"
 
 #: inc/settings/opt-access.php:248
 msgid "保存易支付回调日志"
-msgstr ""
+msgstr "保存易支付回調日誌"
 
 #: inc/settings/opt-access.php:249
 msgid "启用后，保存易支付接口 WebHook 发回的订阅信息到 LOG ，用于回查激活记录，日志文件保存位置 [code]./wp-content/webhook_logs[/code] "
-msgstr ""
+msgstr "啟用後，保存易支付接口 WebHook 發回的訂閱信息到 LOG ，用於回查激活記錄，日誌文件保存位置 [code]./wp-content/webhook_logs[/code] "
 
 #: inc/settings/opt-basic.php:23
 msgid "基本设置"
-msgstr ""
+msgstr "基本設置"
 
 #: inc/settings/opt-basic.php:36
 #: inc/settings/opt-basic.php:51
 msgid "上传"
-msgstr ""
+msgstr "上傳"
 
 #: inc/settings/opt-basic.php:60
 msgid "系统自动"
-msgstr ""
+msgstr "系統自動"
 
 #: inc/settings/opt-basic.php:61
 msgid "暗色"
-msgstr ""
+msgstr "暗色"
 
 #: inc/settings/opt-basic.php:62
 msgid "亮色"
-msgstr ""
+msgstr "亮色"
 
 #: inc/settings/opt-basic.php:67
 msgid "合规类功能设置"
-msgstr ""
+msgstr "合規類功能設置"
 
 #: inc/settings/opt-basic.php:71
 msgid "用户 Cookie 授权弹窗"
-msgstr ""
+msgstr "用戶 Cookie 授權彈窗"
 
 #: inc/settings/opt-basic.php:72
 msgid "用户首次访问网站时，会弹窗提示用户确认 Cookie 权限"
-msgstr ""
+msgstr "用戶首次訪問網站時，會彈窗提示用戶確認 Cookie 權限"
 
 #: inc/settings/opt-basic.php:78
 msgid "全局禁用评论"
-msgstr ""
+msgstr "全局禁用評論"
 
 #: inc/settings/opt-basic.php:79
 msgid "全局禁用所有文章的评论功能"
-msgstr ""
+msgstr "全局禁用所有文章的評論功能"
 
 #: inc/settings/opt-basic.php:85
 msgid "ICP备案"
-msgstr ""
+msgstr "ICP備案"
 
 #: inc/settings/opt-basic.php:86
 msgid "根据《互联网信息服务管理办法》要求的网站 ICP 备案信息"
-msgstr ""
+msgstr "根據《互聯網信息服務管理辦法》要求的網站 ICP 備案信息"
 
 #: inc/settings/opt-basic.php:92
 msgid "公安备案"
-msgstr ""
+msgstr "公安備案"
 
 #: inc/settings/opt-basic.php:93
 msgid "根据《计算机信息网络国际联网安全保护管理办法》要求的网站公网安备信息"
-msgstr ""
+msgstr "根據《計算機信息網絡國際聯網安全保護管理辦法》要求的網站公網安備信息"
 
 #: inc/settings/opt-basic.php:99
 msgid "公安备案记录代码"
-msgstr ""
+msgstr "公安備案記錄代碼"
 
 #: inc/settings/opt-basic.php:100
 msgid "由于地域备案号展示要求不同，手动填写您的公安备案号纯数字部分"
-msgstr ""
+msgstr "由於地域備案號展示要求不同，手動填寫您的公安備案號純數字部分"
 
 #: inc/settings/opt-land.php:9
 #: inc/settings/opt-land.php:10
 msgid "页面组件"
-msgstr ""
+msgstr "頁面組件"
 
 #: inc/settings/opt-land.php:13
 #: inc/settings/opt-oplist.php:12
 msgid "AIYA-CMS 主题，页面组件设置"
-msgstr ""
+msgstr "AIYA-CMS 主題，頁面組件設置"
 
 #: inc/settings/opt-land.php:16
 msgid "正文过滤器"
-msgstr ""
+msgstr "正文過濾器"
 
 #: inc/settings/opt-land.php:20
 msgid "使用 DOMDocument 处理器"
-msgstr ""
+msgstr "使用 DOMDocument 處理器"
 
 #: inc/settings/opt-land.php:21
 msgid " HTML 属性匹配更精准，但性能略差 [del]什么年代了还在用传统 preg_match_all()[/del]"
-msgstr ""
+msgstr " HTML 屬性匹配更精準，但性能略差 [del]什麼年代了還在用傳統 preg_match_all()[/del]"
 
 #: inc/settings/opt-land.php:27
 msgid "添加图片描述"
-msgstr ""
+msgstr "添加圖片描述"
 
 #: inc/settings/opt-land.php:28
 msgid "文章正文内的图片标签自动添加 alt 属性和懒加载属性"
-msgstr ""
+msgstr "文章正文內的圖片標籤自動添加 alt 屬性和懶加載屬性"
 
 #: inc/settings/opt-land.php:34
 msgid "添加链接内链"
-msgstr ""
+msgstr "添加鏈接內鏈"
 
 #: inc/settings/opt-land.php:35
 msgid "给文章正文内链接标签自动添加 [code]rel=\"nofollow\"[/code] 和 [code]target=\"_blank\"[/code] 属性（仅对外部链接生效）"
-msgstr ""
+msgstr "給文章正文內鏈接標籤自動添加 [code]rel=\"nofollow\"[/code] 和 [code]target=\"_blank\"[/code] 屬性（僅對外部鏈接生效）"
 
 #: inc/settings/opt-land.php:41
 msgid "内链格式设置"
-msgstr ""
+msgstr "內鏈格式設置"
 
 #: inc/settings/opt-land.php:42
 msgid "接上一项设置，可选跳转方式"
-msgstr ""
+msgstr "接上一項設置，可選跳轉方式"
 
 #: inc/settings/opt-land.php:46
 msgid "提示外部页面"
-msgstr ""
+msgstr "提示外部頁面"
 
 #: inc/settings/opt-land.php:47
 msgid "使用内链跳转"
-msgstr ""
+msgstr "使用內鏈跳轉"
 
 #: inc/settings/opt-land.php:48
 msgid "直接跳转（不处理）"
-msgstr ""
+msgstr "直接跳轉（不處理）"
 
 #: inc/settings/opt-land.php:53
 msgid "内容组件"
-msgstr ""
+msgstr "內容組件"
 
 #: inc/settings/opt-land.php:57
 msgid "设置文章列表输出的布局模板，文章列表的输出数量请在站点 [url=options-reading.php]阅读设置[/url] 中调整"
-msgstr ""
+msgstr "設置文章列表輸出的佈局模板，文章列表的輸出數量請在站點 [url=options-reading.php]閱讀設置[/url] 中調整"
 
 #: inc/settings/opt-land.php:61
 msgid "文章时效性提示"
-msgstr ""
+msgstr "文章時效性提示"
 
 #: inc/settings/opt-land.php:62
 msgid "在文章发布或更新时间超过天数后显示内容过期提示，留空时禁用"
-msgstr ""
+msgstr "在文章發佈或更新時間超過天數後顯示內容過期提示，留空時禁用"
 
 #: inc/settings/opt-land.php:68
 msgid "文末声明"
-msgstr ""
+msgstr "文末聲明"
 
 #: inc/settings/opt-land.php:69
 msgid "在文章末尾输出版权声明等额外文本"
-msgstr ""
+msgstr "在文章末尾輸出版權聲明等額外文本"
 
 #: inc/settings/opt-land.php:72
 msgid "本站部分内容转载自网络，作品版权归原作者及来源网站所有，任何内容转载、商业用途等均须联系原作者并注明来源。"
-msgstr ""
+msgstr "本站部分內容轉載自網絡，作品版權歸原作者及來源網站所有，任何內容轉載、商業用途等均須聯繫原作者並註明來源。"
 
 #: inc/settings/opt-land.php:75
 msgid "加载文章提示组件"
-msgstr ""
+msgstr "加載文章提示組件"
 
 #: inc/settings/opt-land.php:76
 msgid "创建新的分类法，在文章开头位置输出文章完成状态（更新中、已停更），或提示读者风险操作，等有用的提示"
-msgstr ""
+msgstr "創建新的分類法，在文章開頭位置輸出文章完成狀態（更新中、已停更），或提示讀者風險操作，等有用的提示"
 
 #: inc/settings/opt-land.php:82
 msgid "加载推文组件"
-msgstr ""
+msgstr "加載推文組件"
 
 #: inc/settings/opt-land.php:83
 msgid "创建新的文章类型，以及推文组件页面"
-msgstr ""
+msgstr "創建新的文章類型，以及推文組件頁面"
 
 #: inc/settings/opt-land.php:89
 msgid "首页独立分区列表"
-msgstr ""
+msgstr "首頁獨立分區列表"
 
 #: inc/settings/opt-land.php:90
 msgid "添加独立分区列表，显示不同的分类文章"
-msgstr ""
+msgstr "添加獨立分區列表，顯示不同的分類文章"
 
 #: inc/settings/opt-land.php:96
 msgid "此项为空则自动分类名称"
-msgstr ""
+msgstr "此項為空則自動分類名稱"
 
 #: inc/settings/opt-land.php:102
 msgid "分类"
-msgstr ""
+msgstr "分類"
 
 #: inc/settings/opt-land.php:103
 msgid "选择要显示的分类"
-msgstr ""
+msgstr "選擇要顯示的分類"
 
 #: inc/settings/opt-land.php:110
 msgid "查询排序方式"
-msgstr ""
+msgstr "查詢排序方式"
 
 #: inc/settings/opt-land.php:111
 msgid "选择查询的文章排序方式"
-msgstr ""
+msgstr "選擇查詢的文章排序方式"
 
 #: inc/settings/opt-land.php:115
 msgid "发布时间"
-msgstr ""
+msgstr "發佈時間"
 
 #: inc/settings/opt-land.php:117
 msgid "最后修改日期"
-msgstr ""
+msgstr "最後修改日期"
 
 #: inc/settings/opt-land.php:118
 msgid "随机"
-msgstr ""
+msgstr "隨機"
 
 #: inc/settings/opt-land.php:119
 msgid "不排序"
-msgstr ""
+msgstr "不排序"
 
 #: inc/settings/opt-land.php:124
 msgid "查询数量"
-msgstr ""
+msgstr "查詢數量"
 
 #: inc/settings/opt-land.php:125
 msgid "选择查询的文章数量"
-msgstr ""
+msgstr "選擇查詢的文章數量"
 
 #: inc/settings/opt-land.php:129
 msgid "5条"
-msgstr ""
+msgstr "5條"
 
 #: inc/settings/opt-land.php:130
 msgid "10条"
-msgstr ""
+msgstr "10條"
 
 #: inc/settings/opt-land.php:131
 msgid "20条"
-msgstr ""
+msgstr "20條"
 
 #: inc/settings/opt-land.php:138
 msgid "轮播设置"
-msgstr ""
+msgstr "輪播設置"
 
 #: inc/settings/opt-land.php:142
 msgid "轮播组件外观切换"
-msgstr ""
+msgstr "輪播組件外觀切換"
 
 #: inc/settings/opt-land.php:143
 msgid "切换或关闭首页轮播，CMS模式为至少需要5篇文章，宽幅模式为至少需要1篇文章"
-msgstr ""
+msgstr "切換或關閉首頁輪播，CMS模式為至少需要5篇文章，寬幅模式為至少需要1篇文章"
 
 #: inc/settings/opt-land.php:147
 msgid "关闭"
-msgstr ""
+msgstr "關閉"
 
 #: inc/settings/opt-land.php:148
 msgid "经典（宽幅模式）"
-msgstr ""
+msgstr "經典（寬幅模式）"
 
 #: inc/settings/opt-land.php:149
 msgid "拼贴（三卡片）"
-msgstr ""
+msgstr "拼貼（三卡片）"
 
 #: inc/settings/opt-land.php:150
 msgid "三栏位（CMS模式）"
-msgstr ""
+msgstr "三欄位（CMS模式）"
 
 #: inc/settings/opt-land.php:155
 msgid "轮播列表"
-msgstr ""
+msgstr "輪播列表"
 
 #: inc/settings/opt-land.php:156
 msgid "添加轮播列表"
-msgstr ""
+msgstr "添加輪播列表"
 
 #: inc/settings/opt-land.php:161
 #: inc/settings/opt-land.php:208
@@ -1741,119 +1747,119 @@ msgstr ""
 #: inc/settings/opt-land.php:266
 #: inc/settings/opt-land.php:288
 msgid "链接"
-msgstr ""
+msgstr "鏈接"
 
 #: inc/settings/opt-land.php:162
 msgid "填入任意URL、或填写文章ID或文章别名 [b]*Tips: 不支持识别分类或标签[/b]"
-msgstr ""
+msgstr "填入任意URL、或填寫文章ID或文章別名 [b]*Tips: 不支持識別分類或標籤[/b]"
 
 #: inc/settings/opt-land.php:168
 msgid "图片"
-msgstr ""
+msgstr "圖片"
 
 #: inc/settings/opt-land.php:169
 msgid "轮播卡片的大图，留空时自动获取文章特色图片"
-msgstr ""
+msgstr "輪播卡片的大圖，留空時自動獲取文章特色圖片"
 
 #: inc/settings/opt-land.php:176
 msgid "轮播卡片的标题，留空时自动获取文章标题"
-msgstr ""
+msgstr "輪播卡片的標題，留空時自動獲取文章標題"
 
 #: inc/settings/opt-land.php:182
 msgid "描述"
-msgstr ""
+msgstr "描述"
 
 #: inc/settings/opt-land.php:183
 msgid "轮播卡片的描述，留空时自动获取文章摘要"
-msgstr ""
+msgstr "輪播卡片的描述，留空時自動獲取文章摘要"
 
 #: inc/settings/opt-land.php:191
 msgid "页面广告位（AD）"
-msgstr ""
+msgstr "頁面廣告位（AD）"
 
 #: inc/settings/opt-land.php:195
 msgid "全局顶部"
-msgstr ""
+msgstr "全局頂部"
 
 #: inc/settings/opt-land.php:196
 msgid "广告位在页面顶部显示"
-msgstr ""
+msgstr "廣告位在頁面頂部顯示"
 
 #: inc/settings/opt-land.php:202
 #: inc/settings/opt-land.php:231
 #: inc/settings/opt-land.php:260
 #: inc/settings/opt-land.php:282
 msgid "广告标题，作为链接文本"
-msgstr ""
+msgstr "廣告標題，作為鏈接文本"
 
 #: inc/settings/opt-land.php:209
 #: inc/settings/opt-land.php:238
 #: inc/settings/opt-land.php:267
 #: inc/settings/opt-land.php:289
 msgid "广告的跳转链接"
-msgstr ""
+msgstr "廣告的跳轉鏈接"
 
 #: inc/settings/opt-land.php:215
 #: inc/settings/opt-land.php:244
 msgid "广告视图"
-msgstr ""
+msgstr "廣告視圖"
 
 #: inc/settings/opt-land.php:216
 #: inc/settings/opt-land.php:245
 msgid "广告的图片链接 "
-msgstr ""
+msgstr "廣告的圖片鏈接 "
 
 #: inc/settings/opt-land.php:224
 msgid "全局底部"
-msgstr ""
+msgstr "全局底部"
 
 #: inc/settings/opt-land.php:225
 msgid "广告位在页面底部显示"
-msgstr ""
+msgstr "廣告位在頁面底部顯示"
 
 #: inc/settings/opt-land.php:253
 msgid "文内顶部"
-msgstr ""
+msgstr "文內頂部"
 
 #: inc/settings/opt-land.php:254
 msgid "广告位在文章顶部显示（仅文本链接）"
-msgstr ""
+msgstr "廣告位在文章頂部顯示（僅文本鏈接）"
 
 #: inc/settings/opt-land.php:275
 msgid "文内底部"
-msgstr ""
+msgstr "文內底部"
 
 #: inc/settings/opt-land.php:276
 msgid "广告位在文章底部显示（仅文本链接）"
-msgstr ""
+msgstr "廣告位在文章底部顯示（僅文本鏈接）"
 
 #: inc/settings/opt-notify.php:9
 msgid "消息通知"
-msgstr ""
+msgstr "消息通知"
 
 #: inc/settings/opt-notify.php:19
 msgid "添加自定义通知"
-msgstr ""
+msgstr "添加自定義通知"
 
 #: inc/settings/opt-notify.php:25
 msgid "通知标题"
-msgstr ""
+msgstr "通知標題"
 
 #: inc/settings/opt-notify.php:32
 msgid "通知内容"
-msgstr ""
+msgstr "通知內容"
 
 #: inc/settings/opt-notify.php:39
 msgid "通知图标"
-msgstr ""
+msgstr "通知圖標"
 
 #: inc/settings/opt-notify.php:45
 msgid "提示"
-msgstr ""
+msgstr "提示"
 
 #: inc/settings/opt-notify.php:53
 msgid "通知级别"
-msgstr ""
+msgstr "通知級別"
 
 #: inc/settings/opt-notify.php:54
 msgid ""
@@ -1863,75 +1869,80 @@ msgid ""
 "                    [br/]作者用户：已登录的投稿者、作者及以上权限用户可见\r\n"
 "                    [br/]管理员用户：已登录的编辑权限用户、管理员可见"
 msgstr ""
+"接收此消息的用戶權限級別\r\n"
+"                    [br/]公開：全局消息，遊客和所有用戶可見\r\n"
+"                    [br/]註冊用戶：已登錄的訂閱者及以上權限用戶可見\r\n"
+"                    [br/]作者用戶：已登錄的投稿者、作者及以上權限用戶可見\r\n"
+"                    [br/]管理員用戶：已登錄的編輯權限用戶、管理員可見"
 
 #: inc/settings/opt-notify.php:62
 msgid "公开"
-msgstr ""
+msgstr "公開"
 
 #: inc/settings/opt-notify.php:63
 msgid "注册用户"
-msgstr ""
+msgstr "註冊用戶"
 
 #: inc/settings/opt-notify.php:64
 msgid "作者用户"
-msgstr ""
+msgstr "作者用戶"
 
 #: inc/settings/opt-notify.php:65
 msgid "管理员用户"
-msgstr ""
+msgstr "管理員用戶"
 
 #: inc/settings/opt-oplist.php:9
 msgid "OpenList 客户端"
-msgstr ""
+msgstr "OpenList 客戶端"
 
 #: inc/settings/opt-oplist.php:15
 msgid "OpenList 客户端模块设置"
-msgstr ""
+msgstr "OpenList 客戶端模塊設置"
 
 #: inc/settings/opt-oplist.php:19
 msgid "OpenList 是一个开源的网盘列表程序，此模块用于直接调用 OpenList 的文件列表显示在文章页面上"
-msgstr ""
+msgstr "OpenList 是一個開源的網盤列表程序，此模塊用於直接調用 OpenList 的文件列表顯示在文章頁面上"
 
 #: inc/settings/opt-oplist.php:24
 msgid "服务器地址"
-msgstr ""
+msgstr "服務器地址"
 
 #: inc/settings/opt-oplist.php:25
 msgid "OpenList 的服务器地址"
-msgstr ""
+msgstr "OpenList 的服務器地址"
 
 #: inc/settings/opt-oplist.php:31
 msgid "用户名"
-msgstr ""
+msgstr "用戶名"
 
 #: inc/settings/opt-oplist.php:32
 #: inc/settings/opt-oplist.php:39
 msgid "用于请求 OpenList API 登录的用户"
-msgstr ""
+msgstr "用於請求 OpenList API 登錄的用戶"
 
 #: inc/settings/opt-oplist.php:38
 msgid "密码"
-msgstr ""
+msgstr "密碼"
 
 #: inc/settings/opt-oplist.php:45
 msgid "令牌缓存时间"
-msgstr ""
+msgstr "令牌緩存時間"
 
 #: inc/settings/opt-oplist.php:46
 msgid "OpenList 的 JWt Token 缓存时间（小时），设置为 [code]0[/code] 则每次都重新请求令牌（*取决于 OpenList 站点配置，默认为 48 小时）"
-msgstr ""
+msgstr "OpenList 的 JWt Token 緩存時間（小時），設置為 [code]0[/code] 則每次都重新請求令牌（*取決於 OpenList 站點配置，默認為 48 小時）"
 
 #: inc/settings/opt-oplist.php:52
 msgid "启用文件图标匹配"
-msgstr ""
+msgstr "啟用文件圖標匹配"
 
 #: inc/settings/opt-oplist.php:53
 msgid "在 OpenList 返回文件列表时为文件匹配图标"
-msgstr ""
+msgstr "在 OpenList 返回文件列表時為文件匹配圖標"
 
 #: inc/settings/opt-oplist.php:59
 msgid "文件跳转设置"
-msgstr ""
+msgstr "文件跳轉設置"
 
 #: inc/settings/opt-oplist.php:60
 msgid ""
@@ -1942,54 +1953,60 @@ msgid ""
 "                [br/]直链下载：循环请求尝试直接取出真实文件地址，会大幅增加加载时间\r\n"
 "                "
 msgstr ""
+"設置從文件列表跳轉到 OpenList 的方法\r\n"
+"                [br/]文件頁面：直接跳轉到 OpenList 的文件/文件夾詳情頁面\r\n"
+"                [br/]直接下載：下載文件（由 OpenList 完成 302 跳轉）\r\n"
+"                [br/]代理下載：下載文件（由 OpenList 本機代理下載）\r\n"
+"                [br/]直鏈下載：循環請求嘗試直接取出真實文件地址，會大幅增加加載時間\r\n"
+"                "
 
 #: inc/settings/opt-oplist.php:69
 msgid "文件页面"
-msgstr ""
+msgstr "文件頁面"
 
 #: inc/settings/opt-oplist.php:70
 msgid "直接下载"
-msgstr ""
+msgstr "直接下載"
 
 #: inc/settings/opt-oplist.php:71
 msgid "代理下载"
-msgstr ""
+msgstr "代理下載"
 
 #: inc/settings/opt-oplist.php:72
 msgid "直链下载"
-msgstr ""
+msgstr "直鏈下載"
 
 #: inc/settings/opt-oplist.php:77
 msgid "默认列表描述"
-msgstr ""
+msgstr "默認列表描述"
 
 #: inc/settings/opt-oplist.php:78
 msgid "设置 OpenList 的文件列表底部默认的描述文本"
-msgstr ""
+msgstr "設置 OpenList 的文件列表底部默認的描述文本"
 
 #: inc/widgets/widget-add-menu.php:11
 msgid "AIYA-CMS 菜单"
-msgstr ""
+msgstr "AIYA-CMS 菜單"
 
 #: inc/widgets/widget-add-menu.php:13
 msgid "菜单卡片，菜单内容于 外观->菜单 中设置"
-msgstr ""
+msgstr "菜單卡片，菜單內容於 外觀->菜單 中設置"
 
 #: inc/widgets/widget-add-menu.php:19
 msgid "菜单"
-msgstr ""
+msgstr "菜單"
 
 #: inc/widgets/widget-comments.php:11
 msgid "AIYA-CMS 最近评论"
-msgstr ""
+msgstr "AIYA-CMS 最近評論"
 
 #: inc/widgets/widget-comments.php:13
 msgid "评论列表卡片，显示最近评论"
-msgstr ""
+msgstr "評論列表卡片，顯示最近評論"
 
 #: inc/widgets/widget-comments.php:19
 msgid "最近评论"
-msgstr ""
+msgstr "最近評論"
 
 #: inc/widgets/widget-comments.php:24
 #: inc/widgets/widget-post-comments.php:24
@@ -1999,214 +2016,243 @@ msgstr ""
 #: inc/widgets/widget-post-views.php:24
 #: inc/widgets/widget-tag-cloud.php:24
 msgid "显示数量"
-msgstr ""
+msgstr "顯示數量"
 
 #: inc/widgets/widget-post-comments.php:11
 msgid "AIYA-CMS 热评文章"
-msgstr ""
+msgstr "AIYA-CMS 熱評文章"
 
 #: inc/widgets/widget-post-comments.php:13
 msgid "文章列表卡片，展示评论最多的文章"
-msgstr ""
+msgstr "文章列表卡片，展示評論最多的文章"
 
 #: inc/widgets/widget-post-comments.php:19
 msgid "热评文章"
-msgstr ""
+msgstr "熱評文章"
 
 #: inc/widgets/widget-post-likes.php:11
 msgid "AIYA-CMS 热赞文章"
-msgstr ""
+msgstr "AIYA-CMS 熱贊文章"
 
 #: inc/widgets/widget-post-likes.php:13
 msgid "文章列表卡片，展示点赞量最多的文章"
-msgstr ""
+msgstr "文章列表卡片，展示點贊量最多的文章"
 
 #: inc/widgets/widget-post-likes.php:19
 msgid "点赞排行"
-msgstr ""
+msgstr "點贊排行"
 
 #: inc/widgets/widget-post-newest.php:11
 msgid "AIYA-CMS 最新文章"
-msgstr ""
+msgstr "AIYA-CMS 最新文章"
 
 #: inc/widgets/widget-post-newest.php:13
 msgid "文章列表卡片，展示最近发布的文章"
-msgstr ""
+msgstr "文章列表卡片，展示最近發佈的文章"
 
 #: inc/widgets/widget-post-newest.php:19
 msgid "最新文章"
-msgstr ""
+msgstr "最新文章"
 
 #: inc/widgets/widget-post-random.php:11
 msgid "AIYA-CMS 随机文章"
-msgstr ""
+msgstr "AIYA-CMS 隨機文章"
 
 #: inc/widgets/widget-post-random.php:13
 msgid "文章列表卡片，展示随机的文章"
-msgstr ""
+msgstr "文章列表卡片，展示隨機的文章"
 
 #: inc/widgets/widget-post-random.php:19
 msgid "随机推荐"
-msgstr ""
+msgstr "隨機推薦"
 
 #: inc/widgets/widget-post-views.php:11
 msgid "AIYA-CMS 热门文章"
-msgstr ""
+msgstr "AIYA-CMS 熱門文章"
 
 #: inc/widgets/widget-post-views.php:13
 msgid "文章列表卡片，展示点击量最多的文章"
-msgstr ""
+msgstr "文章列表卡片，展示點擊量最多的文章"
 
 #: inc/widgets/widget-post-views.php:19
 msgid "热门"
-msgstr ""
+msgstr "熱門"
 
 #: inc/widgets/widget-search.php:11
 msgid "AIYA-CMS 搜索"
-msgstr ""
+msgstr "AIYA-CMS 搜索"
 
 #: inc/widgets/widget-search.php:13
 msgid "搜索框卡片"
-msgstr ""
+msgstr "搜索框卡片"
 
 #: inc/widgets/widget-tag-cloud.php:11
 msgid "AIYA-CMS 标签云"
-msgstr ""
+msgstr "AIYA-CMS 標籤雲"
 
 #: inc/widgets/widget-tag-cloud.php:13
 msgid "标签云卡片，栏标签列表组件"
-msgstr ""
+msgstr "標籤雲卡片，欄標籤列表組件"
 
 #: inc/widgets/widget-tag-cloud.php:19
 msgid "热门标签"
-msgstr ""
+msgstr "熱門標籤"
 
 #: inc/widgets/widget-text-html.php:11
 msgid "AIYA-CMS 文本"
-msgstr ""
+msgstr "AIYA-CMS 文本"
 
 #: inc/widgets/widget-text-html.php:13
 msgid "文本卡片，支持HTML"
-msgstr ""
+msgstr "文本卡片，支持HTML"
 
 #: inc/widgets/widget-text-html.php:24
 msgid "是否输出为HTML"
-msgstr ""
+msgstr "是否輸出為HTML"
 
 #: inc/widgets/widget-user-welcome.php:8
 msgid "AIYA-CMS 用户面板"
-msgstr ""
+msgstr "AIYA-CMS 用戶面板"
 
 #: inc/widgets/widget-user-welcome.php:10
 msgid "用户面板组件"
-msgstr ""
+msgstr "用戶面板組件"
 
 #: templates/archive-tweet.php:16
 msgid "推文发布成功"
-msgstr ""
+msgstr "推文發佈成功"
 
 #: templates/archive-tweet.php:17
 msgid "已提交，等待审核"
-msgstr ""
+msgstr "已提交，等待審核"
 
 #: templates/archive-tweet.php:18
 msgid "内容不能为空"
-msgstr ""
+msgstr "內容不能為空"
 
 #: templates/archive-tweet.php:19
 msgid "提交失败，请稍后重试"
-msgstr ""
+msgstr "提交失敗，請稍後重試"
 
 #: templates/archive-tweet.php:31
 msgid "标题（可选）"
-msgstr ""
+msgstr "標題（可選）"
 
 #: templates/archive-tweet.php:32
 msgid "分享点什么…"
-msgstr ""
+msgstr "分享點什麼…"
 
 #: templates/archive-tweet.php:33
 msgid "标签，使用逗号分隔"
-msgstr ""
+msgstr "標籤，使用逗號分隔"
 
 #: templates/archive-tweet.php:34
 msgid "发布推文"
-msgstr ""
+msgstr "發佈推文"
 
 #: templates/archive-tweet.php:41
 msgid "全部"
-msgstr ""
+msgstr "全部"
 
 #: templates/archive.php:11
 #: templates/author.php:36
 #: templates/index.php:128
 #: templates/search.php:11
 msgid "暂无内容"
-msgstr ""
+msgstr "暫無內容"
 
 #: templates/archive.php:12
 msgid "当前没有任何文章被分类到此归档"
-msgstr ""
+msgstr "當前沒有任何文章被分類到此歸檔"
 
 #: templates/author.php:37
 msgid "当前作者没有发布任何文章"
-msgstr ""
+msgstr "當前作者沒有發佈任何文章"
 
 #: templates/author.php:75
 msgid "用户：「"
-msgstr ""
+msgstr "用戶：「"
 
 #: templates/author.php:75
 msgid "」"
-msgstr ""
+msgstr "」"
 
 #: templates/fragments/content-detail.php:40
 msgid "分类："
-msgstr ""
+msgstr "分類："
 
 #: templates/fragments/content-detail.php:86
 #: templates/fragments/content-detail.php:122
 #, php-format
 msgid "[ 上次更新于 %s ]"
-msgstr ""
+msgstr "[ 上次更新於 %s ]"
 
 #: templates/fragments/loop-grid.php:65
 msgid " 阅读"
-msgstr ""
+msgstr " 閱讀"
 
 #: templates/index.php:129
 msgid "暂无文章"
-msgstr ""
+msgstr "暫無文章"
 
 #: templates/pages/external-auto.php:25
 msgid "页面加载中，即将跳转..."
-msgstr ""
+msgstr "頁面加載中，即將跳轉..."
 
 #: templates/pages/external-auto.php:28
 msgid "链接格式错误，返回首页..."
-msgstr ""
+msgstr "鏈接格式錯誤，返回首頁..."
 
 #: templates/pages/external-auto.php:32
 msgid "解码失败，返回首页..."
-msgstr ""
+msgstr "解碼失敗，返回首頁..."
 
 #: templates/pages/external-auto.php:155
 msgid "我们将带您前往外部链接，请注意账号安全。"
-msgstr ""
+msgstr "我們將帶您前往外部鏈接，請注意賬號安全。"
 
 #: templates/pages/external-auto.php:156
 msgid "如果没有自动跳转，请点击下方按钮"
-msgstr ""
+msgstr "如果沒有自動跳轉，請點擊下方按鈕"
 
 #: templates/pages/external-auto.php:160
 msgid "立即前往"
-msgstr ""
+msgstr "立即前往"
 
 #: templates/search.php:12
 msgid "搜索结果下没有文章"
-msgstr ""
+msgstr "搜索結果下沒有文章"
 
 #: templates/search.php:52
 #, php-format
 msgid "搜索\"%s\"的结果"
-msgstr ""
+msgstr "搜索\"%s\"的結果"
+
+#: src/components/ui-mode-toggle.js:56
+msgid "切换到深色模式"
+msgstr "切換到深色模式"
+
+#: src/components/ui-mode-toggle.js:58
+msgid "切换到跟随系统"
+msgstr "切換到跟隨系統"
+
+#: src/components/ui-mode-toggle.js:60
+msgid "切换到浅色模式"
+msgstr "切換到淺色模式"
+
+#: src/components/ui-mode-toggle.js:62
+#: src/components/ui-mode-toggle.js:71
+msgid "切换主题"
+msgstr "切換主題"
+
+#: src/components/ui-not-found.js:23
+msgid "页面未找到"
+msgstr "頁面未找到"
+
+#: src/components/ui-not-found.js:26
+msgid "抱歉，您访问的页面不存在或已被移除"
+msgstr "抱歉，您訪問的頁面不存在或已被移除"
+
+#: src/components/ui-not-found.js:33
+msgid "返回首页"
+msgstr "返回首頁"
