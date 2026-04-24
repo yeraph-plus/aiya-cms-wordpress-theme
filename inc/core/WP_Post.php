@@ -675,7 +675,7 @@ if (!class_exists('AYA_Post_In_While')) {
                 case 'author_desc':
                     $this->data['author_desc'] = $this->get_post_author_desc();
                     break;
-                case 'is_author':
+                case 'is_post_author':
                     $this->data['is_post_author'] = $this->user_is_post_author();
                     break;
                 default:

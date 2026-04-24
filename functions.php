@@ -399,5 +399,3 @@ AYF::module('Record_Visitors', true);
 
 //启用小工具缓存插件
 AYP::action('Widget_Cache', true);
-
-// TODO 接入WordPress i18n 功能

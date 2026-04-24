@@ -1,129 +1,85 @@
 import * as React from "react"
 import { __ } from "@wordpress/i18n"
 import { toast } from "sonner"
+import {
+  Trash2,
+  Pencil,
+  ImagePlus,
+  Hash
+} from "lucide-react"
 
 import { getConfig } from "@/lib/utils"
-import type { TweetCardPost } from "@/components/tweet-card"
 
-interface TweetEditorProps {
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
+import { Spinner } from "@/components/ui/spinner"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+export interface TweetCardTag {
+  id?: number
+  name: string
+  slug?: string
+  count?: number
+}
+
+export interface TweetCardPost {
+  id?: string
+  title: string
+  content: string
+  status?: string
+}
+
+export interface TweetEditorProps {
   mode?: "create" | "edit"
-  post?: TweetCardPost & { status?: string }
+  post?: TweetCardPost
+  tags?: TweetCardTag[]
   redirectUrl?: string
-  className?: string
 }
 
-type SubmitStatus = "publish" | "draft" | "pending"
-
-type UploadedImage = {
-  path: string
-  url: string
-}
+type SubmitStatus = "publish" | "draft" | "pending" | "trash"
 
 function getResponseMessage(data: any, fallback: string) {
   return data?.message || data?.detail || data?.data?.detail || fallback
 }
 
-function buildTweetImageUrl(path: string) {
-  if (/^https?:\/\//i.test(path)) {
-    return path
-  }
+function htmlToText(html: string) {
+  if (!html) return ""
+  if (typeof window === "undefined") return html
 
-  if (typeof window === "undefined") {
-    return `/wp-content/upload-tweet/${path.replace(/^\/+/, "")}`
-  }
+  const doc = new DOMParser().parseFromString(html, "text/html")
 
-  return `${window.location.origin}/wp-content/upload-tweet/${path.replace(/^\/+/, "")}`
-}
+  doc.querySelectorAll("br").forEach((br) => br.replaceWith("\n"))
+  doc.querySelectorAll("p").forEach((p) => {
+    p.append("\n\n")
+  })
 
-function getInitialGalleryImages(post?: TweetEditorProps["post"]): UploadedImage[] {
-  if (!post?.gallery_images || !Array.isArray(post.gallery_images)) {
-    return []
-  }
-
-  return post.gallery_images
-    .filter((item) => typeof item === "string" && item !== "")
-    .map((item) => ({
-      path: item,
-      url: buildTweetImageUrl(item),
-    }))
+  return (doc.body.textContent || "").trim()
 }
 
 export default function TweetEditor({
   mode = "create",
   post,
+  tags = [],
   redirectUrl,
-  className = "",
 }: TweetEditorProps) {
+  const { apiUrl, apiNonce } = getConfig()
   const [title, setTitle] = React.useState(post?.title || "")
-  const [content, setContent] = React.useState(post?.content || "")
-  const [status, setStatus] = React.useState<SubmitStatus>((post?.status as SubmitStatus) || "pending")
-  const [galleryImages, setGalleryImages] = React.useState<UploadedImage[]>(() => getInitialGalleryImages(post))
+  const [content, setContent] = React.useState(() => htmlToText(post?.content || ""))
+  const [isDraft, setIsDraft] = React.useState(post?.status === "draft")
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const [isDeleting, setIsDeleting] = React.useState(false)
-  const [isUploading, setIsUploading] = React.useState(false)
-
-  const endpointBase = React.useMemo(() => {
-    const { apiUrl } = getConfig()
-    return apiUrl ? `${apiUrl}/aiya/v1` : ""
-  }, [])
-
-  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-
-    if (!file) {
-      return
-    }
-
-    if (!endpointBase) {
-      toast.error(__("接口配置缺失", "aiya-cms"))
-      return
-    }
-
-    const { apiNonce } = getConfig()
-    const formData = new FormData()
-    formData.append("file", file)
-
-    setIsUploading(true)
-
-    try {
-      const response = await fetch(`${endpointBase}/tweet/upload_image`, {
-        method: "POST",
-        headers: {
-          "X-WP-Nonce": apiNonce || "",
-        },
-        body: formData,
-      })
-
-      const data = await response.json()
-      const payload = data?.data || data
-
-      if (!response.ok) {
-        throw new Error(getResponseMessage(data, __('图片上传失败', 'aiya-cms')))
-      }
-
-      const path = payload?.path
-      const url = payload?.url
-
-      if (!path || !url) {
-        throw new Error(__("上传接口返回的数据不完整", "aiya-cms"))
-      }
-
-      setGalleryImages((prev) => {
-        const next = prev.filter((item) => item.path !== path)
-        next.push({ path, url })
-        return next
-      })
-      toast.success(getResponseMessage(data, __('图片上传成功', 'aiya-cms')))
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : __('图片上传失败', 'aiya-cms'))
-    } finally {
-      setIsUploading(false)
-      event.target.value = ""
-    }
-  }
 
   const handleSubmit = async (nextStatus: SubmitStatus) => {
-    if (!endpointBase) {
+    if (!apiUrl) {
       toast.error(__("接口配置缺失", "aiya-cms"))
       return
     }
@@ -133,12 +89,10 @@ export default function TweetEditor({
       return
     }
 
-    const { apiNonce } = getConfig()
     const body: Record<string, unknown> = {
       title,
       content,
       status: nextStatus,
-      gallery_images: galleryImages.map((item) => item.path),
     }
 
     if (mode === "edit" && post?.id) {
@@ -148,7 +102,7 @@ export default function TweetEditor({
     setIsSubmitting(true)
 
     try {
-      const response = await fetch(`${endpointBase}/tweet/${mode === "edit" ? "update" : "create"}`, {
+      const response = await fetch(`${apiUrl}/aiya/v1/tweet/${ mode === "edit" ? "update" : "create"}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -166,16 +120,12 @@ export default function TweetEditor({
       toast.success(getResponseMessage(data, mode === "edit" ? __('帖子已更新', 'aiya-cms') : __('帖子已发布', 'aiya-cms')))
 
       const postData = data?.data?.post_data || data?.post_data
-      if (postData) {
-        setTitle(postData.title || "")
-        setContent(postData.content_raw || postData.content || "")
-        setStatus((postData.status as SubmitStatus) || nextStatus)
-        setGalleryImages(getInitialGalleryImages(postData))
-      }
-
       const nextUrl = redirectUrl || postData?.url || postData?.link
-      if (nextUrl && mode === "create") {
+
+      if (nextUrl && mode === "edit") {
         window.location.href = nextUrl
+      } else {
+        window.location.reload()
       }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : __('保存失败', 'aiya-cms'))
@@ -185,7 +135,7 @@ export default function TweetEditor({
   }
 
   const handleDelete = async () => {
-    if (!post?.id || !endpointBase || isDeleting) {
+    if (!post?.id || !apiUrl || isDeleting) {
       return
     }
 
@@ -197,13 +147,13 @@ export default function TweetEditor({
     setIsDeleting(true)
 
     try {
-      const response = await fetch(`${endpointBase}/tweet/delete`, {
+      const response = await fetch(`${apiUrl}/aiya/v1/tweet/delete`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-WP-Nonce": apiNonce || "",
         },
-        body: JSON.stringify({ post_id: post.id }),
+        body: JSON.stringify({ post_id: post.id, status: "trash" }),
       })
 
       const data = await response.json()
@@ -222,90 +172,105 @@ export default function TweetEditor({
   }
 
   return (
-    <section className={className} style={{ display: "grid", gap: "16px" }}>
-      <div style={{ display: "grid", gap: "8px" }}>
-        <label htmlFor="tweet-title">{__("标题", "aiya-cms")}</label>
-        <input
-          id="tweet-title"
-          type="text"
+    <Card className="py-2">
+      <CardContent className="grid gap-2 px-4">
+        <Input
+          placeholder={__("标题", "aiya-cms")}
           value={title}
-          onChange={(event) => setTitle(event.target.value)}
+          onChange={(e) => setTitle(e.target.value)}
           disabled={isSubmitting}
-          style={{ padding: "10px 12px", border: "1px solid #d4d4d8", borderRadius: "8px" }}
+          className="prose prose-sm text-base font-medium border-0 px-0 focus-visible:ring-0 shadow-none"
         />
-      </div>
-
-      <div style={{ display: "grid", gap: "8px" }}>
-        <label htmlFor="tweet-content">{__("内容", "aiya-cms")}</label>
-        <textarea
-          id="tweet-content"
+        <Textarea
+          placeholder={__("有什么新鲜事？", "aiya-cms")}
           value={content}
-          onChange={(event) => setContent(event.target.value)}
+          onChange={(e) => setContent(e.target.value)}
           disabled={isSubmitting}
-          rows={8}
-          style={{ padding: "10px 12px", border: "1px solid #d4d4d8", borderRadius: "8px", resize: "vertical" }}
+          rows={4}
+          className="resize-none border-0 px-0 focus-visible:ring-0 shadow-none text-base prose prose-sm"
         />
-      </div>
+      </CardContent>
 
-      <div style={{ display: "grid", gap: "8px" }}>
-        <label htmlFor="tweet-status">{__("状态", "aiya-cms")}</label>
-        <select
-          id="tweet-status"
-          value={status}
-          onChange={(event) => setStatus(event.target.value as SubmitStatus)}
-          disabled={isSubmitting}
-          style={{ padding: "10px 12px", border: "1px solid #d4d4d8", borderRadius: "8px" }}
-        >
-          <option value="pending">{__("待审核", "aiya-cms")}</option>
-          <option value="draft">{__("草稿", "aiya-cms")}</option>
-          <option value="publish">{__("发布", "aiya-cms")}</option>
-        </select>
-      </div>
-
-      <div style={{ display: "grid", gap: "8px" }}>
-        <label htmlFor="tweet-upload">{__("上传图片", "aiya-cms")}</label>
-        <input id="tweet-upload" type="file" accept="image/*" onChange={handleUpload} disabled={isUploading || isSubmitting} />
-        {isUploading ? <p>{__("图片上传中...", "aiya-cms")}</p> : null}
-      </div>
-
-      {galleryImages.length > 0 ? (
-        <div style={{ display: "grid", gap: "8px" }}>
-          <strong>{__("已上传图片", "aiya-cms")}</strong>
-          <div style={{ display: "grid", gap: "8px" }}>
-            {galleryImages.map((image) => (
-              <div
-                key={image.path}
-                style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", border: "1px solid #d4d4d8", borderRadius: "8px", padding: "8px 12px" }}
-              >
-                <a href={image.url} target="_blank" rel="noreferrer" style={{ wordBreak: "break-all" }}>
-                  {image.url}
-                </a>
-                <button
+      <CardFooter className="flex items-center justify-between border-t [.border-t]:pt-2 px-4">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            type="button"
+            disabled={true}
+            title={__("插入图片", "aiya-cms")}>
+            <ImagePlus className="w-3.5 h-3.5"
+            />
+            {__("上传图片", "aiya-cms")}
+          </Button>
+          {tags.length > 0 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
                   type="button"
-                  onClick={() => setGalleryImages((prev) => prev.filter((item) => item.path !== image.path))}
                   disabled={isSubmitting}
-                >
-                  {__("移除", "aiya-cms")}
-                </button>
-              </div>
-            ))}
-          </div>
+                  title={__("插入标签", "aiya-cms")}>
+                  <Hash className="w-3.5 h-3.5"
+                  />
+                  {__("标签", "aiya-cms")}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-48 max-h-[300px] overflow-y-auto">
+                {tags.map((tag) => (
+                  <DropdownMenuItem
+                    key={tag.id || tag.name}
+                    onClick={() => {
+                      setContent((prev) => {
+                        const separator = prev && !prev.endsWith(" ") && !prev.endsWith("\n") ? " " : ""
+                        return prev + separator + `#${tag.name}# `
+                      })
+                    }}
+                    className="cursor-pointer"
+                  >
+                    {tag.name}
+                    {tag.count !== undefined && <span className="ml-auto text-muted-foreground text-xs">{tag.count}</span>}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
-      ) : null}
 
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
-        <button type="button" onClick={() => handleSubmit(status)} disabled={isSubmitting || isUploading}>
-          {isSubmitting ? __("提交中...", "aiya-cms") : mode === "edit" ? __("更新推文", "aiya-cms") : __("发布推文", "aiya-cms")}
-        </button>
-        <button type="button" onClick={() => handleSubmit("draft")} disabled={isSubmitting || isUploading}>
-          {__("保存草稿", "aiya-cms")}
-        </button>
-        {mode === "edit" && post?.id ? (
-          <button type="button" onClick={handleDelete} disabled={isDeleting || isSubmitting}>
-            {isDeleting ? __("删除中...", "aiya-cms") : __("删除推文", "aiya-cms")}
-          </button>
-        ) : null}
-      </div>
-    </section>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center space-x-2 mr-6">
+            <Checkbox
+              id="draft-mode"
+              checked={isDraft}
+              onCheckedChange={(c) => setIsDraft(!!c)}
+              disabled={isSubmitting}
+            />
+            <Label htmlFor="draft-mode" className="text-sm font-normal cursor-pointer">
+              {__("保存为草稿", "aiya-cms")}
+            </Label>
+          </div>
+          {mode === "edit" && post?.id && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleDelete}
+              disabled={isDeleting || isSubmitting}
+            >
+              {isDeleting ? <Spinner className="w-3.5 h-3.5" /> : <Trash2 className="w-3.5 h-3.5" />}
+              {__("删除", "aiya-cms")}
+            </Button>
+          )}
+          <Button
+            size="sm"
+            onClick={() => handleSubmit(isDraft ? "draft" : "publish")}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? <Spinner className="w-3.5 h-3.5 mr-2" /> : <Pencil className="w-3.5 h-3.5 mr-2" />}
+            {mode === "edit" ? __("更新", "aiya-cms") : __("发布", "aiya-cms")}
+          </Button>
+        </div>
+      </CardFooter>
+    </Card>
   )
 }
