@@ -23,7 +23,7 @@ import {
     ArrowUpDown
 } from "lucide-react"
 import { toast } from "sonner"
-import { getConfig } from "@/lib/utils"
+import { getConfig, type AppConfig } from "@/lib/utils"
 import {
     Card,
     CardContent,
@@ -102,6 +102,35 @@ type Aria2BatchResult = {
 };
 
 type StableJson = null | boolean | number | string | StableJson[] | { [key: string]: StableJson };
+
+async function waitForConfig(timeout: number = 5000): Promise<Partial<AppConfig>> {
+    const config = getConfig();
+    if (config.apiUrl && config.apiNonce) {
+        return config;
+    }
+
+    return new Promise((resolve, reject) => {
+        const startTime = Date.now();
+
+        const checkConfig = () => {
+            const currentConfig = getConfig();
+
+            if (currentConfig.apiUrl && currentConfig.apiNonce) {
+                resolve(currentConfig);
+                return;
+            }
+
+            if (Date.now() - startTime >= timeout) {
+                reject(new Error('等待配置超时，请刷新页面重试'));
+                return;
+            }
+
+            setTimeout(checkConfig, 50);
+        };
+
+        checkConfig();
+    });
+}
 
 function stableStringify(value: unknown): string {
     const toStable = (v: unknown): StableJson => {
@@ -322,15 +351,6 @@ export default function OpenListClient(props: OpenListClientProps) {
             setError(null);
         }
 
-        const { apiUrl, apiNonce } = getConfig()
-        if (!apiNonce) {
-            if (mountedRef.current) {
-                setError(__('缺少安全 nonce', 'aiya-cms'))
-                setLoading(false)
-            }
-            return
-        }
-
         const applyNormalized = (normalized: NormalizedOpenListResponse) => {
             if (!mountedRef.current) return;
 
@@ -369,6 +389,15 @@ export default function OpenListClient(props: OpenListClientProps) {
         };
 
         try {
+            const { apiUrl, apiNonce } = await waitForConfig();
+
+            if (!apiNonce) {
+                if (mountedRef.current) {
+                    setError(__('页面已过期，请刷新页面重试', 'aiya-cms'))
+                }
+                return
+            }
+
             const payload: OpenListApiRequest = { post_id: request, page };
             const cacheKey = stableStringify({ apiUrl, payload });
 
@@ -414,13 +443,14 @@ export default function OpenListClient(props: OpenListClientProps) {
         } catch (err) {
             try {
                 const payload: OpenListApiRequest = { post_id: request, page };
-                const cacheKey = stableStringify({ apiUrl, payload });
+                const cacheKey = stableStringify({ apiUrl: '', payload });
                 getOpenListClientCache().inflight.delete(cacheKey);
             } catch {
             }
             console.error("Fetch error:", err);
             if (mountedRef.current) {
-                setError(__('网络连接错误，请稍后重试', 'aiya-cms'));
+                const errorMessage = err instanceof Error ? err.message : __('网络连接错误，请稍后重试', 'aiya-cms');
+                setError(errorMessage);
             }
         } finally {
             if (mountedRef.current) {

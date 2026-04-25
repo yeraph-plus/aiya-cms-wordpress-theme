@@ -25,7 +25,8 @@ export function useIsMobile() {
 
   return !!isMobile
 }
-interface AppConfig {
+
+export interface AppConfig {
   apiUrl: string;
   apiNonce: string;
   homeUrl: string;

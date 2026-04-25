@@ -25,7 +25,7 @@ export function LogoutDialog({ open, onOpenChange }: LogoutDialogProps) {
   const handleLogout = async () => {
     const { apiUrl, apiNonce } = getConfig()
     if (!apiNonce) {
-      toast.error(__('缺少安全 nonce', 'aiya-cms'))
+      toast.error(__('页面已过期，请刷新页面重试', 'aiya-cms'))
       return
     }
 

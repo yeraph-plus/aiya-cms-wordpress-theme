@@ -77,7 +77,7 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
     e.preventDefault()
     const { apiUrl, apiNonce } = getConfig()
     if (!apiNonce) {
-      toast.error("Missing security nonce")
+      toast.error(__('页面已过期，请刷新页面重试', 'aiya-cms'))
       return
     }
 
@@ -122,7 +122,7 @@ export default function UserSettings({ initialUser }: UserSettingsProps) {
 
     const { apiUrl, apiNonce } = getConfig()
     if (!apiNonce) {
-      toast.error("Missing security nonce")
+      toast.error(__('页面已过期，请刷新页面重试', 'aiya-cms'))
       return
     }
 
