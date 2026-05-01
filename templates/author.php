@@ -79,3 +79,5 @@ if (!have_posts()) {
     //加载分页
     aya_template_part_load('pagination', ['paged' => aya_get_pagination()]);
 }
+
+// TODO 补充文章列表，列出所有文章类型

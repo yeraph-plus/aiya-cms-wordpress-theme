@@ -10,6 +10,10 @@ if (!defined('ABSPATH')) {
  * ------------------------------------------------------------------------------
  */
 
+if (!aya_opt('site_post_add_tweets_bool', 'land')) {
+    return;
+}
+
 //注册文章类型
 add_action('after_setup_theme', 'aya_post_type_tweet_action');
 //MetaBox注册
@@ -128,6 +132,34 @@ function aya_tweet_post_get_tags_list()
     return $items;
 }
 
+function aya_tweet_post_get_tags_by_post_id($post_id)
+{
+    $post_id = (int) $post_id;
+    if ($post_id <= 0) {
+        return [];
+    }
+
+    $terms = get_the_terms($post_id, 'tweet_tag');
+    if (empty($terms) || is_wp_error($terms)) {
+        return [];
+    }
+
+    $items = [];
+    foreach ($terms as $term) {
+        if (!$term instanceof WP_Term) {
+            continue;
+        }
+        $items[] = [
+            'id' => (int) $term->term_id,
+            'name' => $term->name,
+            'slug' => $term->slug,
+            'count' => (int) $term->count,
+        ];
+    }
+
+    return $items;
+}
+
 // 内容截断方法（用于循环中输出）
 function aya_tweet_post_excerpt($content, $lines_limit = 10, $post_url = null)
 {
@@ -136,7 +168,7 @@ function aya_tweet_post_excerpt($content, $lines_limit = 10, $post_url = null)
 
     if (count($lines) > $lines_limit) {
         $lines = array_slice($lines, 0, $lines_limit);
-        return implode("\n", $lines) . "\n\n" . '<a href="' . esc_url($post_url) . '">阅读更多</a>';
+        return implode("\n", $lines) . "\n\n" . '<a href="' . esc_url($post_url) . '">...阅读全文</a>';
     }
 
     return $content;
@@ -153,7 +185,18 @@ function aya_tweet_post_insert_from_request(AYA_WP_REST_API $api, WP_REST_Reques
 {
     $tweet_content = wp_kses_post((string) $request->get_param('content'));
     $tweet_title = sanitize_text_field((string) $request->get_param('title'));
-    $tweet_status = in_array($request->get_param('status'), ['publish', 'draft', 'pending', 'trash'], true) ? $request->get_param('status') : 'pending';
+    $tweet_status = (string) $request->get_param('status');
+
+    if (!in_array($tweet_status, ['publish', 'draft', 'pending', 'trash'], true)) {
+        $tweet_status = 'draft';
+    }
+
+    // 检查是否允许直接发布
+    if ($tweet_status === 'publish' && !aya_opt('site_post_tweets_publish_bool', 'land')) {
+        $tweet_status = 'pending';
+    }
+
+
     $tweet_tags = aya_tweet_extract_tags_from_content($tweet_content);
     $gallery_images = aya_tweet_sanitize_gallery_images($request->get_param('gallery_images'));
 

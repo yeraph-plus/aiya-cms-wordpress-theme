@@ -36,13 +36,15 @@ $tag_items = aya_tweet_post_get_tags_list();
     </div>
     <div class="layout w-full lg:w-4/5">
         <?php
-
-        aya_react_island('tweet-editor', [
-            'mode' => 'create',
-            'redirectUrl' => $archive_url,
-            'tags' => is_array($tag_items) ? $tag_items : [],
-        ]);
-
+        // 推文编辑器
+        if (is_user_logged_in()) {
+            aya_react_island('tweet-editor', [
+                'mode' => 'create',
+                'redirectUrl' => $archive_url,
+                'tags' => is_array($tag_items) ? $tag_items : [],
+            ]);
+        }
+        // 推文卡片
         if (!have_posts()) {
             return;
         } else {
@@ -62,7 +64,7 @@ $tag_items = aya_tweet_post_get_tags_list();
                         'comments' => (string) $post_obj->comments,
                         'likes' => (string) $post_obj->likes,
                         'status' => (array) $post_obj->status,
-                        'tags' => is_array($tag_items) ? $tag_items : [],
+                        'tags' => aya_tweet_post_get_tags_by_post_id($post_obj->id),
                         'author' => [
                             'name' => (string) $post_obj->author_name,
                             'avatar' => (string) $post_obj->author_avatar_x64,

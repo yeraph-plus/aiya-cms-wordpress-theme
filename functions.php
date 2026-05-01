@@ -91,7 +91,12 @@ $GLOBALS['aya_land_page'] = [
         'template' => 'external-auto',
         'orginal' => false,
         'callback' => function () {
-            aya_add_breadcrumb_item(__('跳转页面', 'aiya-cms'), '#');
+            add_filter('aya_breadcrumb_add_item', function () {
+                return [
+                    'label' => __('跳转页面', 'aiya-cms'),
+                    'url' => '#',
+                ];
+            }, 10, 1);
         }
     ],
     'link' => [
@@ -99,7 +104,12 @@ $GLOBALS['aya_land_page'] = [
         'template' => 'external-link',
         'orginal' => true,
         'callback' => function () {
-            aya_add_breadcrumb_item(__('外部链接提示', 'aiya-cms'), '#');
+            add_filter('aya_breadcrumb_add_item', function () {
+                return [
+                    'label' => __('外部链接提示', 'aiya-cms'),
+                    'url' => '#',
+                ];
+            }, 10, 1);
         }
     ],
     'sponsor' => [
@@ -107,7 +117,12 @@ $GLOBALS['aya_land_page'] = [
         'template' => 'sponsor-plan',
         'orginal' => true,
         'callback' => function () {
-            aya_add_breadcrumb_item(__('获取订阅', 'aiya-cms'), '#');
+            add_filter('aya_breadcrumb_add_item', function () {
+                return [
+                    'label' => __('获取订阅', 'aiya-cms'),
+                    'url' => '#',
+                ];
+            }, 10, 1);
         }
     ],
     'user-favlist' => [
@@ -115,7 +130,12 @@ $GLOBALS['aya_land_page'] = [
         'template' => 'user-favlist',
         'orginal' => true,
         'callback' => function () {
-            aya_add_breadcrumb_item(__('收藏列表', 'aiya-cms'), '#');
+            add_filter('aya_breadcrumb_add_item', function () {
+                return [
+                    'label' => __('收藏列表', 'aiya-cms'),
+                    'url' => '#',
+                ];
+            }, 10, 1);
         }
     ],
     'user-settings' => [
@@ -123,7 +143,12 @@ $GLOBALS['aya_land_page'] = [
         'template' => 'user-settings',
         'original' => true,
         'callback' => function () {
-            aya_add_breadcrumb_item(__('用户设置', 'aiya-cms'), '#');
+            add_filter('aya_breadcrumb_add_item', function () {
+                return [
+                    'label' => __('用户设置', 'aiya-cms'),
+                    'url' => '#',
+                ];
+            }, 10, 1);
         }
     ],
     'reset-password' => [
@@ -131,7 +156,12 @@ $GLOBALS['aya_land_page'] = [
         'template' => 'reset-password',
         'orginal' => true,
         'callback' => function () {
-            aya_add_breadcrumb_item(__('重置密码', 'aiya-cms'), '#');
+            add_filter('aya_breadcrumb_add_item', function () {
+                return [
+                    'label' => __('重置密码', 'aiya-cms'),
+                    'url' => '#',
+                ];
+            }, 10, 1);
         }
     ],
 ];

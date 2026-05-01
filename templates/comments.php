@@ -20,7 +20,7 @@ $post_id = $post->ID;
 
 //如果文章设置了密码，不使用评论
 if (post_password_required($post)) {
-    return;
+    return '';
 }
 
 //获取用户登录状态

@@ -235,6 +235,16 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
                 ];
             }
 
+            // 应用自定义面包屑项过滤器
+            $filter_item = apply_filters('aya_breadcrumb_add_item', null, $items);
+
+            if (is_array($filter_item) && !empty($filter_item['label'])) {
+                $items[] = [
+                    'label' => $filter_item['label'],
+                    'url' => isset($filter_item['url']) ? $filter_item['url'] : '',
+                ];
+            }
+
             return $items;
         }
 
@@ -310,18 +320,11 @@ if (!class_exists('AYA_WP_Breadcrumb_Object')) {
         //添加自定义面包屑项
         public static function add_item($label, $url = '')
         {
-
             self::$custom_breadcrumbs[] = [
                 'label' => $label,
                 'url' => $url,
             ];
         }
-    }
-
-    //面包屑注入自定义层级
-    function aya_add_breadcrumb_item($item, $url)
-    {
-        return AYA_WP_Breadcrumb_Object::add_item($item, $url);
     }
 
     //获取面包屑导航

@@ -13,6 +13,10 @@ AYF::new_opt([
     'desc' => __('AIYA-CMS 主题，页面组件设置', 'aiya-cms'),
     'fields' => [
         [
+            'desc' => __('设置文章列表输出的布局模板，文章列表的输出数量请在站点 [url=options-reading.php]阅读设置[/url] 中调整', 'aiya-cms'),
+            'type' => 'message',
+        ],
+        [
             'desc' => __('正文过滤器', 'aiya-cms'),
             'type' => 'title_1',
         ],
@@ -50,12 +54,8 @@ AYF::new_opt([
             'default' => 'link',
         ],
         [
-            'desc' => __('内容组件', 'aiya-cms'),
+            'desc' => __('提示条目组件', 'aiya-cms'),
             'type' => 'title_1',
-        ],
-        [
-            'desc' => __('设置文章列表输出的布局模板，文章列表的输出数量请在站点 [url=options-reading.php]阅读设置[/url] 中调整', 'aiya-cms'),
-            'type' => 'message',
         ],
         [
             'title' => __('文章时效性提示', 'aiya-cms'),
@@ -79,11 +79,26 @@ AYF::new_opt([
             'default' => false,
         ],
         [
-            'title' => __('加载推文组件', 'aiya-cms'),
+            'desc' => __('推文社区组件', 'aiya-cms'),
+            'type' => 'title_1',
+        ],
+        [
+            'title' => __('加载推文社区组件', 'aiya-cms'),
             'desc' => __('创建新的文章类型，以及推文组件页面', 'aiya-cms'),
             'id' => 'site_post_add_tweets_bool',
             'type' => 'switch',
             'default' => false,
+        ],
+        [
+            'title' => __('允许推文不经过审核直接发布', 'aiya-cms'),
+            'desc' => __('允许用户在推文后直接发布，无需后台审核通过', 'aiya-cms'),
+            'id' => 'site_post_tweets_publish_bool',
+            'type' => 'switch',
+            'default' => true,
+        ],
+        [
+            'desc' => __('首页独立分区', 'aiya-cms'),
+            'type' => 'title_1',
         ],
         [
             'title' => __('首页独立分区列表', 'aiya-cms'),
@@ -135,7 +150,7 @@ AYF::new_opt([
             ],
         ],
         [
-            'desc' => __('轮播设置', 'aiya-cms'),
+            'desc' => __('轮播', 'aiya-cms'),
             'type' => 'title_1',
         ],
         [

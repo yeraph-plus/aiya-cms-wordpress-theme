@@ -10,8 +10,12 @@ $archive_url = get_post_type_archive_link('tweet') ?: home_url('/tweet/');
 $is_edit_mode = isset($_GET['update']) && $_GET['update'] === 'true';
 
 if ($is_edit_mode) {
-    //TODO 编辑模式下，面包屑注入晚于导航生成，需要修改调用
-    aya_add_breadcrumb_item(__('编辑推文', 'aiya-cms'), '#');
+    add_filter('aya_breadcrumb_add_item', function () {
+        return [
+            'label' => __('编辑推文', 'aiya-cms'),
+            'url' => '#',
+        ];
+    }, 10, 1);
 }
 
 //没有文章
@@ -37,7 +41,7 @@ while (have_posts()) {
                 'content' => (string) $post_obj->content,
             ],
             'redirectUrl' => $archive_url,
-            'tags' => is_array($tag_items) ? $tag_items : [],
+            'tags' => aya_tweet_post_get_tags_by_post_id($post_obj->id),
         ]);
     } else {
         aya_react_island('tweet-card', [

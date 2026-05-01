@@ -110,8 +110,8 @@ jobs:
                 rm -f "$THEME_DIR/components.json"
                 rm -f "$THEME_DIR/eslint.config.js"
                 rm -f "$THEME_DIR/gulpfile.js"
+                rm -f "$THEME_DIR/vite.config.ts"
                 rm -f "$THEME_DIR/webpack.config.js"
-                rm -f "$THEME_DIR/vite.config.js"
                 rm -f "$THEME_DIR/plugins/plugin-functions.php"
 
             - name: Archive theme package for ZIP

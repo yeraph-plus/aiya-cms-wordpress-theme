@@ -24,7 +24,7 @@ $use_interaction = (bool) $use_interaction ?? false;
         <div class="h-px bg-border flex-1"></div>
     </div>
     <div class="bg-muted/30 rounded-lg px-6 py-4 text-center">
-        <p class="text-sm text-muted-foreground leading-relaxed mx-auto"><?php aya_echo(aya_preg_desc($statement_content)); ?></p>
+        <p class="text-sm text-muted-foreground leading-relaxed mx-auto"><?php aya_echo(aya_preg_desc($statement_content), 'html'); ?></p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <?php if (!empty($prev_post['url']) && !empty($prev_post['title'])) : ?>
