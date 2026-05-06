@@ -27,7 +27,17 @@ if (!defined('ABSPATH')) {
     <!-- Cookie Consent -->
     <?php
     if (aya_opt('site_cookie_consent_bool', 'basic')) {
-        aya_react_island('ui-cookie-consent', ['policyUrl' => get_privacy_policy_url()]);
+        aya_react_island('footer-consent', [
+            'slug' => 'site-cookie-consent',
+            'policyUrl' => get_privacy_policy_url(),
+            'text' => [
+                'title' => __('Cookie 使用提示', 'aiya-cms'),
+                'description' => __('我们使用 Cookie 来提升您的浏览体验，分析网站流量并提供个性化内容。继续使用本网站即表示您同意我们使用 Cookie。', 'aiya-cms'),
+                'urlText' => __('了解更多', 'aiya-cms'),
+                'declineText' => __('拒绝', 'aiya-cms'),
+                'acceptText' => __('同意', 'aiya-cms'),
+            ],
+        ]);
     }
     ?>
     <!-- Scroll Top -->
@@ -57,7 +67,6 @@ if (!defined('ABSPATH')) {
                     <div class="flex flex-wrap items-center justify-center md:justify-end gap-x-4 gap-y-2">
                         <?php if (aya_opt('site_icp_beian_text', 'basic') !== ''): ?>
                             <!-- ICP -->
-                             
                             <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-200">
                                 <?php aya_echo(aya_opt('site_icp_beian_text', 'basic')); ?>
                             </a>

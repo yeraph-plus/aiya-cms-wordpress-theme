@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/input"
 import { InputGroup, InputGroupAddon } from "@/components/ui/input-group"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import { useSearchHistoryStore } from "@/stores/search-history"
+import { joinTranslations } from '@/lib/i18n';
+
+const { t } = joinTranslations();
 
 const SEARCH_DATALIST_ID = "aiya-nav-search-history"
 
@@ -72,7 +75,7 @@ export default function NavSearch() {
             type="search"
             name="s"
             data-slot="input-group-control"
-            placeholder="Search..."
+            placeholder={t('search')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             list={recentSearches.length > 0 ? SEARCH_DATALIST_ID : undefined}

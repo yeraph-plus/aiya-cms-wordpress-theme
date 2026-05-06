@@ -123,7 +123,7 @@ if (is_admin()) {
                 'type' => 'textarea',
                 'label' => __('内容', 'aiya-cms'),
                 'desc' => __('折叠面板的内容', 'aiya-cms'),
-                'default' => __('这里是折叠面板的内容。'),
+                'default' => __('这里是折叠面板的内容。', 'aiya-cms'),
             ],
         ]
     ));
@@ -160,7 +160,7 @@ if (is_admin()) {
                 'type' => 'textarea',
                 'label' => __('内容', 'aiya-cms'),
                 'desc' => __('警告提示的内容', 'aiya-cms'),
-                'default' => __('这里是警告提示的内容。'),
+                'default' => __('这里是警告提示的内容。', 'aiya-cms'),
             ],
         ]
     ));
@@ -199,7 +199,7 @@ if (is_admin()) {
                 'type' => 'textarea',
                 'label' => __('内容', 'aiya-cms'),
                 'desc' => __('赞助者可见的内容', 'aiya-cms'),
-                'default' => __('这是赞助者可见的内容。'),
+                'default' => __('这是赞助者可见的内容。', 'aiya-cms'),
             ],
         ]
     ));
@@ -222,7 +222,7 @@ if (is_admin()) {
                 'type' => 'textarea',
                 'label' => __('内容', 'aiya-cms'),
                 'desc' => __('登录后可见的内容', 'aiya-cms'),
-                'default' => __('这是登录后可见的内容。'),
+                'default' => __('这是登录后可见的内容。', 'aiya-cms'),
             ],
         ]
     ));
@@ -260,14 +260,14 @@ if (is_admin()) {
                 'id' => 'slug',
                 'type' => 'text',
                 'label' => __('后缀', 'aiya-cms'),
-                'desc' => __('创作者个人主页后缀，留空时使用系统设置'),
+                'desc' => __('创作者个人主页后缀，留空时使用系统设置', 'aiya-cms'),
                 'default' => '',
             ],
             [
                 'id' => 'type_btn',
                 'type' => 'checkbox',
                 'label' => __('使用按钮链接', 'aiya-cms'),
-                'desc' => __('使当前段落作为 html 注释输出到前台页面，或者完全不输出'),
+                'desc' => __('使当前段落作为 html 注释输出到前台页面，或者完全不输出', 'aiya-cms'),
                 'default' => false,
             ]
         ]

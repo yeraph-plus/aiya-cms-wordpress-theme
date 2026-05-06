@@ -1,5 +1,3 @@
-import { __ } from '@wordpress/i18n';
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,30 +10,42 @@ import {
 } from "@/components/ui/card";
 import { Cookie } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { joinTranslations } from '@/lib/i18n';
+
 import { usePreferencesStore } from "@/stores/ui-preferences";
 
-export default function CookieConsent({ policyUrl }: { policyUrl?: string }) {
+const { t } = joinTranslations();
+
+type FooterConsentText = {
+  title?: string;
+  description?: string;
+  urlText?: string;
+  declineText?: string;
+  acceptText?: string;
+};
+
+export default function FooterConsent({ slug, policyUrl, text }: { slug: string; policyUrl?: string; text?: FooterConsentText }) {
   const [isVisible, setIsVisible] = useState(false);
-  const cookieConsentDecision = usePreferencesStore((state) => state.cookieConsentDecision);
-  const setCookieConsentDecision = usePreferencesStore((state) => state.setCookieConsentDecision);
+  const consentDecision = usePreferencesStore((state) => state.consentDecisionBySlug[slug]);
+  const setConsentDecision = usePreferencesStore((state) => state.setConsentDecision);
 
   useEffect(() => {
-    if (cookieConsentDecision === null) {
+    if (consentDecision === null) {
       // Small delay for better UX
       const timer = setTimeout(() => setIsVisible(true), 1000);
       return () => clearTimeout(timer);
     }
 
     setIsVisible(false);
-  }, [cookieConsentDecision]);
+  }, [consentDecision]);
 
   const handleAccept = () => {
-    setCookieConsentDecision("accepted");
+    setConsentDecision(slug, "accepted");
     setIsVisible(false);
   };
 
   const handleDecline = () => {
-    setCookieConsentDecision("declined");
+    setConsentDecision(slug, "declined");
     setIsVisible(false);
   };
 
@@ -49,24 +59,24 @@ export default function CookieConsent({ policyUrl }: { policyUrl?: string }) {
       <Card className="shadow-lg border-primary/20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <CardHeader className="flex flex-row items-center gap-2">
           <Cookie className="h-5 w-5 text-primary" />
-          <CardTitle className="text-lg">{__('Cookie 使用提示', 'aiya-cms')}</CardTitle>
+          <CardTitle className="text-lg">{text?.title || t('tip')}</CardTitle>
         </CardHeader>
         <CardContent className="pb-2">
           <CardDescription>
-            {__('我们使用 Cookie 来提升您的浏览体验，分析网站流量并提供个性化内容。继续使用本网站即表示您同意我们使用 Cookie。', 'aiya-cms')}
+            {text?.description || ""}
             {policyUrl && (
               <a href={policyUrl} className="underline hover:text-primary ml-1" target="_blank" rel="noopener noreferrer">
-                {__('了解更多', 'aiya-cms')}
+                {text?.urlText || t('learn_more')}
               </a>
             )}
           </CardDescription>
         </CardContent>
         <CardFooter className="justify-end gap-2">
           <Button variant="outline" size="sm" onClick={handleDecline}>
-            {__('拒绝', 'aiya-cms')}
+            {text?.declineText || t('decline')}
           </Button>
           <Button size="sm" onClick={handleAccept}>
-            {__('同意', 'aiya-cms')}
+            {text?.acceptText || t('accept')}
           </Button>
         </CardFooter>
       </Card>

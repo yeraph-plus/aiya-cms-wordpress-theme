@@ -240,7 +240,7 @@ function aya_opt_access_add_exists()
                     'wxpay' => __('微信', 'aiya-cms'),
                     //'unionpay' => __('云闪付', 'aiya-cms'),
                     //'paypal' => __('PayPal', 'aiya-cms'),
-                    'usdt' => __('USDT'),
+                    'usdt' => __('USDT', 'aiya-cms'),
                 ],
                 'default' => ['alipay', 'wxpay'],
             ],

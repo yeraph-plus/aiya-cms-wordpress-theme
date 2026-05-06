@@ -9,35 +9,35 @@ AYF::new_opt([
     'title' => __('消息通知', 'aiya-cms'),
     'parent' => 'basic',
     'slug' => 'notify',
-    'desc' => __('AIYA-CMS 主题，功能和必要组件设置'),
+    'desc' => __('AIYA-CMS 主题，功能和必要组件设置', 'aiya-cms'),
     'fields' => [
         [
-            'desc' => __('通知列表设置'),
+            'desc' => __('通知列表设置', 'aiya-cms'),
             'type' => 'title_2',
         ],
         [
             'title' => __('添加自定义通知', 'aiya-cms'),
-            'desc' => __('添加新通知消息'),
+            'desc' => __('添加新通知消息', 'aiya-cms'),
             'id' => 'site_custom_notify_list',
             'type' => 'group_mult',
             'sub_type' => [
                 [
                     'title' => __('通知标题', 'aiya-cms'),
-                    'desc' => __('添加新通知消息'),
+                    'desc' => __('添加新通知消息', 'aiya-cms'),
                     'id' => 'title',
                     'type' => 'text',
                     'default' => '',
                 ],
                 [
                     'title' => __('通知内容', 'aiya-cms'),
-                    'desc' => __('消息内容'),
+                    'desc' => __('消息内容', 'aiya-cms'),
                     'id' => 'content',
                     'type' => 'textarea',
                     'default' => '',
                 ],
                 [
                     'title' => __('通知图标', 'aiya-cms'),
-                    'desc' => __('消息提示图标'),
+                    'desc' => __('消息提示图标', 'aiya-cms'),
                     'id' => 'level',
                     'type' => 'radio',
                     'sub' => [

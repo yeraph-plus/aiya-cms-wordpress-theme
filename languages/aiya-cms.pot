@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-06T14:14:54+08:00\n"
+"POT-Creation-Date: 2026-05-06T19:18:09+08:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: aiya-cms\n"
@@ -70,13 +70,13 @@ msgstr ""
 
 #: functions.php:142
 #: functions.php:148
-#: inc/func-wp-locale.php:212
+#: inc/func-wp-locale.php:329
 msgid "用户设置"
 msgstr ""
 
 #: functions.php:155
 #: functions.php:161
-#: inc/func-wp-locale.php:173
+#: inc/func-wp-locale.php:159
 msgid "重置密码"
 msgstr ""
 
@@ -115,13 +115,13 @@ msgid "用户页面"
 msgstr ""
 
 #: inc/core/WP_Breadcrumb.php:57
-#: inc/func-wp-locale.php:316
+#: inc/func-wp-locale.php:289
 msgid "标签"
 msgstr ""
 
 #: inc/core/WP_Breadcrumb.php:67
 #: inc/func-user.php:68
-#: inc/func-wp-locale.php:147
+#: inc/func-wp-locale.php:150
 msgid "作者"
 msgstr ""
 
@@ -175,12 +175,14 @@ msgid "Page %1$s of %2$s"
 msgstr ""
 
 #: inc/core/WP_Paged.php:304
+#: inc/func-wp-locale.php:269
 #: templates/fragments/pagination.php:31
 #: templates/fragments/pagination.php:33
 msgid "上一页"
 msgstr ""
 
 #: inc/core/WP_Paged.php:305
+#: inc/func-wp-locale.php:270
 #: templates/fragments/pagination.php:36
 #: templates/fragments/pagination.php:38
 msgid "下一页"
@@ -282,7 +284,7 @@ msgstr ""
 #: inc/func-api-router.php:183
 #: inc/func-api-router.php:386
 #: inc/func-api-router.php:569
-#: inc/func-wp-locale.php:250
+#: inc/func-wp-locale.php:190
 msgid "两次输入的密码不一致"
 msgstr ""
 
@@ -377,12 +379,12 @@ msgid "重置链接有效，请输入新密码"
 msgstr ""
 
 #: inc/func-api-router.php:382
-#: inc/func-wp-locale.php:191
+#: inc/func-wp-locale.php:308
 msgid "请输入新密码并确认"
 msgstr ""
 
 #: inc/func-api-router.php:407
-#: inc/func-wp-locale.php:194
+#: inc/func-wp-locale.php:311
 msgid "密码已重置，请使用新密码登录"
 msgstr ""
 
@@ -395,17 +397,17 @@ msgid "该邮箱已被使用"
 msgstr ""
 
 #: inc/func-api-router.php:502
-#: inc/func-wp-locale.php:209
+#: inc/func-wp-locale.php:326
 msgid "资料已更新"
 msgstr ""
 
 #: inc/func-api-router.php:572
-#: inc/func-wp-locale.php:202
+#: inc/func-wp-locale.php:319
 msgid "请输入新密码"
 msgstr ""
 
 #: inc/func-api-router.php:587
-#: inc/func-wp-locale.php:211
+#: inc/func-wp-locale.php:328
 msgid "密码已更新，请重新登录"
 msgstr ""
 
@@ -578,7 +580,7 @@ msgstr ""
 
 #: inc/func-payment.php:421
 #: inc/func-payment.php:422
-#: inc/func-wp-locale.php:273
+#: inc/func-wp-locale.php:352
 msgid "无"
 msgstr ""
 
@@ -595,7 +597,7 @@ msgid "当前无法创建激活，稍后重试"
 msgstr ""
 
 #: inc/func-payment.php:493
-#: inc/func-wp-locale.php:269
+#: inc/func-wp-locale.php:209
 msgid "请先登录"
 msgstr ""
 
@@ -668,7 +670,7 @@ msgid "兑换码列表"
 msgstr ""
 
 #: inc/func-payment.php:644
-#: inc/func-wp-locale.php:327
+#: inc/func-wp-locale.php:369
 msgid "兑换码"
 msgstr ""
 
@@ -831,7 +833,7 @@ msgstr ""
 #: inc/func-shotcodes.php:140
 #: inc/func-shotcodes.php:193
 #: inc/func-shotcodes.php:216
-#: inc/func-wp-locale.php:311
+#: inc/func-wp-locale.php:284
 #: inc/settings/opt-land.php:110
 #: inc/settings/opt-land.php:131
 #: inc/settings/opt-land.php:190
@@ -889,7 +891,7 @@ msgid "默认"
 msgstr ""
 
 #: inc/func-shotcodes.php:151
-#: inc/func-wp-locale.php:134
+#: inc/func-wp-locale.php:132
 #: inc/settings/opt-notify.php:47
 msgid "警告"
 msgstr ""
@@ -900,13 +902,13 @@ msgid "信息"
 msgstr ""
 
 #: inc/func-shotcodes.php:153
-#: inc/func-wp-locale.php:132
+#: inc/func-wp-locale.php:130
 #: inc/settings/opt-notify.php:46
 msgid "成功"
 msgstr ""
 
 #: inc/func-shotcodes.php:154
-#: inc/func-wp-locale.php:135
+#: inc/func-wp-locale.php:133
 #: inc/settings/opt-notify.php:48
 msgid "错误"
 msgstr ""
@@ -1046,7 +1048,7 @@ msgid "置顶这篇文章"
 msgstr ""
 
 #: inc/func-tweet-post.php:204
-#: inc/func-wp-locale.php:301
+#: inc/func-wp-locale.php:274
 msgid "帖子内容不能为空"
 msgstr ""
 
@@ -1055,7 +1057,7 @@ msgid "帖子发布失败，请稍后重试"
 msgstr ""
 
 #: inc/func-tweet-post.php:328
-#: inc/func-wp-locale.php:305
+#: inc/func-wp-locale.php:278
 msgid "帖子已发布"
 msgstr ""
 
@@ -1074,7 +1076,7 @@ msgid "没有更新这条帖子的权限"
 msgstr ""
 
 #: inc/func-tweet-post.php:391
-#: inc/func-wp-locale.php:304
+#: inc/func-wp-locale.php:277
 msgid "帖子已更新"
 msgstr ""
 
@@ -1083,12 +1085,12 @@ msgid "没有删除这条帖子的权限"
 msgstr ""
 
 #: inc/func-tweet-post.php:453
-#: inc/func-wp-locale.php:308
+#: inc/func-wp-locale.php:281
 msgid "删除帖子失败"
 msgstr ""
 
 #: inc/func-tweet-post.php:457
-#: inc/func-wp-locale.php:309
+#: inc/func-wp-locale.php:282
 msgid "帖子已删除"
 msgstr ""
 
@@ -1188,7 +1190,7 @@ msgid "累计已赞助 <strong>%d</strong> 天"
 msgstr ""
 
 #: inc/func-user.php:555
-#: inc/func-wp-locale.php:355
+#: inc/func-wp-locale.php:397
 msgid "订单号"
 msgstr ""
 
@@ -1305,21 +1307,27 @@ msgstr ""
 msgid "这篇文章发布于 %s 前，部分信息可能已过时，请留意。"
 msgstr ""
 
-#: inc/func-wp-locale.php:133
+#: inc/func-wp-locale.php:131
+#: inc/func-wp-locale.php:138
 #: inc/settings/opt-notify.php:45
 msgid "提示"
 msgstr ""
 
-#: inc/func-wp-locale.php:136
+#: inc/func-wp-locale.php:134
 msgid "消息"
 msgstr ""
 
-#: inc/func-wp-locale.php:137
+#: inc/func-wp-locale.php:135
 msgid "加载中..."
 msgstr ""
 
-#: inc/func-wp-locale.php:138
+#: inc/func-wp-locale.php:136
 msgid "搜索..."
+msgstr ""
+
+#: inc/func-wp-locale.php:137
+#: inc/func-wp-locale.php:149
+msgid "编辑"
 msgstr ""
 
 #: inc/func-wp-locale.php:139
@@ -1348,778 +1356,926 @@ msgid "取消"
 msgstr ""
 
 #: inc/func-wp-locale.php:145
-msgid "管理员"
+#: templates/footer.php:37
+msgid "拒绝"
 msgstr ""
 
 #: inc/func-wp-locale.php:146
-msgid "编辑"
+#: templates/footer.php:38
+msgid "同意"
+msgstr ""
+
+#: inc/func-wp-locale.php:147
+#: templates/footer.php:36
+msgid "了解更多"
 msgstr ""
 
 #: inc/func-wp-locale.php:148
-msgid "贡献者"
-msgstr ""
-
-#: inc/func-wp-locale.php:149
-msgid "用户"
-msgstr ""
-
-#: inc/func-wp-locale.php:150
-msgid "访客"
+msgid "管理员"
 msgstr ""
 
 #: inc/func-wp-locale.php:151
-msgid "会员"
+msgid "贡献者"
 msgstr ""
 
 #: inc/func-wp-locale.php:152
-#: inc/func-wp-locale.php:206
-msgid "返回首页"
+msgid "用户"
+msgstr ""
+
+#: inc/func-wp-locale.php:153
+msgid "访客"
 msgstr ""
 
 #: inc/func-wp-locale.php:154
-msgid "名称"
+msgid "会员"
 msgstr ""
 
 #: inc/func-wp-locale.php:155
-msgid "写下评论..."
+#: inc/func-wp-locale.php:323
+msgid "返回首页"
 msgstr ""
 
 #: inc/func-wp-locale.php:156
-msgid "提交"
-msgstr ""
-
-#: inc/func-wp-locale.php:157
-msgid "回复"
+msgid "错误请求"
 msgstr ""
 
 #: inc/func-wp-locale.php:158
-msgid "回复给"
-msgstr ""
-
-#: inc/func-wp-locale.php:159
-msgid "获取评论失败"
-msgstr ""
-
-#: inc/func-wp-locale.php:160
-msgid "加载评论失败"
-msgstr ""
-
-#: inc/func-wp-locale.php:161
-msgid "评论内容不能为空"
-msgstr ""
-
-#: inc/func-wp-locale.php:162
-msgid "名称和邮箱为必填项"
-msgstr ""
-
-#: inc/func-wp-locale.php:163
-msgid "提交评论失败"
-msgstr ""
-
-#: inc/func-wp-locale.php:164
-msgid "评论已提交，等待审核。"
-msgstr ""
-
-#: inc/func-wp-locale.php:165
-msgid "评论提交成功"
-msgstr ""
-
-#: inc/func-wp-locale.php:166
-msgid "评论"
-msgstr ""
-
-#: inc/func-wp-locale.php:167
-msgid "您必须登录后才能发表评论。"
-msgstr ""
-
-#: inc/func-wp-locale.php:168
-msgid "还没有评论，来抢沙发吧！"
-msgstr ""
-
-#: inc/func-wp-locale.php:169
-msgid "发表评论"
-msgstr ""
-
-#: inc/func-wp-locale.php:170
-msgid "评论已关闭。"
-msgstr ""
-
-#: inc/func-wp-locale.php:172
 msgid "忘记密码"
 msgstr ""
 
-#: inc/func-wp-locale.php:174
+#: inc/func-wp-locale.php:160
 msgid "确认密码"
 msgstr ""
 
-#: inc/func-wp-locale.php:175
+#: inc/func-wp-locale.php:161
 msgid "页面已过期，请刷新页面重试"
 msgstr ""
 
-#: inc/func-wp-locale.php:176
+#: inc/func-wp-locale.php:162
 msgid "请求失败"
 msgstr ""
 
-#: inc/func-wp-locale.php:177
+#: inc/func-wp-locale.php:163
 msgid "密码重置链接已发送到您的邮箱"
 msgstr ""
 
-#: inc/func-wp-locale.php:178
+#: inc/func-wp-locale.php:164
 msgid "发生错误，请稍后重试"
 msgstr ""
 
-#: inc/func-wp-locale.php:179
+#: inc/func-wp-locale.php:165
 msgid "找回密码"
 msgstr ""
 
-#: inc/func-wp-locale.php:180
+#: inc/func-wp-locale.php:166
 msgid "邮件发送成功"
 msgstr ""
 
-#: inc/func-wp-locale.php:181
+#: inc/func-wp-locale.php:167
 msgid "请输入您的注册邮箱，我们将向您发送重置密码的链接。"
 msgstr ""
 
-#: inc/func-wp-locale.php:182
+#: inc/func-wp-locale.php:168
 msgid "重置密码链接已发送至："
 msgstr ""
 
-#: inc/func-wp-locale.php:183
+#: inc/func-wp-locale.php:169
 msgid "请查收邮件并按照提示重置密码。如果没有收到，请检查垃圾邮件箱。"
 msgstr ""
 
-#: inc/func-wp-locale.php:184
+#: inc/func-wp-locale.php:170
 msgid "返回登录"
 msgstr ""
 
-#: inc/func-wp-locale.php:185
+#: inc/func-wp-locale.php:171
 msgid "请输入邮箱"
 msgstr ""
 
-#: inc/func-wp-locale.php:186
+#: inc/func-wp-locale.php:172
 msgid "发送重置链接"
 msgstr ""
 
-#: inc/func-wp-locale.php:188
-msgid "重置链接缺少验证令牌，请重新申请找回密码。"
-msgstr ""
-
-#: inc/func-wp-locale.php:189
-msgid "接口配置缺失，无法校验重置链接。"
-msgstr ""
-
-#: inc/func-wp-locale.php:190
-msgid "重置链接无效或已过期"
-msgstr ""
-
-#: inc/func-wp-locale.php:192
-msgid "接口配置缺失，无法提交重置请求"
-msgstr ""
-
-#: inc/func-wp-locale.php:193
-msgid "密码重置失败"
-msgstr ""
-
-#: inc/func-wp-locale.php:195
-msgid "请输入新的登录密码。密码至少需要 8 位，并同时包含字母和数字。"
-msgstr ""
-
-#: inc/func-wp-locale.php:196
-msgid "正在验证链接"
-msgstr ""
-
-#: inc/func-wp-locale.php:197
-msgid "请稍候，我们正在检查密码重置链接是否有效。"
-msgstr ""
-
-#: inc/func-wp-locale.php:198
-msgid "链接不可用"
-msgstr ""
-
-#: inc/func-wp-locale.php:199
-msgid "重置链接无效或已过期，请重新申请找回密码。"
-msgstr ""
-
-#: inc/func-wp-locale.php:200
-msgid "密码已更新"
-msgstr ""
-
-#: inc/func-wp-locale.php:201
-msgid "您现在可以返回首页，通过新的密码重新登录。"
-msgstr ""
-
-#: inc/func-wp-locale.php:203
-msgid "请确认密码"
-msgstr ""
-
-#: inc/func-wp-locale.php:204
-msgid "请再次输入新密码"
-msgstr ""
-
-#: inc/func-wp-locale.php:205
-msgid "保存新密码"
-msgstr ""
-
-#: inc/func-wp-locale.php:208
-msgid "更新失败"
-msgstr ""
-
-#: inc/func-wp-locale.php:210
-msgid "更新发生错误"
-msgstr ""
-
-#: inc/func-wp-locale.php:213
-msgid "修改个人资料"
-msgstr ""
-
-#: inc/func-wp-locale.php:214
-msgid "更新您的个人信息和账户设置"
-msgstr ""
-
-#: inc/func-wp-locale.php:215
-msgid "姓氏"
-msgstr ""
-
-#: inc/func-wp-locale.php:216
-msgid "姓"
-msgstr ""
-
-#: inc/func-wp-locale.php:217
-msgid "名字"
-msgstr ""
-
-#: inc/func-wp-locale.php:218
-msgid "名"
-msgstr ""
-
-#: inc/func-wp-locale.php:219
-msgid "昵称"
-msgstr ""
-
-#: inc/func-wp-locale.php:220
-msgid "显示的昵称"
-msgstr ""
-
-#: inc/func-wp-locale.php:221
-msgid "界面语言"
-msgstr ""
-
-#: inc/func-wp-locale.php:222
-msgid "选择语言"
-msgstr ""
-
-#: inc/func-wp-locale.php:223
-msgid "邮箱地址"
-msgstr ""
-
-#: inc/func-wp-locale.php:224
-msgid "个人网站"
-msgstr ""
-
-#: inc/func-wp-locale.php:225
-msgid "个人说明"
-msgstr ""
-
-#: inc/func-wp-locale.php:226
-msgid "请介绍一下自己..."
-msgstr ""
-
-#: inc/func-wp-locale.php:227
-msgid "保存资料"
-msgstr ""
-
-#: inc/func-wp-locale.php:228
-msgid "修改密码"
-msgstr ""
-
-#: inc/func-wp-locale.php:229
-msgid "为了您的账户安全，建议定期更换密码"
-msgstr ""
-
-#: inc/func-wp-locale.php:230
-msgid "新密码"
-msgstr ""
-
-#: inc/func-wp-locale.php:231
-msgid "确认新密码"
-msgstr ""
-
-#: inc/func-wp-locale.php:232
-msgid "再次输入新密码"
-msgstr ""
-
-#: inc/func-wp-locale.php:234
+#: inc/func-wp-locale.php:174
 msgid "登录成功"
 msgstr ""
 
-#: inc/func-wp-locale.php:235
+#: inc/func-wp-locale.php:175
 msgid "登录发生错误"
 msgstr ""
 
-#: inc/func-wp-locale.php:236
+#: inc/func-wp-locale.php:176
 msgid "登录"
 msgstr ""
 
-#: inc/func-wp-locale.php:237
+#: inc/func-wp-locale.php:177
 msgid "请输入您的邮箱和密码登录。"
 msgstr ""
 
-#: inc/func-wp-locale.php:238
+#: inc/func-wp-locale.php:178
 msgid "邮箱"
 msgstr ""
 
-#: inc/func-wp-locale.php:239
+#: inc/func-wp-locale.php:179
 msgid "登录邮箱"
 msgstr ""
 
-#: inc/func-wp-locale.php:240
+#: inc/func-wp-locale.php:180
 msgid "忘记密码？"
 msgstr ""
 
-#: inc/func-wp-locale.php:241
+#: inc/func-wp-locale.php:181
 msgid "登录密码"
 msgstr ""
 
-#: inc/func-wp-locale.php:242
+#: inc/func-wp-locale.php:182
 msgid "记住我"
 msgstr ""
 
-#: inc/func-wp-locale.php:244
+#: inc/func-wp-locale.php:184
 msgid "退出登录成功"
 msgstr ""
 
-#: inc/func-wp-locale.php:245
+#: inc/func-wp-locale.php:185
 msgid "退出登录失败"
 msgstr ""
 
-#: inc/func-wp-locale.php:246
+#: inc/func-wp-locale.php:186
 msgid "确认退出"
 msgstr ""
 
-#: inc/func-wp-locale.php:247
+#: inc/func-wp-locale.php:187
 msgid "确定要退出登录吗？"
 msgstr ""
 
-#: inc/func-wp-locale.php:248
+#: inc/func-wp-locale.php:188
 msgid "退出登录"
 msgstr ""
 
-#: inc/func-wp-locale.php:251
+#: inc/func-wp-locale.php:191
 msgid "注册失败"
 msgstr ""
 
-#: inc/func-wp-locale.php:252
+#: inc/func-wp-locale.php:192
 msgid "注册成功"
 msgstr ""
 
-#: inc/func-wp-locale.php:253
+#: inc/func-wp-locale.php:193
 msgid "注册发生错误"
 msgstr ""
 
-#: inc/func-wp-locale.php:254
+#: inc/func-wp-locale.php:194
 msgid "注册"
 msgstr ""
 
-#: inc/func-wp-locale.php:255
+#: inc/func-wp-locale.php:195
 msgid "请输入您的信息以创建新账户。"
 msgstr ""
 
-#: inc/func-wp-locale.php:256
+#: inc/func-wp-locale.php:196
 #: inc/settings/opt-oplist.php:31
 msgid "用户名"
 msgstr ""
 
-#: inc/func-wp-locale.php:257
+#: inc/func-wp-locale.php:197
 msgid "您的用户名"
 msgstr ""
 
-#: inc/func-wp-locale.php:258
+#: inc/func-wp-locale.php:198
 msgid "您的邮箱"
 msgstr ""
 
-#: inc/func-wp-locale.php:259
+#: inc/func-wp-locale.php:199
 #: inc/settings/opt-oplist.php:38
 msgid "密码"
 msgstr ""
 
-#: inc/func-wp-locale.php:260
+#: inc/func-wp-locale.php:200
 msgid "确认您的密码"
 msgstr ""
 
-#: inc/func-wp-locale.php:262
+#: inc/func-wp-locale.php:202
 #, php-format
 msgid "第 %d 页，共 %d 页"
 msgstr ""
 
-#: inc/func-wp-locale.php:264
+#: inc/func-wp-locale.php:204
 msgid "已取消收藏"
 msgstr ""
 
-#: inc/func-wp-locale.php:265
+#: inc/func-wp-locale.php:205
 msgid "收藏"
 msgstr ""
 
-#: inc/func-wp-locale.php:266
+#: inc/func-wp-locale.php:206
 msgid "已收藏"
 msgstr ""
 
-#: inc/func-wp-locale.php:267
+#: inc/func-wp-locale.php:207
 msgid "点赞"
 msgstr ""
 
-#: inc/func-wp-locale.php:268
+#: inc/func-wp-locale.php:208
 msgid "已赞"
 msgstr ""
 
-#: inc/func-wp-locale.php:270
+#: inc/func-wp-locale.php:210
 msgid "操作失败"
 msgstr ""
 
-#: inc/func-wp-locale.php:272
-msgid "封面"
-msgstr ""
-
-#: inc/func-wp-locale.php:274
-msgid "时间"
-msgstr ""
-
-#: inc/func-wp-locale.php:275
-msgid "操作"
-msgstr ""
-
-#: inc/func-wp-locale.php:276
-msgid "查看文章"
-msgstr ""
-
-#: inc/func-wp-locale.php:277
-msgid "查看"
-msgstr ""
-
-#: inc/func-wp-locale.php:278
-msgid "确定要取消收藏选中的文章吗？"
-msgstr ""
-
-#: inc/func-wp-locale.php:279
-#, php-format
-msgid "成功取消收藏 %d 篇文章"
-msgstr ""
-
-#: inc/func-wp-locale.php:280
-#, php-format
-msgid "取消收藏 %d 篇文章失败"
-msgstr ""
-
-#: inc/func-wp-locale.php:281
-msgid "我的收藏夹"
-msgstr ""
-
-#: inc/func-wp-locale.php:282
-msgid "查看或管理收藏列表"
-msgstr ""
-
-#: inc/func-wp-locale.php:283
-msgid "查看或管理您收藏的文章"
-msgstr ""
-
-#: inc/func-wp-locale.php:284
-#, php-format
-msgid "已选择 %d 项"
-msgstr ""
-
-#: inc/func-wp-locale.php:285
-msgid "暂无收藏"
-msgstr ""
-
-#: inc/func-wp-locale.php:287
+#: inc/func-wp-locale.php:212
 msgid "切换到深色模式"
 msgstr ""
 
-#: inc/func-wp-locale.php:288
+#: inc/func-wp-locale.php:213
 msgid "切换到跟随系统"
 msgstr ""
 
-#: inc/func-wp-locale.php:289
+#: inc/func-wp-locale.php:214
 msgid "切换到浅色模式"
 msgstr ""
 
-#: inc/func-wp-locale.php:291
+#: inc/func-wp-locale.php:216
 msgid "返回顶部"
 msgstr ""
 
-#: inc/func-wp-locale.php:293
+#: inc/func-wp-locale.php:218
 msgid "外部链接"
 msgstr ""
 
-#: inc/func-wp-locale.php:294
+#: inc/func-wp-locale.php:219
 msgid "广告"
 msgstr ""
 
-#: inc/func-wp-locale.php:296
+#: inc/func-wp-locale.php:221
 msgid "点击复制"
 msgstr ""
 
-#: inc/func-wp-locale.php:297
+#: inc/func-wp-locale.php:222
 msgid "已复制"
 msgstr ""
 
-#: inc/func-wp-locale.php:298
+#: inc/func-wp-locale.php:223
 msgid "复制失败"
 msgstr ""
 
-#: inc/func-wp-locale.php:300
+#: inc/func-wp-locale.php:225
+msgid "名称"
+msgstr ""
+
+#: inc/func-wp-locale.php:226
+msgid "写下评论..."
+msgstr ""
+
+#: inc/func-wp-locale.php:227
+msgid "提交"
+msgstr ""
+
+#: inc/func-wp-locale.php:228
+msgid "回复"
+msgstr ""
+
+#: inc/func-wp-locale.php:229
+msgid "回复给"
+msgstr ""
+
+#: inc/func-wp-locale.php:230
+msgid "获取评论失败"
+msgstr ""
+
+#: inc/func-wp-locale.php:231
+msgid "加载评论失败"
+msgstr ""
+
+#: inc/func-wp-locale.php:232
+msgid "评论内容不能为空"
+msgstr ""
+
+#: inc/func-wp-locale.php:233
+msgid "名称和邮箱为必填项"
+msgstr ""
+
+#: inc/func-wp-locale.php:234
+msgid "提交评论失败"
+msgstr ""
+
+#: inc/func-wp-locale.php:235
+msgid "评论已提交，等待审核。"
+msgstr ""
+
+#: inc/func-wp-locale.php:236
+msgid "评论提交成功"
+msgstr ""
+
+#: inc/func-wp-locale.php:237
+msgid "评论"
+msgstr ""
+
+#: inc/func-wp-locale.php:238
+msgid "您必须登录后才能发表评论。"
+msgstr ""
+
+#: inc/func-wp-locale.php:239
+msgid "还没有评论，来抢沙发吧！"
+msgstr ""
+
+#: inc/func-wp-locale.php:240
+msgid "发表评论"
+msgstr ""
+
+#: inc/func-wp-locale.php:241
+msgid "评论已关闭。"
+msgstr ""
+
+#: inc/func-wp-locale.php:243
+msgid "文件名"
+msgstr ""
+
+#: inc/func-wp-locale.php:244
+msgid "修改时间"
+msgstr ""
+
+#: inc/func-wp-locale.php:245
+msgid "新窗口打开"
+msgstr ""
+
+#: inc/func-wp-locale.php:246
+msgid "打开"
+msgstr ""
+
+#: inc/func-wp-locale.php:247
+msgid "使用浏览器下载"
+msgstr ""
+
+#: inc/func-wp-locale.php:248
+msgid "下载"
+msgstr ""
+
+#: inc/func-wp-locale.php:249
+msgid "发送下载到 Aria2 客户端"
+msgstr ""
+
+#: inc/func-wp-locale.php:250
+msgid "推送"
+msgstr ""
+
+#: inc/func-wp-locale.php:251
+#, php-format
+msgid "文件已发送到 Aria2: %s"
+msgstr ""
+
+#: inc/func-wp-locale.php:252
+#, php-format
+msgid "文件发送失败: %s"
+msgstr ""
+
+#: inc/func-wp-locale.php:253
+#, php-format
+msgid "共 %d 个文件发送失败"
+msgstr ""
+
+#: inc/func-wp-locale.php:254
+#, php-format
+msgid "正在发送 %d 个文件到 Aria2..."
+msgstr ""
+
+#: inc/func-wp-locale.php:255
+#, php-format
+msgid "成功发送 %d 个文件到 Aria2"
+msgstr ""
+
+#: inc/func-wp-locale.php:256
+#, php-format
+msgid "发送完成，但在 %d 个文件中: %s"
+msgstr ""
+
+#: inc/func-wp-locale.php:257
+#, php-format
+msgid "批量推送 %d 个文件到下载客户端"
+msgstr ""
+
+#: inc/func-wp-locale.php:258
+msgid "推送下载"
+msgstr ""
+
+#: inc/func-wp-locale.php:259
+msgid "连接到下载客户端"
+msgstr ""
+
+#: inc/func-wp-locale.php:260
+msgid "使用客户端下载"
+msgstr ""
+
+#: inc/func-wp-locale.php:261
+msgid "配置 Aria2 客户端 RPC 连接以远程推送下载"
+msgstr ""
+
+#: inc/func-wp-locale.php:262
+msgid "选择预设"
+msgstr ""
+
+#: inc/func-wp-locale.php:263
+msgid "选择预设配置"
+msgstr ""
+
+#: inc/func-wp-locale.php:264
+msgid "RPC URL"
+msgstr ""
+
+#: inc/func-wp-locale.php:265
+msgid "Secret"
+msgstr ""
+
+#: inc/func-wp-locale.php:266
+msgid "当前目录下没有文件"
+msgstr ""
+
+#: inc/func-wp-locale.php:267
+#, php-format
+msgid "共 %d 个文件"
+msgstr ""
+
+#: inc/func-wp-locale.php:268
+#, php-format
+msgid "，第 %d / %d 页"
+msgstr ""
+
+#: inc/func-wp-locale.php:271
+msgid "网络连接错误，请稍后重试"
+msgstr ""
+
+#: inc/func-wp-locale.php:273
 msgid "接口配置缺失"
 msgstr ""
 
-#: inc/func-wp-locale.php:302
+#: inc/func-wp-locale.php:275
 msgid "帖子更新失败"
 msgstr ""
 
-#: inc/func-wp-locale.php:303
+#: inc/func-wp-locale.php:276
 msgid "帖子发布失败"
 msgstr ""
 
-#: inc/func-wp-locale.php:306
+#: inc/func-wp-locale.php:279
 msgid "保存失败"
 msgstr ""
 
-#: inc/func-wp-locale.php:307
+#: inc/func-wp-locale.php:280
 msgid "确定要删除这条推文吗？"
 msgstr ""
 
-#: inc/func-wp-locale.php:310
+#: inc/func-wp-locale.php:283
 msgid "全部"
 msgstr ""
 
-#: inc/func-wp-locale.php:312
+#: inc/func-wp-locale.php:285
 msgid "有什么新鲜事？"
 msgstr ""
 
-#: inc/func-wp-locale.php:313
+#: inc/func-wp-locale.php:286
 msgid "插入图片"
 msgstr ""
 
-#: inc/func-wp-locale.php:314
+#: inc/func-wp-locale.php:287
 msgid "上传图片"
 msgstr ""
 
-#: inc/func-wp-locale.php:315
+#: inc/func-wp-locale.php:288
 msgid "插入标签"
 msgstr ""
 
-#: inc/func-wp-locale.php:317
+#: inc/func-wp-locale.php:290
 msgid "保存为草稿"
 msgstr ""
 
-#: inc/func-wp-locale.php:318
+#: inc/func-wp-locale.php:291
 msgid "删除"
 msgstr ""
 
-#: inc/func-wp-locale.php:319
+#: inc/func-wp-locale.php:292
 msgid "更新"
 msgstr ""
 
-#: inc/func-wp-locale.php:320
+#: inc/func-wp-locale.php:293
 msgid "发布"
 msgstr ""
 
-#: inc/func-wp-locale.php:321
+#: inc/func-wp-locale.php:294
 msgid "收起"
 msgstr ""
 
-#: inc/func-wp-locale.php:322
+#: inc/func-wp-locale.php:295
 msgid "展开"
 msgstr ""
 
-#: inc/func-wp-locale.php:324
-msgid "激活成功"
-msgstr ""
-
-#: inc/func-wp-locale.php:325
-msgid "激活失败"
-msgstr ""
-
-#: inc/func-wp-locale.php:326
-msgid "请检查网络连接后重试"
-msgstr ""
-
-#: inc/func-wp-locale.php:328
-msgid "爱发电"
-msgstr ""
-
-#: inc/func-wp-locale.php:329
-msgid "Patreon"
-msgstr ""
-
-#: inc/func-wp-locale.php:330
-msgid "自助激活"
-msgstr ""
-
-#: inc/func-wp-locale.php:331
-msgid "使用您获得的订单号或激活码激活赞助者身份"
-msgstr ""
-
-#: inc/func-wp-locale.php:332
-msgid "选择方式"
-msgstr ""
-
-#: inc/func-wp-locale.php:333
-msgid "请输入您的订单号 / 激活码"
-msgstr ""
-
-#: inc/func-wp-locale.php:334
-msgid "立即激活"
-msgstr ""
-
-#: inc/func-wp-locale.php:336
-msgid "被强制取消"
-msgstr ""
-
-#: inc/func-wp-locale.php:337
-msgid "生效中"
-msgstr ""
-
-#: inc/func-wp-locale.php:338
-msgid "未激活"
-msgstr ""
-
-#: inc/func-wp-locale.php:339
-msgid "在线支付"
-msgstr ""
-
-#: inc/func-wp-locale.php:340
-msgid "赠送"
-msgstr ""
-
-#: inc/func-wp-locale.php:341
-msgid "其他"
-msgstr ""
-
-#: inc/func-wp-locale.php:342
-msgid "注意"
-msgstr ""
-
-#: inc/func-wp-locale.php:343
-msgid "您的赞助权限已被管理员强制取消，如有疑问请联系客服。"
-msgstr ""
-
-#: inc/func-wp-locale.php:344
-msgid "当前订阅"
-msgstr ""
-
-#: inc/func-wp-locale.php:345
-msgid "已使用访问"
-msgstr ""
-
-#: inc/func-wp-locale.php:346
-#, php-format
-msgid "已使用赞助权限访问 %d 次"
-msgstr ""
-
-#: inc/func-wp-locale.php:347
-msgid "剩余天数"
-msgstr ""
-
-#: inc/func-wp-locale.php:348
-msgid "天"
-msgstr ""
-
-#: inc/func-wp-locale.php:349
-#, php-format
-msgid "有效期至 %s"
-msgstr ""
-
-#: inc/func-wp-locale.php:350
-msgid "累计赞助"
-msgstr ""
-
-#: inc/func-wp-locale.php:351
-msgid "感谢您的支持"
-msgstr ""
-
-#: inc/func-wp-locale.php:352
-msgid "历史订单记录"
-msgstr ""
-
-#: inc/func-wp-locale.php:353
-msgid "查看您的所有赞助与兑换历史记录"
-msgstr ""
-
-#: inc/func-wp-locale.php:354
-msgid "切换"
-msgstr ""
-
-#: inc/func-wp-locale.php:356
-msgid "订单来源"
-msgstr ""
-
-#: inc/func-wp-locale.php:357
-msgid "时长"
-msgstr ""
-
-#: inc/func-wp-locale.php:358
-msgid "订单状态"
-msgstr ""
-
-#: inc/func-wp-locale.php:359
-msgid "订单创建时间"
-msgstr ""
-
-#: inc/func-wp-locale.php:360
-msgid "已支付"
-msgstr ""
-
-#: inc/func-wp-locale.php:361
-msgid "暂无订单记录"
-msgstr ""
-
-#: inc/func-wp-locale.php:363
-msgid "用户赞助计划"
-msgstr ""
-
-#: inc/func-wp-locale.php:364
-msgid "暂无用户赞助计划"
-msgstr ""
-
-#: inc/func-wp-locale.php:365
-msgid "当前没有可用的赞助订阅方案，请稍后再来看看吧。"
-msgstr ""
-
-#: inc/func-wp-locale.php:366
-msgid "跳转到第三方支付接口"
-msgstr ""
-
-#: inc/func-wp-locale.php:367
-msgid "跳转"
-msgstr ""
-
-#: inc/func-wp-locale.php:368
-msgid "正在处理"
-msgstr ""
-
-#: inc/func-wp-locale.php:369
-msgid "请在新打开的页面中完成操作..."
-msgstr ""
-
-#: inc/func-wp-locale.php:370
-#: inc/settings/opt-land.php:162
-msgid "关闭"
-msgstr ""
-
-#: inc/func-wp-locale.php:371
-msgid "刷新页面"
-msgstr ""
-
-#: inc/func-wp-locale.php:373
+#: inc/func-wp-locale.php:297
 #, php-format
 msgid "浏览和 %s 有关的文章"
 msgstr ""
 
-#: inc/func-wp-locale.php:374
+#: inc/func-wp-locale.php:298
 msgid "嗨！新朋友"
 msgstr ""
 
-#: inc/func-wp-locale.php:375
+#: inc/func-wp-locale.php:299
 msgid "登录以解锁更多功能，体验完整服务"
+msgstr ""
+
+#: inc/func-wp-locale.php:300
+msgid "当前错误请求"
+msgstr ""
+
+#: inc/func-wp-locale.php:301
+msgid "当前页面是通过外部来源打开的，与本站点无关，如需访问请请手动复制链接。"
+msgstr ""
+
+#: inc/func-wp-locale.php:302
+msgid "您即将离开"
+msgstr ""
+
+#: inc/func-wp-locale.php:303
+msgid "您即将离开本站，此链接将带您前往外部网站。"
+msgstr ""
+
+#: inc/func-wp-locale.php:305
+msgid "重置链接缺少验证令牌，请重新申请找回密码。"
+msgstr ""
+
+#: inc/func-wp-locale.php:306
+msgid "接口配置缺失，无法校验重置链接。"
+msgstr ""
+
+#: inc/func-wp-locale.php:307
+msgid "重置链接无效或已过期"
+msgstr ""
+
+#: inc/func-wp-locale.php:309
+msgid "接口配置缺失，无法提交重置请求"
+msgstr ""
+
+#: inc/func-wp-locale.php:310
+msgid "密码重置失败"
+msgstr ""
+
+#: inc/func-wp-locale.php:312
+msgid "请输入新的登录密码。密码至少需要 8 位，并同时包含字母和数字。"
+msgstr ""
+
+#: inc/func-wp-locale.php:313
+msgid "正在验证链接"
+msgstr ""
+
+#: inc/func-wp-locale.php:314
+msgid "请稍候，我们正在检查密码重置链接是否有效。"
+msgstr ""
+
+#: inc/func-wp-locale.php:315
+msgid "链接不可用"
+msgstr ""
+
+#: inc/func-wp-locale.php:316
+msgid "重置链接无效或已过期，请重新申请找回密码。"
+msgstr ""
+
+#: inc/func-wp-locale.php:317
+msgid "密码已更新"
+msgstr ""
+
+#: inc/func-wp-locale.php:318
+msgid "您现在可以返回首页，通过新的密码重新登录。"
+msgstr ""
+
+#: inc/func-wp-locale.php:320
+msgid "请确认密码"
+msgstr ""
+
+#: inc/func-wp-locale.php:321
+msgid "请再次输入新密码"
+msgstr ""
+
+#: inc/func-wp-locale.php:322
+msgid "保存新密码"
+msgstr ""
+
+#: inc/func-wp-locale.php:325
+msgid "更新失败"
+msgstr ""
+
+#: inc/func-wp-locale.php:327
+msgid "更新发生错误"
+msgstr ""
+
+#: inc/func-wp-locale.php:330
+msgid "修改个人资料"
+msgstr ""
+
+#: inc/func-wp-locale.php:331
+msgid "更新您的个人信息和账户设置"
+msgstr ""
+
+#: inc/func-wp-locale.php:332
+msgid "姓氏"
+msgstr ""
+
+#: inc/func-wp-locale.php:333
+msgid "姓"
+msgstr ""
+
+#: inc/func-wp-locale.php:334
+msgid "名字"
+msgstr ""
+
+#: inc/func-wp-locale.php:335
+msgid "名"
+msgstr ""
+
+#: inc/func-wp-locale.php:336
+msgid "昵称"
+msgstr ""
+
+#: inc/func-wp-locale.php:337
+msgid "显示的昵称"
+msgstr ""
+
+#: inc/func-wp-locale.php:338
+msgid "界面语言"
+msgstr ""
+
+#: inc/func-wp-locale.php:339
+msgid "选择语言"
+msgstr ""
+
+#: inc/func-wp-locale.php:340
+msgid "邮箱地址"
+msgstr ""
+
+#: inc/func-wp-locale.php:341
+msgid "个人网站"
+msgstr ""
+
+#: inc/func-wp-locale.php:342
+msgid "个人说明"
+msgstr ""
+
+#: inc/func-wp-locale.php:343
+msgid "请介绍一下自己..."
+msgstr ""
+
+#: inc/func-wp-locale.php:344
+msgid "保存资料"
+msgstr ""
+
+#: inc/func-wp-locale.php:345
+msgid "修改密码"
+msgstr ""
+
+#: inc/func-wp-locale.php:346
+msgid "为了您的账户安全，建议定期更换密码"
+msgstr ""
+
+#: inc/func-wp-locale.php:347
+msgid "新密码"
+msgstr ""
+
+#: inc/func-wp-locale.php:348
+msgid "确认新密码"
+msgstr ""
+
+#: inc/func-wp-locale.php:349
+msgid "再次输入新密码"
+msgstr ""
+
+#: inc/func-wp-locale.php:351
+msgid "封面"
+msgstr ""
+
+#: inc/func-wp-locale.php:353
+msgid "时间"
+msgstr ""
+
+#: inc/func-wp-locale.php:354
+msgid "操作"
+msgstr ""
+
+#: inc/func-wp-locale.php:355
+msgid "查看文章"
+msgstr ""
+
+#: inc/func-wp-locale.php:356
+msgid "查看"
+msgstr ""
+
+#: inc/func-wp-locale.php:357
+msgid "确定要取消收藏选中的文章吗？"
+msgstr ""
+
+#: inc/func-wp-locale.php:358
+#, php-format
+msgid "成功取消收藏 %d 篇文章"
+msgstr ""
+
+#: inc/func-wp-locale.php:359
+#, php-format
+msgid "取消收藏 %d 篇文章失败"
+msgstr ""
+
+#: inc/func-wp-locale.php:360
+msgid "我的收藏夹"
+msgstr ""
+
+#: inc/func-wp-locale.php:361
+msgid "查看或管理收藏列表"
+msgstr ""
+
+#: inc/func-wp-locale.php:362
+msgid "查看或管理您收藏的文章"
+msgstr ""
+
+#: inc/func-wp-locale.php:363
+#, php-format
+msgid "已选择 %d 项"
+msgstr ""
+
+#: inc/func-wp-locale.php:364
+msgid "暂无收藏"
+msgstr ""
+
+#: inc/func-wp-locale.php:366
+msgid "激活成功"
+msgstr ""
+
+#: inc/func-wp-locale.php:367
+msgid "激活失败"
+msgstr ""
+
+#: inc/func-wp-locale.php:368
+msgid "请检查网络连接后重试"
+msgstr ""
+
+#: inc/func-wp-locale.php:370
+msgid "爱发电"
+msgstr ""
+
+#: inc/func-wp-locale.php:371
+msgid "Patreon"
+msgstr ""
+
+#: inc/func-wp-locale.php:372
+msgid "自助激活"
+msgstr ""
+
+#: inc/func-wp-locale.php:373
+msgid "使用您获得的订单号或激活码激活赞助者身份"
+msgstr ""
+
+#: inc/func-wp-locale.php:374
+msgid "选择方式"
+msgstr ""
+
+#: inc/func-wp-locale.php:375
+msgid "请输入您的订单号 / 激活码"
+msgstr ""
+
+#: inc/func-wp-locale.php:376
+msgid "立即激活"
+msgstr ""
+
+#: inc/func-wp-locale.php:378
+msgid "被强制取消"
+msgstr ""
+
+#: inc/func-wp-locale.php:379
+msgid "生效中"
+msgstr ""
+
+#: inc/func-wp-locale.php:380
+msgid "未激活"
+msgstr ""
+
+#: inc/func-wp-locale.php:381
+msgid "在线支付"
+msgstr ""
+
+#: inc/func-wp-locale.php:382
+msgid "赠送"
+msgstr ""
+
+#: inc/func-wp-locale.php:383
+msgid "其他"
+msgstr ""
+
+#: inc/func-wp-locale.php:384
+msgid "注意"
+msgstr ""
+
+#: inc/func-wp-locale.php:385
+msgid "您的赞助权限已被管理员强制取消，如有疑问请联系客服。"
+msgstr ""
+
+#: inc/func-wp-locale.php:386
+msgid "当前订阅"
+msgstr ""
+
+#: inc/func-wp-locale.php:387
+msgid "已使用访问"
+msgstr ""
+
+#: inc/func-wp-locale.php:388
+#, php-format
+msgid "已使用赞助权限访问 %d 次"
+msgstr ""
+
+#: inc/func-wp-locale.php:389
+msgid "剩余天数"
+msgstr ""
+
+#: inc/func-wp-locale.php:390
+msgid "天"
+msgstr ""
+
+#: inc/func-wp-locale.php:391
+#, php-format
+msgid "有效期至 %s"
+msgstr ""
+
+#: inc/func-wp-locale.php:392
+msgid "累计赞助"
+msgstr ""
+
+#: inc/func-wp-locale.php:393
+msgid "感谢您的支持"
+msgstr ""
+
+#: inc/func-wp-locale.php:394
+msgid "历史订单记录"
+msgstr ""
+
+#: inc/func-wp-locale.php:395
+msgid "查看您的所有赞助与兑换历史记录"
+msgstr ""
+
+#: inc/func-wp-locale.php:396
+msgid "切换"
+msgstr ""
+
+#: inc/func-wp-locale.php:398
+msgid "订单来源"
+msgstr ""
+
+#: inc/func-wp-locale.php:399
+msgid "时长"
+msgstr ""
+
+#: inc/func-wp-locale.php:400
+msgid "订单状态"
+msgstr ""
+
+#: inc/func-wp-locale.php:401
+msgid "订单创建时间"
+msgstr ""
+
+#: inc/func-wp-locale.php:402
+msgid "已支付"
+msgstr ""
+
+#: inc/func-wp-locale.php:403
+msgid "暂无订单记录"
+msgstr ""
+
+#: inc/func-wp-locale.php:405
+msgid "用户赞助计划"
+msgstr ""
+
+#: inc/func-wp-locale.php:406
+msgid "暂无用户赞助计划"
+msgstr ""
+
+#: inc/func-wp-locale.php:407
+msgid "当前没有可用的赞助订阅方案，请稍后再来看看吧。"
+msgstr ""
+
+#: inc/func-wp-locale.php:408
+msgid "跳转到第三方支付接口"
+msgstr ""
+
+#: inc/func-wp-locale.php:409
+msgid "跳转"
+msgstr ""
+
+#: inc/func-wp-locale.php:410
+msgid "正在处理"
+msgstr ""
+
+#: inc/func-wp-locale.php:411
+msgid "请在新打开的页面中完成操作..."
+msgstr ""
+
+#: inc/func-wp-locale.php:412
+#: inc/settings/opt-land.php:162
+msgid "关闭"
+msgstr ""
+
+#: inc/func-wp-locale.php:413
+msgid "刷新页面"
 msgstr ""
 
 #: inc/settings/opt-access.php:9
@@ -3051,6 +3207,14 @@ msgstr ""
 
 #: templates/author.php:75
 msgid "」"
+msgstr ""
+
+#: templates/footer.php:34
+msgid "Cookie 使用提示"
+msgstr ""
+
+#: templates/footer.php:35
+msgid "我们使用 Cookie 来提升您的浏览体验，分析网站流量并提供个性化内容。继续使用本网站即表示您同意我们使用 Cookie。"
 msgstr ""
 
 #: templates/fragments/content-detail.php:40

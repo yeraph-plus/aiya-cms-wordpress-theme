@@ -2,29 +2,36 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 export type LoopGridLayout = 'grid' | 'list';
-export type CookieConsentDecision = 'accepted' | 'declined' | null;
+export type ConsentDecision = 'accepted' | 'declined' | null;
+export type ConsentMap = Record<string, Exclude<ConsentDecision, null>>;
 
 interface UiPreferencesState {
     loopGridLayout: LoopGridLayout;
-    cookieConsentDecision: CookieConsentDecision;
+    consentDecisionBySlug: ConsentMap;
     setLoopGridLayout: (layout: LoopGridLayout) => void;
-    setCookieConsentDecision: (decision: Exclude<CookieConsentDecision, null>) => void;
+    setConsentDecision: (slug: string, decision: Exclude<ConsentDecision, null>) => void;
 }
 
 export const usePreferencesStore = create<UiPreferencesState>()(
     persist(
         (set) => ({
             loopGridLayout: 'grid',
-            cookieConsentDecision: null,
+            consentDecisionBySlug: {},
             setLoopGridLayout: (layout) => set({ loopGridLayout: layout }),
-            setCookieConsentDecision: (decision) => set({ cookieConsentDecision: decision }),
+            setConsentDecision: (slug, decision) =>
+                set((state) => ({
+                    consentDecisionBySlug: {
+                        ...state.consentDecisionBySlug,
+                        [slug]: decision,
+                    },
+                })),
         }),
         {
             name: 'ui-preferences',
             storage: createJSONStorage(() => localStorage),
             partialize: (state) => ({
                 loopGridLayout: state.loopGridLayout,
-                cookieConsentDecision: state.cookieConsentDecision,
+                consentDecisionBySlug: state.consentDecisionBySlug,
             }),
         }
     )

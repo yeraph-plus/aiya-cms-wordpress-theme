@@ -10,6 +10,9 @@ if (!defined('ABSPATH')) {
  * ------------------------------------------------------------------------------
  */
 
+//在用户后台页面添加自定义区块
+add_action('show_user_profile', 'aya_user_show_favorites_profile');
+
 //取回收藏列表
 function aya_user_get_favorite_posts($user_id = 0)
 {
@@ -37,9 +40,6 @@ function aya_user_get_favorite_posts_check($post_id, $user_id = 0)
 
     return in_array($post_id, $favorites);
 }
-
-//在用户后台页面添加自定义区块
-add_action('show_user_profile', 'aya_user_show_favorites_profile');
 
 function aya_user_show_favorites_profile($user)
 {

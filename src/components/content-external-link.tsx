@@ -1,5 +1,3 @@
-import { __ } from '@wordpress/i18n';
-
 import {
   Empty,
   EmptyHeader,
@@ -10,6 +8,9 @@ import {
 } from "@/components/ui/empty"
 import { Button } from "@/components/ui/button"
 import { Link, Unlink, Home, ArrowRight } from "lucide-react"
+import { joinTranslations } from '@/lib/i18n';
+
+const { t } = joinTranslations();
 
 interface UiExternalLinkProps {
   url: string
@@ -25,10 +26,10 @@ export default function UiExternalLink({ url, checked }: UiExternalLinkProps) {
             <EmptyMedia variant="icon" className="mb-4">
               <Unlink className="h-8 w-8 text-destructive" />
             </EmptyMedia>
-            <EmptyTitle className="text-2xl font-bold text-destructive">{__('错误请求', 'aiya-cms')}</EmptyTitle>
-            <EmptyDescription className="text-md mt-2">{__('当前错误请求', 'aiya-cms')}</EmptyDescription>
+            <EmptyTitle className="text-2xl font-bold text-destructive">{t('error_request')}</EmptyTitle>
+            <EmptyDescription className="text-md mt-2">{t('current_error_request')}</EmptyDescription>
             <EmptyDescription className="text-md mt-2">
-              {__('当前页面是通过外部来源打开的，与本站点无关，如需访问请请手动复制链接。', 'aiya-cms')}
+              {t('external_source_warning_manual_copy')}
             </EmptyDescription>
             <p className="text-sm text-muted-foreground bg-muted p-2 rounded max-w-md break-all select-all">
               {url}
@@ -38,7 +39,7 @@ export default function UiExternalLink({ url, checked }: UiExternalLinkProps) {
             <Button variant="outline" asChild>
               <a href="/" className="flex items-center gap-2">
                 <Home className="h-4 w-4" />
-                {__('返回首页', 'aiya-cms')}
+                {t('return_to_home')}
               </a>
             </Button>
           </EmptyContent>
@@ -54,9 +55,9 @@ export default function UiExternalLink({ url, checked }: UiExternalLinkProps) {
           <EmptyMedia variant="icon" className="mb-4">
             <Link className="h-8 w-8 text-muted-foreground" />
           </EmptyMedia>
-          <EmptyTitle className="text-2xl font-bold">{__('您即将离开', 'aiya-cms')}</EmptyTitle>
+          <EmptyTitle className="text-2xl font-bold">{t('you_are_leaving')}</EmptyTitle>
           <EmptyDescription className="text-md mt-2">
-            {__('您即将离开本站，此链接将带您前往外部网站。', 'aiya-cms')}
+            {t('you_are_leaving_description')}
           </EmptyDescription>
           <p className="text-sm text-muted-foreground bg-muted p-2 rounded max-w-md break-all">
             {url}
@@ -65,7 +66,7 @@ export default function UiExternalLink({ url, checked }: UiExternalLinkProps) {
         <EmptyContent className="mt-8 flex flex-col items-center gap-4">
           <Button asChild>
             <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-              {__('前往', 'aiya-cms')}
+              {t('go_to')}
               <ArrowRight className="h-4 w-4" />
             </a>
           </Button>

@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * ------------------------------------------------------------------------------
  */
 
-add_filter('determine_locale', 'ayar_locale_auto_convert_filter', 1);
+add_filter('determine_locale', 'aya_locale_auto_convert_filter', 1);
 add_action('after_setup_theme', 'aya_theme_textdomain_load');
 
 // 加载主题语言包
@@ -85,7 +85,7 @@ function aya_get_user_locale()
 }
 
 // 过滤前台请求用于切换语言
-function ayar_locale_auto_convert_filter($locale)
+function aya_locale_auto_convert_filter($locale)
 {
     if (is_admin()) {
         return $locale;
@@ -117,7 +117,7 @@ function aya_theme_localize_translations()
     ];
 
     if (!wp_script_is('aya-theme-i18n', 'registered')) {
-        wp_register_script('aya-theme-i18n', '', [], null, false);
+        wp_register_script('aya-theme-i18n', '', [], null, true);
     }
 
     wp_enqueue_script('aya-theme-i18n');
@@ -126,9 +126,7 @@ function aya_theme_localize_translations()
 
 function aya_theme_frontend_translations_map()
 {
-    return [
-        //'保存' => __('保存', 'aiya-cms'),
-        //'共 %d 条数据' => __('共 %d 条数据', 'aiya-cms'),
+    $translations = [
         'success' => __('成功', 'aiya-cms'),
         'info' => __('提示', 'aiya-cms'),
         'warning' => __('警告', 'aiya-cms'),
@@ -136,12 +134,17 @@ function aya_theme_frontend_translations_map()
         'message' => __('消息', 'aiya-cms'),
         'loading' => __('加载中...', 'aiya-cms'),
         'search' => __('搜索...', 'aiya-cms'),
+        'edit' => __('编辑', 'aiya-cms'),
+        'tip' => __('提示', 'aiya-cms'),
         'mobile_navigation' => __('移动导航', 'aiya-cms'),
         'no_available_navigation_menu' => __('暂无可用导航菜单', 'aiya-cms'),
         'site_notification' => __('站点通知', 'aiya-cms'),
         'no_new_site_notification' => __('当前没有新的站点通知', 'aiya-cms'),
         'menu' => __('菜单', 'aiya-cms'),
         'cancel' => __('取消', 'aiya-cms'),
+        'decline' => __('拒绝', 'aiya-cms'),
+        'accept' => __('同意', 'aiya-cms'),
+        'learn_more' => __('了解更多', 'aiya-cms'),
         'administrator' => __('管理员', 'aiya-cms'),
         'editor' => __('编辑', 'aiya-cms'),
         'author' => __('作者', 'aiya-cms'),
@@ -150,6 +153,74 @@ function aya_theme_frontend_translations_map()
         'guest' => __('访客', 'aiya-cms'),
         'sponsor' => __('会员', 'aiya-cms'),
         'return_to_home' => __('返回首页', 'aiya-cms'),
+        'error_request' => __('错误请求', 'aiya-cms'),
+        // dialog-forgot-password.tsx
+        'forgot_password' => __('忘记密码', 'aiya-cms'),
+        'reset_password' => __('重置密码', 'aiya-cms'),
+        'confirm_password' => __('确认密码', 'aiya-cms'),
+        'page_expired' => __('页面已过期，请刷新页面重试', 'aiya-cms'),
+        'request_failed' => __('请求失败', 'aiya-cms'),
+        'reset_link_sent' => __('密码重置链接已发送到您的邮箱', 'aiya-cms'),
+        'error_retry_later' => __('发生错误，请稍后重试', 'aiya-cms'),
+        'forgot_password_title' => __('找回密码', 'aiya-cms'),
+        'email_sent_success' => __('邮件发送成功', 'aiya-cms'),
+        'forgot_password_description' => __('请输入您的注册邮箱，我们将向您发送重置密码的链接。', 'aiya-cms'),
+        'reset_link_sent_to' => __('重置密码链接已发送至：', 'aiya-cms'),
+        'check_email_instruction' => __('请查收邮件并按照提示重置密码。如果没有收到，请检查垃圾邮件箱。', 'aiya-cms'),
+        'back_to_login' => __('返回登录', 'aiya-cms'),
+        'enter_email' => __('请输入邮箱', 'aiya-cms'),
+        'send_reset_link' => __('发送重置链接', 'aiya-cms'),
+        // dialog-login.tsx
+        'login_success' => __('登录成功', 'aiya-cms'),
+        'login_error' => __('登录发生错误', 'aiya-cms'),
+        'login' => __('登录', 'aiya-cms'),
+        'login_description' => __('请输入您的邮箱和密码登录。', 'aiya-cms'),
+        'email' => __('邮箱', 'aiya-cms'),
+        'login_email' => __('登录邮箱', 'aiya-cms'),
+        'forgot_password_question' => __('忘记密码？', 'aiya-cms'),
+        'login_password' => __('登录密码', 'aiya-cms'),
+        'remember_me' => __('记住我', 'aiya-cms'),
+        // dialog-logout.tsx
+        'logout_success' => __('退出登录成功', 'aiya-cms'),
+        'logout_failed' => __('退出登录失败', 'aiya-cms'),
+        'confirm_logout' => __('确认退出', 'aiya-cms'),
+        'logout_confirm_text' => __('确定要退出登录吗？', 'aiya-cms'),
+        'logout' => __('退出登录', 'aiya-cms'),
+        // dialog-register.tsx
+        'password_mismatch' => __('两次输入的密码不一致', 'aiya-cms'),
+        'register_failed' => __('注册失败', 'aiya-cms'),
+        'register_success' => __('注册成功', 'aiya-cms'),
+        'register_error' => __('注册发生错误', 'aiya-cms'),
+        'register' => __('注册', 'aiya-cms'),
+        'register_description' => __('请输入您的信息以创建新账户。', 'aiya-cms'),
+        'username' => __('用户名', 'aiya-cms'),
+        'your_username' => __('您的用户名', 'aiya-cms'),
+        'your_email' => __('您的邮箱', 'aiya-cms'),
+        'password' => __('密码', 'aiya-cms'),
+        'confirm_your_password' => __('确认您的密码', 'aiya-cms'),
+        // content-pagination.tsx
+        'page_of_total' => __('第 %d 页，共 %d 页', 'aiya-cms'),
+        // content-button-group.tsx
+        'cancel_favorite' => __('已取消收藏', 'aiya-cms'),
+        'favorite' => __('收藏', 'aiya-cms'),
+        'favorited' => __('已收藏', 'aiya-cms'),
+        'like' => __('点赞', 'aiya-cms'),
+        'liked' => __('已赞', 'aiya-cms'),
+        'login_first' => __('请先登录', 'aiya-cms'),
+        'operation_failed' => __('操作失败', 'aiya-cms'),
+        // navbar-mode-toggle.tsx
+        'switch_to_dark_mode' => __('切换到深色模式', 'aiya-cms'),
+        'switch_to_follow_system' => __('切换到跟随系统', 'aiya-cms'),
+        'switch_to_light_mode' => __('切换到浅色模式', 'aiya-cms'),
+        // footer-scroll-top.tsx
+        'back_to_top' => __('返回顶部', 'aiya-cms'),
+        // ad-space.tsx
+        'external_links' => __('外部链接', 'aiya-cms'),
+        'ad_space' => __('广告', 'aiya-cms'),
+        // clipboard-selector.tsx
+        'click_to_copy' => __('点击复制', 'aiya-cms'),
+        'copied' => __('已复制', 'aiya-cms'),
+        'copy_failed' => __('复制失败', 'aiya-cms'),
         // comment.tsx
         'name' => __('名称', 'aiya-cms'),
         'write_comment' => __('写下评论...', 'aiya-cms'),
@@ -168,22 +239,68 @@ function aya_theme_frontend_translations_map()
         'no_comments_yet' => __('还没有评论，来抢沙发吧！', 'aiya-cms'),
         'leave_comment' => __('发表评论', 'aiya-cms'),
         'comments_closed' => __('评论已关闭。', 'aiya-cms'),
-        // dialog-forgot-password.tsx
-        'forgot_password' => __('忘记密码', 'aiya-cms'),
-        'reset_password' => __('重置密码', 'aiya-cms'),
-        'confirm_password' => __('确认密码', 'aiya-cms'),
-        'page_expired' => __('页面已过期，请刷新页面重试', 'aiya-cms'),
-        'request_failed' => __('请求失败', 'aiya-cms'),
-        'reset_link_sent' => __('密码重置链接已发送到您的邮箱', 'aiya-cms'),
-        'error_retry_later' => __('发生错误，请稍后重试', 'aiya-cms'),
-        'forgot_password_title' => __('找回密码', 'aiya-cms'),
-        'email_sent_success' => __('邮件发送成功', 'aiya-cms'),
-        'forgot_password_description' => __('请输入您的注册邮箱，我们将向您发送重置密码的链接。', 'aiya-cms'),
-        'reset_link_sent_to' => __('重置密码链接已发送至：', 'aiya-cms'),
-        'check_email_instruction' => __('请查收邮件并按照提示重置密码。如果没有收到，请检查垃圾邮件箱。', 'aiya-cms'),
-        'back_to_login' => __('返回登录', 'aiya-cms'),
-        'enter_email' => __('请输入邮箱', 'aiya-cms'),
-        'send_reset_link' => __('发送重置链接', 'aiya-cms'),
+        // open-list-client.tsx
+        'filename' => __('文件名', 'aiya-cms'),
+        'modified_time' => __('修改时间', 'aiya-cms'),
+        'open_in_new_window' => __('新窗口打开', 'aiya-cms'),
+        'open' => __('打开', 'aiya-cms'),
+        'download_with_browser' => __('使用浏览器下载', 'aiya-cms'),
+        'download' => __('下载', 'aiya-cms'),
+        'send_download_to_aria2_client' => __('发送下载到 Aria2 客户端', 'aiya-cms'),
+        'push' => __('推送', 'aiya-cms'),
+        'sent_to_aria2_s' => __('文件已发送到 Aria2: %s', 'aiya-cms'),
+        'send_failed_s' => __('文件发送失败: %s', 'aiya-cms'),
+        'total_d_files_send_failed' => __('共 %d 个文件发送失败', 'aiya-cms'),
+        'sending_d_files_to_aria2' => __('正在发送 %d 个文件到 Aria2...', 'aiya-cms'),
+        'successfully_sent_d_files_to_aria2' => __('成功发送 %d 个文件到 Aria2', 'aiya-cms'),
+        'send_completed_but_in_d_files_s' => __('发送完成，但在 %d 个文件中: %s', 'aiya-cms'),
+        'batch_push_d_files_to_download_client' => __('批量推送 %d 个文件到下载客户端', 'aiya-cms'),
+        'push_download' => __('推送下载', 'aiya-cms'),
+        'connect_to_download_client' => __('连接到下载客户端', 'aiya-cms'),
+        'use_client_download' => __('使用客户端下载', 'aiya-cms'),
+        'configure_aria2_rpc_for_remote_push_download' => __('配置 Aria2 客户端 RPC 连接以远程推送下载', 'aiya-cms'),
+        'select_preset' => __('选择预设', 'aiya-cms'),
+        'select_preset_config' => __('选择预设配置', 'aiya-cms'),
+        'rpc_url' => __('RPC URL', 'aiya-cms'),
+        'secret' => __('Secret', 'aiya-cms'),
+        'no_files_in_current_directory' => __('当前目录下没有文件', 'aiya-cms'),
+        'total_d_files' => __('共 %d 个文件', 'aiya-cms'),
+        'page_d_of_d' => __('，第 %d / %d 页', 'aiya-cms'),
+        'previous_page' => __('上一页', 'aiya-cms'),
+        'next_page' => __('下一页', 'aiya-cms'),
+        'network_connection_error_retry_later' => __('网络连接错误，请稍后重试', 'aiya-cms'),
+        // tweet-editor.tsx
+        'api_config_missing' => __('接口配置缺失', 'aiya-cms'),
+        'tweet_content_required' => __('帖子内容不能为空', 'aiya-cms'),
+        'tweet_update_failed' => __('帖子更新失败', 'aiya-cms'),
+        'tweet_publish_failed' => __('帖子发布失败', 'aiya-cms'),
+        'tweet_updated' => __('帖子已更新', 'aiya-cms'),
+        'tweet_published' => __('帖子已发布', 'aiya-cms'),
+        'save_failed' => __('保存失败', 'aiya-cms'),
+        'confirm_delete_tweet' => __('确定要删除这条推文吗？', 'aiya-cms'),
+        'delete_tweet_failed' => __('删除帖子失败', 'aiya-cms'),
+        'tweet_deleted' => __('帖子已删除', 'aiya-cms'),
+        'all_tags' => __('全部', 'aiya-cms'),
+        'title' => __('标题', 'aiya-cms'),
+        'what_is_happening' => __('有什么新鲜事？', 'aiya-cms'),
+        'insert_image' => __('插入图片', 'aiya-cms'),
+        'upload_image' => __('上传图片', 'aiya-cms'),
+        'insert_tag' => __('插入标签', 'aiya-cms'),
+        'tag' => __('标签', 'aiya-cms'),
+        'save_as_draft' => __('保存为草稿', 'aiya-cms'),
+        'delete' => __('删除', 'aiya-cms'),
+        'update' => __('更新', 'aiya-cms'),
+        'publish' => __('发布', 'aiya-cms'),
+        'collapse' => __('收起', 'aiya-cms'),
+        'expand' => __('展开', 'aiya-cms'),
+        // widget.tsx
+        'browse_articles_with_tag' => __('浏览和 %s 有关的文章', 'aiya-cms'),
+        'welcome_user' => __('嗨！新朋友', 'aiya-cms'),
+        'login_to_unlock_features' => __('登录以解锁更多功能，体验完整服务', 'aiya-cms'),
+        'current_error_request' => __('当前错误请求', 'aiya-cms'),
+        'external_source_warning_manual_copy' => __('当前页面是通过外部来源打开的，与本站点无关，如需访问请请手动复制链接。', 'aiya-cms'),
+        'you_are_leaving' => __('您即将离开', 'aiya-cms'),
+        'you_are_leaving_description' => __('您即将离开本站，此链接将带您前往外部网站。', 'aiya-cms'),
         // user-reset-password.tsx
         'reset_token_missing' => __('重置链接缺少验证令牌，请重新申请找回密码。', 'aiya-cms'),
         'api_config_missing_reset_link_validation' => __('接口配置缺失，无法校验重置链接。', 'aiya-cms'),
@@ -230,44 +347,6 @@ function aya_theme_frontend_translations_map()
         'new_password' => __('新密码', 'aiya-cms'),
         'confirm_new_password' => __('确认新密码', 'aiya-cms'),
         'enter_new_password_again' => __('再次输入新密码', 'aiya-cms'),
-        // dialog-login.tsx
-        'login_success' => __('登录成功', 'aiya-cms'),
-        'login_error' => __('登录发生错误', 'aiya-cms'),
-        'login' => __('登录', 'aiya-cms'),
-        'login_description' => __('请输入您的邮箱和密码登录。', 'aiya-cms'),
-        'email' => __('邮箱', 'aiya-cms'),
-        'login_email' => __('登录邮箱', 'aiya-cms'),
-        'forgot_password_question' => __('忘记密码？', 'aiya-cms'),
-        'login_password' => __('登录密码', 'aiya-cms'),
-        'remember_me' => __('记住我', 'aiya-cms'),
-        // dialog-logout.tsx
-        'logout_success' => __('退出登录成功', 'aiya-cms'),
-        'logout_failed' => __('退出登录失败', 'aiya-cms'),
-        'confirm_logout' => __('确认退出', 'aiya-cms'),
-        'logout_confirm_text' => __('确定要退出登录吗？', 'aiya-cms'),
-        'logout' => __('退出登录', 'aiya-cms'),
-        // dialog-register.tsx
-        'password_mismatch' => __('两次输入的密码不一致', 'aiya-cms'),
-        'register_failed' => __('注册失败', 'aiya-cms'),
-        'register_success' => __('注册成功', 'aiya-cms'),
-        'register_error' => __('注册发生错误', 'aiya-cms'),
-        'register' => __('注册', 'aiya-cms'),
-        'register_description' => __('请输入您的信息以创建新账户。', 'aiya-cms'),
-        'username' => __('用户名', 'aiya-cms'),
-        'your_username' => __('您的用户名', 'aiya-cms'),
-        'your_email' => __('您的邮箱', 'aiya-cms'),
-        'password' => __('密码', 'aiya-cms'),
-        'confirm_your_password' => __('确认您的密码', 'aiya-cms'),
-        // content-pagination.tsx
-        'page_of_total' => __('第 %d 页，共 %d 页', 'aiya-cms'),
-        // content-button-group.tsx
-        'cancel_favorite' => __('已取消收藏', 'aiya-cms'),
-        'favorite' => __('收藏', 'aiya-cms'),
-        'favorited' => __('已收藏', 'aiya-cms'),
-        'like' => __('点赞', 'aiya-cms'),
-        'liked' => __('已赞', 'aiya-cms'),
-        'login_first' => __('请先登录', 'aiya-cms'),
-        'operation_failed' => __('操作失败', 'aiya-cms'),
         // user-favorites.tsx
         'cover' => __('封面', 'aiya-cms'),
         'none' => __('无', 'aiya-cms'),
@@ -283,43 +362,6 @@ function aya_theme_frontend_translations_map()
         'view_or_manage_your_favorites' => __('查看或管理您收藏的文章', 'aiya-cms'),
         'selected_items_count' => __('已选择 %d 项', 'aiya-cms'),
         'no_favorites' => __('暂无收藏', 'aiya-cms'),
-        // navbar-mode-toggle.tsx
-        'switch_to_dark_mode' => __('切换到深色模式', 'aiya-cms'),
-        'switch_to_follow_system' => __('切换到跟随系统', 'aiya-cms'),
-        'switch_to_light_mode' => __('切换到浅色模式', 'aiya-cms'),
-        // footer-scroll-top.tsx
-        'back_to_top' => __('返回顶部', 'aiya-cms'),
-        // ad-space.tsx
-        'external_links' => __('外部链接', 'aiya-cms'),
-        'ad_space' => __('广告', 'aiya-cms'),
-        // clipboard-selector.tsx
-        'click_to_copy' => __('点击复制', 'aiya-cms'),
-        'copied' => __('已复制', 'aiya-cms'),
-        'copy_failed' => __('复制失败', 'aiya-cms'),
-        // tweet-editor.tsx
-        'api_config_missing' => __('接口配置缺失', 'aiya-cms'),
-        'tweet_content_required' => __('帖子内容不能为空', 'aiya-cms'),
-        'tweet_update_failed' => __('帖子更新失败', 'aiya-cms'),
-        'tweet_publish_failed' => __('帖子发布失败', 'aiya-cms'),
-        'tweet_updated' => __('帖子已更新', 'aiya-cms'),
-        'tweet_published' => __('帖子已发布', 'aiya-cms'),
-        'save_failed' => __('保存失败', 'aiya-cms'),
-        'confirm_delete_tweet' => __('确定要删除这条推文吗？', 'aiya-cms'),
-        'delete_tweet_failed' => __('删除帖子失败', 'aiya-cms'),
-        'tweet_deleted' => __('帖子已删除', 'aiya-cms'),
-        'all_tags' => __('全部', 'aiya-cms'),
-        'title' => __('标题', 'aiya-cms'),
-        'what_is_happening' => __('有什么新鲜事？', 'aiya-cms'),
-        'insert_image' => __('插入图片', 'aiya-cms'),
-        'upload_image' => __('上传图片', 'aiya-cms'),
-        'insert_tag' => __('插入标签', 'aiya-cms'),
-        'tag' => __('标签', 'aiya-cms'),
-        'save_as_draft' => __('保存为草稿', 'aiya-cms'),
-        'delete' => __('删除', 'aiya-cms'),
-        'update' => __('更新', 'aiya-cms'),
-        'publish' => __('发布', 'aiya-cms'),
-        'collapse' => __('收起', 'aiya-cms'),
-        'expand' => __('展开', 'aiya-cms'),
         // user-sponsor-activate.tsx
         'activate_success' => __('激活成功', 'aiya-cms'),
         'activate_failed' => __('激活失败', 'aiya-cms'),
@@ -369,9 +411,7 @@ function aya_theme_frontend_translations_map()
         'please_complete_in_new_page' => __('请在新打开的页面中完成操作...', 'aiya-cms'),
         'close' => __('关闭', 'aiya-cms'),
         'refresh_page' => __('刷新页面', 'aiya-cms'),
-        // widget.tsx
-        'browse_articles_with_tag' => __('浏览和 %s 有关的文章', 'aiya-cms'),
-        'welcome_user' => __('嗨！新朋友', 'aiya-cms'),
-        'login_to_unlock_features' => __('登录以解锁更多功能，体验完整服务', 'aiya-cms'),
     ];
+
+    return $translations;
 }

@@ -1,5 +1,4 @@
 import * as React from "react"
-import { __ } from "@wordpress/i18n"
 import {
   MessageCircle,
   Heart,
@@ -7,11 +6,14 @@ import {
 } from "lucide-react"
 
 import { getConfig } from "@/lib/utils"
+import { joinTranslations } from '@/lib/i18n';
 
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+
+const { t } = joinTranslations();
 
 export interface TweetCardAuthor {
   name: string
@@ -223,7 +225,7 @@ export default function TweetCard({ post, archiveUrl }: TweetCardProps) {
             }}
           >
             <MoreHorizontal className="h-3 w-3 mr-2" />
-            <span>{__("编辑", "aiya-cms")}</span>
+            <span>{t('edit')}</span>
           </Button>
         )}
       </CardHeader>

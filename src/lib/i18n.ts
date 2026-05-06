@@ -39,7 +39,7 @@ export function sprintf(format: string, ...args: Primitive[]): string {
 
   let index = 0;
 
-  return format.replace(/%(%|s|d|f)/g, (token, specifier: string) => {
+  return format.replace(/%(%|s|d|f)/g, (_token, specifier: string) => {
     if (specifier === "%") {
       return "%";
     }
