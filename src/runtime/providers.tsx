@@ -33,7 +33,7 @@ class IslandErrorBoundary extends Component<{ children: ReactNode; id: string },
 
     render() {
         if (this.state.hasError) {
-            return <div data-island-error={`组件 ${this.props.id} 渲染失败`} />;
+            return <div data-island-error={`The island ${this.props.id} crashed.`} />;
         }
 
         return this.props.children;

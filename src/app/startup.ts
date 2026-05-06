@@ -1,4 +1,4 @@
-import { syncWordPressTranslations } from "../lib/utils"
+import domReady from '@wordpress/dom-ready';
 
 import { hydrateAllIslands } from '../runtime/islands';
 import { bootBadgeSlots } from '../runtime/badge-slots';
@@ -10,23 +10,12 @@ export type CmsPageEntry = 'common' | 'home' | 'archive' | 'single' | 'user';
 
 let hasBootstrapped = false;
 
-function onDocumentReady(callback: () => void) {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', callback, { once: true });
-        return;
-    }
-
-    callback();
-}
-
 function bootstrapApplication() {
     if (hasBootstrapped) {
         return;
     }
 
     hasBootstrapped = true;
-
-    syncWordPressTranslations();
 
     document.documentElement.dataset.cmsAppMode = 'mpa';
 
@@ -48,7 +37,7 @@ function bootstrapApplication() {
 }
 
 function ensureApplicationBootstrapped() {
-    onDocumentReady(bootstrapApplication);
+    domReady(bootstrapApplication);
 }
 
 export function runPageEntry(entry: CmsPageEntry, onReady?: () => void) {
@@ -56,6 +45,6 @@ export function runPageEntry(entry: CmsPageEntry, onReady?: () => void) {
     ensureApplicationBootstrapped();
 
     if (onReady) {
-        onDocumentReady(onReady);
+        domReady(onReady);
     }
 }

@@ -1,8 +1,7 @@
-import { __ } from '@wordpress/i18n';
-
 import { useState, useEffect } from "react";
 import { ArrowUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { joinTranslations } from '@/lib/i18n';
 import { Button } from "@/components/ui/button";
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import {
@@ -11,6 +10,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+
+const { t } = joinTranslations();
 
 export default function BackToTop() {
   const [isVisible, setIsVisible] = useState(false);
@@ -66,7 +67,7 @@ export default function BackToTop() {
           </Button>
         </TooltipTrigger>
         <TooltipContent side="left">
-          <p>{__('返回顶部', 'aiya-cms')} <KbdGroup><Kbd>Ctrl</Kbd><span>+</span><Kbd>↑</Kbd></KbdGroup></p>
+          <p>{t('back_to_top')} <KbdGroup><Kbd>Ctrl</Kbd><span>+</span><Kbd>↑</Kbd></KbdGroup></p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

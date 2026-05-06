@@ -1,4 +1,4 @@
-import { __ } from '@wordpress/i18n';
+import { joinTranslations } from '@/lib/i18n';
 
 import {
     Avatar,
@@ -7,6 +7,8 @@ import {
 } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+
+const { t } = joinTranslations();
 
 export interface LoopAuthorProps {
     avatar: string
@@ -17,13 +19,13 @@ export interface LoopAuthorProps {
 }
 
 const roleMap: Record<string, string> = {
-    administrator: __('管理员', 'aiya-cms'),
-    editor: __('编辑', 'aiya-cms'),
-    author: __('作者', 'aiya-cms'),
-    contributor: __('贡献者', 'aiya-cms'),
-    subscriber: __('用户', 'aiya-cms'),
-    guest: __('访客', 'aiya-cms'),
-    sponsor: __('会员', 'aiya-cms'),
+    administrator: t('administrator'),
+    editor: t('editor'),
+    author: t('author'),
+    contributor: t('contributor'),
+    subscriber: t('subscriber'),
+    guest: t('guest'),
+    sponsor: t('sponsor'),
 }
 
 export default function LoopAuthor({

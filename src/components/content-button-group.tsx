@@ -1,9 +1,9 @@
-import { __ } from '@wordpress/i18n';
-
 import { useState } from "react";
+
 import { Heart, Bookmark } from "lucide-react";
 import { toast } from "sonner";
 import { cn, getConfig } from "@/lib/utils";
+import { joinTranslations } from '@/lib/i18n';
 import { Spinner } from "@/components/ui/spinner";
 
 type ContentButtonGroupProps = {
@@ -11,6 +11,8 @@ type ContentButtonGroupProps = {
   likes?: string | number;
   is_favorite?: boolean;
 };
+
+const { t } = joinTranslations();
 
 function getButtonClass(active = false, tone: "favorite" | "like" = "like") {
   const activeClass =
@@ -72,7 +74,7 @@ export default function ContentButtonGroup({
     }
 
     setIsFavoriteLoading(true);
-    const toastId = toast.loading(isFavorited ? __('正在取消收藏...', 'aiya-cms') : __('正在收藏...', 'aiya-cms'));
+    const toastId = toast.loading(isFavorited ? t('cancel_favorite') : t('favorite') + '...');
 
     try {
       const { apiUrl, apiNonce } = getConfig();
@@ -90,26 +92,20 @@ export default function ContentButtonGroup({
       if (data.success && data.data.status === "done") {
         const nextFavorited = data.data.action === "added";
         setIsFavorited(nextFavorited);
-        toast.success(nextFavorited ? __('已收藏', 'aiya-cms') : __('已取消', 'aiya-cms'), { id: toastId });
+        toast.success(nextFavorited ? t('favorite') + '...' + t('loading') : t('cancel_favorite'), { id: toastId });
       } else {
-        toast.error(__('请先登录', 'aiya-cms'), { id: toastId });
+        toast.error(t('login_first'), { id: toastId });
       }
     } catch (error) {
       console.error("Favorite toggle failed:", error);
-      toast.error(__('操作失败', 'aiya-cms'), { id: toastId });
+      toast.error(t('operation_failed'), { id: toastId });
     } finally {
       setIsFavoriteLoading(false);
     }
   };
 
-  const favoriteLabel = isFavoriteLoading
-    ? isFavorited
-      ? __('取消中', 'aiya-cms')
-      : __('收藏中', 'aiya-cms')
-    : isFavorited
-      ? __('已收藏', 'aiya-cms')
-      : __('收藏', 'aiya-cms');
-  const likeLabel = isLikeLoading ? __('处理中', 'aiya-cms') : hasLiked ? __('已赞', 'aiya-cms') : __('点赞', 'aiya-cms');
+  const favoriteLabel = isFavoriteLoading ? t('loading') : isFavorited ? t('favorited') : t('favorite');
+  const likeLabel = isLikeLoading ? t('loading') : hasLiked ? t('liked') : t('like');
   const hasLikeCount =
     likeCount !== "" && likeCount !== null && likeCount !== undefined;
   const favoriteActive = isFavorited || isFavoriteLoading;

@@ -1,10 +1,12 @@
-import { __ } from '@wordpress/i18n';
-
 import * as React from "react"
 import { AlertTriangle, Bell, CheckCircle2, CircleEllipsis, Info, XCircle } from "lucide-react"
 
+import { joinTranslations } from '@/lib/i18n';
+
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+
+const { t } = joinTranslations();
 
 type NotifyLevel = "success" | "info" | "warning" | "error" | "message"
 
@@ -37,11 +39,11 @@ const levelMeta: Record<
   NotifyLevel,
   { label: string; Icon: React.ComponentType<{ className?: string }>; iconClassName: string }
 > = {
-  success: { label: __('确认', 'aiya-cms'), Icon: CheckCircle2, iconClassName: "text-emerald-500" },
-  info: { label: __('提示', 'aiya-cms'), Icon: Info, iconClassName: "text-sky-500" },
-  warning: { label: __('警告', 'aiya-cms'), Icon: AlertTriangle, iconClassName: "text-amber-500" },
-  error: { label: __('错误', 'aiya-cms'), Icon: XCircle, iconClassName: "text-rose-500" },
-  message: { label: __('消息', 'aiya-cms'), Icon: CircleEllipsis, iconClassName: "text-muted-foreground" },
+  success: { label: t('confirm'), Icon: CheckCircle2, iconClassName: "text-emerald-500" },
+  info: { label: t('info'), Icon: Info, iconClassName: "text-sky-500" },
+  warning: { label: t('warning'), Icon: AlertTriangle, iconClassName: "text-amber-500" },
+  error: { label: t('error'), Icon: XCircle, iconClassName: "text-rose-500" },
+  message: { label: t('message'), Icon: CircleEllipsis, iconClassName: "text-muted-foreground" },
 }
 
 export default function NavNotify(props: any) {
@@ -91,15 +93,15 @@ export default function NavNotify(props: any) {
           <Bell className="h-4 w-4" />
           {count > 0 && (
             <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1.5 rounded-full text-[10px] leading-5 text-background bg-primary text-center">
-              {count > 99 ? "99+" : count}
+              {count > 9 ? "9+" : count}
             </span>
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" sideOffset={8} className="w-[340px] p-0">
         <div className="flex items-center justify-between px-4 py-3">
-          <div className="text-sm font-medium">{__('站点通知', 'aiya-cms')}</div>
-          <div className="text-xs text-muted-foreground">{`${count} +${__('条', 'aiya-cms')}`}</div>
+          <div className="text-sm font-medium">{t('site_notification')}</div>
+          <div className="text-xs text-muted-foreground">{`${count}`}</div>
         </div>
         <div className="max-h-[420px] overflow-auto">
           <div className="p-2 space-y-2">

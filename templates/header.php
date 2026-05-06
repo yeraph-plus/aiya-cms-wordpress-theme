@@ -61,7 +61,7 @@ $is_home = aya_page_is('home');
                     if (aya_opt('site_logo_text_bool', 'basic')) {
                         $text_tag = $is_home ? 'h1' : 'span';
                         $text_class = $logo_url ? 'ml-2' : '';
-                        aya_echo('<' . $text_tag . ' class="' . $text_class . ' hidden font-bold sm:inline-block text-lg" itemprop="name">' . esc_html($site_name) . '</' . $text_tag . '>');
+                        echo '<' . $text_tag . ' class="' . $text_class . ' hidden font-bold sm:inline-block text-lg" itemprop="name">' . esc_html($site_name) . '</' . $text_tag . '>';
                     }
                     ?>
                 </a>
@@ -79,7 +79,7 @@ $is_home = aya_page_is('home');
             <div class="hidden items-center space-x-2 md:flex">
                 <?php
                 aya_react_island('navbar-search');
-                aya_react_island('ui-mode-toggle');
+                aya_react_island('navbar-mode-toggle');
                 // TODO 需要将通知组件添加到store
                 aya_react_island('navbar-notify', $notify_items);
                 aya_react_island('navbar-user', $user_login_data);

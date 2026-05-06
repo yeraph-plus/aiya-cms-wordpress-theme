@@ -7,9 +7,9 @@ if (!defined('ABSPATH')) {
 //没有文章
 if (!have_posts()) {
     //没有文章
-    aya_react_island('ui-empty', [
-        'title' => __('暂无内容', 'aiya-cms'),
-        'description' => __('搜索结果下没有文章', 'aiya-cms'),
+    aya_react_island('content-not-found', [
+        'title' => __('搜索结果为空', 'aiya-cms'),
+        'description' => __('当前搜索关键词下没有文章', 'aiya-cms'),
     ]);
 } else {
 

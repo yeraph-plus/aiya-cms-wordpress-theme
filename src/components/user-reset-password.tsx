@@ -1,5 +1,3 @@
-import { __ } from '@wordpress/i18n';
-
 import * as React from "react"
 import { AlertCircle, CheckCircle2, KeyRound, Loader2 } from "lucide-react"
 import { toast } from "sonner"
@@ -17,6 +15,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getConfig } from "@/lib/utils"
+import { joinTranslations } from "@/lib/i18n"
+
+const { t } = joinTranslations()
 
 interface ResetPasswordFormProps {
   resetToken?: string
@@ -36,7 +37,7 @@ export default function ResetPasswordForm({
     return resetToken ? "checking" : "invalid"
   })
   const [error, setError] = React.useState<string>(() => {
-    return resetToken ? "" : __('重置链接缺少验证令牌，请重新申请找回密码。', 'aiya-cms')
+    return resetToken ? "" : t("reset_token_missing")
   })
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const [password, setPassword] = React.useState("")
@@ -45,14 +46,14 @@ export default function ResetPasswordForm({
   React.useEffect(() => {
     if (!resetToken) {
       setViewState("invalid")
-      setError(__('重置链接缺少验证令牌，请重新申请找回密码。', 'aiya-cms'))
+      setError(t("reset_token_missing"))
       return
     }
 
     const { apiUrl, apiNonce } = getConfig()
     if (!apiUrl) {
       setViewState("invalid")
-      setError(__('接口配置缺失，无法校验重置链接。', 'aiya-cms'))
+      setError(t("api_config_missing_reset_link_validation"))
       return
     }
 
@@ -74,7 +75,7 @@ export default function ResetPasswordForm({
         const data = await response.json()
 
         if (!response.ok) {
-          throw new Error(getResponseError(data, __('重置链接无效或已过期', 'aiya-cms')))
+          throw new Error(getResponseError(data, t("reset_link_invalid_or_expired")))
         }
 
         if (!isCancelled) {
@@ -83,7 +84,7 @@ export default function ResetPasswordForm({
         }
       } catch (err) {
         if (!isCancelled) {
-          setError(err instanceof Error ? err.message : __('重置链接无效或已过期', 'aiya-cms'))
+          setError(err instanceof Error ? err.message : t("reset_link_invalid_or_expired"))
           setViewState("invalid")
         }
       }
@@ -100,18 +101,18 @@ export default function ResetPasswordForm({
     e.preventDefault()
 
     if (!password || !passwordConfirm) {
-      toast.error(__('请输入新密码并确认', 'aiya-cms'))
+      toast.error(t("enter_and_confirm_new_password"))
       return
     }
 
     if (password !== passwordConfirm) {
-      toast.error(__('两次输入的密码不一致', 'aiya-cms'))
+      toast.error(t("password_mismatch"))
       return
     }
 
     const { apiUrl, apiNonce } = getConfig()
     if (!apiUrl) {
-      toast.error(__('接口配置缺失，无法提交重置请求', 'aiya-cms'))
+      toast.error(t("api_config_missing_reset_submit"))
       return
     }
 
@@ -135,15 +136,15 @@ export default function ResetPasswordForm({
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(getResponseError(data, __('密码重置失败', 'aiya-cms')))
+        throw new Error(getResponseError(data, t("password_reset_failed")))
       }
 
-      toast.success(data.message || __('密码已重置，请使用新密码登录'))
+      toast.success(data.message || t("password_reset_success_login_new_password"))
       setPassword("")
       setPasswordConfirm("")
       setViewState("success")
     } catch (err) {
-      const message = err instanceof Error ? err.message : __('密码重置失败', 'aiya-cms')
+      const message = err instanceof Error ? err.message : t("password_reset_failed")
       setError(message)
       toast.error(message)
     } finally {
@@ -156,34 +157,34 @@ export default function ResetPasswordForm({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <KeyRound className="h-6 w-6" />
-          {__('重置密码', 'aiya-cms')}
+          {t("reset_password")}
         </CardTitle>
         <CardDescription>
-          {__('请输入新的登录密码。密码至少需要 8 位，并同时包含字母和数字。', 'aiya-cms')}
+          {t("reset_password_description_security_requirements")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {viewState === "checking" && (
           <Alert>
             <Loader2 className="h-4 w-4 animate-spin" />
-            <AlertTitle>{__('正在验证链接', 'aiya-cms')}</AlertTitle>
-            <AlertDescription>{__('请稍候，我们正在检查密码重置链接是否有效。', 'aiya-cms')}</AlertDescription>
+            <AlertTitle>{t("validating_link")}</AlertTitle>
+            <AlertDescription>{t("checking_reset_link_validity")}</AlertDescription>
           </Alert>
         )}
 
         {viewState === "invalid" && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
-            <AlertTitle>{__('链接不可用', 'aiya-cms')}</AlertTitle>
-            <AlertDescription>{error || __('重置链接无效或已过期，请重新申请找回密码。', 'aiya-cms')}</AlertDescription>
+            <AlertTitle>{t("link_unavailable")}</AlertTitle>
+            <AlertDescription>{error || t("reset_link_invalid_or_expired_request_again")}</AlertDescription>
           </Alert>
         )}
 
         {viewState === "success" && (
           <Alert className="border-green-500 text-green-600">
             <CheckCircle2 className="h-4 w-4" />
-            <AlertTitle>{__('密码已更新', 'aiya-cms')}</AlertTitle>
-            <AlertDescription>{__('您现在可以返回首页，通过新的密码重新登录。', 'aiya-cms')}</AlertDescription>
+            <AlertTitle>{t("password_updated")}</AlertTitle>
+            <AlertDescription>{t("return_home_login_with_new_password")}</AlertDescription>
           </Alert>
         )}
 
@@ -193,20 +194,20 @@ export default function ResetPasswordForm({
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>
-                  {__('提交失败', 'aiya-cms')}
+                  {t("submit_failed")}
                 </AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="reset-password">{__('请输入新密码', 'aiya-cms')}</Label>
+              <Label htmlFor="reset-password">{t("enter_new_password")}</Label>
               <Input
                 id="reset-password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder={__('请输入新密码', 'aiya-cms')}
+                placeholder={t("enter_new_password")}
                 minLength={8}
                 autoComplete="new-password"
                 disabled={isSubmitting}
@@ -215,13 +216,13 @@ export default function ResetPasswordForm({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="reset-password-confirm">{__('请确认密码', 'aiya-cms')}</Label>
+              <Label htmlFor="reset-password-confirm">{t("please_confirm_password")}</Label>
               <Input
                 id="reset-password-confirm"
                 type="password"
                 value={passwordConfirm}
                 onChange={(e) => setPasswordConfirm(e.target.value)}
-                placeholder={__('请再次输入新密码', 'aiya-cms')}
+                placeholder={t("please_enter_new_password_again")}
                 minLength={8}
                 autoComplete="new-password"
                 disabled={isSubmitting}
@@ -231,14 +232,14 @@ export default function ResetPasswordForm({
 
             <Button type="submit" disabled={isSubmitting} className="w-full">
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {__('保存新密码', 'aiya-cms')}
+              {t("save_new_password")}
             </Button>
           </form>
         )}
       </CardContent>
       <CardFooter className="justify-end">
         <Button variant={viewState === "success" ? "default" : "outline"} asChild>
-          <a href={fallbackHomeUrl}>{__('返回首页', 'aiya-cms')}</a>
+          <a href={fallbackHomeUrl}>{t("back_to_home")}</a>
         </Button>
       </CardFooter>
     </Card>

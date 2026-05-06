@@ -1,6 +1,5 @@
-import { __ } from '@wordpress/i18n';
-
 import * as React from "react"
+import { decodeEntities } from '@wordpress/html-entities';
 import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
@@ -55,17 +54,17 @@ export default function NavMenu({ menu, className }: NavMenuProps) {
           if (hasChildren) {
             return (
               <NavigationMenuItem key={index}>
-                <NavigationMenuTrigger className="bg-transparent">{item.label}</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="bg-transparent">{decodeEntities(item.label || '')}</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     {children.map((child, childIndex) => (
                       <ListItem
                         key={childIndex}
-                        title={child.label}
+                        title={decodeEntities(child.label || '')}
                         href={child.url}
                         target={child.target}
                       >
-                        {child.description}
+                        {decodeEntities(child.description || '')}
                       </ListItem>
                     ))}
                   </ul>
@@ -81,7 +80,7 @@ export default function NavMenu({ menu, className }: NavMenuProps) {
                 target={item.target}
                 className={cn(navigationMenuTriggerStyle(), "bg-transparent")}
               >
-                {item.label}
+                {decodeEntities(item.label || '')}
               </NavigationMenuLink>
             </NavigationMenuItem>
           )

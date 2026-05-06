@@ -25,24 +25,22 @@ $render_status_badges = static function ($status_list) {
 };
 
 ?>
-<div class="my-4 space-y-6">
+<div class="my-4 space-y-6" data-post-grid-section>
     <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
             <span class="icon-slot text-primary shrink-0" data-icon="<?php aya_echo($label_icon); ?>" data-icon-size="6"></span>
             <h3 class="text-xl font-bold tracking-tight"><?php aya_echo($label_title); ?></h3>
         </div>
-        <?php if ($is_main_loop) : ?>
-            <div class="hidden md:flex items-center gap-2 bg-muted/50 p-1 rounded-lg border" data-post-grid-controls data-target-id="main-post-loop">
-                <button type="button" data-post-grid-toggle="grid" data-active="true" aria-pressed="true" class="inline-flex h-8 items-center justify-center rounded-md px-3 text-sm transition-colors bg-secondary text-foreground">
-                    <span class="icon-slot shrink-0" data-icon="layout-grid" data-icon-size="4"></span>
-                </button>
-                <button type="button" data-post-grid-toggle="list" aria-pressed="false" class="inline-flex h-8 items-center justify-center rounded-md px-3 text-sm transition-colors text-muted-foreground hover:bg-accent">
-                    <span class="icon-slot shrink-0" data-icon="layout-list" data-icon-size="4"></span>
-                </button>
-            </div>
-        <?php endif; ?>
+        <div class="hidden md:flex items-center gap-2 bg-muted/50 p-1 rounded-lg border" data-post-grid-controls>
+            <button type="button" data-post-grid-toggle="grid" data-active="true" aria-pressed="true" class="inline-flex h-8 items-center justify-center rounded-md px-3 text-sm transition-colors bg-secondary text-foreground">
+                <span class="icon-slot shrink-0" data-icon="layout-grid" data-icon-size="4"></span>
+            </button>
+            <button type="button" data-post-grid-toggle="list" aria-pressed="false" class="inline-flex h-8 items-center justify-center rounded-md px-3 text-sm transition-colors text-muted-foreground hover:bg-accent">
+                <span class="icon-slot shrink-0" data-icon="layout-list" data-icon-size="4"></span>
+            </button>
+        </div>
     </div>
-    <div id="<?php aya_echo($is_main_loop ?  'main-post-loop' : uniqid('post-section-')); ?>" data-post-grid-root data-layout="grid" class="grid gap-2 md:gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
+    <div id="<?php aya_echo($is_main_loop ?  'post-loop-main' : uniqid('post-section-')); ?>" data-post-grid-root data-layout="grid" class="grid gap-2 md:gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
         <?php foreach ($posts as $post) : ?>
             <article data-post-grid-card class="group relative flex flex-col shadow-sm transition-all hover:shadow-md overflow-hidden py-0 gap-0 border-0 ring-1 ring-border rounded-lg bg-card">
                 <div data-post-grid-media class="relative w-full h-40 md:h-44 xl:h-48 bg-muted overflow-hidden rounded-t-lg">

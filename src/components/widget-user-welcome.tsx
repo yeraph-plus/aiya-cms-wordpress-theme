@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import {
   BadgeCheck,
@@ -22,6 +20,10 @@ import { Card, CardContent } from "@/components/ui/card"
 
 import { LoginDialog } from "@/components/dialog-login"
 import { RegisterDialog } from "@/components/dialog-register"
+
+import { joinTranslations } from '@/lib/i18n';
+
+const { t } = joinTranslations();
 
 export interface UserData {
   id: number
@@ -72,9 +74,9 @@ export default function WidgetUserWelcome(props: UserLoginData) {
                 <div className="p-2 rounded-full bg-secondary/50 border border-border">
                   <User className="w-5 h-5 text-muted-foreground/80" />
                 </div>
-                <h3 className="text-lg font-semibold tracking-wide text-foreground">嗨！新朋友</h3>
+                <h3 className="text-lg font-semibold tracking-wide text-foreground">{t('welcome_user')}</h3>
               </div>
-              <p className="text-sm text-muted-foreground/70 leading-relaxed">登录以解锁更多功能，体验完整服务</p>
+              <p className="text-sm text-muted-foreground/70 leading-relaxed">{t('login_to_unlock_features')}</p>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
@@ -84,7 +86,7 @@ export default function WidgetUserWelcome(props: UserLoginData) {
                 onClick={() => setShowLogin(true)}
               >
                 <LogIn className="w-4 h-4 mr-2" />
-                登录
+                {t('login')}
               </Button>
               {enable_register && (
                 <Button
@@ -93,7 +95,7 @@ export default function WidgetUserWelcome(props: UserLoginData) {
                   onClick={() => setShowRegister(true)}
                 >
                   <UserPlus className="w-4 h-4 mr-2" />
-                  注册
+                  {t('register')}
                 </Button>
               )}
             </div>

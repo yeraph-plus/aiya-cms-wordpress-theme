@@ -22,6 +22,7 @@ function aya_theme_localize_default_config()
         'apiUrl' => untrailingslashit(rest_url()),
         'apiNonce' => wp_create_nonce('wp_rest'),
         'defaultColorTheme' => aya_opt('site_default_color_mode_type', 'basic'),
+        'defaultLoopList' => aya_opt('site_default_loop_list_bool', 'basic'),
     ];
 
     if (!wp_script_is('aya-theme-config', 'registered')) {
@@ -49,3 +50,4 @@ function aya_theme_enqueue_login_scripts()
     wp_register_style('aya-login-style', get_template_directory_uri() . '/assets/admin/css/admin.login.css', [], $theme_version, 'all');
     wp_enqueue_style('aya-login-style');
 }
+

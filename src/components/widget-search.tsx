@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { Search, X } from "lucide-react"
 
@@ -7,6 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { useSearchHistoryStore } from "@/stores/search-history"
+import { joinTranslations } from '@/lib/i18n';
+
+const { t } = joinTranslations();
 
 const SEARCH_DATALIST_ID = "aiya-widget-search-history"
 
@@ -45,7 +46,7 @@ export default function WidgetSearch() {
                             ref={inputRef}
                             type="search"
                             name="s"
-                            placeholder="搜索..."
+                            placeholder={t('search')}
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             list={recentSearches.length > 0 ? SEARCH_DATALIST_ID : undefined}

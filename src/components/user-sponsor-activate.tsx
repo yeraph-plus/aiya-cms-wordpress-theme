@@ -1,5 +1,3 @@
-import { __ } from '@wordpress/i18n';
-
 import * as React from "react"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -7,7 +5,10 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { getConfig } from "@/lib/utils"
+import { joinTranslations } from '@/lib/i18n';
 import { SwitchCamera, Loader2, CheckCircle2, AlertCircle } from "lucide-react"
+
+const { t } = joinTranslations();
 
 interface Props {
     code_from?: string[];
@@ -53,19 +54,19 @@ export default function UserSponsorActivate({ code_from = [] }: Props) {
             if (response.ok) {
                 setMessage({
                     type: 'success',
-                    text: data.message || __('激活成功', 'aiya-cms'),
+                    text: data.message || t('activate_success'),
                     description: data.description
                 });
                 setOrder('');
             } else {
                 setMessage({
                     type: 'error',
-                    text: data.message || __('激活失败', 'aiya-cms'),
+                    text: data.message || t('activate_failed'),
                     description: data.detail || data.data?.detail
                 });
             }
         } catch {
-            setMessage({ type: 'error', text: __('请求失败', 'aiya-cms'), description: __('请检查网络连接后重试', 'aiya-cms') });
+            setMessage({ type: 'error', text: t('request_failed'), description: t('check_network_and_retry') });
         } finally {
             setLoading(false);
         }
@@ -73,9 +74,9 @@ export default function UserSponsorActivate({ code_from = [] }: Props) {
 
     const getSourceLabel = (source: string) => {
         const map: Record<string, string> = {
-            'code': __('兑换码', 'aiya-cms'),
-            'afdian': __('爱发电', 'aiya-cms'),
-            'patreon': __('Patreon', 'aiya-cms'),
+            'code': t('redeem_code'),
+            'afdian': t('afdian'),
+            'patreon': t('patreon'),
         };
         return map[source] || source;
     };
@@ -89,9 +90,9 @@ export default function UserSponsorActivate({ code_from = [] }: Props) {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <SwitchCamera className="w-6 h-6" />
-                    <h4 className=" font-bold tracking-tight">{__('自助激活', 'aiya-cms')}</h4>
+                    <h4 className=" font-bold tracking-tight">{t('self_service_activation')}</h4>
                 </CardTitle>
-                <CardDescription>{__('使用您获得的订单号或激活码激活赞助者身份', 'aiya-cms')}</CardDescription>
+                <CardDescription>{t('activate_sponsor_with_order_or_code')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 {message && (
@@ -104,7 +105,7 @@ export default function UserSponsorActivate({ code_from = [] }: Props) {
                 <form onSubmit={handleSubmit} className="flex items-end gap-2">
                     <Select value={orderBy} onValueChange={setOrderBy}>
                         <SelectTrigger className="w-[140px]">
-                            <SelectValue placeholder={__('选择方式', 'aiya-cms')} />
+                            <SelectValue placeholder={t('select_method')} />
                         </SelectTrigger>
                         <SelectContent>
                             {sources.map((method) => (
@@ -116,14 +117,14 @@ export default function UserSponsorActivate({ code_from = [] }: Props) {
                     </Select>
                     <Input
                         className="w-full flex-1"
-                        placeholder={__('请输入您的订单号 / 激活码', 'aiya-cms')}
+                        placeholder={t('enter_order_or_activation_code')}
                         value={order}
                         onChange={(e) => setOrder(e.target.value)}
                         required
                     />
                     <Button type="submit" disabled={loading}>
                         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {__('立即激活', 'aiya-cms')}
+                        {t('activate_now')}
                     </Button>
                 </form>
             </CardContent>

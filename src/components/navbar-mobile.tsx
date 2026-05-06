@@ -1,5 +1,3 @@
-import { __ } from '@wordpress/i18n';
-
 import * as React from "react"
 import {
   ChevronRight,
@@ -14,7 +12,6 @@ import {
   XCircle,
 } from "lucide-react"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Collapsible,
@@ -38,9 +35,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import ModeToggle from "@/components/ui-mode-toggle"
+import ModeToggle from "@/components/navbar-mode-toggle"
 import { useSearchHistoryStore } from "@/stores/search-history"
 import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
+import { joinTranslations } from '@/lib/i18n';
+
+const { t } = joinTranslations();
 
 type MenuNode = {
   label?: string
@@ -72,11 +73,11 @@ const levelMeta: Record<
   NotifyLevel,
   { label: string; Icon: React.ComponentType<{ className?: string }>; iconClassName: string }
 > = {
-  success: { label: __('成功', 'aiya-cms'), Icon: CheckCircle2, iconClassName: "text-emerald-500" },
-  info: { label: __('提示', 'aiya-cms'), Icon: Info, iconClassName: "text-sky-500" },
-  warning: { label: __('警告', 'aiya-cms'), Icon: AlertTriangle, iconClassName: "text-amber-500" },
-  error: { label: __('错误', 'aiya-cms'), Icon: XCircle, iconClassName: "text-rose-500" },
-  message: { label: __('消息', 'aiya-cms'), Icon: CircleEllipsis, iconClassName: "text-muted-foreground" },
+  success: { label: t('success'), Icon: CheckCircle2, iconClassName: "text-emerald-500" },
+  info: { label: t('info'), Icon: Info, iconClassName: "text-sky-500" },
+  warning: { label: t('warning'), Icon: AlertTriangle, iconClassName: "text-amber-500" },
+  error: { label: t('error'), Icon: XCircle, iconClassName: "text-rose-500" },
+  message: { label: t('message'), Icon: CircleEllipsis, iconClassName: "text-muted-foreground" },
 }
 
 function normalizeMenuNodes(nodes: NavbarMobileProps["menu"]): MenuNode[] {
@@ -281,7 +282,7 @@ function InlineMenuLevel({
                       onClick={onNavigate}
                       aria-current={item.is_active ? "page" : undefined}
                     >
-                      {__('进入', 'aiya-cms')} {' '} {item.label}
+                      {item.label}
                     </a>
                   </Button>
                 )}
@@ -343,7 +344,6 @@ function MobileSearch({ onSubmitted }: { onSubmitted: () => void }) {
               onClick={handleClear}
             >
               <X className="h-3 w-3 text-muted-foreground" />
-              <span className="sr-only">{__('清除', 'aiya-cms')}</span>
             </Button>
           )}
         </div>
@@ -378,9 +378,9 @@ export default function NavbarMobile({ menu, notes }: NavbarMobileProps) {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="flex h-full w-[88vw] max-w-sm flex-col p-0">
-        <SheetTitle className="sr-only">{__('移动导航', 'aiya-cms')}</SheetTitle>
+        <SheetTitle className="sr-only">{"Mobile navigation"}</SheetTitle>
         <SheetDescription className="sr-only">
-          {__('移动端导航抽屉，包含搜索、菜单、站点通知和主题切换。', 'aiya-cms')}
+          {"Mobile navigation drawer."}
         </SheetDescription>
         <div className="shrink-0 border-t bg-background px-4 py-4"></div>
         <div className="flex-1 overflow-y-auto px-4 scrollbar-hide">
@@ -390,21 +390,21 @@ export default function NavbarMobile({ menu, notes }: NavbarMobileProps) {
 
           <section className="border-t py-4">
             <div className="mb-3 flex items-center justify-between">
-              <div className="text-sm font-medium">{__('菜单', 'aiya-cms')}</div>
+              <div className="text-sm font-medium">{t('menu')}</div>
             </div>
 
             {items.length > 0 ? (
               <InlineMenuLevel items={items} level={1} onNavigate={() => setOpen(false)} />
             ) : (
               <div className="rounded-md border border-dashed px-3 py-4 text-sm text-muted-foreground">
-                {__('暂无可用导航菜单', 'aiya-cms')}
+                {t('no_available_navigation_menu')}
               </div>
             )}
           </section>
 
           <section className="border-t py-4">
             <div className="mb-3 flex items-center justify-between">
-              <div className="text-sm font-medium">{__('站点通知', 'aiya-cms')}</div>
+              <div className="text-sm font-medium">{t('site_notification')}</div>
               <Badge className="">{notifyNotes.length}</Badge>
             </div>
             {notifyNotes.length > 0 ? (
@@ -441,7 +441,7 @@ export default function NavbarMobile({ menu, notes }: NavbarMobileProps) {
               </div>
             ) : (
               <div className="rounded-md border border-dashed px-3 py-4 text-sm text-muted-foreground">
-                {__('当前没有新的站点通知', 'aiya-cms')}
+                {t('no_new_site_notification')}
               </div>
             )}
           </section>

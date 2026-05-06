@@ -25,35 +25,35 @@ AYF::new_opt([
     'desc' => __('AIYA-CMS 主题，首选项设置'),
     'fields' => [
         [
-            'desc' => __('站点设置'),
+            'desc' => __('站点设置', 'aiya-cms'),
             'type' => 'title_1',
         ],
         [
-            'title' => __(' LOGO 图片'),
-            'desc' => __(' LOGO 使用的图片地址Url'),
+            'title' => __(' LOGO 图片', 'aiya-cms'),
+            'desc' => __(' LOGO 使用的图片地址Url', 'aiya-cms'),
             'id' => 'site_logo_image_upload',
             'type' => 'upload',
             'button_text' => __('上传', 'aiya-cms'),
             'default' => get_template_directory_uri() . '/assets/image/logo.png',
         ],
         [
-            'title' => __('显示站点名称'),
-            'desc' => __('是否在 LOGO 图片后显示站点名称'),
+            'title' => __('显示站点名称', 'aiya-cms'),
+            'desc' => __('是否在 LOGO 图片后显示站点名称', 'aiya-cms'),
             'id' => 'site_logo_text_bool',
             'type' => 'switch',
             'default' => false,
         ],
         [
-            'title' => __('默认文章缩略图'),
-            'desc' => __('上传文章默认缩略图'),
+            'title' => __('默认文章缩略图', 'aiya-cms'),
+            'desc' => __('上传文章默认缩略图', 'aiya-cms'),
             'id' => 'site_default_thumb_upload',
             'type' => 'upload',
             'button_text' => __('上传', 'aiya-cms'),
             'default' => get_template_directory_uri() . '/assets/image/default-thumb.png',
         ],
         [
-            'title' => __('默认使用主题模式'),
-            'desc' => __('设置站点用户首次初始化时加载的配色模式'),
+            'title' => __('默认使用主题模式', 'aiya-cms'),
+            'desc' => __('设置站点用户首次初始化时加载的配色模式', 'aiya-cms'),
             'id' => 'site_default_color_mode_type',
             'type' => 'radio',
             'sub'  => [
@@ -62,6 +62,13 @@ AYF::new_opt([
                 'light' => __('亮色', 'aiya-cms'),
             ],
             'default' => 'system',
+        ],
+        [
+            'title' => __('默认文章列表布局', 'aiya-cms'),
+            'desc' => __('设置站点用户首次初始化时加载的默认文章列表布局', 'aiya-cms'),
+            'id' => 'site_default_loop_list_bool',
+            'type' => 'switch',
+            'default' => false,
         ],
         [
             'desc' => __('合规类功能设置', 'aiya-cms'),

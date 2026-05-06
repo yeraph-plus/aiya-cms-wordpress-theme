@@ -1,5 +1,5 @@
 import * as React from "react"
-import { __ } from "@wordpress/i18n"
+
 import { toast } from "sonner"
 import {
   Trash2,
@@ -9,6 +9,7 @@ import {
 } from "lucide-react"
 
 import { getConfig } from "@/lib/utils"
+import { joinTranslations } from '@/lib/i18n';
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -23,6 +24,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+
+const { t } = joinTranslations();
 
 export interface TweetCardTag {
   id?: number
@@ -80,12 +83,12 @@ export default function TweetEditor({
 
   const handleSubmit = async (nextStatus: SubmitStatus) => {
     if (!apiUrl) {
-      toast.error(__("接口配置缺失", "aiya-cms"))
+      toast.error(t("api_config_missing"))
       return
     }
 
     if (!content.trim()) {
-      toast.error(__("帖子内容不能为空", "aiya-cms"))
+      toast.error(t("tweet_content_required"))
       return
     }
 
@@ -102,7 +105,7 @@ export default function TweetEditor({
     setIsSubmitting(true)
 
     try {
-      const response = await fetch(`${apiUrl}/aiya/v1/tweet/${ mode === "edit" ? "update" : "create"}`, {
+      const response = await fetch(`${apiUrl}/aiya/v1/tweet/${mode === "edit" ? "update" : "create"}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,10 +117,10 @@ export default function TweetEditor({
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(getResponseMessage(data, mode === "edit" ? __('帖子更新失败', 'aiya-cms') : __('帖子发布失败', 'aiya-cms')))
+        throw new Error(getResponseMessage(data, mode === "edit" ? t("tweet_update_failed") : t("tweet_publish_failed")))
       }
 
-      toast.success(getResponseMessage(data, mode === "edit" ? __('帖子已更新', 'aiya-cms') : __('帖子已发布', 'aiya-cms')))
+      toast.success(getResponseMessage(data, mode === "edit" ? t("tweet_updated") : t("tweet_published")))
 
       const postData = data?.data?.post_data || data?.post_data
       const nextUrl = redirectUrl || postData?.url || postData?.link
@@ -128,7 +131,7 @@ export default function TweetEditor({
         window.location.reload()
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : __('保存失败', 'aiya-cms'))
+      toast.error(error instanceof Error ? error.message : t("save_failed"))
     } finally {
       setIsSubmitting(false)
     }
@@ -139,7 +142,7 @@ export default function TweetEditor({
       return
     }
 
-    if (!window.confirm(__("确定要删除这条推文吗？", "aiya-cms"))) {
+    if (!window.confirm(t("confirm_delete_tweet"))) {
       return
     }
 
@@ -159,13 +162,13 @@ export default function TweetEditor({
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(getResponseMessage(data, __('删除帖子失败', 'aiya-cms')))
+        throw new Error(getResponseMessage(data, t("delete_tweet_failed")))
       }
 
-      toast.success(getResponseMessage(data, __('帖子已删除', 'aiya-cms')))
+      toast.success(getResponseMessage(data, t("tweet_deleted")))
       window.location.href = redirectUrl || getConfig().homeUrl || "/"
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : __('删除帖子失败', 'aiya-cms'))
+      toast.error(error instanceof Error ? error.message : t("delete_tweet_failed"))
     } finally {
       setIsDeleting(false)
     }
@@ -175,14 +178,14 @@ export default function TweetEditor({
     <Card className="py-2">
       <CardContent className="grid gap-2 px-4">
         <Input
-          placeholder={__("标题", "aiya-cms")}
+          placeholder={t("title")}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           disabled={isSubmitting}
           className="prose prose-sm text-base font-medium border-0 px-0 focus-visible:ring-0 shadow-none"
         />
         <Textarea
-          placeholder={__("有什么新鲜事？", "aiya-cms")}
+          placeholder={t("what_is_happening")}
           value={content}
           onChange={(e) => setContent(e.target.value)}
           disabled={isSubmitting}
@@ -198,10 +201,10 @@ export default function TweetEditor({
             size="sm"
             type="button"
             disabled={true}
-            title={__("插入图片", "aiya-cms")}>
+            title={t("insert_image")}>
             <ImagePlus className="w-3.5 h-3.5"
             />
-            {__("上传图片", "aiya-cms")}
+            {t("upload_image")}
           </Button>
           {tags.length > 0 && (
             <DropdownMenu>
@@ -211,10 +214,10 @@ export default function TweetEditor({
                   size="sm"
                   type="button"
                   disabled={isSubmitting}
-                  title={__("插入标签", "aiya-cms")}>
+                  title={t("insert_tag")}>
                   <Hash className="w-3.5 h-3.5"
                   />
-                  {__("标签", "aiya-cms")}
+                  {t("tag")}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-48 max-h-[300px] overflow-y-auto">
@@ -247,7 +250,7 @@ export default function TweetEditor({
               disabled={isSubmitting}
             />
             <Label htmlFor="draft-mode" className="text-sm font-normal cursor-pointer">
-              {__("保存为草稿", "aiya-cms")}
+              {t("save_as_draft")}
             </Label>
           </div>
           {mode === "edit" && post?.id && (
@@ -258,7 +261,7 @@ export default function TweetEditor({
               disabled={isDeleting || isSubmitting}
             >
               {isDeleting ? <Spinner className="w-3.5 h-3.5" /> : <Trash2 className="w-3.5 h-3.5" />}
-              {__("删除", "aiya-cms")}
+              {t("delete")}
             </Button>
           )}
           <Button
@@ -267,7 +270,7 @@ export default function TweetEditor({
             disabled={isSubmitting}
           >
             {isSubmitting ? <Spinner className="w-3.5 h-3.5 mr-2" /> : <Pencil className="w-3.5 h-3.5 mr-2" />}
-            {mode === "edit" ? __("更新", "aiya-cms") : __("发布", "aiya-cms")}
+            {mode === "edit" ? t("update") : t("publish")}
           </Button>
         </div>
       </CardFooter>

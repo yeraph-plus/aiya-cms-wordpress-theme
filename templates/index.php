@@ -15,6 +15,7 @@ aya_home_open();
 //获取轮播组件
 $carousel_section = aya_opt('site_carousel_section_type', 'land');
 
+// TODO 轮播关闭时似乎会意外加载，检查前端
 if ($carousel_section !== 'off' && !$is_pre_paged) {
 
     $carousel_items = aya_opt('site_carousel_section_item_mult', 'land');
@@ -124,7 +125,7 @@ if (!empty($post_sections) && !$is_pre_paged) {
 
 if (!have_posts()) {
     //没有文章
-    aya_react_island('ui-empty', [
+    aya_react_island('content-not-found', [
         'title' => __('暂无内容', 'aiya-cms'),
         'description' => __('暂无文章', 'aiya-cms'),
     ]);

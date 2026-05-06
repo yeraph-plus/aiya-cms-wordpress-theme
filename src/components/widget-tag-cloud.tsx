@@ -1,6 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tags } from "lucide-react"
+import { joinTranslations } from '@/lib/i18n';
+
+const { t, sprintf } = joinTranslations();
 
 export interface TagItem {
     id: number
@@ -58,7 +61,7 @@ export default function WidgetTagCloud({ tags, widgetTitle, className }: WidgetT
                     <a
                         key={tag.id}
                         href={tag.url}
-                        title={`浏览和 ${tag.name} 有关的文章 (${tag.count})`}
+                        title={`${sprintf(t('browse_articles_with_tag', tag.name))} (${tag.count})`}
                         className="no-underline"
                     >
                         <Badge

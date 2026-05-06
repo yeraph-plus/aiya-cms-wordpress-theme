@@ -142,9 +142,9 @@ function aya_preg_desc($desc)
         '<em class="italic">$2</em>',
         '<ins class="underline decoration-solid">$1</ins>',
         '<del class="line-through">$1</del>',
-        '<code class="bg-base-200 text-base-content rounded px-1 py-0.5 text-sm font-mono">$1</code>',
-        '<pre class="bg-base-200 text-base-content rounded p-4 my-2 overflow-x-auto text-sm font-mono">$1</pre>',
-        '<a href="$1" class="link link-primary hover:link-hover" target="_blank" rel="noopener noreferrer">$2</a>',
+        '<code class="bg-gray-100 text-gray-900 rounded px-1 py-0.5 text-sm font-mono">$1</code>',
+        '<pre class="bg-gray-100 text-gray-900 rounded p-4 my-2 overflow-x-auto text-sm font-mono">$1</pre>',
+        '<a href="$1" class="text-blue-600 underline hover:text-blue-700" target="_blank" rel="noopener noreferrer">$2</a>',
     ];
 
     $desc = preg_replace($bbcode_search, $bbcode_replace, $desc);

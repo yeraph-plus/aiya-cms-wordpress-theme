@@ -1,5 +1,3 @@
-import { __, sprintf } from '@wordpress/i18n';
-
 import { useState } from "react"
 import {
     Table,
@@ -13,6 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { Trash2, ExternalLink, Loader2, Bookmark, Archive, ArrowUpDown } from "lucide-react"
 import { getConfig } from "@/lib/utils"
+import { joinTranslations } from '@/lib/i18n';
 import { toast } from "sonner"
 import {
     Card,
@@ -29,6 +28,8 @@ import {
     type SortingState,
     useReactTable,
 } from "@tanstack/react-table"
+
+const { t, sprintf } = joinTranslations();
 
 interface FavPost {
     id: number
@@ -77,7 +78,7 @@ export default function UserFavorites({ initialPosts }: UserFavListProps) {
         },
         {
             accessorKey: "thumbnail",
-            header: __('封面', 'aiya-cms'),
+            header: t('cover'),
             cell: ({ row }) => {
                 const thumbnail = row.original.thumbnail
                 const title = row.original.title
@@ -89,7 +90,7 @@ export default function UserFavorites({ initialPosts }: UserFavListProps) {
                     />
                 ) : (
                     <div className="w-10 h-10 bg-muted rounded flex items-center justify-center text-xs text-muted-foreground">
-                        {__('无', 'aiya-cms')}
+                        {t('none')}
                     </div>
                 )
             },
@@ -104,7 +105,7 @@ export default function UserFavorites({ initialPosts }: UserFavListProps) {
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                         className="px-0"
                     >
-                        {__('标题', 'aiya-cms')}
+                        {t('title')}
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                 )
@@ -120,7 +121,7 @@ export default function UserFavorites({ initialPosts }: UserFavListProps) {
         },
         {
             accessorKey: "author_name",
-            header: __('作者', 'aiya-cms'),
+            header: t('author'),
             cell: ({ row }) => <div className="text-muted-foreground">{row.getValue("author_name")}</div>,
         },
         {
@@ -132,7 +133,7 @@ export default function UserFavorites({ initialPosts }: UserFavListProps) {
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                         className="px-0"
                     >
-                        {__('时间', 'aiya-cms')}
+                        {t('time')}
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                 )
@@ -141,14 +142,14 @@ export default function UserFavorites({ initialPosts }: UserFavListProps) {
         },
         {
             id: "actions",
-            header: () => <div className="text-center">{__('操作', 'aiya-cms')}</div>,
+            header: () => <div className="text-center">{t('operation')}</div>,
             cell: ({ row }) => {
                 const post = row.original
                 return (
                     <div className="text-center">
                         <Button variant="outline" size="sm" asChild>
-                            <a href={post.url} target="_blank" rel="noopener noreferrer" title={__('查看文章', 'aiya-cms')}>
-                                {__('查看', 'aiya-cms')}
+                            <a href={post.url} target="_blank" rel="noopener noreferrer" title={t('view_article')}>
+                                {t('view')}
                                 <ExternalLink className="h-4 w-4" />
                             </a>
                         </Button>
@@ -176,7 +177,7 @@ export default function UserFavorites({ initialPosts }: UserFavListProps) {
         const selectedRows = table.getFilteredSelectedRowModel().rows
         if (selectedRows.length === 0 || isLoading) return
 
-        if (!confirm(__('确定要取消收藏选中的文章吗？', 'aiya-cms'))) {
+        if (!confirm(t('confirm_remove_selected_favorites'))) {
             return
         }
 
@@ -209,11 +210,11 @@ export default function UserFavorites({ initialPosts }: UserFavListProps) {
         if (removedIds.length > 0) {
             setPosts(prev => prev.filter(post => !removedIds.includes(post.id)))
             setRowSelection({})
-            toast.success(sprintf(__('成功取消收藏 %d 篇文章', 'aiya-cms'), removedIds.length))
+            toast.success(sprintf(t('removed_favorites_count_success'), removedIds.length))
         }
 
         if (failedIds.length > 0) {
-            toast.error(sprintf(__('取消收藏 %d 篇文章失败', 'aiya-cms'), failedIds.length))
+            toast.error(sprintf(t('removed_favorites_count_failed'), failedIds.length))
         }
 
         setIsLoading(false)
@@ -223,22 +224,22 @@ export default function UserFavorites({ initialPosts }: UserFavListProps) {
         <>
             <div className="flex items-center gap-2 pl-2 mb-4">
                 <Bookmark className="w-6 h-6 text-primary" />
-                <h2 className="text-xl font-bold tracking-tight">{__('我的收藏夹', 'aiya-cms')}</h2>
+                <h2 className="text-xl font-bold tracking-tight">{t('my_favorites')}</h2>
             </div>
             <Card>
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <Archive className="w-6 h-6" />
-                        <h4 className="font-bold tracking-tight">{__('查看或管理收藏列表', 'aiya-cms')}</h4>
+                        <h4 className="font-bold tracking-tight">{t('view_or_manage_favorites')}</h4>
                     </CardTitle>
                     <CardDescription>
-                        {__('查看或管理您收藏的文章', 'aiya-cms')}
+                        {t('view_or_manage_your_favorites')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="flex justify-between items-center bg-muted/50 p-2 rounded-lg">
                         <div className="text-sm text-muted-foreground pl-2">
-                            {sprintf(__('已选择 %d 项', 'aiya-cms'), Object.keys(rowSelection).length)}
+                            {sprintf(t('selected_items_count'), Object.keys(rowSelection).length)}
                         </div>
                         <Button
                             variant="destructive"
@@ -248,7 +249,7 @@ export default function UserFavorites({ initialPosts }: UserFavListProps) {
                             className="gap-2"
                         >
                             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-                            {__('取消收藏', 'aiya-cms')}
+                            {t('cancel_favorite')}
                         </Button>
                     </div>
 
@@ -295,7 +296,7 @@ export default function UserFavorites({ initialPosts }: UserFavListProps) {
                                             colSpan={columns.length}
                                             className="h-24 text-center text-muted-foreground"
                                         >
-                                            {__('暂无收藏', 'aiya-cms')}
+                                            {t('no_favorites')}
                                         </TableCell>
                                     </TableRow>
                                 )}

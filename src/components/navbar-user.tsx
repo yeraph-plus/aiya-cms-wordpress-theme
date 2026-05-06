@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { joinTranslations } from '@/lib/i18n';
 import { LoginDialog } from "@/components/dialog-login"
 import { RegisterDialog } from "@/components/dialog-register"
 import { LogoutDialog } from "@/components/dialog-logout"
@@ -43,6 +44,8 @@ export interface UserData {
   name: string
   email: string
 }
+
+const { t } = joinTranslations();
 
 export interface MenuItem {
   label: string
@@ -69,13 +72,13 @@ const IconMap: Record<string, React.ElementType> = {
 }
 
 const roleMap: Record<string, string> = {
-  administrator: __('管理员', 'aiya-cms'),
-  editor: __('编辑', 'aiya-cms'),
-  author: __('作者', 'aiya-cms'),
-  contributor: __('贡献者', 'aiya-cms'),
-  subscriber: __('用户', 'aiya-cms'),
-  guest: __('访客', 'aiya-cms'),
-  sponsor: __('会员', 'aiya-cms'),
+  administrator: t('administrator'),
+  editor: t('editor'),
+  author: t('author'),
+  contributor: t('contributor'),
+  subscriber: t('subscriber'),
+  guest: t('guest'),
+  sponsor: t('sponsor'),
 }
 
 export default function NavUser(props: UserLoginData) {
@@ -95,10 +98,10 @@ export default function NavUser(props: UserLoginData) {
             size={compact ? "icon" : "default"}
             onClick={() => setShowLogin(true)}
             className={cn(compact ? "h-9 w-9 rounded-full" : "h-8 px-3")}
-            aria-label={__('登录', 'aiya-cms')}
+            aria-label={t('login')}
           >
             <LogIn className={cn("w-4 h-4", compact ? "" : "mr-2")} />
-            {compact ? <span className="sr-only">{__('登录', 'aiya-cms')}</span> : __('登录', 'aiya-cms')}
+            {compact ? <span className="sr-only">{t('login')}</span> : t('login')}
           </Button>
           {!compact && enable_register && (
             <Button
@@ -107,7 +110,7 @@ export default function NavUser(props: UserLoginData) {
               className="h-8 px-3"
             >
               <UserPlus className="w-4 h-4 mr-2" />
-              {__('注册', 'aiya-cms')}
+              {t('register')}
             </Button>
           )}
         </div>
@@ -203,7 +206,7 @@ export default function NavUser(props: UserLoginData) {
 
           <DropdownMenuItem onClick={() => setShowLogout(true)} className="text-destructive focus:text-destructive cursor-pointer">
             <LogOut className="mr-2 h-4 w-4 text-destructive" />
-            {__('退出登录', 'aiya-cms')}
+            {t('logout')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

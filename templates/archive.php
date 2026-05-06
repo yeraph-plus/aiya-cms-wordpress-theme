@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 //没有文章
 if (!have_posts()) {
     //没有文章
-    aya_react_island('ui-empty', [
+    aya_react_island('content-not-found', [
         'title' => __('暂无内容', 'aiya-cms'),
         'description' => __('当前没有任何文章被分类到此归档', 'aiya-cms'),
     ]);

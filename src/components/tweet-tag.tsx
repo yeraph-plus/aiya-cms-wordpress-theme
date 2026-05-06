@@ -1,8 +1,10 @@
 import * as React from "react"
-import { __ } from "@wordpress/i18n"
 import { Hash, LayoutGrid, ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { joinTranslations } from '@/lib/i18n';
+
+const { t } = joinTranslations();
 
 export interface TweetTagItem {
   id: number
@@ -62,6 +64,7 @@ export default function TweetTag({
 
   const [isExpanded, setIsExpanded] = React.useState(false)
 
+
   const allHref = React.useMemo(() => {
     const origin = typeof window !== "undefined" ? window.location.origin : "/tweet/"
     const url = new URL(fallbackArchiveUrl, origin)
@@ -76,7 +79,7 @@ export default function TweetTag({
     <nav className="flex flex-col gap-2 my-4">
       <a
         href={allHref}
-        aria-pressed={isAllActive}
+        aria-current={isAllActive ? "page" : undefined}
         className={cn(
           "flex items-center justify-between px-3 py-2 text-md font-medium rounded-md transition-colors",
           isAllActive
@@ -86,7 +89,7 @@ export default function TweetTag({
       >
         <div className="flex items-center gap-2">
           <LayoutGrid className="w-4 h-4" />
-          <span>{__("全部", "aiya-cms")}</span>
+          <span>{t('all_tags')}</span>
         </div>
       </a>
 
@@ -98,7 +101,7 @@ export default function TweetTag({
           <a
             key={tag.id}
             href={href}
-            aria-pressed={isActive}
+            aria-current={isActive ? "page" : undefined}
             className={cn(
               "flex items-center justify-between px-3 py-2 text-md font-medium rounded-md transition-colors",
               isActive
@@ -132,12 +135,12 @@ export default function TweetTag({
           {isExpanded ? (
             <>
               <ChevronUp className="w-4 h-4" />
-              <span>{__("收起", "aiya-cms")}</span>
+              <span>{t('collapse')}</span>
             </>
           ) : (
             <>
               <ChevronDown className="w-4 h-4" />
-              <span>{__("展开更多", "aiya-cms")}</span>
+              <span>{t('expand')}</span>
             </>
           )}
         </button>

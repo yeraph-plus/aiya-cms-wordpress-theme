@@ -1,11 +1,12 @@
-import { __ } from '@wordpress/i18n';
-
 import * as React from "react"
 import { Card, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@/components/ui/empty";
 import { Receipt, ExternalLink, SendToBack, PackageOpen } from 'lucide-react';
+import { joinTranslations } from '@/lib/i18n';
+
+const { t } = joinTranslations();
 
 interface Plan {
     title: string;
@@ -41,7 +42,7 @@ export default function UserSponsorSubscribe({ plans }: UserSponsorSubscribeProp
         <>
             <div className="flex items-center gap-2 pl-2 my-4">
                 <Receipt className="w-6 h-6 text-primary" />
-                <h2 className="text-xl font-bold tracking-tight">{__('用户赞助计划', 'aiya-cms')}</h2>
+                <h2 className="text-xl font-bold tracking-tight">{t('user_sponsorship_plans')}</h2>
             </div>
 
             {!hasPlans ? (
@@ -50,9 +51,9 @@ export default function UserSponsorSubscribe({ plans }: UserSponsorSubscribeProp
                         <PackageOpen className="text-muted-foreground size-10" />
                     </EmptyMedia>
                     <EmptyHeader>
-                        <EmptyTitle>{__('暂无用户赞助计划', 'aiya-cms')}</EmptyTitle>
+                        <EmptyTitle>{t('no_user_sponsorship_plans')}</EmptyTitle>
                         <EmptyDescription>
-                            {__('当前没有可用的赞助订阅方案，请稍后再来看看吧。', 'aiya-cms')}
+                            {t('no_available_sponsorship_plans_please_check_later')}
                         </EmptyDescription>
                     </EmptyHeader>
                 </Empty>
@@ -75,9 +76,9 @@ export default function UserSponsorSubscribe({ plans }: UserSponsorSubscribeProp
                                 </CardDescription>
                             </CardHeader>
                             <CardFooter className="mt-auto ">
-                                <Button className="w-full" variant="outline" style={{ color: plan.color, borderColor: plan.color }} title={__('跳转到第三方支付接口', 'aiya-cms')}>
+                                <Button className="w-full" variant="outline" style={{ color: plan.color, borderColor: plan.color }} title={t('go_to_third_party_payment_interface')}>
                                     <ExternalLink className="mr-2 h-4 w-4" />
-                                    {plan.href_title || __('跳转', 'aiya-cms')}
+                                    {plan.href_title || t('go_to')}
                                 </Button>
                             </CardFooter>
                         </Card>
@@ -90,15 +91,15 @@ export default function UserSponsorSubscribe({ plans }: UserSponsorSubscribeProp
                     <DialogHeader>
                         <DialogTitle className="flex items-center">
                             <SendToBack className="w-5 h-5 mr-2" />
-                            {__('正在处理', 'aiya-cms')}
+                            {t('processing')}
                         </DialogTitle>
                         <DialogDescription className="pt-4 text-base">
-                            {selectedPlan?.triggered_msg || __('请在新打开的页面中完成操作...', 'aiya-cms')}
+                            {selectedPlan?.triggered_msg || t('please_complete_in_new_page')}
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <Button variant="secondary" onClick={() => setOpen(false)}>{__('关闭', 'aiya-cms')}</Button>
-                        <Button onClick={() => window.location.reload()}>{__('刷新页面', 'aiya-cms')}</Button>
+                        <Button variant="secondary" onClick={() => setOpen(false)}>{t('close')}</Button>
+                        <Button onClick={() => window.location.reload()}>{t('refresh_page')}</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

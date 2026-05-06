@@ -1,6 +1,5 @@
-"use client"
-
 import { cn } from "@/lib/utils"
+import { joinTranslations, sprintf } from '@/lib/i18n';
 import {
   Pagination,
   PaginationContent,
@@ -10,6 +9,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
+
+const { t } = joinTranslations();
+const pageInfoText = (current: number, total: number) => sprintf(t('page_of_total'), current, total);
 
 export interface PaginationLink {
   type: 'prev' | 'next' | 'page' | 'current'
@@ -54,22 +56,19 @@ export default function LoopPagination({
 
           {pageLinks.map((link, index) => {
             const isActive = link.type === 'current' || link.active === true || link.active === 1
-            
-            // Check if we need to render an ellipsis
-            // This is a simplified logic, assuming the backend or parent component provides the links correctly including dots if needed
-            // If the link text is dots, render PaginationEllipsis
+
             if (link.text === '…' || link.text === '...') {
-               return (
+              return (
                 <PaginationItem key={`${link.type}-${link.text}-${index}`}>
                   <PaginationEllipsis />
                 </PaginationItem>
-               )
+              )
             }
 
             return (
               <PaginationItem key={`${link.type}-${link.text}-${index}`}>
-                <PaginationLink 
-                  href={link.url} 
+                <PaginationLink
+                  href={link.url}
                   isActive={isActive}
                 >
                   {link.text}
@@ -90,7 +89,7 @@ export default function LoopPagination({
 
       {/* Pagination Info Text */}
       <div className="text-sm text-muted-foreground">
-        第 {current} 页，共 {total} 页
+        {pageInfoText(current, total)}
       </div>
     </div>
   )

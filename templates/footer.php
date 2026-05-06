@@ -23,15 +23,15 @@ if (!defined('ABSPATH')) {
             </div>
         </div>
     </div>
-    <!-- Scroll Top -->
-    <?php aya_react_island('ui-scroll-top', []); ?>
+    <?php wp_footer(); ?>
     <!-- Cookie Consent -->
     <?php
     if (aya_opt('site_cookie_consent_bool', 'basic')) {
         aya_react_island('ui-cookie-consent', ['policyUrl' => get_privacy_policy_url()]);
     }
     ?>
-    <?php wp_footer(); ?>
+    <!-- Scroll Top -->
+    <?php aya_react_island('footer-scroll-top', []); ?>
     <footer class="bg-neutral-900/95 backdrop-blur supports-[backdrop-filter]:bg-neutral/60 text-neutral-400 py-12 transition-all duration-300 ease-in-out">
         <div class="container mx-auto px-4 flex flex-col md:flex-row items-center md:justify-between gap-6">
             <div class="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2 text-sm">

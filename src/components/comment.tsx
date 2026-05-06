@@ -17,6 +17,9 @@ import {
 import { MessageSquare, Reply, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn, getConfig } from '@/lib/utils';
+import { joinTranslations } from '@/lib/i18n';
+
+const { t } = joinTranslations();
 
 interface Comment {
     id: number;
@@ -73,14 +76,14 @@ const CommentForm = ({
             {!currentUser && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Input
-                        placeholder="Name"
+                        placeholder={t('name')}
                         value={authorName}
                         onChange={(e) => setAuthorName(e.target.value)}
                         required={requireNameEmail}
                     />
                     <Input
                         type="email"
-                        placeholder="Email"
+                        placeholder={t('email')}
                         value={authorEmail}
                         onChange={(e) => setAuthorEmail(e.target.value)}
                         required={requireNameEmail}
@@ -89,7 +92,7 @@ const CommentForm = ({
             )}
             <div className="relative">
                 <Textarea
-                    placeholder="Write a comment..."
+                    placeholder={t('write_comment')}
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     required
@@ -99,12 +102,12 @@ const CommentForm = ({
             <div className="flex justify-end gap-2">
                 {onCancel && (
                     <Button type="button" variant="ghost" onClick={onCancel}>
-                        Cancel
+                        {t('cancel')}
                     </Button>
                 )}
                 <Button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? <Spinner className="mr-2" /> : <Send className="h-4 w-4 mr-2" />}
-                    Submit
+                    {t('submit')}
                 </Button>
             </div>
         </form>
@@ -148,7 +151,7 @@ const CommentItem = ({
                             )}
                             onClick={() => onReply(comment)}
                         >
-                            <Reply className="h-3 w-3 mr-1" /> Reply
+                            <Reply className="h-3 w-3 mr-1" /> {t('reply')}
                         </Button>
                     )}
                 </div>
@@ -161,7 +164,7 @@ const CommentItem = ({
                 {isReplying && (
                     <div className="mt-4 bg-muted/30 p-4 rounded-lg border">
                         <div className="flex items-center justify-between mb-4">
-                            <span className="text-xs font-medium text-muted-foreground">Replying to {comment.author_name}</span>
+                            <span className="text-xs font-medium text-muted-foreground">{t('replying_to')} {comment.author_name}</span>
                         </div>
                         <CommentForm
                             {...formProps}
@@ -236,7 +239,7 @@ export default function CommentSection({
                         'X-WP-Nonce': apiNonce || '',
                     }
                 });
-                if (!res.ok) throw new Error('Failed to fetch comments');
+                if (!res.ok) throw new Error(t('fetch_comments_failed'));
 
                 // Get total pages from header
                 const totalPagesHeader = res.headers.get('X-WP-TotalPages');
@@ -248,7 +251,7 @@ export default function CommentSection({
                 setComments(data);
             } catch (error) {
                 console.error('Error fetching comments:', error);
-                toast.error('Failed to load comments');
+                toast.error(t('load_comments_failed'));
             } finally {
                 setIsLoading(false);
             }
@@ -287,12 +290,12 @@ export default function CommentSection({
         if (e) e.preventDefault();
 
         if (!content.trim()) {
-            toast.error('Comment content cannot be empty');
+            toast.error(t('comment_content_required'));
             return;
         }
 
         if (!currentUser && settings.require_name_email && (!authorName || !authorEmail)) {
-            toast.error('Name and Email are required');
+            toast.error(t('name_email_required'));
             return;
         }
 
@@ -322,16 +325,16 @@ export default function CommentSection({
 
             if (!res.ok) {
                 const errorData = await res.json();
-                throw new Error(errorData.message || 'Failed to submit comment');
+                throw new Error(errorData.message || t('submit_comment_failed'));
             }
 
             const newComment = await res.json();
 
             // Check if comment is pending
             if (newComment.status === 'hold') {
-                toast.success('Comment submitted and waiting for moderation.');
+                toast.success(t('comment_submitted_pending'));
             } else {
-                toast.success('Comment submitted successfully');
+                toast.success(t('comment_submitted_success'));
             }
 
             // Add to list (might look weird if paginated, but immediate feedback is good)
@@ -341,7 +344,7 @@ export default function CommentSection({
 
         } catch (error: any) {
             console.error('Error submitting comment:', error);
-            toast.error(error.message || 'Failed to submit comment');
+            toast.error(error.message || t('submit_comment_failed'));
         } finally {
             setIsSubmitting(false);
         }
@@ -437,13 +440,13 @@ export default function CommentSection({
                 <CardHeader className="px-0">
                     <CardTitle className="flex items-center gap-2 text-xl">
                         <MessageSquare className="h-5 w-5" />
-                        Comments ({commentsCount})
+                        {t('comments')} ({commentsCount})
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col items-center justify-center py-8 space-y-4 bg-muted/20 rounded-lg border border-dashed">
-                    <p className="text-muted-foreground">You must be logged in to post a comment.</p>
+                    <p className="text-muted-foreground">{t('login_required_for_comment')}</p>
                     <Button onClick={() => (window as any).LoginAction?.showLogin()}>
-                        Login
+                        {t('login')}
                     </Button>
                 </CardContent>
             </Card>
@@ -455,7 +458,7 @@ export default function CommentSection({
             <CardHeader className="px-0">
                 <CardTitle className="flex items-center gap-2 text-xl">
                     <MessageSquare className="h-5 w-5" />
-                    Comments ({comments.length > 0 ? comments.length : commentsCount})
+                    {t('comments')} ({comments.length > 0 ? comments.length : commentsCount})
                 </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8 px-0">
@@ -480,7 +483,7 @@ export default function CommentSection({
                             ))}
                             {comments.length === 0 && (
                                 <p className="text-center text-muted-foreground py-8">
-                                    No comments yet. Be the first to share your thoughts!
+                                    {t('no_comments_yet')}
                                 </p>
                             )}
                         </div>
@@ -489,14 +492,14 @@ export default function CommentSection({
 
                         {commentsOpen && !replyTo && (
                             <div className="mt-8 pt-8 border-t">
-                                <h3 className="font-semibold mb-4 text-lg">Leave a comment</h3>
+                                <h3 className="font-semibold mb-4 text-lg">{t('leave_comment')}</h3>
                                 <CommentForm {...formProps} />
                             </div>
                         )}
 
                         {!commentsOpen && (
                             <div className="mt-8 pt-8 border-t text-center text-muted-foreground">
-                                Comments are closed.
+                                {t('comments_closed')}
                             </div>
                         )}
                     </>

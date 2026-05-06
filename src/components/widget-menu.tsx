@@ -1,5 +1,3 @@
-import { __ } from '@wordpress/i18n';
-
 import { ChevronRight, MoreHorizontal, EllipsisVertical } from "lucide-react"
 
 import { cn } from "@/lib/utils"

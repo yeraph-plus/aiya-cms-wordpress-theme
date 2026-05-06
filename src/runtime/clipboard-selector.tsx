@@ -1,18 +1,19 @@
 import * as React from "react"
-import ClipboardJS from "clipboard"
 import { createRoot, type Root } from "react-dom/client"
-
+import { joinTranslations } from '@/lib/i18n';
+import ClipboardJS from "clipboard"
 import {
     Check,
     Copy
 } from "lucide-react";
-
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+
+const { t } = joinTranslations();
 
 const SLOT_SELECTOR = "[data-clipboard-slot]"
 const PROCESSED_ATTR = "data-clipboard-hydrated"
@@ -22,7 +23,7 @@ let clipboardObserver: MutationObserver | null = null
 
 function ClipboardInline({ slot }: { slot: HTMLElement }) {
     const buttonRef = React.useRef<HTMLButtonElement | null>(null)
-    const defaultLabel = "点击复制"
+    const defaultLabel = t('click_to_copy')
     const [text] = React.useState(() => slot.textContent?.trim() || "")
 
     const [tooltipLabel, setTooltipLabel] = React.useState(defaultLabel)
@@ -42,12 +43,12 @@ function ClipboardInline({ slot }: { slot: HTMLElement }) {
         clipboard.on("success", (event) => {
             event.clearSelection()
             setCopyState("success")
-            setTooltipLabel("已复制")
+            setTooltipLabel(t('copied'))
         })
 
         clipboard.on("error", () => {
             setCopyState("error")
-            setTooltipLabel("复制失败")
+            setTooltipLabel(t('copy_failed'))
         })
 
         return () => {

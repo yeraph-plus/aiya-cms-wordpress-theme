@@ -1,5 +1,3 @@
-import { __ } from '@wordpress/i18n';
-
 import * as React from "react"
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from "@/components/ui/button"
@@ -16,7 +14,10 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "sonner"
 import { getConfig } from "@/lib/utils"
+import { joinTranslations } from '@/lib/i18n';
 import { ForgotPasswordDialog } from "./dialog-forgot-password"
+
+const { t } = joinTranslations();
 
 interface LoginDialogProps {
   open: boolean
@@ -35,7 +36,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
     e.preventDefault()
     const { apiUrl, apiNonce } = getConfig()
     if (!apiNonce) {
-      setError(__('页面已过期，请刷新页面重试', 'aiya-cms'))
+      setError(t('page_expired'))
       return
     }
 
@@ -59,16 +60,16 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || __('请求失败', 'aiya-cms'))
+        throw new Error(data.message || t('request_failed'))
       }
 
       // Login successful, show toast and reload page
-      toast.success(__('登录成功', 'aiya-cms'))
+      toast.success(t('login_success'))
       setTimeout(() => {
         window.location.reload()
       }, 1000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : __('登录发生错误', 'aiya-cms'))
+      setError(err instanceof Error ? err.message : t('login_error'))
     } finally {
       setIsLoading(false)
     }
@@ -93,18 +94,18 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{__('登录', 'aiya-cms')}</DialogTitle>
+          <DialogTitle>{t('login')}</DialogTitle>
           <DialogDescription>
-            {__('请输入您的邮箱和密码登录。', 'aiya-cms')}
+            {t('login_description')}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="email">{__('邮箱', 'aiya-cms')}</Label>
+            <Label htmlFor="email">{t('email')}</Label>
             <Input
               id="email"
               type="text"
-              placeholder={__('登录邮箱', 'aiya-cms')}
+              placeholder={t('your_email')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isLoading}
@@ -113,20 +114,20 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
           </div>
           <div className="grid gap-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="password">{__('密码', 'aiya-cms')}</Label>
+              <Label htmlFor="password">{t('password')}</Label>
               <Button
                 variant="link"
                 className="px-0 h-auto text-xs text-muted-foreground"
                 type="button"
                 onClick={() => setShowForgot(true)}
               >
-                {__('忘记密码？', 'aiya-cms')}
+                {t('forgot_password_question')}
               </Button>
             </div>
             <Input
               id="password"
               type="password"
-              placeholder={__('登录密码', 'aiya-cms')}
+              placeholder={t('login_password')}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={isLoading}
@@ -145,7 +146,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
               htmlFor="remember"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              {__('记住我', 'aiya-cms')}
+              {t('remember_me')}
             </label>
           </div>
 
@@ -157,7 +158,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
           <DialogFooter>
             <Button type="submit" disabled={isLoading}>
               {isLoading && <Spinner className="mr-2" />}
-              {__('登录', 'aiya-cms')}
+              {t('login')}
             </Button>
           </DialogFooter>
         </form>

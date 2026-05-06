@@ -2,10 +2,8 @@ import {
   type LoopGridLayout,
   usePreferencesStore,
 } from "@/stores/ui-preferences";
+import { getConfig } from "@/lib/utils";
 
-const MAIN_GRID_ID = "main-post-loop";
-const ROOT_SELECTOR = `[data-post-grid-root]#${MAIN_GRID_ID}`;
-const CONTROL_SELECTOR = `[data-post-grid-controls][data-target-id="${MAIN_GRID_ID}"]`;
 const ACTIVE_BUTTON_CLASS = "bg-secondary text-foreground";
 const INACTIVE_BUTTON_CLASS = "text-muted-foreground hover:bg-accent";
 
@@ -125,13 +123,7 @@ function applyLayoutToGrid(root: HTMLElement, layout: LoopGridLayout): void {
   });
 }
 
-function updateControlState(layout: LoopGridLayout, root: ParentNode): void {
-  const controls = root.querySelector<HTMLElement>(CONTROL_SELECTOR);
-
-  if (!controls) {
-    return;
-  }
-
+function updateControlState(layout: LoopGridLayout, controls: ParentNode): void {
   controls
     .querySelectorAll<HTMLButtonElement>("[data-post-grid-toggle]")
     .forEach((button) => {
@@ -139,46 +131,68 @@ function updateControlState(layout: LoopGridLayout, root: ParentNode): void {
     });
 }
 
-function applyLayout(layout: LoopGridLayout, root: ParentNode): void {
-  const mainGrid = root.querySelector<HTMLElement>(ROOT_SELECTOR);
+function applyLayout(layout: LoopGridLayout, section: HTMLElement): void {
+  const sectionRoot = section as ParentNode;
+  const grid = sectionRoot.querySelector<HTMLElement>("[data-post-grid-root]");
 
-  if (!mainGrid) {
+  if (!grid) {
     return;
   }
 
-  applyLayoutToGrid(mainGrid, layout);
+  applyLayoutToGrid(grid, layout);
 
-  updateControlState(layout, root);
-}
-
-export function bootPostGridLayout(root: ParentNode = document): void {
-  const mainGrid = root.querySelector<HTMLElement>(ROOT_SELECTOR);
-
-  if (!mainGrid) {
-    return;
-  }
-
-  const controls = root.querySelector<HTMLElement>(CONTROL_SELECTOR);
-  const currentLayout = usePreferencesStore.getState().loopGridLayout;
-  applyLayoutToGrid(mainGrid, currentLayout);
-  updateControlState(currentLayout, root);
+  const controls = sectionRoot.querySelector<HTMLElement>("[data-post-grid-controls]");
 
   if (!controls) {
     return;
   }
 
-  controls
-    .querySelectorAll<HTMLButtonElement>("[data-post-grid-toggle]")
-    .forEach((button) => {
-      button.addEventListener("click", () => {
-        const nextLayout = button.dataset.postGridToggle as LoopGridLayout;
+  updateControlState(layout, controls);
+}
 
-        if (nextLayout !== "grid" && nextLayout !== "list") {
-          return;
-        }
+function getInitialLayout(): LoopGridLayout {
+  const config = getConfig() as { defaultLoopList?: boolean } | undefined;
 
-        usePreferencesStore.getState().setLoopGridLayout(nextLayout);
-        applyLayout(nextLayout, root);
+  if (config?.defaultLoopList === true) {
+    return "list";
+  }
+
+  return usePreferencesStore.getState().loopGridLayout;
+}
+
+export function bootPostGridLayout(root: ParentNode = document): void {
+  const initialLayout = getInitialLayout();
+
+  // 若开启 defaultLoopList，则无需用户点击，直接应用并写入偏好
+  usePreferencesStore.getState().setLoopGridLayout(initialLayout);
+
+  const sections = root.querySelectorAll<HTMLElement>("[data-post-grid-section]");
+
+  sections.forEach((section) => {
+    applyLayout(initialLayout, section);
+
+    const controls = section.querySelector<HTMLElement>("[data-post-grid-controls]");
+
+    if (!controls) {
+      return;
+    }
+
+    controls
+      .querySelectorAll<HTMLButtonElement>("[data-post-grid-toggle]")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const nextLayout = button.dataset.postGridToggle as LoopGridLayout;
+
+          if (nextLayout !== "grid" && nextLayout !== "list") {
+            return;
+          }
+
+          usePreferencesStore.getState().setLoopGridLayout(nextLayout);
+
+          root.querySelectorAll<HTMLElement>("[data-post-grid-section]").forEach((item) => {
+            applyLayout(nextLayout, item);
+          });
+        });
       });
-    });
+  });
 }

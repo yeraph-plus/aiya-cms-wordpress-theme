@@ -1,8 +1,8 @@
-import { __ } from '@wordpress/i18n';
-
 import * as React from "react"
 import { Moon, Sun, Laptop } from "lucide-react"
 import { useTheme } from "next-themes"
+
+import { joinTranslations } from '@/lib/i18n';
 
 import { Button } from "@/components/ui/button"
 import {
@@ -10,6 +10,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+
+const { t } = joinTranslations();
 
 export default function ModeToggle() {
   const { theme, setTheme } = useTheme()
@@ -22,7 +24,7 @@ export default function ModeToggle() {
   if (!mounted) {
     return (
       <Button variant="ghost" size="icon" className="h-9 w-9 px-0">
-        <span className="sr-only">Toggle theme</span>
+        <span className="sr-only">Toggle theme.</span>
       </Button>
     )
   }
@@ -53,13 +55,13 @@ export default function ModeToggle() {
   const getTooltipText = () => {
     switch (theme) {
       case 'light':
-        return __('切换到深色模式', 'aiya-cms')
+        return t('switch_to_dark_mode')
       case 'dark':
-        return __('切换到跟随系统', 'aiya-cms')
+        return t('switch_to_follow_system')
       case 'system':
-        return __('切换到浅色模式', 'aiya-cms')
+        return t('switch_to_light_mode')
       default:
-        return __('切换主题', 'aiya-cms')
+        return t('toggle_theme')
     }
   }
 
@@ -68,7 +70,7 @@ export default function ModeToggle() {
       <TooltipTrigger asChild>
         <Button variant="outline" size="icon" className="h-9 w-9 px-0" onClick={cycleTheme}>
           {getIcon()}
-          <span className="sr-only">{__('切换主题', 'aiya-cms')}</span>
+          <span className="sr-only">Toggle theme.</span>
         </Button>
       </TooltipTrigger>
       <TooltipContent>

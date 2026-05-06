@@ -1,13 +1,11 @@
 import * as React from "react"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { setLocaleData } from "@wordpress/i18n"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-const CMS_TEXT_DOMAIN = "aiya-cms"
 const MOBILE_BREAKPOINT = 768
 
 export function useIsMobile() {
@@ -31,7 +29,14 @@ export interface AppConfig {
   apiNonce: string;
   homeUrl: string;
   defaultColorTheme: string;
+  defaultLoopList: boolean;
   [key: string]: any;
+}
+
+declare global {
+  interface Window {
+    AIYACMS_CONFIG?: AppConfig;
+  }
 }
 
 // 从HTML获取配置
@@ -43,25 +48,4 @@ export function getConfig(): Partial<AppConfig> {
     return config;
   }
   return {};
-}
-
-type CmsLocaleData = Parameters<typeof setLocaleData>[0]
-
-type WordPressI18nBridge = {
-  getLocaleData?: (domain?: string) => CmsLocaleData | undefined
-}
-
-type WordPressGlobal = {
-  i18n?: WordPressI18nBridge
-}
-
-export function syncWordPressTranslations() {
-  const wpGlobal = (window as Window & { wp?: WordPressGlobal }).wp
-  const localeData = wpGlobal?.i18n?.getLocaleData?.(CMS_TEXT_DOMAIN)
-
-  if (!localeData) {
-    return
-  }
-
-  setLocaleData(localeData, CMS_TEXT_DOMAIN)
 }

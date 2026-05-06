@@ -1,5 +1,3 @@
-import { __ } from '@wordpress/i18n';
-
 import {
   Empty,
   EmptyHeader,
@@ -11,7 +9,20 @@ import {
 import { Button } from "@/components/ui/button"
 import { Terminal, ArrowLeft } from "lucide-react"
 
-export default function NotFound() {
+import { joinTranslations } from '@/lib/i18n';
+
+const { t } = joinTranslations();
+
+type NotFoundProps = {
+  title?: string
+  description?: string
+  buttonText?: string
+}
+
+export default function NotFound({
+  title = "404 NOT FOUND",
+  description = "",
+}: NotFoundProps) {
   return (
     <div className="w-full h-[60vh] flex items-center justify-center">
       <Empty className="border-none">
@@ -20,17 +31,17 @@ export default function NotFound() {
             <Terminal className="h-8 w-8 text-muted-foreground" />
           </EmptyMedia>
           <EmptyTitle className="text-2xl font-bold">
-            {__('页面未找到', 'aiya-cms')}
+            {title}
           </EmptyTitle>
           <EmptyDescription className="text-md mt-2">
-            {__('抱歉，您访问的页面不存在或已被移除', 'aiya-cms')}
+            {description}
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent className="mt-8">
           <Button variant="outline" asChild>
             <a href="/" className="flex items-center gap-2">
               <ArrowLeft className="h-4 w-4" />
-              {__('返回首页', 'aiya-cms')}
+              {t('return_to_home')}
             </a>
           </Button>
         </EmptyContent>

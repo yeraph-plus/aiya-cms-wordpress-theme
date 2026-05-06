@@ -1,10 +1,9 @@
-import { __ } from '@wordpress/i18n';
-
 import * as React from "react"
 import { toast } from "sonner"
 import {Spinner} from '@/components/ui/spinner';
 import { Button } from "@/components/ui/button"
 import { getConfig } from "@/lib/utils"
+import { joinTranslations } from '@/lib/i18n';
 import {
   Dialog,
   DialogContent,
@@ -13,6 +12,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+
+const { t } = joinTranslations();
 
 interface LogoutDialogProps {
   open: boolean
@@ -25,7 +26,7 @@ export function LogoutDialog({ open, onOpenChange }: LogoutDialogProps) {
   const handleLogout = async () => {
     const { apiUrl, apiNonce } = getConfig()
     if (!apiNonce) {
-      toast.error(__('页面已过期，请刷新页面重试', 'aiya-cms'))
+      toast.error(t('page_expired'))
       return
     }
 
@@ -44,13 +45,13 @@ export function LogoutDialog({ open, onOpenChange }: LogoutDialogProps) {
         throw new Error('Logout failed')
       }
 
-      toast.success(__('退出登录成功', 'aiya-cms'))
+      toast.success(t('logout_success'))
       setTimeout(() => {
         window.location.reload()
       }, 1000)
     } catch (error) {
       console.error('Logout error:', error)
-      toast.error(__('退出登录失败', 'aiya-cms'))
+      toast.error(t('logout_failed'))
       setIsLoading(false)
     }
   }
@@ -59,18 +60,18 @@ export function LogoutDialog({ open, onOpenChange }: LogoutDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{__('确认退出登录', 'aiya-cms')}</DialogTitle>
+          <DialogTitle>{t('confirm_logout')}</DialogTitle>
           <DialogDescription>
-            {__('您确定要退出登录吗？', 'aiya-cms')}
+            {t('logout_confirm_text')}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isLoading}>
-            {__('取消', 'aiya-cms')}
+            {t('cancel')}
           </Button>
           <Button variant="destructive" onClick={handleLogout} disabled={isLoading}>
             {isLoading && <Spinner className="mr-2" />}
-            {__('确认退出登录', 'aiya-cms')}
+            {t('confirm_logout')}
           </Button>
         </DialogFooter>
       </DialogContent>

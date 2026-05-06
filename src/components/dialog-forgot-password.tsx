@@ -1,5 +1,3 @@
-import { __ } from '@wordpress/i18n';
-
 import * as React from "react"
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from "@/components/ui/button"
@@ -15,6 +13,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 import { getConfig } from "@/lib/utils"
+import { joinTranslations } from '@/lib/i18n';
+
+const { t } = joinTranslations();
 
 interface ForgotPasswordDialogProps {
   open: boolean
@@ -33,7 +34,7 @@ export function ForgotPasswordDialog({ open, onOpenChange, onBackToLogin }: Forg
 
     const { apiUrl, apiNonce } = getConfig()
     if (!apiNonce) {
-      setError(__('页面已过期，请刷新页面重试', 'aiya-cms'))
+      setError(t('page_expired'))
       return
     }
 
@@ -55,16 +56,16 @@ export function ForgotPasswordDialog({ open, onOpenChange, onBackToLogin }: Forg
       const data = await response.json()
 
       if (data.code && data.code !== 'success' && data.code !== 200) {
-        throw new Error(data.message || data.detail || __('请求失败', 'aiya-cms'))
+        throw new Error(data.message || data.detail || t('request_failed'))
       }
 
       // Success
       setIsSuccess(true)
-      toast.success(data.message || __('密码重置链接已发送到您的邮箱', 'aiya-cms'))
+      toast.success(data.message || t('reset_link_sent'))
 
     } catch (err: any) {
       console.error(err)
-      setError(err.message || __('发生错误，请稍后重试', 'aiya-cms'))
+      setError(err.message || t('error_retry_later'))
     } finally {
       setIsLoading(false)
     }
@@ -86,37 +87,37 @@ export function ForgotPasswordDialog({ open, onOpenChange, onBackToLogin }: Forg
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{__('找回密码', 'aiya-cms')}</DialogTitle>
+          <DialogTitle>{t('forgot_password_title')}</DialogTitle>
           <DialogDescription>
             {isSuccess
-              ? __('邮件发送成功', 'aiya-cms')
-              : __('请输入您的注册邮箱，我们将向您发送重置密码的链接。', 'aiya-cms')}
+              ? t('email_sent_success')
+              : t('forgot_password_description')}
           </DialogDescription>
         </DialogHeader>
 
         {isSuccess ? (
           <div className="py-6 text-center space-y-4">
             <div className="text-green-600 bg-green-50 p-4 rounded-md">
-              <p>{__('重置密码链接已发送至：', 'aiya-cms')}</p>
+              <p>{t('reset_link_sent_to')}</p>
               <p className="font-medium mt-1">{email}</p>
             </div>
             <p className="text-sm text-muted-foreground">
-              {__('请查收邮件并按照提示重置密码。如果没有收到，请检查垃圾邮件箱。', 'aiya-cms')}
+              {t('check_email_instruction')}
             </p>
             <div className="pt-4">
               <Button variant="outline" onClick={onBackToLogin} className="w-full">
-                {__('返回登录', 'aiya-cms')}
+                {t('back_to_login')}
               </Button>
             </div>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="forgot-email">{__('请输入邮箱', 'aiya-cms')}</Label>
+              <Label htmlFor="forgot-email">{t('enter_email')}</Label>
               <Input
                 id="forgot-email"
                 type="email"
-                placeholder={__('请输入邮箱', 'aiya-cms')}
+                placeholder={t('enter_email')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
@@ -138,11 +139,11 @@ export function ForgotPasswordDialog({ open, onOpenChange, onBackToLogin }: Forg
                   onClick={onBackToLogin}
                   disabled={isLoading}
                 >
-                  {__('返回登录', 'aiya-cms')}
+                  {t('back_to_login')}
                 </Button>
                 <Button type="submit" disabled={isLoading}>
                   {isLoading && <Spinner className="mr-2 h-4 w-4" />}
-                  {__('发送重置链接', 'aiya-cms')}
+                  {t('send_reset_link')}
                 </Button>
               </div>
             </DialogFooter>

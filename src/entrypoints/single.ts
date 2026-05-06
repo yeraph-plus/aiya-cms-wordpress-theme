@@ -2,7 +2,7 @@ import { runPageEntry } from '../app/startup';
 import { initPrism } from '../lib/prism-plugin';
 import { initViewer } from '../lib/viewer-plugin';
 import { bootAlertSlots } from '../runtime/alert-slots';
-import { bootClipboardSlots } from '../runtime/clipboard-slots';
+import { bootClipboardSlots } from '../runtime/clipboard-selector';
 
 let viewerInstance: ReturnType<typeof initViewer> = null;
 
