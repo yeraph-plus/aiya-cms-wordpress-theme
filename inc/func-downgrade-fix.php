@@ -86,4 +86,10 @@ if (!function_exists('aya_get_post_thumb')) {
 
         return get_bfi_thumb($image_url, $size_w, $size_h);
     }
+
+    // 方法别名
+    function aya_get_thumb($image_url = false, $post_id = 0, $size_w = 400, $size_h = 300)
+    {
+        return aya_get_post_thumb($image_url, $post_id, $size_w, $size_h);
+    }
 }

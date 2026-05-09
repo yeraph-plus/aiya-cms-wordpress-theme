@@ -489,7 +489,7 @@ function aya_sponsor_show_orders_user_profile($user)
     if (isset($_GET['fix_sponsor_data']) && $_GET['fix_sponsor_data'] === '1' && isset($_GET['user_id']) && intval($_GET['user_id']) === intval($user->ID)) {
         //nonce 验证防止 CSRF
         if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'aya_fix_sponsor_' . $user->ID)) {
-            echo '<div class="notice notice-error"><p>' . _e('安全验证失败，请重试', 'aiya-cms') . '</p></div>';
+            echo '<div class="notice notice-error"><p>' . __('安全验证失败，请重试', 'aiya-cms') . '</p></div>';
         } else {
             //恢复订阅
             $review_cancel = (isset($_GET['review_cancel']) && $_GET['review_cancel'] === '1');
@@ -497,7 +497,7 @@ function aya_sponsor_show_orders_user_profile($user)
             $fix_result = aya_sponsor_fix_user_data($user->ID, $review_cancel);
 
             if ($fix_result === true) {
-                echo '<div class="updated"><p>' . _e('用户订阅数据已修复', 'aiya-cms') . '</p></div>';
+                echo '<div class="updated"><p>' . __('用户订阅数据已修复', 'aiya-cms') . '</p></div>';
             } elseif (is_string($fix_result)) {
                 echo '<div class="notice notice-warning"><p>' . esc_html($fix_result) . '</p></div>';
             }

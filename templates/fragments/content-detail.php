@@ -63,7 +63,7 @@ $render_tags = static function ($tags) {
 <div class="relative mb-8">
     <?php if ($has_thumbnail) :
         //获取特色图片生成裁剪
-        $thumbnail = aya_get_post_thumb($thumbnail_url, 0, 1200, 640);
+        $thumbnail = aya_get_thumb($thumbnail_url, 0, 1200, 640);
     ?>
         <div class="relative w-full h-60 md:h-72 lg:h-96 rounded-lg overflow-hidden mb-6">
             <img src="<?php aya_echo($thumbnail); ?>" alt="<?php aya_echo($title); ?>" class="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" />

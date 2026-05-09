@@ -22,7 +22,7 @@ if (!have_posts()) {
         //提取文章对象
         $post_obj = new AYA_Post_In_While();
 
-        $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->id, 300, 200);
+        $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->id, 400, 300);
 
         //添加到数组
         $loop_porps[] = [
