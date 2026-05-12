@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Cookie } from "lucide-react";
+import { Cookie, BotMessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { joinTranslations } from '@/lib/i18n';
 
@@ -19,18 +19,19 @@ const { t } = joinTranslations();
 type FooterConsentText = {
   title?: string;
   description?: string;
-  urlText?: string;
+  moreUrl?: string;
+  moreText?: string;
   declineText?: string;
   acceptText?: string;
 };
 
-export default function FooterConsent({ slug, policyUrl, text }: { slug: string; policyUrl?: string; text?: FooterConsentText }) {
+export default function FooterConsent({ slug, text }: { slug: string; text?: FooterConsentText }) {
   const [isVisible, setIsVisible] = useState(false);
   const consentDecision = usePreferencesStore((state) => state.consentDecisionBySlug[slug]);
   const setConsentDecision = usePreferencesStore((state) => state.setConsentDecision);
 
   useEffect(() => {
-    if (consentDecision === null) {
+    if (consentDecision === undefined) {
       // Small delay for better UX
       const timer = setTimeout(() => setIsVisible(true), 1000);
       return () => clearTimeout(timer);
@@ -58,25 +59,35 @@ export default function FooterConsent({ slug, policyUrl, text }: { slug: string;
     )}>
       <Card className="shadow-lg border-primary/20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <CardHeader className="flex flex-row items-center gap-2">
-          <Cookie className="h-5 w-5 text-primary" />
+          {slug === 'cookie' ? (
+            <Cookie className="h-5 w-5 text-primary" />
+          ) : (
+            <BotMessageSquare className="h-5 w-5 text-primary" />
+          )}
           <CardTitle className="text-lg">{text?.title || t('tip')}</CardTitle>
         </CardHeader>
         <CardContent className="pb-2">
           <CardDescription>
-            {text?.description || ""}
-            {policyUrl && (
-              <a href={policyUrl} className="underline hover:text-primary ml-1" target="_blank" rel="noopener noreferrer">
-                {text?.urlText || t('learn_more')}
+            {text?.description && (
+              <span
+                dangerouslySetInnerHTML={{ __html: text?.description || "" }}
+              />
+            )}
+            {text?.moreUrl && (
+              <a href={text?.moreUrl} className="underline hover:text-primary ml-1" target="_blank" rel="noopener noreferrer">
+                {text?.moreText || t('learn_more')}
               </a>
             )}
           </CardDescription>
         </CardContent>
         <CardFooter className="justify-end gap-2">
-          <Button variant="outline" size="sm" onClick={handleDecline}>
-            {text?.declineText || t('decline')}
-          </Button>
+          {text?.declineText && (
+            <Button variant="outline" size="sm" onClick={handleDecline}>
+              {text?.declineText || t('cancel')}
+            </Button>
+          )}
           <Button size="sm" onClick={handleAccept}>
-            {text?.acceptText || t('accept')}
+            {text?.acceptText || t('no_more_remind')}
           </Button>
         </CardFooter>
       </Card>

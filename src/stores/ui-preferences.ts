@@ -2,14 +2,14 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 export type LoopGridLayout = 'grid' | 'list';
-export type ConsentDecision = 'accepted' | 'declined' | null;
-export type ConsentMap = Record<string, Exclude<ConsentDecision, null>>;
+export type ConsentDecision = 'accepted' | 'declined';
+export type ConsentMap = Partial<Record<string, ConsentDecision>>;
 
 interface UiPreferencesState {
     loopGridLayout: LoopGridLayout;
     consentDecisionBySlug: ConsentMap;
     setLoopGridLayout: (layout: LoopGridLayout) => void;
-    setConsentDecision: (slug: string, decision: Exclude<ConsentDecision, null>) => void;
+    setConsentDecision: (slug: string, decision: ConsentDecision) => void;
 }
 
 export const usePreferencesStore = create<UiPreferencesState>()(

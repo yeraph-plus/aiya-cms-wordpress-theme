@@ -70,7 +70,7 @@ if (!function_exists('aya_get_post_thumb')) {
     }
 
     // 相同逻辑实现
-    function aya_get_post_thumb($image_url = false, $post_id = 0, $size_w = 400, $size_h = 300)
+    function aya_get_post_thumb($image_url = false, $post_id = 0, $size_w = 300, $size_h = 200)
     {
         // 如果已传入 URL 直接用它
         if ($image_url == false) {
@@ -88,7 +88,7 @@ if (!function_exists('aya_get_post_thumb')) {
     }
 
     // 方法别名
-    function aya_get_thumb($image_url = false, $post_id = 0, $size_w = 400, $size_h = 300)
+    function aya_get_thumb($image_url = false, $post_id = 0, $size_w = 300, $size_h = 200)
     {
         return aya_get_post_thumb($image_url, $post_id, $size_w, $size_h);
     }

@@ -1,5 +1,6 @@
 import domReady from '@wordpress/dom-ready';
 
+import { refreshTranslations } from '../lib/i18n';
 import { hydrateAllIslands } from '../runtime/islands';
 import { bootBadgeSlots } from '../runtime/badge-slots';
 import { bootIconSlots } from '../runtime/icon-slots';
@@ -22,6 +23,8 @@ function bootstrapApplication() {
     if (!document.documentElement.dataset.cmsPageEntry) {
         document.documentElement.dataset.cmsPageEntry = 'common';
     }
+
+    refreshTranslations();
 
     hydrateAllIslands(document);
     bootBadgeSlots(document);

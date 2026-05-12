@@ -144,6 +144,7 @@ function aya_theme_frontend_translations_map()
         'cancel' => __('取消', 'aiya-cms'),
         'decline' => __('拒绝', 'aiya-cms'),
         'accept' => __('同意', 'aiya-cms'),
+        'no_more_remind' => __('不再提醒', 'aiya-cms'),
         'learn_more' => __('了解更多', 'aiya-cms'),
         'administrator' => __('管理员', 'aiya-cms'),
         'editor' => __('编辑', 'aiya-cms'),

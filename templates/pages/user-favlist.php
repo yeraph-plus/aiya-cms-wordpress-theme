@@ -21,7 +21,7 @@ $posts_data = [];
 foreach ($fav_posts as $fav_post) {
     $post_obj = new AYA_Post_In_While($fav_post);
 
-    $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->id, 400, 300);
+    $post_thumb = aya_get_thumb($post_obj->thumbnail_url, $post_obj->id, 150, 100);
 
     $posts_data[] = [
         'id' => $post_obj->id,

@@ -554,6 +554,10 @@ function render_convert_order_page()
     global $wpdb;
     $table_name = $wpdb->prefix . 'aya_convert_codes';
 
+    if (!current_user_can('manage_options')) {
+        wp_die(__('无权限访问此页面', 'aiya-cms'));
+    }
+
     // 处理删除所有请求
     if (isset($_POST['aya_delete_all_codes']) && check_admin_referer('aya_delete_all_codes_action')) {
         $wpdb->query("TRUNCATE TABLE $table_name");
@@ -562,23 +566,35 @@ function render_convert_order_page()
 
     // 处理生成请求
     if (isset($_POST['aya_generate_codes']) && check_admin_referer('aya_generate_codes_action')) {
-        $quantity = intval($_POST['quantity']);
-        $days = intval($_POST['days']);
-        $prefix = sanitize_text_field($_POST['prefix']);
+        $quantity = max(1, intval(wp_unslash($_POST['quantity'] ?? 0)));
+        $days = max(1, intval(wp_unslash($_POST['days'] ?? 0)));
+        $prefix = strtoupper(sanitize_text_field(wp_unslash($_POST['prefix'] ?? '')));
+
+        if ($prefix !== '' && !str_ends_with($prefix, '-')) {
+            $prefix .= '-';
+        }
 
         if ($quantity > 0 && $days > 0) {
             $generated = 0;
             for ($i = 0; $i < $quantity; $i++) {
-                $code = strtoupper($prefix . wp_generate_password(16, false));
+                $code = $prefix . strtoupper(wp_generate_password(16, false, false));
                 $res = $wpdb->insert($table_name, [
                     'code' => $code,
                     'duration' => $days,
-                    'created_at' => current_time('mysql'),
+                    'created_at' => current_time('mysql', 1),
                     'status' => 0
                 ]);
-                if ($res) $generated++;
+
+                if ($res !== false) {
+                    $generated++;
+                }
             }
-            echo '<div class="updated notice is-dismissible"><p>' . sprintf(__('成功生成 %d 个兑换码', 'aiya-cms'), $generated) . '</p></div>';
+
+            if ($generated > 0) {
+                echo '<div class="updated notice is-dismissible"><p>' . sprintf(__('成功生成 %d 个兑换码', 'aiya-cms'), $generated) . '</p></div>';
+            } else {
+                echo '<div class="error notice is-dismissible"><p>' . __('兑换码生成失败，请检查数据库表结构或字段权限', 'aiya-cms') . '</p></div>';
+            }
         } else {
             echo '<div class="error notice is-dismissible"><p>' . __('请输入有效的数量和天数', 'aiya-cms') . '</p></div>';
         }

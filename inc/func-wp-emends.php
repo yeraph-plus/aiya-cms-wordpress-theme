@@ -14,6 +14,9 @@ add_action('after_switch_theme', 'aya_theme_after_init');
 
 function aya_theme_after_init()
 {
+    //安装数据表
+    do_action('aya_install');
+
     //刷新站点重写规则
     flush_rewrite_rules();
 
@@ -27,9 +30,6 @@ function aya_theme_after_init()
         exit;
     }
     */
-
-    //安装数据表
-    do_action('aya_install');
 }
 
 /*

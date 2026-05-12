@@ -735,11 +735,11 @@ export default function OpenListClient(props: OpenListClientProps) {
     if (!request) return null;
 
     return (
-        <Card className="w-full rounded-lg">
+        <Card className="w-full rounded-lg mt-4">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <FolderOpen className="h-5 w-5" />
-                    {folderName || t('loading')}
+                    {loading ? t('loading') : _error ? t('error') : folderName}
                 </CardTitle>
                 <CardDescription>
                     {description && (
@@ -823,7 +823,7 @@ export default function OpenListClient(props: OpenListClientProps) {
                     </div>
                 ) : _error ? (
                     <div className="h-24 flex items-center justify-center text-destructive">
-                        {_error}
+                        <span dangerouslySetInnerHTML={{ __html: String(_error) }} />
                     </div>
                 ) : (
                     <Table className="">

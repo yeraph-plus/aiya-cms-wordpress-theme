@@ -47,6 +47,7 @@ $tag_items = aya_tweet_post_get_tags_list();
         // 推文卡片
         if (!have_posts()) {
             aya_react_island('content-not-found', [
+                'slug' => 'no-tweet',
                 'title' => __('没有推文', 'aiya-cms'),
                 'description' => __('抱歉，没有找到推文，你可以先发布一条推文', 'aiya-cms'),
             ]);

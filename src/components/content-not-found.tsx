@@ -7,19 +7,20 @@ import {
   EmptyContent,
 } from "@/components/ui/empty"
 import { Button } from "@/components/ui/button"
-import { Terminal, ArrowLeft } from "lucide-react"
+import { Terminal, Bot, ArrowLeft } from "lucide-react"
 
 import { joinTranslations } from '@/lib/i18n';
 
 const { t } = joinTranslations();
 
 type NotFoundProps = {
+  slug?: string
   title?: string
   description?: string
-  buttonText?: string
 }
 
 export default function NotFound({
+  slug,
   title = "404 NOT FOUND",
   description = "",
 }: NotFoundProps) {
@@ -28,7 +29,11 @@ export default function NotFound({
       <Empty className="border-none">
         <EmptyHeader>
           <EmptyMedia variant="icon" className="mb-4">
-            <Terminal className="h-8 w-8 text-muted-foreground" />
+            {slug === '404' ? (
+              <Terminal className="h-8 w-8 text-muted-foreground" />
+            ) : (
+              <Bot className="h-8 w-8 text-muted-foreground" />
+            )}
           </EmptyMedia>
           <EmptyTitle className="text-2xl font-bold">
             {title}

@@ -12,7 +12,38 @@ AYF::new_opt([
     'desc' => __('AIYA-CMS 主题，功能和必要组件设置', 'aiya-cms'),
     'fields' => [
         [
-            'desc' => __('通知列表设置', 'aiya-cms'),
+            'desc' => __('右下角弹窗', 'aiya-cms'),
+            'type' => 'title_2',
+        ],
+        [
+            'title' => __('添加自定义弹窗', 'aiya-cms'),
+            'desc' => __('添加新弹窗消息', 'aiya-cms'),
+            'id' => 'site_custom_consent_list',
+            'type' => 'group_mult',
+            'sub_type' => [
+                [
+                    'title' => __('弹窗标题', 'aiya-cms'),
+                    'desc' => __('添加新弹窗消息', 'aiya-cms'),
+                    'id' => 'title',
+                    'type' => 'text',
+                    'default' => '',
+                ],
+                [
+                    'title' => __('弹窗内容', 'aiya-cms'),
+                    'desc' => __('添加新弹窗消息', 'aiya-cms'),
+                    'id' => 'content',
+                    'type' => 'textarea',
+                    'default' => '',
+                ],
+                [
+                    'id' => 'time',
+                    'type' => 'hidden',
+                    'default' => time(),
+                ],
+            ]
+        ],
+        [
+            'desc' => __('导航栏通知列表', 'aiya-cms'),
             'type' => 'title_2',
         ],
         [
@@ -55,14 +86,14 @@ AYF::new_opt([
                     [br/]公开：全局消息，游客和所有用户可见
                     [br/]注册用户：已登录的订阅者及以上权限用户可见
                     [br/]作者用户：已登录的投稿者、作者及以上权限用户可见
-                    [br/]管理员用户：已登录的编辑权限用户、管理员可见', 'aiya-cms'),
+                    [br/]编辑员用户：已登录的编辑权限用户、管理员可见', 'aiya-cms'),
                     'id' => 'scope',
                     'type' => 'radio',
                     'sub' => [
                         'guest' => __('公开', 'aiya-cms'),
                         'user' => __('注册用户', 'aiya-cms'),
                         'author' => __('作者用户', 'aiya-cms'),
-                        'administrator' => __('管理员用户', 'aiya-cms'),
+                        'administrator' => __('编辑用户', 'aiya-cms'),
                     ],
                     'default' => 'user',
                 ],
@@ -73,6 +104,5 @@ AYF::new_opt([
                 ],
             ]
         ],
-
     ]
 ]);

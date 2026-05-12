@@ -8,6 +8,7 @@ if (!defined('ABSPATH')) {
 if (!have_posts()) {
     //没有文章
     aya_react_island('content-not-found', [
+        'slug' => 'no-search',
         'title' => __('搜索结果为空', 'aiya-cms'),
         'description' => __('当前搜索关键词下没有文章', 'aiya-cms'),
     ]);
@@ -22,7 +23,7 @@ if (!have_posts()) {
         //提取文章对象
         $post_obj = new AYA_Post_In_While();
 
-        $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->id, 400, 300);
+        $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->id, 300, 200);
 
         //添加到数组
         $loop_porps[] = [

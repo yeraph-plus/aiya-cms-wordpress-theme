@@ -300,7 +300,7 @@ if (!class_exists('AYA_WP_Paged_Object')) {
     function aya_get_pagination()
     {
         $paged = AYA_WP_Paged_Object::get_pagination([
-            'mid_size' => 3,
+            'mid_size' => 7,
             'prev_text' => __('上一页', 'aiya-cms'),
             'next_text' => __('下一页', 'aiya-cms'),
         ]);

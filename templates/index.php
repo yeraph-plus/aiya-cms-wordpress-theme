@@ -41,7 +41,7 @@ if ($carousel_section !== 'off' && !$is_pre_paged) {
                     $c_item['url'] = $post_obj->url;
 
                     if (empty($c_item['thumbnail'])) {
-                        $c_item['thumbnail'] = aya_get_thumb($post_obj->thumbnail_url, $post_obj->id, 1200, 640);
+                        $c_item['thumbnail'] = aya_get_thumb($post_obj->thumbnail_url, $post_obj->id, 800, 600);
                     }
                     if (empty($c_item['title'])) {
                         $c_item['title'] = $post_obj->attr_title;
@@ -58,7 +58,7 @@ if ($carousel_section !== 'off' && !$is_pre_paged) {
             }
 
             //尝试压缩原图（使用一个空ID跳过缓存体）
-            $try_to_thumb = aya_get_thumb($c_item['thumbnail'], 0, 1200, 640);
+            $try_to_thumb = aya_get_thumb($c_item['thumbnail'], 0, 800, 600);
 
             if ($try_to_thumb !== false) {
                 $c_item['thumbnail'] = $try_to_thumb;
@@ -91,7 +91,7 @@ if (!empty($post_sections) && !$is_pre_paged) {
         foreach ($section_posts as $section_post) {
             $section_post_obj = new AYA_Post_In_While($section_post);
 
-            $section_post_thumb = aya_get_post_thumb($section_post_obj->thumbnail_url, $section_post_obj->id, 400, 300);
+            $section_post_thumb = aya_get_post_thumb($section_post_obj->thumbnail_url, $section_post_obj->id, 300, 200);
 
             $section_posts_data[] = [
                 'id' => $section_post_obj->id,
@@ -126,6 +126,7 @@ if (!empty($post_sections) && !$is_pre_paged) {
 if (!have_posts()) {
     //没有文章
     aya_react_island('content-not-found', [
+        'slug' => 'no-index',
         'title' => __('暂无内容', 'aiya-cms'),
         'description' => __('暂无文章', 'aiya-cms'),
     ]);
@@ -139,7 +140,7 @@ if (!have_posts()) {
         //提取文章对象
         $post_obj = new AYA_Post_In_While();
 
-        $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->id, 400, 300);
+        $post_thumb = aya_get_post_thumb($post_obj->thumbnail_url, $post_obj->id, 300, 200);
 
         //添加到数组
         $loop_porps[] = [

@@ -1,6 +1,9 @@
 type Primitive = string | number | boolean | null | undefined;
 type TranslationMap = Record<string, string>;
 
+let activeLocale = "zh_CN";
+let activeTranslations: TranslationMap = {};
+
 declare global {
   interface Window {
     AIYACMS_I18N?: {
@@ -30,6 +33,14 @@ function getI18nSource(): { locale: string; translations: TranslationMap } {
 
   return { locale, translations };
 }
+
+// 重载方法
+export function refreshTranslations() {
+  const { locale, translations } = getI18nSource();
+  activeLocale = locale;
+  activeTranslations = translations;
+}
+
 
 // 复刻 @wordpress/i18n 的格式化字符串实现
 export function sprintf(format: string, ...args: Primitive[]): string {
@@ -65,10 +76,10 @@ export function sprintf(format: string, ...args: Primitive[]): string {
 
 // 应用语言包
 export function joinTranslations() {
-  const { locale, translations } = getI18nSource();
+  refreshTranslations();
 
   function t(key: string, fallback?: string): string {
-    const translated = translations[key];
+    const translated = activeTranslations[key];
     if (typeof translated === "string" && translated !== "") {
       return translated;
     }
@@ -87,7 +98,7 @@ export function joinTranslations() {
     return sprintf(t(key), ...args);
   }
 
-  return { locale, t, __, sprintf };
+  return { locale: activeLocale, t, __, sprintf };
 }
 
 export function getTranslations() {

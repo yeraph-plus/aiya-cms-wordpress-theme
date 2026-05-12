@@ -328,7 +328,7 @@ function MobileSearch({ onSubmitted }: { onSubmitted: () => void }) {
           ref={inputRef}
           type="search"
           name="s"
-          placeholder="搜索内容..."
+          placeholder={t('search')}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           list={recentSearches.length > 0 ? SEARCH_DATALIST_ID : undefined}

@@ -496,8 +496,13 @@ $api->register_route('oplist_fs', [
             return $api->error_response('invalid_param', ['detail' => __('非法访问', 'aiya-cms')]);
         }
 
+        if (!is_user_logged_in()) {
+            return $api->error_response('permission_denied', ['detail' => __('请先登录', 'aiya-cms')]);
+        }
+
         // 检查文章是否存在
         $post = get_post($post_id);
+
         if (!$post instanceof WP_Post) {
             return $api->error_response('not_found', ['detail' => __('文章不存在', 'aiya-cms')]);
         }
@@ -513,7 +518,7 @@ $api->register_route('oplist_fs', [
         $sponsor_can = filter_var(aya_post_opt('sponsor_can', $box_id, $post_id), FILTER_VALIDATE_BOOLEAN);
 
         if ($sponsor_can && !aya_is_sponsor()) {
-            return $api->error_response('permission_denied', ['detail' => __('未获授权', 'aiya-cms')]);
+            return $api->error_response('permission_denied', ['detail' => sprintf(__('仅限订阅用户查看，请 %s 获取权限', 'aiya-cms'), '<a href="' . get_home_url('sponsor') . '">' . __('购买订阅', 'aiya-cms') . '</a>')]);
         }
         // 增加计数器
         if ($sponsor_can) {
@@ -611,7 +616,7 @@ $api->register_route('oplist_fs', [
         ]);
     },
     'permission_callback' => function () {
-        return is_user_logged_in();
+        return true;
     }
 ]);
 

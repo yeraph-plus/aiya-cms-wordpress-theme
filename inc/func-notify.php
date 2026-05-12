@@ -126,7 +126,7 @@ function aya_notify_create($once_note = array())
     }
 
     $note['title'] = wp_kses_post($note['title']);
-    $note['content'] = wp_kses_post($note['content']);
+    $note['content'] = aya_preg_desc(wp_kses_post($note['content']));
     $note['time'] = date_i18n(get_option('date_format'), $note['time']);
 
     //添加到消息列表
@@ -160,6 +160,44 @@ function aya_notify_list()
     $notes = apply_filters('aya_notify_add', []);
     //应用通知过滤器
     $notes = apply_filters('aya_notify_scope_filter', $notes);
+    //返回数据
+    return $notes;
+}
+
+/*
+ * ------------------------------------------------------------------------------
+ * 弹窗消息格式化
+ * ------------------------------------------------------------------------------
+ */
+
+//格式化消息
+function aya_consent_message()
+{
+    //格式化消息
+    $custom_notes = aya_opt('site_custom_consent_list', 'notify');
+    $notes = [];
+
+    if (!empty($custom_notes)) {
+        foreach ($custom_notes as $key => $custom_note) {
+            if (empty($custom_note['content'])) {
+                continue;
+            }
+            
+            $note_item = [];
+            
+            $note_item['content'] = aya_preg_desc($custom_note['content']);
+            
+            if (empty($custom_note['title'])) {
+                $note_item['title'] = __('提示', 'aiya-cms');
+            } else {
+                $note_item['title'] = $custom_note['title'];
+            }
+            
+            $note_item['slug'] = $custom_note['time'];
+            
+            $notes[] = $note_item;
+        }
+    }
     //返回数据
     return $notes;
 }
