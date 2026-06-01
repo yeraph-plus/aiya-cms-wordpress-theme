@@ -2,6 +2,9 @@ import * as React from "react"
 import {
     Folder,
     FolderOpen,
+    FolderMinus,
+    FolderSync,
+    FolderX,
     FileText,
     FileArchive,
     Image,
@@ -222,12 +225,7 @@ function normalizeOpenListResponse(raw: any, pageFallback: number): NormalizedOp
         };
     }
 
-    const message =
-        (typeof raw?.message === "string" && raw.message) ||
-        (typeof raw?.data?.detail === "string" && raw.data.detail) ||
-        (typeof raw?.data?.message === "string" && raw.data.message) ||
-        (typeof raw?.detail === "string" && raw.detail) ||
-        "请求失败";
+    const message = (typeof raw?.data?.detail === "string" && raw.data.detail) || (typeof raw?.message === "string" && raw.message) || (typeof raw?.detail === "string" && raw.detail) || "";
 
     return { ok: false, message };
 }
@@ -448,9 +446,9 @@ export default function OpenListClient(props: OpenListClientProps) {
             } catch {
             }
             console.error("Fetch error:", err);
+
             if (mountedRef.current) {
-                const errorMessage = err instanceof Error ? err.message : t('network_connection_error_retry_later');
-                setError(errorMessage);
+                setError(t('network_connection_error_retry_later'));
             }
         } finally {
             if (mountedRef.current) {
@@ -738,8 +736,22 @@ export default function OpenListClient(props: OpenListClientProps) {
         <Card className="w-full rounded-lg mt-4">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                    <FolderOpen className="h-5 w-5" />
-                    {loading ? t('loading') : _error ? t('error') : folderName}
+                    {loading ? (
+                        <>
+                            <FolderSync className="h-5 w-5" />
+                            {t('loading')}
+                        </>
+                    ) : _error ? (
+                        <>
+                            <FolderX className="h-5 w-5" />
+                            {t('error_request')}
+                        </>
+                    ) : (
+                        <>
+                            <FolderOpen className="h-5 w-5" />
+                            {folderName}
+                        </>
+                    )}
                 </CardTitle>
                 <CardDescription>
                     {description && (
@@ -822,8 +834,9 @@ export default function OpenListClient(props: OpenListClientProps) {
                         <Spinner className="h-8 w-8" />
                     </div>
                 ) : _error ? (
-                    <div className="h-24 flex items-center justify-center text-destructive">
-                        <span dangerouslySetInnerHTML={{ __html: String(_error) }} />
+                    <div className="flex items-center justify-center h-32">
+                        <FolderMinus className="h-8 w-8 text-destructive mr-2" />
+                        <span className="text-destructive text-md" dangerouslySetInnerHTML={{ __html: String(_error) }} />
                     </div>
                 ) : (
                     <Table className="">

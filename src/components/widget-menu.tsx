@@ -1,5 +1,5 @@
 import { ChevronRight, MoreHorizontal, EllipsisVertical } from "lucide-react"
-
+import { decodeEntities } from '@wordpress/html-entities';
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -31,6 +31,10 @@ type MenuNode = {
   child?: Record<string, MenuNode> | MenuNode[]
 }
 
+function decodeMenuLabel(label?: string) {
+  return decodeEntities(label ?? "")
+}
+
 function normalizeMenuNodes(nodes: any): MenuNode[] {
   if (!nodes) {
     return []
@@ -60,7 +64,7 @@ function RecursiveDropdownMenu({ items }: { items: MenuNode[] }) {
           return (
             <DropdownMenuSub key={idx}>
               <DropdownMenuSubTrigger>
-                <span>{item.label}</span>
+                <span>{decodeMenuLabel(item.label)}</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 <RecursiveDropdownMenu items={children} />
@@ -72,7 +76,7 @@ function RecursiveDropdownMenu({ items }: { items: MenuNode[] }) {
         return (
           <DropdownMenuItem key={idx} asChild>
             <a href={item.url} target={item.target}>
-              {item.label}
+              {decodeMenuLabel(item.label)}
             </a>
           </DropdownMenuItem>
         )
@@ -114,7 +118,7 @@ export default function WidgetMenu({ menu, widgetTitle, className }: WidgetMenuP
                     variant="ghost"
                     className="w-full justify-between font-normal"
                   >
-                    <span>{item.label}</span>
+                    <span>{decodeMenuLabel(item.label)}</span>
                     <ChevronRight className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </Button>
                 </CollapsibleTrigger>
@@ -131,7 +135,7 @@ export default function WidgetMenu({ menu, widgetTitle, className }: WidgetMenuP
                               size="sm"
                               className="w-full justify-between h-8 font-normal"
                             >
-                              <span>{subItem.label}</span>
+                              <span>{decodeMenuLabel(subItem.label)}</span>
                               <MoreHorizontal className="ml-auto size-4 opacity-50" />
                             </Button>
                           </DropdownMenuTrigger>
@@ -154,7 +158,7 @@ export default function WidgetMenu({ menu, widgetTitle, className }: WidgetMenuP
                         )}
                       >
                         <a href={subItem.url} target={subItem.target}>
-                          <span>{subItem.label}</span>
+                          <span>{decodeMenuLabel(subItem.label)}</span>
                         </a>
                       </Button>
                     )
@@ -175,7 +179,7 @@ export default function WidgetMenu({ menu, widgetTitle, className }: WidgetMenuP
               )}
             >
               <a href={item.url} target={item.target}>
-                <span>{item.label}</span>
+                <span>{decodeMenuLabel(item.label)}</span>
               </a>
             </Button>
           )

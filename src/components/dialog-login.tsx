@@ -19,6 +19,10 @@ import { ForgotPasswordDialog } from "./dialog-forgot-password"
 
 const { t } = joinTranslations();
 
+function getResponseError(data: any, fallback: string) {
+  return data?.message || data?.detail || data?.data?.detail || fallback
+}
+
 interface LoginDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -60,7 +64,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || t('request_failed'))
+        throw new Error(getResponseError(data, t('request_failed')))
       }
 
       // Login successful, show toast and reload page

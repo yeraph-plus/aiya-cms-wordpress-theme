@@ -454,23 +454,32 @@ AYF::new_box([
 // 检查文章是否配置了文件列表
 function aya_is_oplist_cli_ready($post_id = 0)
 {
+    if (!is_user_logged_in()) {
+        return false;
+    }
+
     $post_id = absint($post_id);
 
     if ($post_id <= 0) {
         return false;
     }
+
     // 检查文章是否配置了请求方法
     $fs_method = aya_post_opt('fs_method', 'oplist_client', $post_id);
+
     if (!in_array($fs_method, ['list', 'get', 'dirs', 'search'], true)) {
         return false;
     }
+
     // 检查文章是否配置了搜索关键词
     if ($fs_method === 'search') {
         $keywords = (string) aya_post_opt('keywords', 'oplist_client', $post_id);
         return $keywords !== '';
     }
+
     // 检查文章是否配置了目录路径
     $path = (string) aya_post_opt('path', 'oplist_client', $post_id);
+
     return $path !== '';
 }
 
@@ -492,12 +501,9 @@ $api->register_route('oplist_fs', [
         $params = $request->get_json_params();
 
         $post_id = isset($params['post_id']) ? absint($params['post_id']) : 0;
+
         if ($post_id <= 0) {
             return $api->error_response('invalid_param', ['detail' => __('非法访问', 'aiya-cms')]);
-        }
-
-        if (!is_user_logged_in()) {
-            return $api->error_response('permission_denied', ['detail' => __('请先登录', 'aiya-cms')]);
         }
 
         // 检查文章是否存在
@@ -510,7 +516,7 @@ $api->register_route('oplist_fs', [
         $box_id = 'oplist_client';
 
         // 检查文章是否配置了 OpenList 客户端
-        if (!aya_is_oplist_cli_ready($post_id, false)) {
+        if (!aya_is_oplist_cli_ready($post_id)) {
             return $api->error_response('not_found', ['detail' => __('文件访问未获授权', 'aiya-cms')]);
         }
 
@@ -520,6 +526,7 @@ $api->register_route('oplist_fs', [
         if ($sponsor_can && !aya_is_sponsor()) {
             return $api->error_response('permission_denied', ['detail' => sprintf(__('仅限订阅用户查看，请 %s 获取权限', 'aiya-cms'), '<a href="' . get_home_url('sponsor') . '">' . __('购买订阅', 'aiya-cms') . '</a>')]);
         }
+
         // 增加计数器
         if ($sponsor_can) {
             aya_sponsor_user_auto_trigger_count();

@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/pagination"
 import { MessageSquare, Reply, Send } from 'lucide-react';
 import { toast } from 'sonner';
+//@wordpress/html-entities
+//@wordpress/url
 import { cn, getConfig } from '@/lib/utils';
 import { joinTranslations } from '@/lib/i18n';
 

@@ -70,16 +70,16 @@ export default function SponsorDashboard({ data }: { data: SponsorData }) {
 
     return (
         <>
-            {force_cancel && (
-                <Alert variant="destructive">
-                    <AlertTriangle className="h-4 w-4" />
-                    <AlertTitle>{t('notice')}</AlertTitle>
-                    <AlertDescription>
-                        {t('sponsor_access_force_canceled_contact_support')}
-                    </AlertDescription>
-                </Alert>
-            )}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                {force_cancel && (
+                    <Alert variant="destructive">
+                        <AlertTriangle className="h-4 w-4" />
+                        <AlertTitle>{t('notice')}</AlertTitle>
+                        <AlertDescription>
+                            {t('sponsor_access_force_canceled_contact_support')}
+                        </AlertDescription>
+                    </Alert>
+                )}
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-md font-medium">{t('current_subscription')}</CardTitle>

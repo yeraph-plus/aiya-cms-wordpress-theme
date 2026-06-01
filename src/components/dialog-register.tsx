@@ -18,6 +18,10 @@ import { joinTranslations } from '@/lib/i18n';
 
 const { t } = joinTranslations();
 
+function getResponseError(data: any, fallback: string) {
+  return data?.message || data?.detail || data?.data?.detail || fallback
+}
+
 interface RegisterDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -33,6 +37,9 @@ export function RegisterDialog({ open, onOpenChange }: RegisterDialogProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    const trimmedUsername = username.trim()
+    const trimmedEmail = email.trim()
 
     if (password !== confirmPassword) {
       setError(t('password_mismatch'))
@@ -56,8 +63,8 @@ export function RegisterDialog({ open, onOpenChange }: RegisterDialogProps) {
           "X-WP-Nonce": apiNonce,
         },
         body: JSON.stringify({
-          username,
-          email,
+          username: trimmedUsername,
+          email: trimmedEmail,
           password,
           password_confirm: confirmPassword,
         }),
@@ -66,7 +73,7 @@ export function RegisterDialog({ open, onOpenChange }: RegisterDialogProps) {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || t('register_failed'))
+        throw new Error(getResponseError(data, t('register_failed')))
       }
 
       toast.success(t('register_success'))

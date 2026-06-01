@@ -241,6 +241,7 @@ function aya_theme_frontend_translations_map()
         'leave_comment' => __('发表评论', 'aiya-cms'),
         'comments_closed' => __('评论已关闭。', 'aiya-cms'),
         // open-list-client.tsx
+        'size' => __('大小', 'aiya-cms'),
         'filename' => __('文件名', 'aiya-cms'),
         'modified_time' => __('修改时间', 'aiya-cms'),
         'open_in_new_window' => __('新窗口打开', 'aiya-cms'),

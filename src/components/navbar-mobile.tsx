@@ -1,4 +1,5 @@
 import * as React from "react"
+import { decodeEntities } from '@wordpress/html-entities';
 import {
   ChevronRight,
   CircleEllipsis,

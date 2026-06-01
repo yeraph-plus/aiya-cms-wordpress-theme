@@ -17,6 +17,10 @@ import { joinTranslations } from '@/lib/i18n';
 
 const { t } = joinTranslations();
 
+function getResponseError(data: any, fallback: string) {
+  return data?.message || data?.detail || data?.data?.detail || fallback
+}
+
 interface ForgotPasswordDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -31,6 +35,8 @@ export function ForgotPasswordDialog({ open, onOpenChange, onBackToLogin }: Forg
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    const trimmedEmail = email.trim()
 
     const { apiUrl, apiNonce } = getConfig()
     if (!apiNonce) {
@@ -49,19 +55,18 @@ export function ForgotPasswordDialog({ open, onOpenChange, onBackToLogin }: Forg
           "X-WP-Nonce": apiNonce,
         },
         body: JSON.stringify({
-          email,
+          email: trimmedEmail,
         }),
       })
 
       const data = await response.json()
 
-      if (data.code && data.code !== 'success' && data.code !== 200) {
-        throw new Error(data.message || data.detail || t('request_failed'))
+      if (!response.ok) {
+        throw new Error(getResponseError(data, t('request_failed')))
       }
 
-      // Success
       setIsSuccess(true)
-      toast.success(data.message || t('reset_link_sent'))
+      toast.success(data?.data?.message || data?.message || t('reset_link_sent'))
 
     } catch (err: any) {
       console.error(err)

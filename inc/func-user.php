@@ -300,17 +300,16 @@ function aya_sponsor_get_user_orders($user_id = 0)
         $user_id
     ));
 
-    //如果没有订单，返回空数组
-    if (empty($orders)) {
-        return [];
-    }
-
     //获取当前禁用状态
     $force_cancel = get_user_meta($user_id, 'aya_force_cancel_sponsor', true);
     //获取到期时间
     $expiration = get_user_meta($user_id, 'sponsor_expiration', true);
     //获取赞助计数器使用次数
     $used_count = get_user_meta($user_id, 'aya_trigger_count_sponsor', true);
+
+    if (empty($orders)) {
+        $orders = [];
+    }
 
     //计算期时间和剩余天数
     $now = current_time('timestamp');

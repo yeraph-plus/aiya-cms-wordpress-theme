@@ -215,6 +215,7 @@ $api->register_route('register', [
         //将用户名设置为display_name
         wp_update_user([
             'ID' => $user_id,
+            'nickname' => $register_name,
             'display_name' => $register_name,
         ]);
 
