@@ -1,6 +1,5 @@
 import * as React from "react"
-import { decodeEntities } from '@wordpress/html-entities';
-import { cn } from "@/lib/utils"
+import { cn, sanitizeBackendText } from "@/lib/utils"
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -54,17 +53,17 @@ export default function NavMenu({ menu, className }: NavMenuProps) {
           if (hasChildren) {
             return (
               <NavigationMenuItem key={index}>
-                <NavigationMenuTrigger className="bg-transparent">{decodeEntities(item.label || '')}</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="bg-transparent">{sanitizeBackendText(item.label)}</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     {children.map((child, childIndex) => (
                       <ListItem
                         key={childIndex}
-                        title={decodeEntities(child.label || '')}
+                        title={sanitizeBackendText(child.label)}
                         href={child.url}
                         target={child.target}
                       >
-                        {decodeEntities(child.description || '')}
+                        {sanitizeBackendText(child.description)}
                       </ListItem>
                     ))}
                   </ul>
@@ -80,7 +79,7 @@ export default function NavMenu({ menu, className }: NavMenuProps) {
                 target={item.target}
                 className={cn(navigationMenuTriggerStyle(), "bg-transparent")}
               >
-                {decodeEntities(item.label || '')}
+                {sanitizeBackendText(item.label)}
               </NavigationMenuLink>
             </NavigationMenuItem>
           )

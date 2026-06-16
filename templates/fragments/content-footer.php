@@ -1,9 +1,14 @@
 <?php
 
-//获取声明文本
+// 获取声明文本
 $statement_content = aya_opt('site_post_statement_text', 'land');
+// 获取议题标题内容
+$issue_title_content = explode("\n", aya_opt('site_issue_feedback_title_text', 'land'));
+//当前用户ID
+$current_user_id = is_user_logged_in() ? get_current_user_id() : 0;
 // 是否显示交互按钮
 $use_interaction = (bool) $use_interaction ?? false;
+
 
 ?>
 <footer class="my-8 space-y-8">
@@ -12,8 +17,10 @@ $use_interaction = (bool) $use_interaction ?? false;
             <?php
             aya_react_island('content-button-group', [
                 'post_id' => $post_id,
+                'current_user_id' => $current_user_id,
                 'likes' => $likes,
                 'is_favorite' => $is_favorite,
+                'issue_title_content' => $issue_title_content,
             ]);
             ?>
         </div>

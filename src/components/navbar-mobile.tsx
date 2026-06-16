@@ -1,5 +1,4 @@
 import * as React from "react"
-import { decodeEntities } from '@wordpress/html-entities';
 import {
   ChevronRight,
   CircleEllipsis,
@@ -39,7 +38,7 @@ import {
 import ModeToggle from "@/components/navbar-mode-toggle"
 import { useSearchHistoryStore } from "@/stores/search-history"
 import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
+import { cn, sanitizeBackendText } from "@/lib/utils"
 import { joinTranslations } from '@/lib/i18n';
 
 const { t } = joinTranslations();
@@ -131,7 +130,7 @@ function RecursiveDropdownMenu({
         if (children.length > 0) {
           return (
             <DropdownMenuSub key={itemKey}>
-              <DropdownMenuSubTrigger>{item.label}</DropdownMenuSubTrigger>
+              <DropdownMenuSubTrigger>{sanitizeBackendText(item.label)}</DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {item.url && (
                   <DropdownMenuItem asChild>
@@ -141,7 +140,7 @@ function RecursiveDropdownMenu({
                       rel={item.target === "_blank" ? "noopener noreferrer" : undefined}
                       onClick={onNavigate}
                       aria-current={item.is_active ? "page" : undefined}
-                    >{item.label}</a>
+                    >{sanitizeBackendText(item.label)}</a>
                   </DropdownMenuItem>
                 )}
                 <RecursiveDropdownMenu items={children} onNavigate={onNavigate} />
@@ -158,7 +157,7 @@ function RecursiveDropdownMenu({
               rel={item.target === "_blank" ? "noopener noreferrer" : undefined}
               onClick={onNavigate}
               aria-current={item.is_active ? "page" : undefined}
-            >{item.label}</a>
+            >{sanitizeBackendText(item.label)}</a>
           </DropdownMenuItem>
         )
       })}
@@ -208,7 +207,7 @@ function InlineMenuLevel({
                 onClick={onNavigate}
                 aria-current={item.is_active ? "page" : undefined}
               >
-                <span>{item.label}</span>
+                <span>{sanitizeBackendText(item.label)}</span>
               </a>
             </Button>
           )
@@ -223,7 +222,7 @@ function InlineMenuLevel({
                   size="sm"
                   className="w-full justify-between h-8 font-normal"
                 >
-                  <span>{item.label}</span>
+                  <span>{sanitizeBackendText(item.label)}</span>
                   <MoreHorizontal className="ml-auto size-4 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
@@ -237,7 +236,7 @@ function InlineMenuLevel({
                       onClick={onNavigate}
                       aria-current={item.is_active ? "page" : undefined}
                     >
-                      {item.label}
+                      {sanitizeBackendText(item.label)}
                     </a>
                   </DropdownMenuItem>
                 )}
@@ -263,7 +262,7 @@ function InlineMenuLevel({
                   item.is_active && "bg-accent text-accent-foreground font-medium"
                 )}
               >
-                <span>{item.label}</span>
+                <span>{sanitizeBackendText(item.label)}</span>
                 <ChevronRight className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
               </Button>
             </CollapsibleTrigger>
@@ -283,7 +282,7 @@ function InlineMenuLevel({
                       onClick={onNavigate}
                       aria-current={item.is_active ? "page" : undefined}
                     >
-                      {item.label}
+                      {sanitizeBackendText(item.label)}
                     </a>
                   </Button>
                 )}

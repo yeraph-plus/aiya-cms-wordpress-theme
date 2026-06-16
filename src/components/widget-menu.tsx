@@ -1,6 +1,5 @@
 import { ChevronRight, MoreHorizontal, EllipsisVertical } from "lucide-react"
-import { decodeEntities } from '@wordpress/html-entities';
-import { cn } from "@/lib/utils"
+import { cn, sanitizeBackendText } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -29,10 +28,6 @@ type MenuNode = {
   target?: string
   is_active?: boolean
   child?: Record<string, MenuNode> | MenuNode[]
-}
-
-function decodeMenuLabel(label?: string) {
-  return decodeEntities(label ?? "")
 }
 
 function normalizeMenuNodes(nodes: any): MenuNode[] {
@@ -64,7 +59,7 @@ function RecursiveDropdownMenu({ items }: { items: MenuNode[] }) {
           return (
             <DropdownMenuSub key={idx}>
               <DropdownMenuSubTrigger>
-                <span>{decodeMenuLabel(item.label)}</span>
+                <span>{sanitizeBackendText(item.label)}</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 <RecursiveDropdownMenu items={children} />
@@ -76,7 +71,7 @@ function RecursiveDropdownMenu({ items }: { items: MenuNode[] }) {
         return (
           <DropdownMenuItem key={idx} asChild>
             <a href={item.url} target={item.target}>
-              {decodeMenuLabel(item.label)}
+              {sanitizeBackendText(item.label)}
             </a>
           </DropdownMenuItem>
         )
@@ -118,7 +113,7 @@ export default function WidgetMenu({ menu, widgetTitle, className }: WidgetMenuP
                     variant="ghost"
                     className="w-full justify-between font-normal"
                   >
-                    <span>{decodeMenuLabel(item.label)}</span>
+                    <span>{sanitizeBackendText(item.label)}</span>
                     <ChevronRight className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </Button>
                 </CollapsibleTrigger>
@@ -135,7 +130,7 @@ export default function WidgetMenu({ menu, widgetTitle, className }: WidgetMenuP
                               size="sm"
                               className="w-full justify-between h-8 font-normal"
                             >
-                              <span>{decodeMenuLabel(subItem.label)}</span>
+                              <span>{sanitizeBackendText(subItem.label)}</span>
                               <MoreHorizontal className="ml-auto size-4 opacity-50" />
                             </Button>
                           </DropdownMenuTrigger>
@@ -158,7 +153,7 @@ export default function WidgetMenu({ menu, widgetTitle, className }: WidgetMenuP
                         )}
                       >
                         <a href={subItem.url} target={subItem.target}>
-                          <span>{decodeMenuLabel(subItem.label)}</span>
+                          <span>{sanitizeBackendText(subItem.label)}</span>
                         </a>
                       </Button>
                     )
@@ -179,7 +174,7 @@ export default function WidgetMenu({ menu, widgetTitle, className }: WidgetMenuP
               )}
             >
               <a href={item.url} target={item.target}>
-                <span>{decodeMenuLabel(item.label)}</span>
+                <span>{sanitizeBackendText(item.label)}</span>
               </a>
             </Button>
           )

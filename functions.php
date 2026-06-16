@@ -112,6 +112,19 @@ $GLOBALS['aya_land_page'] = [
             }, 10, 1);
         }
     ],
+    'issues' => [
+        'title' => __('议题', 'aiya-cms'),
+        'template' => 'issues',
+        'orginal' => true,
+        'callback' => function () {
+            add_filter('aya_breadcrumb_add_item', function () {
+                return [
+                    'label' => __('议题', 'aiya-cms'),
+                    'url' => home_url('/issues/'),
+                ];
+            }, 10, 1);
+        }
+    ],
     'sponsor' => [
         'title' => __('获取订阅', 'aiya-cms'),
         'template' => 'sponsor-plan',
@@ -120,7 +133,7 @@ $GLOBALS['aya_land_page'] = [
             add_filter('aya_breadcrumb_add_item', function () {
                 return [
                     'label' => __('获取订阅', 'aiya-cms'),
-                    'url' => '#',
+                    'url' => home_url('/sponsor/'),
                 ];
             }, 10, 1);
         }
@@ -133,7 +146,7 @@ $GLOBALS['aya_land_page'] = [
             add_filter('aya_breadcrumb_add_item', function () {
                 return [
                     'label' => __('收藏列表', 'aiya-cms'),
-                    'url' => '#',
+                    'url' => home_url('/user-favlist/'),
                 ];
             }, 10, 1);
         }
@@ -146,7 +159,7 @@ $GLOBALS['aya_land_page'] = [
             add_filter('aya_breadcrumb_add_item', function () {
                 return [
                     'label' => __('用户设置', 'aiya-cms'),
-                    'url' => '#',
+                    'url' => home_url('/user-settings/'),
                 ];
             }, 10, 1);
         }
@@ -244,6 +257,7 @@ aya_require('func-api-router');
 
 // 功能
 aya_require('func-payment');
+aya_require('func-issue');
 aya_require('func-user');
 aya_require('func-openlist');
 aya_require('func-notify');

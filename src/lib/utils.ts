@@ -1,9 +1,25 @@
 import * as React from "react"
+import { decodeEntities } from "@wordpress/html-entities"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export function sanitizeBackendText(value?: unknown) {
+  const raw = String(value ?? "")
+
+  if (!raw) {
+    return ""
+  }
+
+  const textContent =
+    typeof window === "undefined"
+      ? raw.replace(/<[^>]*>/g, " ")
+      : new DOMParser().parseFromString(raw, "text/html").body.textContent || ""
+
+  return decodeEntities(textContent).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim()
 }
 
 const MOBILE_BREAKPOINT = 768

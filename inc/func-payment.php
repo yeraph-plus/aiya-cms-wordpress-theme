@@ -536,17 +536,17 @@ function aya_verify_code_by_code($code)
 add_action('admin_menu', function () {
     //启用时加载
     if (aya_opt('site_sponsor_convert_bool', 'access')) {
-        add_menu_page(
+        add_submenu_page(
+            'aya-options-basic',
             __('兑换码管理', 'aiya-cms'),
             __('兑换码管理', 'aiya-cms'),
             'manage_options',
             'convert-management',
             'render_convert_order_page',
-            'dashicons-admin-site-alt3',
             99
         );
     }
-});
+}, 20);
 
 //激活码管理页面
 function render_convert_order_page()

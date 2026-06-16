@@ -15,6 +15,11 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination"
 import { MessageSquare, Reply, Send } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
+import remarkBreaks from 'remark-breaks';
+import remarkGfm from 'remark-gfm';
 import { toast } from 'sonner';
 //@wordpress/html-entities
 //@wordpress/url
@@ -158,10 +163,14 @@ const CommentItem = ({
                     )}
                 </div>
 
-                <div
-                    className="text-sm prose dark:prose-invert max-w-none text-muted-foreground/90 break-words"
-                    dangerouslySetInnerHTML={{ __html: comment.content.rendered }}
-                />
+                <div className="text-sm prose dark:prose-invert max-w-none text-muted-foreground/90 break-words">
+                    <ReactMarkdown
+                        remarkPlugins={[remarkGfm, remarkBreaks]}
+                        rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                    >
+                        {comment.content?.rendered ?? ''}
+                    </ReactMarkdown>
+                </div>
 
                 {isReplying && (
                     <div className="mt-4 bg-muted/30 p-4 rounded-lg border">

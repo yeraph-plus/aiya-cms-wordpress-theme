@@ -94,7 +94,25 @@ AYF::new_opt([
             'desc' => __('允许用户在推文后直接发布，无需后台审核通过', 'aiya-cms'),
             'id' => 'site_post_tweets_publish_bool',
             'type' => 'switch',
+            'default' => false,
+        ],
+        [
+            'desc' => __('议题反馈组件', 'aiya-cms'),
+            'type' => 'title_1',
+        ],
+        [
+            'title' => __('公开议题页面', 'aiya-cms'),
+            'desc' => __('允许所有人查看 Issues 页面，否则仅允许管理员查看', 'aiya-cms'),
+            'id' => 'site_issue_public_bool',
+            'type' => 'switch',
             'default' => true,
+        ],
+        [
+            'title' => __('文章内发布反馈时的预设标题', 'aiya-cms'),
+            'desc' => __('创建一些预设标题，用户可以在发布反馈时快捷输入，一行一个', 'aiya-cms'),
+            'id' => 'site_issue_feedback_title_text',
+            'type' => 'textarea',
+            'default' => '',
         ],
         [
             'desc' => __('首页独立分区', 'aiya-cms'),
