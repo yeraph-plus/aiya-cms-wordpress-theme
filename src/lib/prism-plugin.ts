@@ -1,24 +1,47 @@
-import Prism from "prismjs"
+type PrismCore = typeof import("prismjs")
 
-import "prismjs/plugins/line-numbers/prism-line-numbers"
-import "prismjs/plugins/normalize-whitespace/prism-normalize-whitespace"
-import "prismjs/plugins/toolbar/prism-toolbar"
-import "prismjs/plugins/show-language/prism-show-language"
-import "prismjs/components/prism-markup"
-import "prismjs/components/prism-markup-templating"
-import "prismjs/components/prism-javascript"
-import "prismjs/components/prism-typescript"
-import "prismjs/components/prism-css"
-import "prismjs/components/prism-php"
-import "prismjs/components/prism-ruby"
-import "prismjs/components/prism-python"
-import "prismjs/components/prism-java"
-import "prismjs/components/prism-c"
-import "prismjs/components/prism-cpp"
-import "prismjs/components/prism-csharp"
-import "prismjs/components/prism-yaml"
-import "prismjs/components/prism-json"
-import "prismjs/components/prism-sql"
+let prismLoader: Promise<PrismCore> | null = null
+
+function loadPrism() {
+  if (prismLoader) {
+    return prismLoader
+  }
+
+  prismLoader = (async () => {
+    const prismModule = await import("prismjs")
+    const Prism = (prismModule as { default?: PrismCore }).default ?? prismModule
+
+    // Prism language/components expect a global Prism at execution time.
+    ;(globalThis as typeof globalThis & { Prism?: PrismCore }).Prism = Prism
+
+    await import("prismjs/plugins/line-numbers/prism-line-numbers")
+    await import("prismjs/plugins/normalize-whitespace/prism-normalize-whitespace")
+    await import("prismjs/plugins/toolbar/prism-toolbar")
+    await import("prismjs/plugins/show-language/prism-show-language")
+    await import("prismjs/components/prism-markup")
+    await import("prismjs/components/prism-markup-templating")
+    await import("prismjs/components/prism-javascript")
+    await import("prismjs/components/prism-typescript")
+    await import("prismjs/components/prism-css")
+    await import("prismjs/components/prism-php")
+    await import("prismjs/components/prism-ruby")
+    await import("prismjs/components/prism-python")
+    await import("prismjs/components/prism-java")
+    await import("prismjs/components/prism-c")
+    await import("prismjs/components/prism-cpp")
+    await import("prismjs/components/prism-csharp")
+    await import("prismjs/components/prism-yaml")
+    await import("prismjs/components/prism-json")
+    await import("prismjs/components/prism-sql")
+
+    return Prism
+  })().catch((error) => {
+    prismLoader = null
+    throw error
+  })
+
+  return prismLoader
+}
 
 
 export type InitPrismOptions = {
@@ -45,7 +68,7 @@ function getLanguageFromCodeEl(codeEl: Element) {
   return null
 }
 
-export function initPrism(options: InitPrismOptions = {}) {
+export async function initPrism(options: InitPrismOptions = {}) {
   const container =
     options.container ??
     (options.selector
@@ -56,6 +79,7 @@ export function initPrism(options: InitPrismOptions = {}) {
 
   const codeEls = Array.from(container.querySelectorAll("pre code, code"))
   if (codeEls.length === 0) return
+  const Prism = await loadPrism()
 
   for (const codeEl of codeEls) {
     if (!options.force && (codeEl as HTMLElement).dataset.prismHighlighted === "done") continue

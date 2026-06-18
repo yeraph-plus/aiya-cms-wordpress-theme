@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
  * ------------------------------------------------------------------------------
  */
 
-define('VITE_HOST', 'http://localhost:5173');
+define('VITE_HOST', 'http://127.0.0.1:5173');
 define('VITE_ENTRY_POINT', 'src/entrypoints/common.ts');
 define('VITE_PUBLIC_PATH', './build');
 

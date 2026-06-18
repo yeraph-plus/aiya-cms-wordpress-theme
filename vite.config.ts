@@ -5,7 +5,7 @@
 import path, { resolve } from 'node:path'
 import type { Plugin } from 'vite';
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import tailwindcss from "@tailwindcss/vite";
 //import legacy from '@vitejs/plugin-legacy'
 //import liveReload from 'vite-plugin-live-reload'
@@ -60,9 +60,7 @@ export default defineConfig({
     },
     */
     //固定的端口以匹配PHP接入
-    /*
-    host: '0.0.0.0',
-    */
+    host: '127.0.0.1',
     strictPort: true,
     port: 5173,
 
@@ -76,7 +74,7 @@ export default defineConfig({
     */
     //HMR连接
     hmr: {
-      host: 'localhost',
+      host: '127.0.0.1',
       //port: 443
     },
   },//构建选项
@@ -116,6 +114,10 @@ export default defineConfig({
         },
 
         manualChunks(id) {
+          if (id.includes('/node_modules/prismjs/') || id.includes('\\node_modules\\prismjs\\')) {
+            return 'prism'
+          }
+
           // all third-party code will be in vendor chunk
           if (id.includes('node_modules')) {
             return 'vendor'

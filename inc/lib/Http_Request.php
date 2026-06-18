@@ -46,8 +46,7 @@ if (!class_exists('AYA_HTTP_Request')) {
 
         public function __destruct()
         {
-            //结束请求
-            curl_close($this->curl);
+            $this->curl = null;
         }
 
         //设置请求头

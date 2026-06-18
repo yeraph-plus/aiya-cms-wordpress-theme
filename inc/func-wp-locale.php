@@ -233,6 +233,8 @@ function aya_theme_frontend_translations_map()
         'feedback' => __('反馈', 'aiya-cms'),
         'start_issue' => __('发起议题', 'aiya-cms'),
         'create_issue' => __('创建议题', 'aiya-cms'),
+        'related_post_issues' => __('此文章的议题', 'aiya-cms'),
+        'related_post_issues_empty' => __('当前文章没有议题', 'aiya-cms'),
         'create_issue_description' => __('发起一个新的议题讨论。', 'aiya-cms'),
         'issue_type' => __('议题类型', 'aiya-cms'),
         'issue_title' => __('议题标题', 'aiya-cms'),

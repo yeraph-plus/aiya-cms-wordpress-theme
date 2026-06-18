@@ -58,12 +58,7 @@ export default function TweetTag({
     return window.location.pathname
   }, [archiveUrl])
 
-  if (!tags.length) {
-    return null
-  }
-
   const [isExpanded, setIsExpanded] = React.useState(false)
-
 
   const allHref = React.useMemo(() => {
     const origin = typeof window !== "undefined" ? window.location.origin : "/tweet/"
@@ -71,6 +66,10 @@ export default function TweetTag({
     url.searchParams.delete("t_tag")
     return `${url.pathname}${url.search}`
   }, [fallbackArchiveUrl])
+
+  if (!tags.length) {
+    return null
+  }
 
   const isAllActive = normalizedSelected.length === 0
   const displayTags = isExpanded ? tags : tags.slice(0, MAX_TAGS)
